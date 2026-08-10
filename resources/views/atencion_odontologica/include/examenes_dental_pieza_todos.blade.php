@@ -32,7 +32,8 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 col-lg-6 examen-pieza-lista-detalle">
+    <div class="col-sm-12 col-lg-6 examen-pieza-lista-detalle" tabindex="0"
+        role="region" aria-label="Detalle e historial de exámenes por pieza">
         <div class="card detalle-examen-pieza-vacio" @if($examenes->isNotEmpty()) style="display:none" @endif>
             <div class="card-body text-center py-5">
                 <i class="feather icon-info text-primary" style="font-size:2rem"></i>
@@ -300,21 +301,55 @@
         // Todas las tarjetas ya están visibles; solo se resalta y se hace scroll a la elegida.
         $contenedor.find('.detalle-examen-pieza').removeClass('border-primary');
         $detalle.addClass('border-primary');
-        $detalle.get(0).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const $lista=$contenedor.find('.examen-pieza-lista-detalle');
+        const destino=$lista.scrollTop()+$detalle.offset().top-$lista.offset().top;
+        $lista.stop(true).animate({scrollTop:Math.max(0,destino-8)},250);
     });
 })();
 </script>
 <style>
 @media (min-width: 992px) {
+    .examen-pieza-master-detail .examen-pieza-lista-detalle {
+        max-height: 640px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+        padding-right: .65rem;
+    }
+
     .examen-pieza-master-detail .detalle-examen-pieza .form-row > [class*="col-"] {
         flex: 0 0 50%;
         max-width: 50%;
     }
 }
 @media (max-width: 991.98px) {
+    .examen-pieza-master-detail .examen-pieza-lista-detalle {
+        max-height: 70vh;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-right: .35rem;
+    }
+
     .examen-pieza-master-detail .detalle-examen-pieza .form-row > [class*="col-"] {
         flex: 0 0 100%;
         max-width: 100%;
     }
+}
+
+.examen-pieza-master-detail .examen-pieza-lista-detalle:focus {
+    outline: 2px solid rgba(23, 78, 166, .22);
+    outline-offset: 2px;
+    border-radius: .65rem;
+}
+
+.examen-pieza-master-detail .examen-pieza-lista-detalle::-webkit-scrollbar {
+    width: 9px;
+}
+
+.examen-pieza-master-detail .examen-pieza-lista-detalle::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: #aeb9c6;
+    background-clip: padding-box;
 }
 </style>

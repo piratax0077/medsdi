@@ -376,6 +376,77 @@
         font-weight: 600;
     }
 
+
+    /* Modal de edición de arancel */
+    .arancel-edit-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 13px 15px;
+        margin-bottom: 18px;
+        border: 1px solid #d9e9fb;
+        border-radius: 12px;
+        background: #f3f8ff;
+        color: #4c6178;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .arancel-edit-info i {
+        color: var(--medsdi-primary);
+        font-size: 18px;
+        margin-top: 1px;
+    }
+
+    .arancel-readonly-wrap {
+        position: relative;
+    }
+
+    .arancel-readonly-wrap .form-control[readonly] {
+        background: #f4f6f9 !important;
+        color: #425466;
+        border-color: #dfe5ec;
+        padding-right: 42px;
+        cursor: not-allowed;
+        font-weight: 600;
+    }
+
+    .arancel-lock-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8a98a8;
+        pointer-events: none;
+        display: none;
+    }
+
+    .arancel-edit-grid {
+        border: 1px solid var(--medsdi-border);
+        border-radius: 14px;
+        background: #fff;
+        padding: 16px;
+    }
+
+    .arancel-edit-grid .form-group {
+        margin-bottom: 0;
+    }
+
+    .arancel-modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid var(--medsdi-border);
+    }
+
+    .arancel-modal-footer .btn {
+        border-radius: 9px;
+        min-width: 110px;
+    }
+
     @media (max-width: 991px) {
         .medsdi-hero { padding: 20px; }
     }
@@ -566,37 +637,54 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="form-row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label class="medsdi-form-label" for="nombre_procedimiento_nuevo">Nombre del procedimiento</label>
-                        <input type="text" name="nombre_procedimiento_nuevo" id="nombre_procedimiento_nuevo" class="form-control form-control-sm">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="medsdi-form-label" for="cantidad_uco">Cantidad UCO</label>
-                        <input type="number" name="cantidad_uco" id="cantidad_uco" class="form-control form-control-sm">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="floating-label-activo-sm" for="cantidad_uco">Cantidad Bloques</label>
-                        <input type="number" name="cantidad_bloques" id="cantidad_bloques" class="form-control form-control-sm">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="tiene_lab">
-                            <label class="form-check-label" for="existeLaboratorioDental">
-                                ¿Laboratorio?
-                            </label>
-                        </div>
+            <div class="arancel-edit-info" id="arancel_modo_edicion_info" style="display:none;">
+                <i class="feather icon-lock"></i>
+                <div>
+                    <strong>Nombre protegido</strong><br>
+                    El tratamiento pertenece al catálogo odontológico de MedSDI. Puedes modificar UCO, bloques y laboratorio, pero no su descripción.
                 </div>
             </div>
 
+            <div class="form-group mb-3">
+                <label class="medsdi-form-label" for="nombre_procedimiento_nuevo">Nombre del procedimiento</label>
+                <div class="arancel-readonly-wrap">
+                    <input type="text" name="nombre_procedimiento_nuevo" id="nombre_procedimiento_nuevo" class="form-control" autocomplete="off">
+                    <i class="feather icon-lock arancel-lock-icon" id="arancel_nombre_lock"></i>
+                </div>
+                <small class="medsdi-help" id="arancel_nombre_help">Ingresa el nombre del nuevo procedimiento.</small>
+            </div>
 
-            <button type="button" class="btn medsdi-btn-primary btn-sm float-right" id="btn_guardar_procedimiento" onclick="agregar_otro_procedimiento()"><i class="fas fa-plus"></i>  Agregar otro diagnostico</button>
+            <div class="arancel-edit-grid">
+                <div class="form-row align-items-end">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="medsdi-form-label" for="cantidad_uco">Cantidad UCO</label>
+                            <input type="number" min="0" step="0.01" name="cantidad_uco" id="cantidad_uco" class="form-control" placeholder="Ej: 3">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="medsdi-form-label" for="cantidad_bloques">Cantidad de bloques</label>
+                            <input type="number" min="1" name="cantidad_bloques" id="cantidad_bloques" class="form-control" placeholder="Ej: 2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="medsdi-switch-box">
+                            <div class="custom-control custom-switch">
+                                <input class="custom-control-input" type="checkbox" id="tiene_lab">
+                                <label class="custom-control-label" for="tiene_lab">Requiere laboratorio dental</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arancel-modal-footer">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn medsdi-btn-primary btn-sm" id="btn_guardar_procedimiento" onclick="agregar_otro_procedimiento()">
+                    <i class="feather icon-save mr-1"></i><span id="texto_btn_guardar_procedimiento">Guardar procedimiento</span>
+                </button>
+            </div>
             {{-- <table class="table w-100" id="table_procedimientos_propios_dental">
                 <thead>
                     <tr>
@@ -852,20 +940,19 @@
 }
 
         function agregar_otro_procedimiento() {
-            var nombre_procedimiento_nuevo = $('#nombre_procedimiento_nuevo').val();
+            // La descripción se mantiene bloqueada: sólo editamos la configuración del arancel.
             var cantidad_uco = $('#cantidad_uco').val();
             var tiene_lab = $('#tiene_lab').is(':checked') ? 1 : 0;
-            if (nombre_procedimiento_nuevo == '' || cantidad_uco == '') {
+            if (cantidad_uco == '') {
                 swal({
                     title: 'Error',
-                    text: 'Debe ingresar el nombre del procedimiento y la cantidad de UCO',
+                    text: 'Debe ingresar la cantidad de UCO',
                     icon: 'error'
                 });
                 return;
             }
 
             let data = {
-                nombre_procedimiento_nuevo: nombre_procedimiento_nuevo,
                 cantidad_uco: cantidad_uco,
                 tiene_lab: tiene_lab,
                 nuevo_procedimiento: true,
@@ -1046,6 +1133,24 @@
             });
         }
 
+
+        // Al abrir el modal desde "Agregar procedimiento", restaurar el modo creación.
+        $('#modalAgregarDiagnosticoDental').on('show.bs.modal', function (event) {
+            const trigger = $(event.relatedTarget);
+            if (trigger && trigger.length) {
+                $('#modalAgregarDiagnosticoDentalLabel').html('<i class="feather icon-plus-circle mr-2"></i>Agregar nuevo procedimiento / trabajo');
+                $('#arancel_modo_edicion_info').hide();
+                $('#arancel_nombre_lock').hide();
+                $('#arancel_nombre_help').text('Ingresa el nombre del nuevo procedimiento.');
+                $('#nombre_procedimiento_nuevo').prop('readonly', false).val('');
+                $('#cantidad_uco').val('');
+                $('#cantidad_bloques').val('');
+                $('#tiene_lab').prop('checked', false);
+                $('#btn_guardar_procedimiento').attr('onclick', 'agregar_otro_procedimiento()');
+                $('#texto_btn_guardar_procedimiento').text('Guardar procedimiento');
+            }
+        });
+
         function mostrar_procedimiento(id){
             console.log(id);
             let data = {
@@ -1067,17 +1172,28 @@
                         //     text: 'Se ha encontrado el procedimiento dental',
                         //     icon: 'success'
                         // });
-                        // abrir modal
-                        $('#modalAgregarDiagnosticoDental').modal('show');
-                        // llenar los campos del modal
-                        $('#nombre_procedimiento_nuevo').val(response.procedimiento.descripcion);
+                        // Modo edición: el nombre proviene del catálogo y no debe modificarse.
+                        $('#modalAgregarDiagnosticoDentalLabel').html('<i class="feather icon-edit mr-2"></i>Editar arancel del tratamiento');
+                        $('#arancel_modo_edicion_info').show();
+                        $('#arancel_nombre_lock').show();
+                        $('#arancel_nombre_help').text('La descripción pertenece al catálogo odontológico y no puede modificarse desde el arancel.');
+
+                        $('#nombre_procedimiento_nuevo')
+                            .val(response.procedimiento.descripcion)
+                            .prop('readonly', true);
+
                         $('#cantidad_uco').val(response.procedimiento.cantidad_uco);
                         $('#cantidad_bloques').val(response.procedimiento.cantidad_bloques);
-                        $('#tiene_lab').prop('checked', response.procedimiento.laboratorio == 1 ? true : false);
-                        $('#btn_guardar_procedimiento').attr('onclick', 'editarProcedimiento(' + id + ')');
-                        $('#btn_guardar_procedimiento').text('Editar');
-                        $('#btn_guardar_procedimiento').removeClass('btn-success');
-                        $('#btn_guardar_procedimiento').addClass('btn-warning');
+                        $('#tiene_lab').prop('checked', parseInt(response.procedimiento.laboratorio) === 1);
+
+                        $('#btn_guardar_procedimiento')
+                            .attr('onclick', 'editarProcedimiento(' + id + ')')
+                            .removeClass('btn-warning')
+                            .addClass('medsdi-btn-primary');
+                        $('#texto_btn_guardar_procedimiento').text('Guardar cambios');
+
+                        $('#modalAgregarDiagnosticoDental').modal('show');
+                        setTimeout(function(){ $('#cantidad_uco').trigger('focus').select(); }, 250);
 
 
                     }

@@ -289,22 +289,64 @@
                 : ($mostrarProximoControlImplante ? 'prox_cont_imp' : null)));
 @endphp
 
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+<style>
+    .ficha-implantologia .dental-treatment-steps { display: flex; gap: .65rem; border: 0; }
+    .ficha-implantologia .dental-treatment-steps .nav-item-secciones { flex: 1 1 0; }
+    .ficha-implantologia .dental-treatment-steps .nav-secciones { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: .6rem .45rem; border: 1px solid #b8c7dc; border-radius: .65rem; background: #fff; color: #63758d; font-weight: 700; text-align: center; }
+    .ficha-implantologia .dental-treatment-steps .nav-secciones::before { content: attr(data-step); display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-right: .55rem; border: 1px solid #bfd0e5; border-radius: 50%; background: #fff; color: #63758d; }
+    .ficha-implantologia .dental-treatment-steps .nav-secciones.active { border-color: #1755b5; color: #1755b5; box-shadow: 0 4px 10px rgba(23,85,181,.12); }
+    .ficha-implantologia .dental-treatment-steps .nav-secciones.active::before { border-color: #1755b5; background: #1755b5; color: #fff; }
+    .ficha-implantologia .impl-plan-panel { overflow: hidden; margin-top: 1rem; border: 1px solid #dbe4ee; border-radius: .85rem; background: #fff; box-shadow: 0 5px 18px rgba(34,72,120,.08); }
+    .ficha-implantologia .impl-plan-panel__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid #e4eaf1; background: #f8fbff; }
+    .ficha-implantologia .impl-plan-panel__header h5, .ficha-implantologia .impl-piece-planner h6 { margin: 0; color: #174ea6; font-weight: 700; }
+    .ficha-implantologia .impl-plan-panel__header p, .ficha-implantologia .impl-piece-planner p { margin: .2rem 0 0; color: #718096; }
+    .ficha-implantologia .impl-piece-planner { margin-bottom: 1rem; padding: 1rem; border: 1px solid #dbe4ee; border-radius: .75rem; background: #fff; }
+    .ficha-implantologia #table_odontograma { width: 100% !important; min-width: 1320px; table-layout: fixed; }
+    .ficha-implantologia #table_odontograma th,
+    .ficha-implantologia #table_odontograma td { vertical-align: middle; padding-left: .75rem; padding-right: .75rem; }
+    .ficha-implantologia #table_odontograma th { white-space: nowrap; }
+    .ficha-implantologia #table_odontograma th:nth-child(1) { width: 120px; }
+    .ficha-implantologia #table_odontograma th:nth-child(2) { width: 360px; }
+    .ficha-implantologia #table_odontograma th:nth-child(3) { width: 75px; }
+    .ficha-implantologia #table_odontograma th:nth-child(4) { width: 130px; }
+    .ficha-implantologia #table_odontograma th:nth-child(5) { width: 170px; }
+    .ficha-implantologia #table_odontograma th:nth-child(6) { width: 100px; }
+    .ficha-implantologia #table_odontograma th:nth-child(7) { width: 110px; }
+    .ficha-implantologia #table_odontograma th:nth-child(8) { width: 255px; }
+    .ficha-implantologia #table_odontograma td:nth-child(2),
+    .ficha-implantologia #table_odontograma td:nth-child(5) { white-space: normal !important; overflow-wrap: anywhere; }
+    .ficha-implantologia #table_odontograma td:nth-child(6),
+    .ficha-implantologia #table_odontograma td:nth-child(7) { white-space: nowrap; }
+    .ficha-implantologia .dental-table-tooth { display: flex; align-items: center; justify-content: center; gap: .45rem; }
+    .ficha-implantologia .dental-table-tooth img { width: 26px !important; height: 38px !important; object-fit: contain; }
+    .ficha-implantologia .dental-table-tooth strong { color: #174ea6; }
+    .ficha-implantologia .dental-treatment-name { display: -webkit-box; overflow: hidden; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .ficha-implantologia .dental-table-datetime { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; }
+    .ficha-implantologia .dental-table-datetime small { margin-top: .2rem; color: #718096; }
+    .ficha-implantologia .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .5rem; min-width: 190px; }
+    .ficha-implantologia .dental-table-state-control .dental-piece-status { min-width: 140px; }
+    @media (max-width: 991.98px) { .ficha-implantologia .dental-treatment-steps { overflow-x: auto; } .ficha-implantologia .dental-treatment-steps .nav-item-secciones { flex: 0 0 220px; } }
+</style>
+
+<div class="user-profile user-card mt-0 ficha-implantologia" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
+                <ul class="nav nav-tabs-secciones dental-treatment-steps mb-3 mt-3" id="oft" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_dent_impl_tab" data-toggle="tab" href="#atencion_dent_impl" role="tab" aria-controls="atencion_dent_impl" aria-selected="true">Atención especialidad</a>
+                        <a class="nav-secciones active text-uppercase" data-step="1" id="atencion_dent_impl_tab" data-toggle="tab" href="#atencion_dent_impl" role="tab" aria-controls="atencion_dent_impl" aria-selected="true">Atención implantológica</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
+                        <a class="nav-secciones text-uppercase" data-step="2" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Periodonto-pre-implantar</a>
+                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación preimplantar</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="presupuesto_tab" onclick="actualizar_presupuesto()" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
+                        <a class="nav-secciones text-uppercase" data-step="4" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Plan de tratamiento</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" data-step="5" id="presupuesto_tab" onclick="actualizar_presupuesto()" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
                     </li>
                 </ul>
             </div>
@@ -378,7 +420,9 @@
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                                  {{-- @include('atencion_odontologica.generales.includes.odontologia_general') --}}
                                 @if($mostrarEvaluacionPreImplante)
-                                    @include('atencion_odontologica.generales.includes.odontologia_preimplante')
+                                    @include('atencion_odontologica.generales.includes.odontologia_preimplante', [
+                                        'usarSelectorHistoriaPieza' => true,
+                                    ])
                                 @endif
                                 @if($mostrarTratamientoImplantologico)
                                     @include('atencion_odontologica.generales.includes.odontologia_tto_preimplante')
@@ -3149,7 +3193,23 @@
                         </div>
                         <!-- CIERRE PERIIMPLANTE -->
                         <!-- EVALUACIÓN-->
-                        <div class="tab-pane fade" id="evaluacion_general" role="tabpanel" aria-labelledby="evaluacion_general_tab">
+                        <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
+                            @php
+                                $piezasPlanImplantologia = [
+                                    '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                    '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                    '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                    '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                ];
+                            @endphp
+                            <div class="impl-plan-panel">
+                                <div class="impl-plan-panel__header">
+                                    <div>
+                                        <h5>Plan de tratamiento implantológico</h5>
+                                        <p>Seleccione una pieza, indique el diagnóstico y agregue la prestación al presupuesto.</p>
+                                    </div>
+                                    <span class="badge badge-light-primary">Dentición adulta</span>
+                                </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -3172,6 +3232,26 @@
                                                         <div class="tab-content" id="gral_od_adulto">
                                                             <!--ADULTO-->
                                                             <div class="tab-pane fade active show " id="eval_adults" role="tabpanel" aria-labelledby="eval_adults_tab">
+                                                                <div class="impl-piece-planner mt-3 mx-2">
+                                                                    <h6>Seleccione una pieza para agregar al tratamiento</h6>
+                                                                    <p>Presione una pieza para ingresar su diagnóstico y prestación implantológica.</p>
+                                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                                        'id' => 'selector_plan_tratamiento_implantologia',
+                                                                        'inputId' => 'pieza_plan_tratamiento_implantologia',
+                                                                        'counter' => 9900,
+                                                                        'multiple' => false,
+                                                                        'compacto' => true,
+                                                                        'autoRefresh' => false,
+                                                                        'mostrarMensajeVacio' => false,
+                                                                        'mostrarEstadoClinico' => true,
+                                                                        'historialPiezas' => $odontograma_historial ?? [],
+                                                                        'estadosBloqueados' => [],
+                                                                        'piezasDisponibles' => $piezasPlanImplantologia,
+                                                                        'titulo' => 'Odontograma del plan implantológico',
+                                                                        'ayuda' => 'Presione una pieza para agregarla al tratamiento',
+                                                                    ])
+                                                                    <input type="hidden" id="pieza_plan_tratamiento_implantologia" value="0">
+                                                                </div>
                                                                 @include('atencion_odontologica.generales.evaluacion_adulto')
                                                             </div>
                                                             <!--NIÑOS-->
@@ -3188,12 +3268,39 @@
                                 </div>
                             </div>
                         </div>
-                        <!--CIERRE: EVALUACION--->
-                        <!-- TRATAMIENTO-->
-                        <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
-                           @include('atencion_odontologica.generales.tratamiento_presup')
-                        </div>
+                            </div>
                         <!--CIERRE: TRATAMIENTO--->
+                        <div class="modal fade" id="modal_pieza_plan_implantologia" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div>
+                                            <small class="text-uppercase text-c-blue font-weight-bold">Plan implantológico</small>
+                                            <h5 class="modal-title">Pieza <span id="numero_pieza_plan_implantologia"></span></h5>
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="diagnostico_pieza_plan_implantologia">Diagnóstico</label>
+                                            <select class="form-control" id="diagnostico_pieza_plan_implantologia">
+                                                <option value="0">Seleccione un diagnóstico</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="tratamiento_pieza_plan_implantologia">Tratamiento o prestación</label>
+                                            <input type="text" class="form-control tratamiento-autocomplete" id="tratamiento_pieza_plan_implantologia"
+                                                placeholder="Busque o describa el tratamiento implantológico" autocomplete="off">
+                                            <small class="form-text text-muted">La pieza se incorporará al plan y al presupuesto.</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" id="guardar_pieza_plan_implantologia"><i class="feather icon-plus"></i> Agregar al plan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- PRESUPUESTO -->
                         <div class="tab-pane fade" id="presupuesto" role="tabpanel" aria-labelledby="presupuesto_tab">
                             @include('atencion_odontologica.generales.presupuesto')
@@ -3220,23 +3327,173 @@
 @include('atencion_odontologica.modals.odontograma.modal_insumos_lab')
 
 <script>
+    let diagnosticoPlanImplantologiaSeleccionado = null;
+
+    function sincronizarSelectorPlanImplantologia(listaOdontograma) {
+        const $selector = $('#selector_plan_tratamiento_implantologia');
+        if (!$selector.length) return;
+        const estados = {};
+        (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
+            if (!registro || Number(registro.presupuesto) !== 1 || Number(registro.urgencia) === 1) return;
+            const pieza = String(registro.pieza || '');
+            const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
+            const diagnostico = String(registro.diagnostico || '').toLowerCase();
+            let estado = diagnostico.includes('carie') ? 'carie' : 'normal';
+            if (tratamiento.includes('implante')) estado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
+            estados[pieza] = estado;
+        });
+        const base = @json(asset('images/dental/dientes'));
+        $selector.find('[data-selector-pieza]').each(function () {
+            const $boton = $(this);
+            const pieza = String($boton.data('selector-pieza'));
+            const codigo = pieza.replace('.', '');
+            const estado = estados[pieza] || 'normal';
+            const rutas = {
+                carie: base + '/carie/carie' + codigo + '.png',
+                ausente: base + '/diente-ausente/dau' + codigo + '.png',
+                implante: base + '/implante/impl' + codigo + '.png',
+                normal: base + '/d' + codigo + '.png'
+            };
+            $boton.find('img').attr('src', rutas[estado] || rutas.normal).attr('data-estado-clinico', estado);
+        });
+        $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+        $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+        $('#pieza_plan_tratamiento_implantologia').val('0');
+    }
+
+    function decorarTablaPlanImplantologia() {
+        const base = @json(asset('images/dental/dientes'));
+        const $tablaPlan = $('#tratamiento #table_odontograma');
+        if (!$tablaPlan.data('implant-table-positioned')) {
+            $tablaPlan.closest('.table-responsive').scrollLeft(0);
+            $tablaPlan.data('implant-table-positioned', true);
+        }
+        $tablaPlan.find('tbody tr').each(function () {
+            const $fila = $(this), $celdas = $fila.children('td');
+            if ($celdas.length < 8) return;
+            const fechaHora = $.trim($celdas.eq(0).text());
+            const partes = fechaHora.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+            if (!$celdas.eq(0).find('.dental-table-datetime').length && partes) {
+                $celdas.eq(0).html('<div class="dental-table-datetime"><strong>' + partes[3] + '-' + partes[2] + '-' + partes[1] + '</strong><small>' + partes[4] + ':' + partes[5] + '</small></div>');
+            }
+            if (!$celdas.eq(1).find('.dental-treatment-name').length) {
+                const nombre = $.trim($celdas.eq(1).text());
+                $celdas.eq(1).empty().append($('<span>', { class: 'dental-treatment-name', title: nombre, text: nombre }));
+            }
+            const $check = $celdas.eq(7).find('.checkbox-seleccion');
+            const id = Number($check.val() || $fila.data('treatment-id'));
+            const pieza = $.trim($celdas.eq(3).text());
+            if (pieza && !$celdas.eq(3).find('.dental-table-tooth').length) {
+                const codigo = pieza.replace('.', '');
+                $celdas.eq(3).html('<div class="dental-table-tooth"><img src="' + base + '/d' + codigo + '.png" alt="Pieza ' + pieza + '"><strong>' + pieza + '</strong></div>');
+            }
+            if (id && !$celdas.eq(7).find('.dental-piece-status').length) {
+                const registro = (window.odontograma_global || []).find(function (item) { return Number(item.id) === id; });
+                const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
+                const select = '<select class="form-control form-control-sm dental-piece-status" data-original-state="' + estado + '" onchange="actualizarEstadoPiezaPlanImplantologia(this,' + id + ')">' +
+                    '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
+                    '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
+                    '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
+                    '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option></select>';
+                const $control = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
+                $celdas.eq(7).html('<div class="dental-table-state-control">' + select + '</div>');
+                $celdas.eq(7).find('.dental-table-state-control').append($control);
+            }
+        });
+    }
+
+    function actualizarEstadoPiezaPlanImplantologia(select, idTratamiento) {
+        const $select = $(select), anterior = String($select.data('original-state')), nuevo = String($select.val());
+        $select.prop('disabled', true);
+        $.ajax({
+            type: 'POST', url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
+            data: { id_tratamiento: idTratamiento, estado: nuevo, id_ficha_atencion: $('#id_fc').val(), id_paciente: $('#id_paciente_fc').val(), id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(), id_lugar_atencion: $('#id_lugar_atencion').val(), _token: "{{ csrf_token() }}" },
+            success: function (respuesta) {
+                if (respuesta.mensaje !== 'OK') { $select.val(anterior); swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error'); return; }
+                $select.data('original-state', nuevo).closest('tr').attr('data-clinical-state', nuevo);
+                if (Array.isArray(respuesta.odontograma)) { window.odontograma_global = respuesta.odontograma; sincronizarSelectorPlanImplantologia(respuesta.odontograma); }
+            },
+            error: function () { $select.val(anterior); swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error'); },
+            complete: function () { $select.prop('disabled', false); }
+        });
+    }
+
+    // El include compartido utiliza este nombre. Se mantiene el comportamiento
+    // específico de Implantología sin modificar el componente para otras fichas.
+    function actualizarEstadoPiezaPlan(select, idTratamiento) {
+        return actualizarEstadoPiezaPlanImplantologia(select, idTratamiento);
+    }
+
+    const observadorTablaPlanImplantologia = new MutationObserver(function (mutaciones) {
+        const afectaTabla = mutaciones.some(function (mutacion) {
+            const nodo = mutacion.target.nodeType === 1 ? mutacion.target : mutacion.target.parentElement;
+            return nodo && (nodo.id === 'table_odontograma' || nodo.closest('#table_odontograma'));
+        });
+        if (afectaTabla) window.requestAnimationFrame(decorarTablaPlanImplantologia);
+    });
+    observadorTablaPlanImplantologia.observe(document.body, { childList: true, subtree: true });
+    $(decorarTablaPlanImplantologia);
+
+    document.addEventListener('click', function (event) {
+        const boton = event.target.closest('#selector_plan_tratamiento_implantologia [data-selector-pieza]');
+        if (!boton || boton.disabled || !boton.classList.contains('is-enabled')) return;
+        const pieza = String(boton.getAttribute('data-selector-pieza') || '');
+        window.setTimeout(function () {
+            if (!boton.classList.contains('is-selected')) {
+                $('#pieza_plan_tratamiento_implantologia').val('0');
+                return;
+            }
+            $('#pieza_plan_tratamiento_implantologia').val(pieza);
+            $('#numero_pieza_plan_implantologia').text(pieza);
+            const $destino = $('#diagnostico_pieza_plan_implantologia');
+            const $origen = $('#diagnostico_combo_g');
+            if ($origen.length && $destino.find('option').length <= 1) $destino.html($origen.html());
+            $destino.val('0');
+            $('#tratamiento_pieza_plan_implantologia').val('');
+            $('#modal_pieza_plan_implantologia').modal('show');
+        }, 0);
+    });
+
+    $(document).on('click', '#guardar_pieza_plan_implantologia', function () {
+        const pieza = String($('#pieza_plan_tratamiento_implantologia').val() || '');
+        const diagnostico = $('#diagnostico_pieza_plan_implantologia').val();
+        const tratamiento = $.trim($('#tratamiento_pieza_plan_implantologia').val());
+        if (!pieza || pieza === '0' || !diagnostico || diagnostico === '0' || !tratamiento) {
+            swal('Datos requeridos', 'Seleccione una pieza, un diagnóstico y una prestación.', 'warning');
+            return;
+        }
+        diagnosticoPlanImplantologiaSeleccionado = diagnostico;
+        $('#paciente_piezas_dentales_ex_impl').val([pieza]).trigger('change');
+        $('#diagnostico_combo_g').val(diagnostico).trigger('change');
+        $('#diag_presupuesto_pieza_g_impl').val(tratamiento);
+        $('#modal_pieza_plan_implantologia').modal('hide');
+        cargar_a_presupuesto_impl_g_confirmar();
+    });
+
     $(document).ready(function(){
-        $('#paciente_piezas_dentales_ex').select2();
+        function iniciarSelect2Implantologia(selector) {
+            $(selector).filter('select').each(function () {
+                const $select = $(this);
+                if (!$select.hasClass('select2-hidden-accessible')) $select.select2();
+            });
+        }
+
+        iniciarSelect2Implantologia('#paciente_piezas_dentales_ex');
         // $('#paciente_piezas_dentales_ex_impl').select2();
-        $('#paciente_piezas_dentales_ex_').select2();
-        $('#paciente_piezas_dentales_rehab_impl').select2();
-        $('#tpo_proc_imp').select2();
-        $('#prot_pieza_imp').select2();
-        $('#prot_pieza_imp_man').select2();
-        $('#prot_implante').select2();
-        $('#prot_implante_man').select2();
+        iniciarSelect2Implantologia('#paciente_piezas_dentales_ex_');
+        iniciarSelect2Implantologia('#paciente_piezas_dentales_rehab_impl');
+        iniciarSelect2Implantologia('#tpo_proc_imp');
+        iniciarSelect2Implantologia('#prot_pieza_imp');
+        iniciarSelect2Implantologia('#prot_pieza_imp_man');
+        iniciarSelect2Implantologia('#prot_implante');
+        iniciarSelect2Implantologia('#prot_implante_man');
         // generar numero random entre el 10 y el 20
         var random = Math.floor(Math.random() * (20 - 10 + 1) + 10);
         $('#random_preimpl').val(random);
         $('#random_postimpl').val(random);
 
         // Inicializar select2 en todos los select cuyo id comience con "pzas_grupo_impl"
-        $('[id^="pzas_grupo_impl"]').select2();
+        iniciarSelect2Implantologia('[id^="pzas_grupo_impl"]');
 
         // mostrar_nueva_pieza_dental_tto_impl(1000);
         // mostrar_nueva_pieza_post_impl(1000);
@@ -3787,7 +4044,7 @@
                     tipo_examen: item.tipo_examen || 'Otro',
                     caras: item.diagnosticocaras || 'N/A',
                     responsable: item.profesional || 'N/A',
-                    estado: item.diagnostico.estado == 1 ? 'TERMINADO' : 'EN ESPERA'
+                    estado: Number(item.estado ?? (item.diagnostico && item.diagnostico.estado) ?? 0) === 1 ? 'TERMINADO' : 'EN ESPERA'
                 }));
 
                 // Inicializa o actualiza la tabla
@@ -3834,8 +4091,19 @@
 
         }
 
-        function dame_info_pieza() {
-            let pieza = $('#historia_pza').val();
+        function limpiarHistoriaPiezaImplantologia() {
+            if ($.fn.DataTable && $.fn.DataTable.isDataTable('#historia_odontograma_pieza')) {
+                $('#historia_odontograma_pieza').DataTable().clear().draw();
+                return;
+            }
+            $('#historia_odontograma_pieza tbody').empty();
+        }
+
+        function dame_info_pieza(piezaSeleccionada) {
+            let pieza = String(piezaSeleccionada || $('#historia_pza_implantologia').val() || $('#historia_pza').val() || '');
+            if (!pieza || pieza === '0') {
+                return;
+            }
             console.log(pieza);
             let url ="{{ route('dental.dame_pieza') }}";
             let id_paciente = $('#id_paciente_fc').val();
@@ -3875,7 +4143,7 @@
                     tipo_examen: tipoExamenMap[item.tipo_examen] || 'Otro',
                     caras: item.diagnosticocaras || 'N/A',
                     responsable: item.profesional || 'N/A',
-                    estado: item.diagnostico.estado == 1 ? 'TERMINADO' : 'EN ESPERA'
+                    estado: Number(item.estado ?? (item.diagnostico && item.diagnostico.estado) ?? 0) === 1 ? 'TERMINADO' : 'EN ESPERA'
                 }));
 
                 // Inicializa o actualiza la tabla
@@ -5008,6 +5276,7 @@ $.ajax({
                 button: 'Aceptar'
             })
         }
+
     },
     error: function(error) {
         console.log(error);
@@ -6683,9 +6952,15 @@ function cargar_a_presupuesto_impl_g() {
 
 function cargar_a_presupuesto_impl_g_confirmar(){
     // Obtener los valores seleccionados en el select
-    var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_impl').val();
-    var diagnostico = $('#diagnostico_combo_g').val();
-    var ttoPiezas = $('#diag_presupuesto_pieza_g_impl').val();
+    var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_impl').val() || [];
+    if (!Array.isArray(piezasSeleccionadas)) piezasSeleccionadas = [piezasSeleccionadas].filter(Boolean);
+    if (piezasSeleccionadas.length === 0) {
+        const piezaSelector = String($('#pieza_plan_tratamiento_implantologia').val() || '');
+        if (piezaSelector && piezaSelector !== '0') piezasSeleccionadas = [piezaSelector];
+    }
+    var diagnostico = diagnosticoPlanImplantologiaSeleccionado || $('#diagnostico_combo_g').val();
+    var ttoPiezas = $('#diag_presupuesto_pieza_g_impl').val()
+        || $.trim($('#tratamiento_pieza_plan_implantologia').val() || '');
 
     let valido = 1;
     let mensaje = '';
@@ -6737,13 +7012,20 @@ function cargar_a_presupuesto_impl_g_confirmar(){
         success: function(resp){
             console.log(resp);
             if(resp.status == 1){
+                diagnosticoPlanImplantologiaSeleccionado = null;
                 swal({
                     icon:'success',
                     title:'Info',
                     text: resp.mensaje
                 });
-                let odontograma = resp.odontograma_paciente;
-                odontograma_global = resp.odontograma_paciente;
+                let odontograma = Array.isArray(resp.odontograma_paciente) ? resp.odontograma_paciente : [];
+                odontograma_global = odontograma;
+                sincronizarSelectorPlanImplantologia(odontograma);
+                if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                    sincronizarOdontogramaPresupuesto(odontograma, piezasSeleccionadas[0]);
+                }
+                $('#diagnostico_pieza_plan_implantologia').val('0');
+                $('#tratamiento_pieza_plan_implantologia').val('');
                 let html = '';
                 odontograma.forEach(function(odonto){
                     html += '<tr>';
@@ -6784,6 +7066,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#contenedor_examenes_grupos_dentales').empty();
                 $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
                 $('#table_odontograma tbody').html(html);
+                decorarTablaPlanImplantologia();
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 $('#table_trabajos_presupuesto tbody').empty();
                 $('#numero_pieza_post_impl2000').empty();
@@ -7149,6 +7432,7 @@ function cargar_a_presupuesto_rehab_impl_g_confirmar(){
                 $('#table_trabajos_presupuesto tbody').empty();
                 $('#numero_pieza_post_impl2000').empty();
                 // id que representa el select de piezas pre implante
+                decorarTablaPlanImplantologia();
                 $('#numero_pieza_tto_impl1000').empty();
                 // Este array almacenará solo las piezas únicas
                 let piezasUnicas = [];
@@ -7794,7 +8078,7 @@ let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto_impl_rehab') }}"
             console.log(resp);
             $('#pieza_dental_tto_rehab_impl').empty();
             $('#pieza_dental_tto_rehab_impl').append(resp.v);
-            $('#numero_pieza_tto_rehab_impl1000').select2();
+            $('select#numero_pieza_tto_rehab_impl1000').select2();
         },
         error: function(error) {
             console.log(error);
@@ -8460,6 +8744,8 @@ function mostrar_nuevo_grupo_post_impl(counter){
         type: 'post',
         data: {
             count: counter,
+            id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
             _token: '{{ csrf_token() }}'
         },
         success: function(resp) {
@@ -10677,4 +10963,3 @@ function ocultar_pieza_impl(counter){
 
         }
 </script>
-

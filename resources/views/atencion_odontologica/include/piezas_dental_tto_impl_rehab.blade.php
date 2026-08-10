@@ -364,8 +364,8 @@
 <script>
 
     $(document).ready(function(){
-        $('#numero_pieza_tto_impl1000').select2();
-        $('#numero_pieza_tto_impl_grupo1000').select2();
+        $('select#numero_pieza_tto_impl1000').select2();
+        $('select#numero_pieza_tto_impl_grupo1000').select2();
     });
 
     function dame_tratamientos_pieza_impl_rehab(pieza, counter, tipo) {

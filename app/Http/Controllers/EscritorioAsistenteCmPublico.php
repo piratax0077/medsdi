@@ -86,17 +86,10 @@ class EscritorioAsistenteCmPublico extends Controller
             $institucion = $id_institucion
                 ? Instituciones::where('id', $id_institucion)->first()
                 : null;
-            // Mostrar solamente los profesionales con los que esta asistente
-            // tiene una asociación activa en este lugar de atención.
-            $ids_profesionales_asociados = AsistenteLugarAtencion::where('id_asistente', $asistente->id)
-                ->where('id_lugar_atencion', $id_lugar_atencion)
-                ->where('estado', 1)
-                ->whereNotNull('id_profesional')
-                ->pluck('id_profesional')
-                ->unique()
-                ->values();
-
-            $profesionales = Profesional::whereIn('id', $ids_profesionales_asociados)
+            // La asociación activa de la asistente al lugar le permite ver a
+            // todos los profesionales activos registrados en ese lugar.
+            $profesionales = $lugares_atencion->Profesionales()
+                ->wherePivot('estado', 1)
                 ->orderBy('apellido_uno', 'asc')
                 ->get();
 
@@ -182,23 +175,48 @@ class EscritorioAsistenteCmPublico extends Controller
             ], 404);
         }
 
-        $asociacion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)
-            ->where('id_profesional', $request->id_profesional)
+        $asociacionActiva = AsistenteLugarAtencion::where('id_asistente', $asistente->id)
             ->where('id_lugar_atencion', $request->id_lugar_atencion)
             ->where('estado', 1)
-            ->first();
+            ->exists();
 
-        if (!$asociacion) {
+        $tiposAsistentePermitidos = [
+            'ASISTENTE ADMINISTRATIVO',
+            'ASISTENTE CONSULTA',
+            'ASISTENTE JEFA CAJA',
+            'ASISTENTE MANEJO DE AGENDA',
+            'ASISTENTE ONLINE',
+            'ASISTENTE PUBLICO',
+        ];
+
+        $contratoActivo = ContratoDependiente::where('id_empleado', $asistente->id)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->where('estado', 2)
+            ->whereIn('tipo_empleado', $tiposAsistentePermitidos)
+            ->exists();
+
+        if (!$asociacionActiva && !$contratoActivo) {
             return response()->json([
                 'estado' => 0,
-                'msj' => 'No existe una asociación activa con el profesional seleccionado.',
+                'msj' => 'No existe un contrato o asociación activa con el lugar de atención seleccionado.',
             ], 403);
         }
 
+        // Los permisos generales definidos por el administrador del centro
+        // tienen prioridad para todos los profesionales del lugar.
         $permiso = PermisoAsistente::where('id_asistente', $asistente->id)
-            ->where('id_profesional', $request->id_profesional)
             ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->whereNull('id_profesional')
             ->first();
+
+        // Se conservan los permisos particulares como compatibilidad para
+        // asistentes que todavía no tengan una configuración general.
+        if (!$permiso) {
+            $permiso = PermisoAsistente::where('id_asistente', $asistente->id)
+                ->where('id_profesional', $request->id_profesional)
+                ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                ->first();
+        }
 
         return response()->json([
             'estado' => 1,

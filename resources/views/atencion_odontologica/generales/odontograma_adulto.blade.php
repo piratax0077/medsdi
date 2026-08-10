@@ -7,22 +7,28 @@
         // Agrupar por pieza
         $historialPorPieza = [];
         foreach ($odontograma_historial as $pieza) {
-            $codigoPieza = $pieza['pieza'];
+            $codigoPieza = trim((string) data_get($pieza, 'pieza', ''));
+            if ($codigoPieza === '') {
+                continue;
+            }
             $historialPorPieza[$codigoPieza][] = $pieza;
         }
 
         foreach ($historialPorPieza as $codigoPieza => $historial) {
             $estadoFinal = 'normal';
             foreach ($historial as $pieza) {
-                $tratamiento = $pieza['tratamiento'] ?? '';
-                $diagnostico = $pieza['diagnostico'] ?? '';
-                $estado = $pieza['estado'] ?? '';
+                $tratamiento = (string) data_get($pieza, 'tratamiento', data_get($pieza, 'descripcion', ''));
+                $diagnostico = (string) data_get($pieza, 'diagnostico', '');
+                $estado = data_get($pieza, 'estado', '');
+                $tratamientoNormalizado = Str::lower(Str::ascii(trim($tratamiento)));
+                $diagnosticoNormalizado = Str::lower(Str::ascii(trim($diagnostico)));
 
-                if (Str::contains($diagnostico, 'Carie')) {
+                // Acepta Carie, CARIES y cualquier variación de mayúsculas o acentos.
+                if (Str::contains($diagnosticoNormalizado, 'carie')) {
                     $estadoFinal = 'carie';
                 }
                 // Prioridad: si hay algún implante con estado 0, es ausente
-                if (Str::contains(Str::lower($tratamiento), 'implante')) {
+                if (Str::contains($tratamientoNormalizado, 'implante')) {
                     if ($estado == '0') {
                         $estadoFinal = 'ausente';
                         break; // No importa lo demás, es ausente
@@ -32,9 +38,9 @@
                 }
 
                 // endodoncia
-                if (Str::contains(Str::lower($tratamiento), 'endodoncia') ||
-                    Str::contains(Str::lower($tratamiento), 'pulpotomia') ||
-                    Str::contains(Str::lower($tratamiento), 'pulpectomia')) {
+                if (Str::contains($tratamientoNormalizado, 'endodoncia') ||
+                    Str::contains($tratamientoNormalizado, 'pulpotomia') ||
+                    Str::contains($tratamientoNormalizado, 'pulpectomia')) {
                     $estadoFinal = 'endodoncia';
                 }
             }

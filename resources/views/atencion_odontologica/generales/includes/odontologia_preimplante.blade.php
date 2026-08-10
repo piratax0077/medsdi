@@ -387,22 +387,45 @@
                                                             </div>
                                                             @php $count_hist++; @endphp
                                                             @endforeach --}}
-                                                            <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2 mt-3">
-
-
-
-
-                                                                <div class="input-group mb-3">
-                                                                <label class="floating-label-activo-sm">Historia de la pieza N°</label>
-                                                                    <input type="text" class="form-control form-control-sm"  aria-label="Recipient's username"  name="historia_pza" id="historia_pza" value="" >
-                                                                    <div class="input-group-append">
-                                                                        <button class="btn btn-info btn-sm" type="button"  onclick="dame_info_pieza()"><i class="fas fa-search"></i></button>
+                                                            @if(!empty($usarSelectorHistoriaPieza))
+                                                                @php
+                                                                    $piezasHistoria = [
+                                                                        '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                                                        '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                                                        '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                                                        '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                                    ];
+                                                                @endphp
+                                                                <div class="col-12 mt-3 mb-3">
+                                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                                        'id' => 'selector_historia_pieza_implantologia',
+                                                                        'inputId' => 'historia_pza_implantologia',
+                                                                        'counter' => 15000,
+                                                                        'multiple' => false,
+                                                                        'compacto' => true,
+                                                                        'autoRefresh' => false,
+                                                                        'mostrarMensajeVacio' => false,
+                                                                        'mostrarEstadoClinico' => true,
+                                                                        'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                                        'estadosBloqueados' => [],
+                                                                        'piezasDisponibles' => $piezasHistoria,
+                                                                        'titulo' => 'Historia de la pieza',
+                                                                        'ayuda' => 'Seleccione una pieza para cargar automáticamente sus antecedentes',
+                                                                    ])
+                                                                    <input type="hidden" name="historia_pza" id="historia_pza_implantologia" value="0"
+                                                                        onchange="if (String(this.value || '0') === '0') { limpiarHistoriaPiezaImplantologia(); } else { dame_info_pieza(String(this.value)); }">
+                                                                </div>
+                                                            @else
+                                                                <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2 mt-3">
+                                                                    <div class="input-group mb-3">
+                                                                        <label class="floating-label-activo-sm">Historia de la pieza N°</label>
+                                                                        <input type="text" class="form-control form-control-sm" aria-label="Pieza dental" name="historia_pza" id="historia_pza" value="">
+                                                                        <div class="input-group-append">
+                                                                            <button class="btn btn-info btn-sm" type="button" onclick="dame_info_pieza()"><i class="fas fa-search"></i></button>
+                                                                        </div>
                                                                     </div>
-                                                                    </div>
-
-
-
-                                                            </div>
+                                                                </div>
+                                                            @endif
                                                             <div class="col-md-12">
                                                             <div class="card-informacion">
                                                             <div class="card-body">
@@ -918,7 +941,7 @@
         });
 
     $(document).ready(function() {
-        $('#selectDestinatarios').select2({
+        $('select#selectDestinatarios').first().select2({
             tags: true,
             width: '100%',
             placeholder: 'Selecciona o ingresa correos',

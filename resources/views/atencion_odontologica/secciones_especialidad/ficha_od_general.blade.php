@@ -237,12 +237,187 @@
     ]);
 @endphp
 
+@php
+    $piezasPresupuestadasEstado = collect($odontograma ?? [])->filter(function ($pieza) {
+        return (int) ($pieza->presupuesto ?? 0) === 1
+            && (int) ($pieza->urgencia ?? 0) === 0;
+    });
+    $presupuestoPagadoEstado = (bool) data_get($presupuesto ?? null, 'pago_completado', false);
+    $todasLasPiezasFinalizadas = $piezasPresupuestadasEstado->isNotEmpty()
+        && $piezasPresupuestadasEstado->every(function ($pieza) {
+            return (int) ($pieza->estado ?? 0) === 1;
+        });
+    $hayAtencionIniciada = $piezasPresupuestadasEstado->contains(function ($pieza) {
+        return in_array((int) ($pieza->estado ?? 0), [1, 2, 3], true);
+    });
+
+    if ($presupuestoPagadoEstado && $todasLasPiezasFinalizadas) {
+        $estadoCabeceraPlan = ['codigo' => 'terminado', 'texto' => 'Terminado', 'icono' => 'icon-check-circle'];
+    } elseif ($presupuestoPagadoEstado) {
+        $estadoCabeceraPlan = ['codigo' => 'pagado', 'texto' => 'Pagado', 'icono' => 'icon-dollar-sign'];
+    } elseif ($hayAtencionIniciada) {
+        $estadoCabeceraPlan = ['codigo' => 'en-tratamiento', 'texto' => 'En tratamiento', 'icono' => 'icon-activity'];
+    } elseif ($piezasPresupuestadasEstado->isNotEmpty()) {
+        $estadoCabeceraPlan = ['codigo' => 'presupuestado', 'texto' => 'Presupuestado', 'icono' => 'icon-file-text'];
+    } else {
+        $estadoCabeceraPlan = ['codigo' => 'preparacion', 'texto' => 'En preparación', 'icono' => 'icon-edit-3'];
+    }
+@endphp
+
+
+<style>
+    .ficha-odontologia-general .dental-treatment-flow {
+        padding: 1rem 1.15rem;
+        border: 1px solid #dbe4ee;
+        border-radius: .8rem;
+        background: linear-gradient(105deg, #f7fbff 0%, #fff 68%);
+        box-shadow: 0 4px 14px rgba(34, 72, 120, .07);
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__eyebrow {
+        display: block;
+        margin-bottom: .15rem;
+        color: #174ea6;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow h5 {
+        margin: 0;
+        color: #263b50;
+        font-weight: 700;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow p {
+        margin: .2rem 0 0;
+        color: #6c7d90;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__status {
+        flex: 0 0 auto;
+        padding: .45rem .75rem;
+        border-radius: 2rem;
+        background: #fff4dc;
+        color: #936317;
+        font-size: .78rem;
+        font-weight: 700;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__status[data-status="terminado"] {
+        background: #e4f6ea;
+        color: #278447;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__status[data-status="pagado"] {
+        background: #e5f2ff;
+        color: #1768ad;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__status[data-status="en-tratamiento"] {
+        background: #e9edff;
+        color: #4058b8;
+    }
+
+    .ficha-odontologia-general .dental-treatment-flow__status[data-status="presupuestado"] {
+        background: #eef2f6;
+        color: #586b7d;
+    }
+
+    .ficha-odontologia-general .dental-treatment-steps {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(145px, 1fr));
+        gap: .45rem;
+        padding: .45rem;
+        overflow-x: auto;
+        counter-reset: dental-step;
+        border: 1px solid #dbe4ee;
+        border-radius: .75rem;
+        background: #f4f7fb;
+    }
+
+    .ficha-odontologia-general .dental-treatment-steps .nav-item-secciones {
+        min-width: 145px;
+        counter-increment: dental-step;
+    }
+
+    .ficha-odontologia-general .dental-treatment-steps .nav-secciones {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .45rem;
+        width: 100%;
+        min-height: 44px;
+        padding: .45rem .65rem;
+        border: 0;
+        border-radius: .55rem;
+        color: #617286 !important;
+        font-size: .72rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .ficha-odontologia-general .dental-treatment-steps .nav-secciones::before {
+        content: counter(dental-step);
+        display: inline-flex;
+        flex: 0 0 24px;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border: 1px solid #b7c5d4;
+        border-radius: 50%;
+        background: #fff;
+        color: #617286;
+        font-size: .72rem;
+    }
+
+    .ficha-odontologia-general .dental-treatment-steps .nav-secciones.active {
+        background: #fff;
+        color: #174ea6 !important;
+        box-shadow: 0 2px 9px rgba(34, 72, 120, .14);
+    }
+
+    .ficha-odontologia-general .dental-treatment-steps .nav-secciones.active::before {
+        border-color: #174ea6;
+        background: #174ea6;
+        color: #fff;
+    }
+
+    @media (max-width: 767.98px) {
+        .ficha-odontologia-general .dental-treatment-flow__heading { align-items: flex-start; flex-direction: column; }
+        .ficha-odontologia-general .dental-treatment-steps { display: flex; }
+    }
+</style>
 
 <div class="user-profile user-card mt-0 ficha-odontologia-general" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
+                <div class="dental-treatment-flow mt-3" aria-label="Flujo de atencion odontologica">
+                    <div class="dental-treatment-flow__heading">
+                        <div>
+                            <span class="dental-treatment-flow__eyebrow">Odontolog&iacute;a general</span>
+                            <h5>Plan de tratamiento</h5>
+                            <p>Eval&uacute;e, seleccione las piezas y prepare el presupuesto del paciente.</p>
+                        </div>
+                        <span class="dental-treatment-flow__status" id="estado_cabecera_plan_dental"
+                            data-status="{{ $estadoCabeceraPlan['codigo'] }}"
+                            data-paid="{{ $presupuestoPagadoEstado ? '1' : '0' }}">
+                            <i class="feather {{ $estadoCabeceraPlan['icono'] }}" aria-hidden="true"></i>
+                            <span>{{ $estadoCabeceraPlan['texto'] }}</span>
+                        </span>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs-secciones dental-treatment-steps mb-3 mt-2" id="oft" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_dent_endo_tab" data-toggle="tab"
                             href="#atencion_dent_endo" role="tab" aria-controls="atencion_dent_endo"
@@ -265,7 +440,7 @@
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab"
                             onclick="refrescar_caras_grupos()"
                             href="#evaluacion_general" role="tab" aria-controls="evaluacion_general"
-                            aria-selected="false">Caras y grupos</a>
+                            aria-selected="false">Plan de tratamiento</a>
                     </li>
 
 
@@ -801,6 +976,14 @@
 
                         <div class="tab-pane fade" id="evaluacion_general" role="tabpanel"
                             aria-labelledby="evaluacion_general_tab">
+                            @php
+                                $piezasPlanTratamiento = [
+                                    '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                    '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                    '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                    '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                ];
+                            @endphp
                             <style>
                                 #evaluacion_general .caras-grupos-shell {
                                     --dental-blue: #174ea6;
@@ -895,6 +1078,38 @@
                                     color: var(--dental-blue) !important;
                                 }
 
+                                #evaluacion_general .dental-table-tooth { display: flex; align-items: center; justify-content: center; gap: .45rem; min-width: 74px; }
+                                #evaluacion_general .dental-table-tooth img { width: 26px; height: 38px; object-fit: contain; }
+                                #evaluacion_general .dental-table-tooth strong { color: var(--dental-blue); }
+                                #evaluacion_general #table_odontograma { width: 100% !important; min-width: 1160px; table-layout: fixed; }
+                                #evaluacion_general #table_odontograma th,
+                                #evaluacion_general #table_odontograma td { vertical-align: middle; }
+                                #evaluacion_general #table_odontograma th:nth-child(1) { width: 105px; }
+                                #evaluacion_general #table_odontograma th:nth-child(2) { width: 315px; }
+                                #evaluacion_general #table_odontograma td:nth-child(2) { white-space: normal !important; }
+                                #evaluacion_general .dental-treatment-name {
+                                    display: -webkit-box;
+                                    overflow: hidden;
+                                    line-height: 1.3;
+                                    white-space: normal;
+                                    overflow-wrap: anywhere;
+                                    -webkit-box-orient: vertical;
+                                    -webkit-line-clamp: 2;
+                                }
+                                #evaluacion_general #table_odontograma th:nth-child(3) { width: 75px; }
+                                #evaluacion_general #table_odontograma th:nth-child(4) { width: 125px; }
+                                #evaluacion_general #table_odontograma th:nth-child(5) { width: 130px; }
+                                #evaluacion_general #table_odontograma th:nth-child(6) { width: 90px; }
+                                #evaluacion_general #table_odontograma th:nth-child(7) { width: 105px; }
+                                #evaluacion_general #table_odontograma th:nth-child(8) { width: 215px; }
+                                #evaluacion_general .dental-table-datetime { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; }
+                                #evaluacion_general .dental-table-datetime strong { color: #34495e; font-size: .8rem; }
+                                #evaluacion_general .dental-table-datetime small { margin-top: .2rem; color: var(--dental-muted); font-size: .75rem; }
+                                #evaluacion_general .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .5rem; min-width: 190px; }
+                                #evaluacion_general .dental-table-state-control .dental-piece-status { min-width: 140px; }
+                                #evaluacion_general .dental-table-state-control .custom-control { flex: 0 0 auto; margin: 0; }
+                                #evaluacion_general .dental-piece-status:disabled { cursor: wait; opacity: .65; }
+
                                 #evaluacion_general .dental-evaluation-panel .tab-content .card {
                                     margin: .55rem 1rem 1rem;
                                     border: 1px solid var(--dental-border);
@@ -916,6 +1131,38 @@
                                     margin: .75rem 1rem 0;
                                     padding-bottom: .65rem;
                                     border-bottom: 1px solid var(--dental-border);
+                                }
+
+                                #evaluacion_general .dental-piece-planner {
+                                    margin-bottom: 1rem;
+                                    border: 1px solid var(--dental-border);
+                                    border-radius: .8rem;
+                                    background: #fff;
+                                    box-shadow: 0 4px 14px rgba(34, 72, 120, .08);
+                                }
+
+                                #evaluacion_general .dental-piece-planner__header {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: space-between;
+                                    gap: 1rem;
+                                    padding: 1rem 1.1rem .25rem;
+                                }
+
+                                #evaluacion_general .dental-piece-planner__header h6 {
+                                    margin: 0;
+                                    color: var(--dental-blue);
+                                    font-size: 1rem;
+                                    font-weight: 700;
+                                }
+
+                                #evaluacion_general .dental-piece-planner__header p {
+                                    margin: .2rem 0 0;
+                                    color: var(--dental-muted);
+                                }
+
+                                #evaluacion_general .dental-piece-planner__body {
+                                    padding: .75rem 1.1rem 1.1rem;
                                 }
 
                                 #evaluacion_general .dental-plan-table {
@@ -946,6 +1193,75 @@
                             </style>
                             <div class="row">
                                 <div class="col-md-12">
+                                    <div class="dental-piece-planner">
+                                        <div class="dental-piece-planner__header">
+                                            <div>
+                                                <h6>Seleccione una pieza para agregar al plan</h6>
+                                                <p>Las 32 piezas est&aacute;n habilitadas. Luego indique diagn&oacute;stico y tratamiento.</p>
+                                            </div>
+                                            <span class="badge badge-light-primary">Dentici&oacute;n adulta</span>
+                                        </div>
+                                        <div class="dental-piece-planner__body">
+                                            @include('atencion_odontologica.include.selector_odontograma', [
+                                                'id' => 'selector_plan_tratamiento_general',
+                                                'inputId' => 'pieza_plan_tratamiento_general',
+                                                'counter' => 9700,
+                                                'multiple' => false,
+                                                'compacto' => true,
+                                                'autoRefresh' => false,
+                                                'mostrarMensajeVacio' => false,
+                                                'mostrarEstadoClinico' => true,
+                                                'historialPiezas' => $odontograma_historial ?? [],
+                                                'estadosBloqueados' => [],
+                                                'piezasDisponibles' => $piezasPlanTratamiento,
+                                                'titulo' => 'Odontograma del plan de tratamiento',
+                                                'ayuda' => 'Presione una pieza para ingresar su prestacion',
+                                            ])
+                                            <input type="hidden" id="pieza_plan_tratamiento_general" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="modal_pieza_plan_tratamiento" tabindex="-1" role="dialog"
+                                        aria-labelledby="titulo_modal_pieza_plan_tratamiento" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div>
+                                                        <small class="text-uppercase text-c-blue font-weight-bold">Plan de tratamiento</small>
+                                                        <h5 class="modal-title" id="titulo_modal_pieza_plan_tratamiento">
+                                                            Pieza <span id="numero_pieza_plan_tratamiento"></span>
+                                                        </h5>
+                                                    </div>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="diagnostico_pieza_plan_tratamiento">Diagn&oacute;stico</label>
+                                                        <select class="form-control" id="diagnostico_pieza_plan_tratamiento">
+                                                            <option value="0">Seleccione un diagn&oacute;stico</option>
+                                                            @foreach ($diagnosticos as $diagnosticoPlan)
+                                                                <option value="{{ $diagnosticoPlan->id }}">{{ $diagnosticoPlan->descripcion }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="tratamiento_pieza_plan_tratamiento">Tratamiento o prestaci&oacute;n</label>
+                                                        <input type="text" class="form-control tratamiento-autocomplete"
+                                                            id="tratamiento_pieza_plan_tratamiento"
+                                                            placeholder="Busque o describa el tratamiento" autocomplete="off">
+                                                        <small class="form-text text-muted">Al guardar, la pieza se incorporar&aacute; a su grupo dental y al presupuesto.</small>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                    <button type="button" class="btn btn-primary" id="guardar_pieza_plan_tratamiento">
+                                                        <i class="feather icon-plus"></i> Agregar al plan
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card caras-grupos-shell">
                                         <div class="card-body">
                                             <div class="col-sm-12">
@@ -1017,7 +1333,263 @@
     </div>
 </div>
 <script>
+    function actualizarEstadoCabeceraPlanDental(pagado) {
+        const $estado = $('#estado_cabecera_plan_dental');
+        if (!$estado.length) return;
+
+        if (typeof pagado !== 'undefined') {
+            $estado.attr('data-paid', pagado ? '1' : '0');
+        }
+
+        const odontogramaEstado = typeof odontograma_global !== 'undefined' ? odontograma_global : [];
+        const piezas = (odontogramaEstado || []).filter(function (pieza) {
+            return Number(pieza.presupuesto) === 1 && Number(pieza.urgencia) === 0;
+        });
+        const estaPagado = $estado.attr('data-paid') === '1';
+        const todasFinalizadas = piezas.length > 0 && piezas.every(function (pieza) {
+            return Number(pieza.estado) === 1;
+        });
+        const atencionIniciada = piezas.some(function (pieza) {
+            return [1, 2, 3].includes(Number(pieza.estado));
+        });
+
+        let estado = { codigo: 'preparacion', texto: 'En preparación', icono: 'icon-edit-3' };
+        if (estaPagado && todasFinalizadas) {
+            estado = { codigo: 'terminado', texto: 'Terminado', icono: 'icon-check-circle' };
+        } else if (estaPagado) {
+            estado = { codigo: 'pagado', texto: 'Pagado', icono: 'icon-dollar-sign' };
+        } else if (atencionIniciada) {
+            estado = { codigo: 'en-tratamiento', texto: 'En tratamiento', icono: 'icon-activity' };
+        } else if (piezas.length) {
+            estado = { codigo: 'presupuestado', texto: 'Presupuestado', icono: 'icon-file-text' };
+        }
+
+        $estado.attr('data-status', estado.codigo);
+        $estado.find('i').attr('class', 'feather ' + estado.icono);
+        $estado.find('span').text(estado.texto);
+    }
+
+    function actualizarEstadoPiezaPlan(select, idTratamiento) {
+        const $select = $(select);
+        const estadoAnterior = String($select.data('original-state'));
+        const estadoNuevo = String($select.val());
+
+        $select.prop('disabled', true);
+        $select.siblings('.dental-piece-status-feedback').remove();
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
+            data: {
+                id_tratamiento: idTratamiento,
+                estado: estadoNuevo,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_profesional: $('#id_profesional_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (respuesta) {
+                if (respuesta.mensaje !== 'OK') {
+                    $select.val(estadoAnterior);
+                    swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error');
+                    return;
+                }
+
+                $select.data('original-state', estadoNuevo);
+                $select.closest('tr').attr('data-clinical-state', estadoNuevo);
+                $('<small class="dental-piece-status-feedback text-success d-block mt-1"><i class="feather icon-check"></i> Estado actualizado</small>')
+                    .insertAfter($select)
+                    .delay(2200)
+                    .fadeOut(250, function () { $(this).remove(); });
+
+                if (Array.isArray(respuesta.odontograma)) {
+                    odontograma_global = respuesta.odontograma;
+                } else {
+                    const piezaActualizada = (odontograma_global || []).find(function (pieza) {
+                        return Number(pieza.id) === Number(idTratamiento);
+                    });
+                    if (piezaActualizada) piezaActualizada.estado = Number(estadoNuevo);
+                }
+                actualizarEstadoCabeceraPlanDental();
+            },
+            error: function () {
+                $select.val(estadoAnterior);
+                swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error');
+            },
+            complete: function () {
+                $select.prop('disabled', false);
+            }
+        });
+    }
+
+    function decorarTablaPlanTratamiento() {
+        const baseImagenes = @json(asset('images/dental/dientes'));
+
+        $('#table_odontograma tbody tr').each(function () {
+            const $fila = $(this);
+            const $celdas = $fila.children('td');
+            const fechaHoraOriginal = $.trim($celdas.eq(0).text());
+            const partesFechaHora = fechaHoraOriginal.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+
+            if (!$celdas.eq(0).find('.dental-table-datetime').length && partesFechaHora) {
+                $celdas.eq(0).html(
+                    '<div class="dental-table-datetime">' +
+                        '<strong>' + partesFechaHora[3] + '-' + partesFechaHora[2] + '-' + partesFechaHora[1] + '</strong>' +
+                        '<small>' + partesFechaHora[4] + ':' + partesFechaHora[5] + '</small>' +
+                    '</div>'
+                );
+            }
+
+            if (!$celdas.eq(1).find('.dental-treatment-name').length) {
+                const nombrePrestacion = $.trim($celdas.eq(1).text());
+                $celdas.eq(1).empty().append($('<span>', {
+                    class: 'dental-treatment-name',
+                    title: nombrePrestacion,
+                    text: nombrePrestacion
+                }));
+            }
+
+            const decoracionVigente = $celdas.eq(3).find('.dental-table-tooth').length
+                && $celdas.eq(7).find('.dental-piece-status').length;
+
+            if ($celdas.length < 8 || decoracionVigente) {
+                return;
+            }
+
+            const $seleccion = $celdas.eq(7).find('.checkbox-seleccion');
+            const idTratamiento = Number($seleccion.val() || $fila.data('treatment-id'));
+            const numeroPieza = $.trim($celdas.eq(3).text());
+
+            if (!idTratamiento || !numeroPieza) {
+                return;
+            }
+
+            const tratamiento = (window.odontograma_global || []).find(function (item) {
+                return Number(item.id) === idTratamiento;
+            });
+            const estado = Number($fila.attr('data-clinical-state') || (tratamiento ? tratamiento.estado : 0));
+            const archivoPieza = numeroPieza.replace('.', '');
+
+            $celdas.eq(3).html(
+                '<div class="dental-table-tooth">' +
+                    '<img src="' + baseImagenes + '/d' + archivoPieza + '.png" alt="Pieza ' + numeroPieza + '">' +
+                    '<strong>' + numeroPieza + '</strong>' +
+                '</div>'
+            );
+
+            const selectorEstado =
+                '<select class="form-control form-control-sm dental-piece-status" data-original-state="' + estado + '" ' +
+                    'onchange="actualizarEstadoPiezaPlan(this,' + idTratamiento + ')">' +
+                    '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
+                    '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
+                    '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
+                    '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option>' +
+                '</select>';
+
+            const $controlSeleccion = $celdas.eq(7).find('.custom-control').detach();
+            $celdas.eq(7).html('<div class="dental-table-state-control">' + selectorEstado + '</div>');
+            $celdas.eq(7).find('.dental-table-state-control').append($controlSeleccion);
+            $fila.addClass('dental-plan-row-ready');
+        });
+    }
+
+    let decoracionTablaPlanPendiente = false;
+
+    function programarDecoracionTablaPlan() {
+        if (decoracionTablaPlanPendiente) {
+            return;
+        }
+
+        decoracionTablaPlanPendiente = true;
+        window.requestAnimationFrame(function () {
+            decoracionTablaPlanPendiente = false;
+            decorarTablaPlanTratamiento();
+        });
+    }
+
+    // DataTables dispara el evento sobre la tabla y algunos complementos lo
+    // propagan desde el documento; escuchar ambos casos evita perder el redraw.
+    $(document).on('draw.dt init.dt responsive-display.dt', function (event, settings) {
+        if (settings && settings.nTable && settings.nTable.id === 'table_odontograma') {
+            programarDecoracionTablaPlan();
+        }
+    });
+
+    // La secci&oacute;n completa tambi&eacute;n puede ser reemplazada por AJAX. El
+    // observador vuelve a decorar las filas nuevas despu&eacute;s de ese reemplazo.
+    const observadorTablaPlan = new MutationObserver(function (mutaciones) {
+        const afectaTablaPlan = mutaciones.some(function (mutacion) {
+            const nodo = mutacion.target.nodeType === 1 ? mutacion.target : mutacion.target.parentElement;
+            return nodo && (nodo.id === 'table_odontograma' || nodo.closest('#table_odontograma'));
+        });
+
+        if (afectaTablaPlan) {
+            programarDecoracionTablaPlan();
+        }
+    });
+
+    observadorTablaPlan.observe(document.body, { childList: true, subtree: true });
+
+    $(document).on('odontograma:change', '#selector_plan_tratamiento_general', function (event, piezas) {
+        const pieza = Array.isArray(piezas) ? piezas[0] : null;
+
+        if (!pieza) {
+            return;
+        }
+
+        $('#numero_pieza_plan_tratamiento').text(pieza);
+        $('#diagnostico_pieza_plan_tratamiento').val('0');
+        $('#tratamiento_pieza_plan_tratamiento').val('');
+        $('#modal_pieza_plan_tratamiento').modal('show');
+    });
+
+    $(document).on('click', '#guardar_pieza_plan_tratamiento', function () {
+        const pieza = String($('#pieza_plan_tratamiento_general').val() || '');
+        const diagnostico = $('#diagnostico_pieza_plan_tratamiento').val();
+        const tratamiento = $.trim($('#tratamiento_pieza_plan_tratamiento').val());
+        const errores = [];
+
+        if (!pieza || pieza === '0') {
+            errores.push('Seleccione una pieza dental.');
+        }
+        if (!diagnostico || diagnostico === '0') {
+            errores.push('Seleccione un diagn&oacute;stico.');
+        }
+        if (!tratamiento) {
+            errores.push('Ingrese un tratamiento o prestaci&oacute;n.');
+        }
+
+        if (errores.length) {
+            swal({
+                title: 'Datos requeridos',
+                content: {
+                    element: 'div',
+                    attributes: { innerHTML: errores.join('<br>') }
+                },
+                icon: 'warning'
+            });
+            return;
+        }
+
+        // Reutiliza el flujo cl&iacute;nico existente para conservar aranceles,
+        // presupuesto, historial y reglas de negocio en un solo lugar.
+        $('#max_sup, #max_inf').prop('checked', false);
+        $('#piezas_presup').prop('checked', true);
+        $('#paciente_piezas_dentales_ex').val([pieza]).trigger('change');
+        $('#diagnostico_combo_g_od_gral').val(diagnostico).trigger('change');
+        $('#diag_presupuesto_pieza_g').val(tratamiento);
+        $('#modal_pieza_plan_tratamiento').modal('hide');
+
+        cargar_a_presupuesto_impl_g_confirmar();
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
+        const $selectorAdulto = $('#evaluacion_general .dental-piece-planner');
+        if ($selectorAdulto.length && $('#eval_adults').length) {
+            $selectorAdulto.prependTo('#eval_adults');
+        }
+        programarDecoracionTablaPlan();
         var primerTab = document.querySelector('#oft .nav-secciones');
         var tabs = document.querySelectorAll('#oft .nav-secciones');
 
@@ -5765,6 +6337,26 @@ setTimeout(function(){
                 success: function(resp) {
                     console.log(resp);
                     if (resp.status == 1) {
+                        const presupuestoActualizado = resp.presupuesto || {};
+                        const presupuestoCompletado = resp.presupuesto_completado !== undefined
+                            ? Boolean(resp.presupuesto_completado)
+                            : Boolean(presupuestoActualizado.pago_completado);
+                        const totalAbonadoActualizado = resp.total_abonado !== undefined
+                            ? resp.total_abonado
+                            : presupuestoActualizado.valor_abonado;
+                        const saldoActualizado = resp.saldo_pendiente !== undefined
+                            ? resp.saldo_pendiente
+                            : Math.max(0,
+                                (parseInt(presupuestoActualizado.valor_total) || 0)
+                                - (parseInt(totalAbonadoActualizado) || 0)
+                            );
+                        if (typeof marcarPresupuestoComoReabierto === 'function') {
+                            marcarPresupuestoComoReabierto(presupuestoCompletado);
+                        }
+                        if (typeof sincronizarResumenPagoPresupuesto === 'function'
+                            && totalAbonadoActualizado !== undefined) {
+                            sincronizarResumenPagoPresupuesto(totalAbonadoActualizado, saldoActualizado);
+                        }
                         swal({
                             icon: 'success',
                             title: 'Info',
@@ -5905,6 +6497,9 @@ setTimeout(function(){
                             ? String(piezaExamenActual)
                             : (piezaRecienAgregada || '0');
                         $selectorExamenPieza.val(piezaASeleccionar).trigger('change.select2');
+                        if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                            sincronizarOdontogramaPresupuesto(odontograma, piezaRecienAgregada || piezasSeleccionadas[0]);
+                        }
                         let valores_boca_general = resp.valores[0];
                         let valores_odontograma = resp.valores[1];
                         let valores_insumos = resp.valores[2];
@@ -6058,6 +6653,7 @@ setTimeout(function(){
                     // redistribuir los abonos. Obtener inmediatamente el estado
                     // canónico para sincronizar tabla, totales y modal.
                     if (resp.status == 1) {
+                        refrescar_caras_grupos();
                         actualizar_presupuesto();
                     }
                 },
@@ -11464,6 +12060,7 @@ setTimeout(function(){
         }
 
          function refrescar_caras_grupos(){
+            const $selectorAdulto = $('#evaluacion_general .dental-piece-planner').detach();
             $.ajax({
                 type: 'post',
                 url: '{{ ROUTE("dental.refrescar_caras_grupos") }}',
@@ -11477,9 +12074,15 @@ setTimeout(function(){
                     if (response.estado == 1) {
                         $('#contenedor_examenes_grupos_dentales').closest('.dental-evaluation-panel').replaceWith(response.evaluacion_adulto_html);
                         $('#contenedor_examenes_grupos_dentales_odontop').closest('.dental-evaluation-panel').replaceWith(response.caras_cuadrantes_html);
+                        if ($selectorAdulto.length) {
+                            $selectorAdulto.prependTo('#eval_adults');
+                        }
                     }
                 },
                 error: function(xhr){
+                    if ($selectorAdulto.length) {
+                        $selectorAdulto.insertBefore('#evaluacion_general .caras-grupos-shell');
+                    }
                     console.log('Error al refrescar caras y grupos:', xhr);
                 }
             });

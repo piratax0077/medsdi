@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!-- fileupload-custom css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
@@ -77,9 +78,10 @@
 </head>
 <body>
     
-    @include('template.header')
-    @include('template.menuProfesional')
+    {{-- Orden odontológico normalizado, conservando recursos y títulos de Implantología. --}}
     @include('atencion_odontologica.generales.eval_periimplante')
+    @include('template.dental.header')
+    @include('template.menuProfesional')
     @yield('Content')
 
     <!-- Modal de la vista -->
@@ -135,6 +137,8 @@
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/modals_atencion_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/modals_atencion_implantologia.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>

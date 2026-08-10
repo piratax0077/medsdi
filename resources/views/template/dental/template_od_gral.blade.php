@@ -574,11 +574,12 @@
        
 
 
-        function cargar_a_presupuesto(id, tipo = null, elemento = null) {
+        function cargar_a_presupuesto(id, tipo = null, elemento = null, confirmarReapertura = false) {
             let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
             let data = {
                 id: id,
                 tipo: tipo,
+                reabrir_presupuesto: confirmarReapertura ? 1 : 0,
                 _token: "{{ csrf_token() }}"
             }
             console.log(data);
@@ -588,8 +589,27 @@
                 data: data,
                 success: function(resp) {
                     console.log(resp);
+                    if (tipo == null && (resp.status == 2 || resp.requiere_reapertura)) {
+                        swal({
+                            title: 'Presupuesto cerrado',
+                            text: resp.mensaje + ' Los abonos ya registrados se conservarán.',
+                            icon: 'warning',
+                            buttons: ['Cancelar', 'Reabrir y continuar'],
+                            dangerMode: true
+                        }).then(function (confirmado) {
+                            if (confirmado) {
+                                cargar_a_presupuesto(id, tipo, elemento, true);
+                            } else {
+                                $('#presupuestoCheck' + id).prop('checked', false);
+                            }
+                        });
+                        return;
+                    }
                     if (tipo == null) {
                         if (resp.status == 1) {
+                            if (resp.presupuesto_reabierto && typeof marcarPresupuestoComoReabierto === 'function') {
+                                marcarPresupuestoComoReabierto(resp.presupuesto_completado);
+                            }
                             swal({
                                 icon: 'success',
                                 title: 'Info',
@@ -645,6 +665,12 @@
                             $('#contenedor_piezas_dentales_presupuesto').empty();
                             $('#table_trabajos_presupuesto tbody').empty();
                             odontograma_global = odontograma;
+                            if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                                const piezaAgregada = (odontograma || []).find(function(item) {
+                                    return Number(item.id) === Number(id);
+                                });
+                                sincronizarOdontogramaPresupuesto(odontograma, piezaAgregada ? piezaAgregada.pieza : null);
+                            }
                             odontograma.forEach(function(odonto) {
                                 if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
                                     $('#contenedor_piezas_dentales_presupuesto').append(`
@@ -1394,6 +1420,9 @@
 
                             let odontograma = response.odontograma_paciente;
                               odontograma_global = response.odontograma_paciente;
+                            if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                                sincronizarOdontogramaPresupuesto(odontograma);
+                            }
                             let table_odonto = $('#table_odontograma').DataTable();
 
                             // Vacía la tabla

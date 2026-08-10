@@ -22,22 +22,39 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     @php
-                                        $piezasUnicas = [];
+                                        $piezasUnicas = collect($odontograma ?? [])
+                                            ->filter(function ($pieza) {
+                                                return (int) data_get($pieza, 'presupuesto', 0) === 1;
+                                            })
+                                            ->pluck('pieza')
+                                            ->map(function ($pieza) { return (string) $pieza; })
+                                            ->unique()
+                                            ->values()
+                                            ->all();
                                     @endphp
 
-                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-4 col-xxl-2">
-                                        <label class="floating-label-activo-sm">Pieza N°</label>
+                                    <div class="col-12 mb-3">
+                                        @include('atencion_odontologica.include.selector_odontograma', [
+                                            'id' => 'selector_implante_propio'.$counter,
+                                            'inputId' => 'numero_pieza_post_impl'.$counter,
+                                            'counter' => 13000 + (int) $counter,
+                                            'multiple' => false,
+                                            'compacto' => true,
+                                            'autoRefresh' => true,
+                                            'mostrarMensajeVacio' => true,
+                                            'mostrarEstadoClinico' => true,
+                                            'historialPiezas' => $odontograma ?? [],
+                                            'estadosBloqueados' => [],
+                                            'piezasDisponibles' => $piezasUnicas,
+                                            'titulo' => 'Seleccione el implante a evaluar',
+                                            'ayuda' => 'Se muestran las piezas incluidas en el presupuesto',
+                                        ])
                                         <select name="numero_pieza_post_impl{{ $counter }}"
                                                 id="numero_pieza_post_impl{{ $counter }}"
-                                                class="form-control form-control-sm">
+                                                class="d-none" aria-hidden="true" tabindex="-1">
                                             <option value="0">Seleccione</option>
-                                            @foreach ($odontograma as $o)
-                                                @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
-                                                    <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                                    @php
-                                                        $piezasUnicas[] = $o->pieza;
-                                                    @endphp
-                                                @endif
+                                            @foreach ($piezasUnicas as $piezaPresupuestada)
+                                                <option value="{{ $piezaPresupuestada }}">{{ $piezaPresupuestada }}</option>
                                             @endforeach
                                         </select>
                                     </div>

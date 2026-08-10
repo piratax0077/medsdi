@@ -1575,7 +1575,6 @@ class ficha_atencionController extends Controller
         /** ENDODONCIA - 15 */
         else if($profesional->id_tipo_especialidad == 15 )
         {
-
             $ruta_blade = 'atencion_odontologica.atencion_endodoncia';
 
             $fichaTipo = '';
@@ -1587,6 +1586,10 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+
+            $placeholder_motivo_consulta = "DOLOR DENTAL, DERIVACIÓN ENDODÓNTICA, CONTROL DE TRATAMIENTO";
+            $placeholder_examen_fisico = "EXAMEN CLÍNICO ENDODÓNTICO, PRUEBAS DE SENSIBILIDAD Y HALLAZGOS";
+            $placeholder_antecedentes = "ANTECEDENTES ENDODÓNTICOS Y TRATAMIENTOS PREVIOS";
         }
         /** odontologia general - 18 */
         else if($profesional->id_tipo_especialidad == 18 )

@@ -127,7 +127,7 @@
 <script>
 $(document).ready(function() {
     // Inicializa todos los select con clase .select2
-    $('.select2').select2({
+    $('select.select2').select2({
         width: '100%',
         placeholder: "Seleccione piezas",
         allowClear: true

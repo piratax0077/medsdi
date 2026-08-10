@@ -19,30 +19,74 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     @php
-                                        $piezasUnicas = [];
+                                        $piezasUnicas = collect($odontograma ?? [])
+                                            ->filter(function ($pieza) {
+                                                return (int) data_get($pieza, 'presupuesto', 0) === 1
+                                                    && (int) data_get($pieza, 'urgencia', 0) === 0;
+                                            })
+                                            ->pluck('pieza')
+                                            ->map(function ($pieza) { return (string) $pieza; })
+                                            ->unique()
+                                            ->values()
+                                            ->all();
                                     @endphp
-                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                                    <div class="col-12 mb-3">
                                         <div class="form-group">
-                                                <label for="numero_pieza_tto_impl{{ $counter }}" class="floating-label-activo-sm">Pieza Nº</label>
-                                                <select name="numero_pieza_tto_impl{{ $counter }}" id="numero_pieza_tto_impl{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl(this.value, {{ $counter }}, 'pieza')">
+                                            @include('atencion_odontologica.include.selector_odontograma', [
+                                                'id' => 'selector_procedimiento_implantologia'.$counter,
+                                                'inputId' => 'pieza_selector_procedimiento_implantologia'.$counter,
+                                                'counter' => 11000 + (int) $counter,
+                                                'multiple' => false,
+                                                'compacto' => true,
+                                                'autoRefresh' => false,
+                                                'mostrarMensajeVacio' => true,
+                                                'mostrarEstadoClinico' => true,
+                                                'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                'estadosBloqueados' => [],
+                                                'piezasDisponibles' => $piezasUnicas,
+                                                'titulo' => 'Piezas incluidas en el presupuesto',
+                                                'ayuda' => 'Seleccione una pieza para cargar sus procedimientos',
+                                            ])
+                                            <input type="hidden" id="pieza_selector_procedimiento_implantologia{{ $counter }}" value="0">
+                                            <select name="numero_pieza_tto_impl{{ $counter }}" id="numero_pieza_tto_impl{{ $counter }}"
+                                                class="d-none" aria-hidden="true" tabindex="-1">
                                                     <option value="0">Seleccione</option>
-                                                    @foreach ($odontograma as $o)
-                                                        @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
-                                                        <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                                        @php
-                                                            $piezasUnicas[] = $o->pieza;
-                                                        @endphp
-                                                    @endif
-                                                @endforeach
+                                                    @foreach ($piezasUnicas as $piezaPresupuestada)
+                                                        <option value="{{ $piezaPresupuestada }}">{{ $piezaPresupuestada }}</option>
+                                                    @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9 col-xxl-9">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Procedimiento</label>
                                             <select name="tto_impl{{ $counter }}" id="tto_impl{{ $counter }}" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                             </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="modal_procedimiento_implantologia{{ $counter }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div>
+                                                        <small class="text-uppercase text-c-blue font-weight-bold">Procedimiento implantológico</small>
+                                                        <h5 class="modal-title">Pieza <span data-pieza-procedimiento></span></h5>
+                                                    </div>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="text-muted mb-2">Prestación incluida en el presupuesto</p>
+                                                    <div class="alert alert-light border mb-0" data-prestacion-procedimiento>Seleccione el procedimiento a realizar.</div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light" data-dismiss="modal">Continuar editando</button>
+                                                    <button type="button" class="btn btn-warning" onclick="guardar_pieza_dental_tto_impl({{ $counter }})">
+                                                        <i class="fas fa-check"></i> Finalizar prestación en curso
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
@@ -259,7 +303,9 @@
                             <div class="card-footer">
                                 <div class="float-right">
                                     {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-x"></i> </button> --}}
-                                    <button type="button" class="btn btn-xxs btn-warning-light-c" onclick="guardar_pieza_dental_tto_impl({{ $counter }})"> <i class="fas fa-check"></i> Presione para finalizar prestación en curso</button></button>
+                                    <button type="button" class="btn btn-xxs btn-warning-light-c" onclick="abrirConfirmacionProcedimientoImplantologia({{ $counter }})">
+                                        <i class="fas fa-check"></i> Presione para finalizar prestación en curso
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -274,20 +320,39 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     @php
-                                        $piezasUnicas = [];
+                                        $piezasGrupoImplantologia = collect($odontograma ?? [])
+                                            ->filter(function ($pieza) {
+                                                return (int) data_get($pieza, 'presupuesto', 0) === 1
+                                                    && (int) data_get($pieza, 'urgencia', 0) === 0;
+                                            })
+                                            ->pluck('pieza')
+                                            ->map(function ($pieza) { return (string) $pieza; })
+                                            ->unique()
+                                            ->values()
+                                            ->all();
                                     @endphp
 
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
-                                        <label class="floating-label-activo-sm">Piezas Nº</label>
-                                        <select name="numero_pieza_tto_impl_grupo{{ $counter }}" id="numero_pieza_tto_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl(this.value, {{ $counter }},'grupo')" multiple>
-                                            <option value="0">Seleccione</option>
-                                            @foreach ($odontograma as $o)
-                                                @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
-                                                    <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                                    @php
-                                                        $piezasUnicas[] = $o->pieza;
-                                                    @endphp
-                                                @endif
+                                        @include('atencion_odontologica.include.selector_odontograma', [
+                                            'id' => 'selector_procedimiento_grupo_implantologia'.$counter,
+                                            'inputId' => 'numero_pieza_tto_impl_grupo'.$counter,
+                                            'counter' => 16000 + (int) $counter,
+                                            'multiple' => true,
+                                            'compacto' => true,
+                                            'autoRefresh' => false,
+                                            'mostrarMensajeVacio' => true,
+                                            'mostrarEstadoClinico' => true,
+                                            'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                            'estadosBloqueados' => [],
+                                            'piezasDisponibles' => $piezasGrupoImplantologia,
+                                            'titulo' => 'Seleccione las piezas del grupo dental',
+                                            'ayuda' => 'Puede seleccionar una o varias piezas incluidas en el presupuesto',
+                                        ])
+                                        <select name="numero_pieza_tto_impl_grupo{{ $counter }}[]" id="numero_pieza_tto_impl_grupo{{ $counter }}"
+                                            class="d-none" aria-hidden="true" tabindex="-1"
+                                            onchange="if (this.value) { dame_tratamientos_pieza_impl(this.value, {{ $counter }}, 'grupo'); } else { $('#tto_impl_grupo{{ $counter }}').empty().append('<option value=&quot;0&quot;>Seleccione</option>'); }" multiple>
+                                            @foreach ($piezasGrupoImplantologia as $piezaGrupo)
+                                                <option value="{{ $piezaGrupo }}">{{ $piezaGrupo }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -517,10 +582,64 @@
 
 <script>
 
-    $(document).ready(function(){
-        $('#numero_pieza_tto_impl1000').select2();
-        $('#numero_pieza_tto_impl_grupo1000').select2();
+    function abrirConfirmacionProcedimientoImplantologia(counter) {
+        const pieza = String($('select#numero_pieza_tto_impl' + counter).val() || '');
+        const $procedimiento = $('#tto_impl' + counter);
+        const procedimiento = $.trim($procedimiento.find('option:selected').text());
+        if (!pieza || pieza === '0') {
+            swal('Seleccione una pieza', 'Presione una pieza del odontograma antes de finalizar la prestación.', 'warning');
+            return;
+        }
+        if (!$procedimiento.val() || $procedimiento.val() === '0') {
+            swal('Seleccione un procedimiento', 'Debe seleccionar la prestación correspondiente antes de finalizarla.', 'warning');
+            $procedimiento.focus();
+            return;
+        }
+        const $modal = $('#modal_procedimiento_implantologia' + counter);
+        $modal.find('[data-pieza-procedimiento]').text(pieza);
+        $modal.find('[data-prestacion-procedimiento]').text(
+            $procedimiento.val() && $procedimiento.val() !== '0'
+                ? procedimiento
+                : 'Seleccione el procedimiento a realizar para esta pieza.'
+        );
+        // El include vive dentro de paneles que crean su propio contexto de
+        // apilamiento. Llevar el modal al body evita que el backdrop lo cubra.
+        if (!$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+        $modal.modal('show');
+    }
 
+    document.addEventListener('click', function (event) {
+        const boton = event.target.closest('#selector_procedimiento_implantologia{{ $counter }} [data-selector-pieza]');
+        if (!boton || boton.disabled || !boton.classList.contains('is-enabled')) return;
+
+        const pieza = String(boton.getAttribute('data-selector-pieza') || '');
+        window.setTimeout(function () {
+            if (!boton.classList.contains('is-selected')) {
+                $('#pieza_selector_procedimiento_implantologia{{ $counter }}').val('0');
+                $('select#numero_pieza_tto_impl{{ $counter }}').val('0');
+                $('#tto_impl{{ $counter }}')
+                    .prop('disabled', false)
+                    .empty()
+                    .append('<option value="0">Seleccione</option>');
+                return;
+            }
+
+            $('#pieza_selector_procedimiento_implantologia{{ $counter }}').val(pieza);
+            const $selectPieza = $('select#numero_pieza_tto_impl{{ $counter }}');
+            if (!$selectPieza.find('option[value="' + pieza + '"]').length) {
+                $selectPieza.append(new Option(pieza, pieza));
+            }
+            $selectPieza.val(pieza);
+            dame_tratamientos_pieza_impl(pieza, {{ $counter }}, 'pieza');
+        }, 0);
+    });
+
+    $(document).on('change', '#tto_impl{{ $counter }}', function () {
+        const prestacion = $.trim($(this).find('option:selected').text());
+        $('#modal_procedimiento_implantologia{{ $counter }} [data-prestacion-procedimiento]')
+            .text($(this).val() && $(this).val() !== '0' ? prestacion : 'Seleccione el procedimiento a realizar para esta pieza.');
     });
 
     function dame_tratamientos_pieza_impl(pieza, counter, tipo) {
@@ -528,6 +647,13 @@
         if(id_paciente == '' || id_paciente == null){
             id_paciente = $('#id_paciente').val();
         }
+        const $selectorTratamiento = tipo === 'grupo'
+            ? $('#tto_impl_grupo' + counter)
+            : $('#tto_impl' + counter);
+        $selectorTratamiento
+            .prop('disabled', true)
+            .empty()
+            .append('<option value="0">Cargando procedimientos...</option>');
         $.ajax({
             url: '{{ route("dental.dame_tratamientos_pieza_impl") }}',
             type: 'POST',
@@ -540,6 +666,9 @@
             success: function(resp) {
                 console.log(resp);
                 if(resp.error){
+                    $selectorTratamiento
+                        .empty()
+                        .append('<option value="0">Seleccione</option>');
                     swal({
                         title: "Error",
                         text: resp.error,
@@ -562,7 +691,20 @@
                     $.each(resp.tratamientos, function(index, value) {
                         $('#tto_impl' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
                     });
+                    if (resp.tratamientos && resp.tratamientos.length === 1) {
+                        $('#tto_impl' + counter)
+                            .val(String(resp.tratamientos[0].id))
+                            .trigger('change');
+                    }
                 }
+            },
+            error: function() {
+                $selectorTratamiento
+                    .empty()
+                    .append('<option value="0">No fue posible cargar los procedimientos</option>');
+            },
+            complete: function() {
+                $selectorTratamiento.prop('disabled', false);
             }
         });
     }
@@ -738,6 +880,7 @@
             success: function(resp){
                 console.log(resp);
                 if(resp.mensaje == 'OK'){
+                    $('#modal_procedimiento_implantologia'+counter).modal('hide');
                     swal({
                         title: "Pieza guardada",
                         text: "Pieza guardada correctamente",

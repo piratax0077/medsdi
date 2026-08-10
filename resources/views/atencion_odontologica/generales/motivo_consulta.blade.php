@@ -7,6 +7,11 @@
         isset($subseccionVisibleFichaDental)
         && is_callable($subseccionVisibleFichaDental);
 
+    // Evita Undefined variable en fichas odontológicas que aún no cargan el helper.
+    if (!$subseccionVisibleDentalDisponible) {
+        $subseccionVisibleFichaDental = null;
+    }
+
     $resolverSubseccionMotivo = static function (
         array $aliasSubseccion,
         bool $predeterminado = true

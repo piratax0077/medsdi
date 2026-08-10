@@ -8244,6 +8244,7 @@ class AdministradorCmController extends Controller
 
         $permiso = PermisoAsistente::where('id_asistente', $request->id_asistente)
             ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->whereNull('id_profesional')
             ->first();
 
         return response()->json([
@@ -8541,9 +8542,11 @@ public function guardar_permisos_asistente_profesional(Request $request)
         $permiso = PermisoAsistente::firstOrNew([
             'id_asistente' => $id_asistente,
             'id_lugar_atencion' => $id_lugar_atencion,
+            'id_profesional' => null,
         ]);
         $permiso->id_asistente = $id_asistente;
         $permiso->id_lugar_atencion = $id_lugar_atencion;
+        $permiso->id_profesional = null;
         $permiso->permiso_cotizar = (int) $request->input('permiso_cotizar', 0) === 1;
         $permiso->permiso_confirmar_hora = (int) $request->input('permiso_confirmar_hora', 0) === 1;
         $permiso->permiso_anular_hora = (int) $request->input('permiso_anular_hora', 0) === 1;

@@ -1,25 +1,291 @@
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+@php
+    /*
+     * Configuración común para todas las fichas odontológicas.
+     *
+     * Debe incluirse al comienzo de cada ficha odontológica que necesite
+     * respetar la plantilla personalizada del profesional.
+     */
+    $configuracionFichaDental = $plantilla
+        ?? ($plantillaFicha
+        ?? ($configuracionFicha
+        ?? null));
+
+    if (
+        empty($configuracionFichaDental)
+        && isset($profesional)
+        && !empty($profesional->id)
+    ) {
+        $consultaPlantillaDental = \App\Models\PlantillaFichaMedica::with([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ])
+            ->where('id_profesional', $profesional->id)
+            ->where('id_especialidad', (int) ($profesional->id_especialidad ?? 0))
+            ->where('id_tipo_especialidad', (int) ($profesional->id_tipo_especialidad ?? 0))
+            ->where('id_sub_tipo_especialidad', (int) ($profesional->id_sub_tipo_especialidad ?? 0))
+            ->where('activa', 1);
+
+        $configuracionFichaDental = $consultaPlantillaDental
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->first();
+    }
+
+    $seccionesPersonalizadasDental = data_get(
+        $configuracionFichaDental,
+        'secciones',
+        []
+    );
+
+    if (is_string($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental =
+            json_decode($seccionesPersonalizadasDental, true) ?: [];
+    } elseif (
+        $seccionesPersonalizadasDental instanceof
+        \Illuminate\Support\Collection
+    ) {
+        $seccionesPersonalizadasDental =
+            $seccionesPersonalizadasDental->toArray();
+    } elseif (is_object($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental = json_decode(
+            json_encode($seccionesPersonalizadasDental),
+            true
+        ) ?: [];
+    }
+
+    $normalizarCodigoFichaDental = static function ($valor) {
+        return \Illuminate\Support\Str::slug((string) $valor, '_');
+    };
+
+    $buscarSeccionFichaDental = static function (array $alias) use (
+        $seccionesPersonalizadasDental,
+        $normalizarCodigoFichaDental
+    ) {
+        if (empty($seccionesPersonalizadasDental)) {
+            return null;
+        }
+
+        $aliasNormalizados = collect($alias)
+            ->map($normalizarCodigoFichaDental)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($seccionesPersonalizadasDental as $seccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($seccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($seccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return $seccion;
+            }
+        }
+
+        return null;
+    };
+
+    $seccionVisibleFichaDental = static function (
+        array $alias,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $seccionesPersonalizadasDental
+    ) {
+        if (empty($seccionesPersonalizadasDental)) {
+            return $predeterminado;
+        }
+
+        $seccion = $buscarSeccionFichaDental($alias);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        if (
+            (bool) data_get(
+                $seccion,
+                'obligatoria',
+                data_get($seccion, 'obligatorio', false)
+            )
+        ) {
+            return true;
+        }
+
+        return filter_var(
+            data_get($seccion, 'visible', true),
+            FILTER_VALIDATE_BOOLEAN
+        );
+    };
+
+    $subseccionVisibleFichaDental = static function (
+        array $aliasSeccion,
+        array $aliasSubseccion,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $normalizarCodigoFichaDental
+    ) {
+        $seccion = $buscarSeccionFichaDental($aliasSeccion);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        $subsecciones = data_get($seccion, 'subsecciones', []);
+
+        if ($subsecciones instanceof \Illuminate\Support\Collection) {
+            $subsecciones = $subsecciones->toArray();
+        } elseif (is_object($subsecciones)) {
+            $subsecciones = json_decode(
+                json_encode($subsecciones),
+                true
+            ) ?: [];
+        }
+
+        if (empty($subsecciones)) {
+            return $predeterminado;
+        }
+
+        $aliasNormalizados = collect($aliasSubseccion)
+            ->map($normalizarCodigoFichaDental)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($subsecciones as $subseccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return filter_var(
+                    data_get($subseccion, 'visible', true),
+                    FILTER_VALIDATE_BOOLEAN
+                );
+            }
+        }
+
+        return $predeterminado;
+    };
+
+    /*
+     * Alias temporales para otras vistas odontológicas antiguas que todavía
+     * utilicen los nombres previos. Esto evita romperlas durante la migración.
+     */
+    $configuracionFichaOdontologica = $configuracionFichaDental;
+    $seccionesPersonalizadasOdonto = $seccionesPersonalizadasDental;
+    $normalizarCodigoFichaOdonto = $normalizarCodigoFichaDental;
+    $buscarSeccionFichaOdonto = $buscarSeccionFichaDental;
+    $seccionVisibleFichaOdonto = $seccionVisibleFichaDental;
+@endphp
+
+
+@php
+    $mostrarMotivoConsultaPeriodoncia = $seccionVisibleFichaDental([
+        'motivo_consulta', 'motivo de la consulta y examen fisico general'
+    ]);
+    $mostrarUrgenciaPeriodoncia = $seccionVisibleFichaDental([
+        'urgencia_odontologica', 'control_urgencias', 'urgencia odontologica'
+    ]);
+    $mostrarExamenGeneralPeriodoncia = $seccionVisibleFichaDental([
+        'examen_odontologico_general', 'examen odontologico general', 'examen_odontologico'
+    ]);
+    $mostrarEvaluacionPeriodontal = $seccionVisibleFichaDental([
+        'evaluacion_periodontal', 'evaluacion periodontica', 'evaluacion periodontal'
+    ]);
+    $mostrarProcedimientosPeriodoncia = $seccionVisibleFichaDental([
+        'procedimientos_periodoncia', 'procedimientos periodoncia', 'procedimientos periodontales'
+    ]);
+    $mostrarEvolucionesPeriodoncia = $seccionVisibleFichaDental([
+        'evoluciones', 'control_odontologico'
+    ]);
+    $mostrarAntecedentesCronicosPeriodoncia = $seccionVisibleFichaDental([
+        'antecedentes_cronicos_ges', 'antecedentes cronicos ges', 'cronicos ges confidencial'
+    ]);
+    $mostrarDiagnosticoPeriodoncia = $seccionVisibleFichaDental([
+        'diagnostico', 'diagnosticos'
+    ]);
+    $mostrarRecetasExamenesPeriodoncia = $seccionVisibleFichaDental([
+        'recetas_examenes', 'recetas y examenes', 'recetas_examenes_generales'
+    ]);
+@endphp
+
+<style>
+    .ficha-periodoncia .dental-treatment-steps { display: flex; gap: .65rem; border: 0; }
+    .ficha-periodoncia .dental-treatment-steps .nav-item-secciones { flex: 1 1 0; }
+    .ficha-periodoncia .dental-treatment-steps .nav-secciones { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: .6rem .45rem; border: 1px solid #b8c7dc; border-radius: .65rem; background: #fff; color: #63758d; font-weight: 700; text-align: center; }
+    .ficha-periodoncia .dental-treatment-steps .nav-secciones::before { content: attr(data-step); display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-right: .55rem; border: 1px solid #bfd0e5; border-radius: 50%; background: #fff; color: #63758d; }
+    .ficha-periodoncia .dental-treatment-steps .nav-secciones.active { border-color: #1755b5; color: #1755b5; box-shadow: 0 4px 10px rgba(23,85,181,.12); }
+    .ficha-periodoncia .dental-treatment-steps .nav-secciones.active::before { border-color: #1755b5; background: #1755b5; color: #fff; }
+    .ficha-periodoncia .periodontal-plan-selector { margin-bottom: 1rem; padding: 1rem; border: 1px solid #dbe4ee; border-radius: .75rem; background: #f8fbff; }
+    .ficha-periodoncia #table_odontograma { width: 100% !important; min-width: 1280px; table-layout: fixed; }
+    .ficha-periodoncia #table_odontograma th, .ficha-periodoncia #table_odontograma td { padding: .7rem; vertical-align: middle; }
+    .ficha-periodoncia #table_odontograma th:nth-child(1) { width: 125px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(2) { width: 340px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(3) { width: 80px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(4) { width: 135px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(5) { width: 180px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(6) { width: 105px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(7) { width: 115px; }
+    .ficha-periodoncia #table_odontograma th:nth-child(8) { width: 230px; }
+    .ficha-periodoncia #table_odontograma td:nth-child(2), .ficha-periodoncia #table_odontograma td:nth-child(5) { white-space: normal !important; overflow-wrap: anywhere; }
+    .ficha-periodoncia #table_odontograma tbody tr { height: 72px; }
+    .ficha-periodoncia .dental-table-tooth { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 46px; }
+    .ficha-periodoncia .dental-table-tooth img,
+    .ficha-periodoncia #table_odontograma td:nth-child(4) img { display: block; width: 28px !important; max-width: 28px !important; height: 42px !important; max-height: 42px !important; margin: 0 !important; object-fit: contain; }
+    .ficha-periodoncia .dental-table-tooth strong { color: #174ea6; }
+    .ficha-periodoncia .dental-table-datetime { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; }
+    .ficha-periodoncia .dental-table-datetime small { margin-top: .2rem; color: #718096; }
+    .ficha-periodoncia .dental-treatment-name { display: -webkit-box; overflow: hidden; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .ficha-periodoncia .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .55rem; min-width: 200px; }
+    .ficha-periodoncia .dental-table-state-control .dental-piece-status { min-width: 145px; }
+    @media (max-width: 991.98px) { .ficha-periodoncia .dental-treatment-steps { overflow-x: auto; } .ficha-periodoncia .dental-treatment-steps .nav-item-secciones { flex: 0 0 220px; } }
+</style>
+
+<div class="user-profile user-card mt-0 ficha-periodoncia" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
+                <ul class="nav nav-tabs-secciones dental-treatment-steps mb-3 mt-3" id="oft" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_dent_period_tab" data-toggle="tab" href="#atencion_dent_period" role="tab" aria-controls="atencion_dent_period" aria-selected="true">Atención especialidad</a>
+                        <a class="nav-secciones active text-uppercase" data-step="1" id="atencion_dent_period_tab" data-toggle="tab" href="#atencion_dent_period" role="tab" aria-controls="atencion_dent_period" aria-selected="true">Atención periodontal</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="odontograma_gral_tab" data-toggle="tab" href="#odontograma_gral" role="tab" aria-controls="odontograma_gral" aria-selected="false">Odontograma</a>
+                        <a class="nav-secciones text-uppercase" data-step="2" id="odontograma_gral_tab" data-toggle="tab" href="#odontograma_gral" role="tab" aria-controls="odontograma_gral" aria-selected="false">Odontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Periodoncica</a>
+                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación periodontal</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" onclick="refrescar_caras_grupos()" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación General</a>
+                        <a class="nav-secciones text-uppercase" data-step="4" id="evaluacion_general_tab" data-toggle="tab" onclick="refrescar_caras_grupos()" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Plan de tratamiento</a>
                     </li>
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
                     </li>  --}}
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="presupuesto_tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
+                        <a class="nav-secciones text-uppercase" data-step="5" id="presupuesto_tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
                     </li>
                 </ul>
             </div>
@@ -65,14 +331,21 @@
                                 <!--Cierre: Formulario / Menor de edad-->
                             </div>
                             <!--Motivo consulta-->
-                            @include('atencion_odontologica.generales.motivo_consulta')
+                            @if($mostrarMotivoConsultaPeriodoncia)
+                                @include('atencion_odontologica.generales.motivo_consulta')
+                            @endif
                            <!-- URGENCIAS -->
-                            @include('atencion_odontologica.generales.control_urgencias')
+                            @if($mostrarUrgenciaPeriodoncia)
+                                @include('atencion_odontologica.generales.control_urgencias')
+                            @endif
                             <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                             {{-- @include('atencion_odontologica.generales.includes.odontologia_general') --}}
-                            @include('atencion_odontologica.generales.odonto_gral')
+                            @if($mostrarExamenGeneralPeriodoncia)
+                                @include('atencion_odontologica.generales.odonto_gral')
+                            @endif
                             {{--  @include('atencion_odontologica.generales.includes.odontologia_preimplante')  --}}
                             <!--EVALUACION PERIODONCIA -->
+                            @if($mostrarEvaluacionPeriodontal)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="eval_period">
@@ -1401,13 +1674,37 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                                                                                        @include('atencion_odontologica.generales.odontograma_adulto_grupos_periodoncia')
+                                                                                    <div class="col-sm-12">
+                                                                                        @php
+                                                                                            $piezasPlanPeriodoncia = [
+                                                                                                '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                                                                                '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                                                                                '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                                                                                '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                                                            ];
+                                                                                        @endphp
+                                                                                        <div class="periodontal-plan-selector">
+                                                                                            @include('atencion_odontologica.include.selector_odontograma', [
+                                                                                                'id' => 'selector_plan_tratamiento_periodoncia',
+                                                                                                'inputId' => 'paciente_piezas_dentales_ex_period',
+                                                                                                'counter' => 9700,
+                                                                                                'multiple' => true,
+                                                                                                'compacto' => true,
+                                                                                                'autoRefresh' => false,
+                                                                                                'mostrarMensajeVacio' => false,
+                                                                                                'mostrarEstadoClinico' => true,
+                                                                                                'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                                                                'estadosBloqueados' => [],
+                                                                                                'piezasDisponibles' => $piezasPlanPeriodoncia,
+                                                                                                'titulo' => 'Odontograma del plan periodontal',
+                                                                                                'ayuda' => 'Seleccione una o varias piezas para indicar diagnóstico y tratamiento',
+                                                                                            ])
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
+                                                                                    <div class="col-sm-12 mt-2">
                                                                                         <div class="form-row">
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                <div class="form-group">
+                                                                                                <div class="form-group d-none" aria-hidden="true">
                                                                                                     <label for="" class="floating-label-activo-sm">Grupos</label>
                                                                                                     <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex_period" id="paciente_piezas_dentales_ex_period" multiple="multiple">
                                                                                                         <option value="1.1">1.1</option>
@@ -1594,7 +1891,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <!--PROCEDIMIENTOS PERIODONCIA -->
+                            @if($mostrarProcedimientosPeriodoncia)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="tto_periodontal">
@@ -2065,7 +2364,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <!--CONTROL ODONTOLOGICO-->
+                            @if($mostrarEvolucionesPeriodoncia)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="control_odontologico">
@@ -2085,9 +2386,13 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <!--CRONICOS / GES / CONFIDENCIAL -->
-                            @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                            @if($mostrarAntecedentesCronicosPeriodoncia)
+                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                            @endif
                             <!--Diagnóstico-->
+                            @if($mostrarDiagnosticoPeriodoncia)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a " id="diagnostico">
@@ -2120,8 +2425,11 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
+                            @endif
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @if($mostrarRecetasExamenesPeriodoncia)
+                                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @endif
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
                                         </div>
@@ -2538,6 +2846,32 @@
                                                         <div class="tab-content" id="gral_od_adulto">
                                                             <!--ADULTO-->
                                                             <div class="tab-pane fade active show " id="eval_adults" role="tabpanel" aria-labelledby="eval_adults_tab">
+                                                                @php
+                                                                    $piezasSelectorPlanPeriodoncia = [
+                                                                        '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                                                        '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                                                        '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                                                        '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                                    ];
+                                                                @endphp
+                                                                <div class="periodontal-plan-selector mt-3 mx-2">
+                                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                                        'id' => 'selector_plan_principal_periodoncia',
+                                                                        'inputId' => 'pieza_plan_principal_periodoncia',
+                                                                        'counter' => 9701,
+                                                                        'multiple' => false,
+                                                                        'compacto' => true,
+                                                                        'autoRefresh' => false,
+                                                                        'mostrarMensajeVacio' => false,
+                                                                        'mostrarEstadoClinico' => true,
+                                                                        'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                                        'estadosBloqueados' => [],
+                                                                        'piezasDisponibles' => $piezasSelectorPlanPeriodoncia,
+                                                                        'titulo' => 'Seleccione una pieza para agregar al plan periodontal',
+                                                                        'ayuda' => 'Presione una pieza para ingresar su diagnóstico y tratamiento',
+                                                                    ])
+                                                                    <input type="hidden" id="pieza_plan_principal_periodoncia" value="0">
+                                                                </div>
                                                                 @include('atencion_odontologica.generales.evaluacion_adulto')
                                                             </div>
                                                             <!--NIÑOS-->
@@ -2555,6 +2889,42 @@
                             </div>
                         </div>
                         <!--CIERRE: EVALUACION GENERAL --->
+                        <div class="modal fade" id="modal_pieza_plan_periodoncia" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div>
+                                            <small class="text-uppercase text-c-blue font-weight-bold">Plan periodontal</small>
+                                            <h5 class="modal-title">Pieza <span id="numero_pieza_plan_periodoncia"></span></h5>
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="diagnostico_pieza_plan_periodoncia">Diagnóstico</label>
+                                            <select class="form-control" id="diagnostico_pieza_plan_periodoncia">
+                                                <option value="0">Seleccione un diagnóstico</option>
+                                                @foreach ($diagnosticos as $diagnosticoPeriodoncia)
+                                                    @if ((int) $diagnosticoPeriodoncia->tipo_especialidad === 21)
+                                                        <option value="{{ $diagnosticoPeriodoncia->id }}">{{ $diagnosticoPeriodoncia->descripcion }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="tratamiento_pieza_plan_periodoncia">Tratamiento o prestación</label>
+                                            <input type="text" class="form-control tratamiento-autocomplete" id="tratamiento_pieza_plan_periodoncia"
+                                                placeholder="Busque o describa el tratamiento periodontal" autocomplete="off">
+                                            <small class="form-text text-muted">La pieza se incorporará al plan y al presupuesto.</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" id="guardar_pieza_plan_periodoncia"><i class="feather icon-plus"></i> Agregar al plan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- TRATAMIENTO-->
                         {{--  <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
                            @include('atencion_odontologica.generales.tratamiento_presup')
@@ -7677,6 +8047,187 @@ function ocultar_pieza_impl(counter){
             });
         }
 
+        function decorarTablaPlanPeriodoncia() {
+            const $tabla = $('#evaluacion_general #table_odontograma');
+            if (!$tabla.length) return;
+            const base = @json(asset('images/dental/dientes'));
+
+            $tabla.find('tbody tr').each(function () {
+                const $fila = $(this);
+                const $celdas = $fila.children('td');
+                if ($celdas.length < 8) return;
+
+                const fechaHora = $.trim($celdas.eq(0).text());
+                const partes = fechaHora.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+                if (!$celdas.eq(0).find('.dental-table-datetime').length && partes) {
+                    $celdas.eq(0).html('<div class="dental-table-datetime"><strong>' + partes[3] + '-' + partes[2] + '-' + partes[1] + '</strong><small>' + partes[4] + ':' + partes[5] + '</small></div>');
+                }
+
+                if (!$celdas.eq(1).find('.dental-treatment-name').length) {
+                    const nombre = $.trim($celdas.eq(1).text());
+                    $celdas.eq(1).empty().append($('<span>', {
+                        class: 'dental-treatment-name', title: nombre, text: nombre
+                    }));
+                }
+
+                const pieza = $.trim($celdas.eq(3).text());
+                if (pieza && !$celdas.eq(3).find('.dental-table-tooth').length) {
+                    const codigo = pieza.replace('.', '');
+                    $celdas.eq(3).html('<div class="dental-table-tooth"><img src="' + base + '/d' + codigo + '.png" alt="Pieza ' + pieza + '"><strong>' + pieza + '</strong></div>');
+                }
+
+                const $check = $celdas.eq(7).find('.checkbox-seleccion');
+                const idTratamiento = Number($check.val() || $fila.data('treatment-id'));
+                if (idTratamiento && !$celdas.eq(7).find('.dental-piece-status').length) {
+                    const registro = (window.odontograma_global || []).find(function (item) {
+                        return Number(item.id) === idTratamiento;
+                    });
+                    const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
+                    const opciones = '<select class="form-control form-control-sm dental-piece-status" data-original-state="' + estado + '" onchange="actualizarEstadoPiezaPlan(this,' + idTratamiento + ')">' +
+                        '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
+                        '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
+                        '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
+                        '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option></select>';
+                    const $seleccion = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
+                    $celdas.eq(7).html('<div class="dental-table-state-control">' + opciones + '</div>');
+                    $celdas.eq(7).find('.dental-table-state-control').append($seleccion);
+                }
+            });
+        }
+
+        function actualizarEstadoPiezaPlan(select, idTratamiento) {
+            const $select = $(select);
+            const anterior = String($select.data('original-state'));
+            const nuevo = String($select.val());
+            $select.prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
+                data: {
+                    id_tratamiento: idTratamiento,
+                    estado: nuevo,
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (respuesta) {
+                    if (respuesta.mensaje !== 'OK') {
+                        $select.val(anterior);
+                        swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error');
+                        return;
+                    }
+                    $select.data('original-state', nuevo);
+                    $select.closest('tr').attr('data-clinical-state', nuevo);
+                    if (Array.isArray(respuesta.odontograma)) {
+                        odontograma_global = respuesta.odontograma;
+                        sincronizarSelectorPlanPeriodoncia(respuesta.odontograma);
+                    }
+                },
+                error: function () {
+                    $select.val(anterior);
+                    swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error');
+                },
+                complete: function () { $select.prop('disabled', false); }
+            });
+        }
+
+        $(document).on('draw.dt', '#table_odontograma', decorarTablaPlanPeriodoncia);
+        $(decorarTablaPlanPeriodoncia);
+
+        document.addEventListener('click', function (event) {
+            const boton = event.target.closest('#selector_plan_principal_periodoncia [data-selector-pieza]');
+            if (!boton || boton.disabled || !boton.classList.contains('is-enabled')) return;
+
+            const pieza = String(boton.getAttribute('data-selector-pieza') || '');
+            window.setTimeout(function () {
+                if (!boton.classList.contains('is-selected')) {
+                    $('#pieza_plan_principal_periodoncia').val('0');
+                    return;
+                }
+
+                $('#pieza_plan_principal_periodoncia').val(pieza);
+                $('#numero_pieza_plan_periodoncia').text(pieza);
+                $('#diagnostico_pieza_plan_periodoncia').val('0');
+                $('#tratamiento_pieza_plan_periodoncia').val('');
+                $('#modal_pieza_plan_periodoncia').modal('show');
+            }, 0);
+        });
+
+        $(document).on('click', '#guardar_pieza_plan_periodoncia', function () {
+            const pieza = String($('#pieza_plan_principal_periodoncia').val() || '');
+            const diagnostico = String($('#diagnostico_pieza_plan_periodoncia').val() || '0');
+            const tratamiento = $.trim($('#tratamiento_pieza_plan_periodoncia').val() || '');
+
+            if (!pieza || pieza === '0' || diagnostico === '0' || !tratamiento) {
+                swal('Datos requeridos', 'Seleccione una pieza, un diagnóstico y una prestación.', 'warning');
+                return;
+            }
+
+            $('#paciente_piezas_dentales_ex_period').val([pieza]).trigger('change');
+            $('#diagnostico_combo_g_period').val(diagnostico).trigger('change');
+            $('#diag_presupuesto_pieza_g_period').val(tratamiento);
+            $('#modal_pieza_plan_periodoncia').modal('hide');
+            cargar_a_presupuesto_period_g_confirmar();
+        });
+
+        $('#modal_pieza_plan_periodoncia').on('hidden.bs.modal', function () {
+            const pieza = String($('#pieza_plan_principal_periodoncia').val() || '');
+            if (pieza && pieza !== '0') {
+                $('#selector_plan_principal_periodoncia [data-selector-pieza="' + pieza + '"]')
+                    .removeClass('is-selected').attr('aria-pressed', 'false');
+            }
+            $('#pieza_plan_principal_periodoncia').val('0');
+            $('#selector_plan_principal_periodoncia .selector-odontograma-generico__resumen')
+                .html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+        });
+
+        function sincronizarSelectorPlanPeriodoncia(listaOdontograma) {
+            const $selector = $('#selector_plan_tratamiento_periodoncia');
+            if (!$selector.length) return;
+
+            const estados = {};
+            (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
+                if (!registro || Number(registro.urgencia) === 1) return;
+                const pieza = String(registro.pieza || '');
+                const diagnostico = String(registro.diagnostico || registro.diagnostico_descripcion || '').toLowerCase();
+                estados[pieza] = diagnostico.includes('carie') ? 'carie' : 'normal';
+            });
+
+            const base = @json(asset('images/dental/dientes'));
+            $selector.find('[data-selector-pieza]').each(function () {
+                const $boton = $(this);
+                const pieza = String($boton.data('selector-pieza'));
+                const codigo = pieza.replace('.', '');
+                const estado = estados[pieza] || 'normal';
+                const imagen = estado === 'carie'
+                    ? base + '/carie/carie' + codigo + '.png'
+                    : base + '/d' + codigo + '.png';
+                $boton.find('img').attr('src', imagen).attr('data-estado-clinico', estado);
+            });
+
+            $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+            $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+            $('#paciente_piezas_dentales_ex_period').val([]).trigger('change');
+
+            const $selectorPrincipal = $('#selector_plan_principal_periodoncia');
+            $selectorPrincipal.find('[data-selector-pieza]').each(function () {
+                const $boton = $(this);
+                const pieza = String($boton.data('selector-pieza'));
+                const codigo = pieza.replace('.', '');
+                const estado = estados[pieza] || 'normal';
+                const imagen = estado === 'carie'
+                    ? base + '/carie/carie' + codigo + '.png'
+                    : base + '/d' + codigo + '.png';
+                $boton.find('img').attr('src', imagen).attr('data-estado-clinico', estado);
+            });
+            $selectorPrincipal.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+            $selectorPrincipal.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+            $('#pieza_plan_principal_periodoncia').val('0');
+        }
+
         function cargar_a_presupuesto_period_g() {
             // preguntar si desea eliminar
             swal({
@@ -7695,7 +8246,10 @@ function ocultar_pieza_impl(counter){
 
         function cargar_a_presupuesto_period_g_confirmar() {
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_period').val();
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_period').val() || [];
+            if (!Array.isArray(piezasSeleccionadas)) {
+                piezasSeleccionadas = [piezasSeleccionadas].filter(Boolean);
+            }
             let diagnosticoPiezas = $('#diagnostico_combo_g_period').val();
             var ttoPiezas = $('#diag_presupuesto_pieza_g_period').val();
 
@@ -7706,7 +8260,7 @@ function ocultar_pieza_impl(counter){
                 valido = 0;
                 mensaje += '<li>Diagnóstico </li>';
             }
-            if (piezasSeleccionadas.length == 0) {
+            if (piezasSeleccionadas.length === 0) {
                 valido = 0;
                 mensaje += '<li>Piezas seleccionadas </li>'
             }
@@ -7737,6 +8291,7 @@ function ocultar_pieza_impl(counter){
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_paciente: $('#id_paciente_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val(),
                 _token: "{{ csrf_token() }}"
             }
             console.log(data);
@@ -7754,6 +8309,7 @@ function ocultar_pieza_impl(counter){
                         });
                         let odontograma = resp.odontograma_paciente;
                         odontograma_global = resp.odontograma_paciente;
+                        sincronizarSelectorPlanPeriodoncia(odontograma);
                         let table_odontograma = $('#table_odontograma').DataTable();
 
                         // Vacía la tabla
@@ -11305,5 +11861,3 @@ function ocultar_pieza_impl(counter){
     });
 
 </script>
-
-

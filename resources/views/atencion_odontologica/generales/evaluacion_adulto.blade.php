@@ -1528,15 +1528,15 @@
                             <table class="table table-xs" id="table_odontograma">
                                 <thead>
                                     <tr>
-                                        <th>Fecha</th>
+                                        <th>Fecha y hora</th>
                                         <th>Prestación</th>
                                         <th>Caras</th>
-                                        <th>Pieza</th>
+                                        <th>Pieza / Imagen</th>
                                         <th>Diagnóstico</th>
                                         <th>Valor</th>
                                         <th>Presupuesto</th>
                                         <th class="text-center">
-                                            Seleccionar
+                                            Estado / Seleccionar
                                             <button
                                                 type="button"
                                                 class="btn btn-outline-danger btn-sm ml-2"
@@ -1553,11 +1553,22 @@
                                     @if(isset($odontograma))
                                     @foreach ($odontograma as $odonto)
                                     @if($odonto->urgencia == 0)
-                                    <tr>
-                                        <td>{{ $odonto->fecha }}</td>
-                                        <td>{{ $odonto->tratamiento }}</td>
+                                    <tr data-treatment-id="{{ $odonto->id }}" data-clinical-state="{{ (int) ($odonto->estado ?? 0) }}">
+                                        <td>
+                                            <div class="dental-table-datetime">
+                                                <strong>{{ \Carbon\Carbon::parse($odonto->fecha)->format('d-m-Y') }}</strong>
+                                                <small>{{ \Carbon\Carbon::parse($odonto->fecha)->format('H:i') }}</small>
+                                            </div>
+                                        </td>
+                                        <td><span class="dental-treatment-name" title="{{ $odonto->tratamiento }}">{{ $odonto->tratamiento }}</span></td>
                                         <td>{{ $odonto->caras }}</td>
-                                        <td>{{ $odonto->pieza }}</td>
+                                        <td>
+                                            <div class="dental-table-tooth">
+                                                <img src="{{ asset('images/dental/dientes/d'.str_replace('.', '', (string) $odonto->pieza).'.png') }}"
+                                                    alt="Pieza {{ $odonto->pieza }}">
+                                                <strong>{{ $odonto->pieza }}</strong>
+                                            </div>
+                                        </td>
                                         <td>{{ $odonto->diagnostico }}</td>
                                         <td>{{ number_format($odonto->valor,0,',','.') }}</td>
                                         {{-- <td>
@@ -1584,6 +1595,15 @@
                                         </td>
 
                                         <td>
+                                            <div class="dental-table-state-control">
+                                                <select class="form-control form-control-sm dental-piece-status"
+                                                    data-original-state="{{ (int) ($odonto->estado ?? 0) }}"
+                                                    onchange="actualizarEstadoPiezaPlan(this, {{ $odonto->id }})">
+                                                    <option value="0" {{ (int) ($odonto->estado ?? 0) === 0 ? 'selected' : '' }}>Pendiente</option>
+                                                    <option value="2" {{ (int) ($odonto->estado ?? 0) === 2 ? 'selected' : '' }}>En proceso</option>
+                                                    <option value="3" {{ (int) ($odonto->estado ?? 0) === 3 ? 'selected' : '' }}>Citado a control</option>
+                                                    <option value="1" {{ (int) ($odonto->estado ?? 0) === 1 ? 'selected' : '' }}>Finalizado</option>
+                                                </select>
                                             <div class="custom-control custom-switch">
                                                 <input
                                                     type="checkbox"
@@ -1592,6 +1612,7 @@
                                                     value="{{ $odonto->id }}"
                                                     onchange="toggleSeleccion({{ $odonto->id }}, this.checked)">
                                                 <label class="custom-control-label" for="seleccionCheck{{ $odonto->id }}"></label>
+                                            </div>
                                             </div>
                                         </td>
 

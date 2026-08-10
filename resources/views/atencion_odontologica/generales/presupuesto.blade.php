@@ -549,8 +549,8 @@
                                         <p class="mb-0">Agregue tratamientos desde el odontograma o la planificación dental.</p>
                                     </div>
 
-                                    @if($piezasPresupuestoDetalle->isNotEmpty())
-                                    <div class="card-informacion mb-3" id="presupuesto_piezas_visor">
+                                    <div class="card-informacion mb-3" id="presupuesto_piezas_visor"
+                                        style="{{ $piezasPresupuestoDetalle->isEmpty() ? 'display:none' : '' }}">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-7 col-xl-8 mb-3 mb-lg-0">
@@ -581,7 +581,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
 
                                 <style>
                                     #detalle_pieza_presupuesto{min-height:100%;padding:.9rem;border:1px solid #dce5ef;border-radius:.65rem;background:#f7f9fc;display:flex;flex-direction:column;justify-content:center}
@@ -658,6 +657,75 @@
                                         const piezaActivaBtn = $('#selector_presupuesto_piezas [data-selector-pieza].is-selected').first();
                                         if(piezaActivaBtn.length){
                                             $('#selector_presupuesto_piezas').trigger('odontograma:change', [[String(piezaActivaBtn.data('selector-pieza'))]]);
+                                        }
+                                    }
+
+                                    function sincronizarOdontogramaPresupuesto(listaOdontograma, piezaPreferida){
+                                        const $visor = $('#presupuesto_piezas_visor');
+                                        const $selector = $('#selector_presupuesto_piezas');
+                                        if(!$selector.length){ return; }
+
+                                        const prestaciones = (listaOdontograma || []).filter(function(o){
+                                            return Number(o.presupuesto) === 1 && Number(o.urgencia) === 0;
+                                        });
+                                        const piezas = new Set(prestaciones.map(function(o){ return String(o.pieza); }));
+                                        const estadosVisuales = {};
+
+                                        prestaciones.forEach(function(o){
+                                            const pieza = String(o.pieza);
+                                            if(estadosVisuales[pieza] === 'ausente'){ return; }
+                                            const diagnostico = String(o.diagnostico || '').toLowerCase();
+                                            const tratamiento = String(o.tratamiento || o.descripcion || '').toLowerCase();
+                                            let estado = estadosVisuales[pieza] || 'normal';
+                                            if(diagnostico.includes('carie')) estado = 'carie';
+                                            if(tratamiento.includes('implante')) estado = Number(o.estado) === 0 ? 'ausente' : 'implante';
+                                            if(estado !== 'ausente' && (tratamiento.includes('endodoncia') || tratamiento.includes('pulpotomia') || tratamiento.includes('pulpectomia'))){
+                                                estado = 'endodoncia';
+                                            }
+                                            estadosVisuales[pieza] = estado;
+                                        });
+
+                                        const base = @json(asset('images/dental/dientes'));
+                                        $selector.find('[data-selector-pieza]').each(function(){
+                                            const $boton = $(this);
+                                            const pieza = String($boton.data('selector-pieza'));
+                                            const habilitada = piezas.has(pieza);
+                                            const codigo = pieza.replace('.', '');
+                                            const estado = estadosVisuales[pieza] || 'normal';
+                                            const rutas = {
+                                                carie: base + '/carie/carie' + codigo + '.png',
+                                                ausente: base + '/diente-ausente/dau' + codigo + '.png',
+                                                implante: base + '/implante/impl' + codigo + '.png',
+                                                endodoncia: base + '/endodoncia/endo' + codigo + '.png',
+                                                normal: base + '/d' + codigo + '.png'
+                                            };
+
+                                            $boton.prop('disabled', !habilitada).toggleClass('is-enabled', habilitada);
+                                            $boton.find('img').attr('src', rutas[estado] || rutas.normal).attr('data-estado-clinico', estado);
+                                            if(!habilitada) $boton.removeClass('is-selected').attr('aria-pressed', 'false');
+                                        });
+
+                                        $visor.toggle(prestaciones.length > 0);
+                                        sincronizarDetallePresupuestoClinico(prestaciones);
+
+                                        const seleccionActual = String($selector.find('.is-selected').first().data('selector-pieza') || '');
+                                        const preferida = piezaPreferida && piezas.has(String(piezaPreferida))
+                                            ? String(piezaPreferida)
+                                            : (piezas.has(seleccionActual) ? seleccionActual : (piezas.values().next().value || null));
+                                        $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+                                        if(preferida){
+                                            const $boton = $selector.find('[data-selector-pieza="' + preferida + '"]');
+                                            $boton.addClass('is-selected').attr('aria-pressed', 'true');
+                                            $selector.find('.selector-odontograma-generico__resumen').html('<span class="badge badge-primary">' + preferida + '</span>');
+                                            $selector.trigger('odontograma:change', [[preferida]]);
+                                        } else {
+                                            $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+                                            $('#detalle_pieza_presupuesto_contenido').hide().empty();
+                                            $('#detalle_pieza_presupuesto_vacio').show();
+                                        }
+
+                                        if(typeof mejorarExperienciaPresupuestoDental === 'function'){
+                                            mejorarExperienciaPresupuestoDental();
                                         }
                                     }
                                 </script>
@@ -2736,10 +2804,33 @@
     function marcarPresupuestoComoPagado() {
         presupuestoCerradoPorPago = true;
         montoDisponibleReasignar = 0;
-        $('.btn-pagar-presupuesto, .btn-confirmar-pago').prop('disabled', true)
+        // El botón principal queda disponible para volver a consultar el estado.
+        // Si posteriormente se agrega una prestación, esa consulta reabre el pago.
+        $('.btn-pagar-presupuesto').prop('disabled', false)
+            .attr('title', 'Consultar estado del presupuesto');
+        $('.btn-confirmar-pago').prop('disabled', true)
             .attr('title', 'Presupuesto pagado completamente');
         $('#montoPago, #metodoPago, #bono_prevision').prop('disabled', true);
         $('#presupuesto_pagado_mensaje').removeClass('d-none');
+        if (typeof actualizarEstadoCabeceraPlanDental === 'function') {
+            actualizarEstadoCabeceraPlanDental(true);
+        }
+    }
+
+    function marcarPresupuestoComoReabierto(sigueCompletamentePagado) {
+        presupuestoCerradoPorPago = false;
+        $('.btn-pagar-presupuesto, .btn-confirmar-pago').prop('disabled', false)
+            .attr('title', 'Registrar un nuevo abono');
+        $('#montoPago, #metodoPago, #bono_prevision').prop('disabled', false);
+        $('#presupuesto_pagado_mensaje').addClass('d-none');
+
+        if (sigueCompletamentePagado) {
+            marcarPresupuestoComoPagado();
+            return;
+        }
+        if (typeof actualizarEstadoCabeceraPlanDental === 'function') {
+            actualizarEstadoCabeceraPlanDental(false);
+        }
     }
 
     function actualizarOrdenVisualReasignacion() {
@@ -3143,8 +3234,14 @@
 
     function pagar_presupuesto() {
         if (presupuestoCerradoPorPago) {
-            swal('Presupuesto pagado', 'Este presupuesto está cerrado y no admite nuevos abonos.', 'info');
-            return;
+            const totalVigente = parseInt($('#total_presupuesto_dental').val()) || 0;
+            const abonadoVigente = parseInt($('#total_abonado_presupuesto').val()) || 0;
+            if (totalVigente > abonadoVigente) {
+                marcarPresupuestoComoReabierto(false);
+            } else {
+                swal('Presupuesto pagado', 'Este presupuesto está cerrado y no admite nuevos abonos.', 'info');
+                return;
+            }
         }
         total = $('#total_presupuesto_dental').val();
         console.log(formatoMoneda(parseInt(total)));
@@ -3478,7 +3575,12 @@
                      $('#metodoPago').val('');
 
                      actualizarPendientesModalReasignacion(response);
-                     actualizar_presupuesto();
+                     // La respuesta de confirmar_pago ya contiene el estado definitivo.
+                     // Evita que una segunda peticion asincrona vuelva a pintar una pieza
+                     // como incompleta justo despues de completar el presupuesto.
+                     if (!response.presupuesto_completado) {
+                         actualizar_presupuesto();
+                     }
                      // La respuesta ya contiene los saldos y estados recalculados.
                      cargarInformacionPresupuesto(response.pagos || []);
                      if (response.presupuesto_completado) {
@@ -4043,7 +4145,8 @@
             montoDisponibleReasignar = parseInt(datosActualizados.monto_disponible_reasignar) || 0;
         }
         $('#monto_abonado').html(formatoMoneda(montoDisponibleReasignar));
-        $('#monto_adeudado').html(formatoMoneda(Math.max(0, parseInt(adeudado) || 0)));
+        const deudaActual = Math.max(0, parseInt(adeudado) || 0);
+        $('#monto_adeudado').html(formatoMoneda(deudaActual));
         // limpiamos los check con clase valor-checkbox
         $('.valor-checkbox').prop('checked', false);
         valoresSeleccionados.splice(0, valoresSeleccionados.length);
@@ -4060,7 +4163,9 @@
             .attr('class', tieneNuevoAbono ? 'text-muted' : 'text-warning')
             .text(tieneNuevoAbono
                 ? 'Seleccione las piezas o grupos que desea cubrir con el remanente.'
-                : 'El nuevo abono no dejó remanente después de cubrir los insumos.');
+                : (deudaActual > 0
+                    ? 'Todos los abonos ya fueron asignados. Para cubrir el saldo pendiente debe registrar un nuevo abono.'
+                    : 'Todos los abonos fueron asignados automáticamente.'));
         $('#btn_confirmar_reasignacion').prop('disabled', true);
         actualizarPendientesModalReasignacion(datosActualizados);
     }
@@ -4385,6 +4490,18 @@
             const contenedor = document.getElementById(id);
             if (!contenedor) return;
 
+            contenedor.querySelectorAll('input[name="prestación"]').forEach(function(input) {
+                const textarea = document.createElement('textarea');
+                textarea.className = input.className + ' prestacion-dos-lineas';
+                textarea.name = input.name;
+                textarea.rows = 2;
+                textarea.value = input.value;
+                textarea.readOnly = true;
+                textarea.setAttribute('aria-readonly', 'true');
+                textarea.setAttribute('title', input.value);
+                input.replaceWith(textarea);
+            });
+
             contenedor.querySelectorAll('input[type="text"]').forEach(function(input) {
                 input.readOnly = true;
                 input.setAttribute('aria-readonly', 'true');
@@ -4427,6 +4544,10 @@
             if (saldo.textContent !== textoSaldo) saldo.textContent = textoSaldo;
         });
     }
+
+    const estiloPrestacionDosLineas = document.createElement('style');
+    estiloPrestacionDosLineas.textContent = '.prestacion-dos-lineas{height:50px!important;min-height:50px!important;line-height:1.25!important;resize:none;overflow:hidden;white-space:normal}';
+    document.head.appendChild(estiloPrestacionDosLineas);
 
     document.addEventListener('DOMContentLoaded', function() {
         mejorarExperienciaPresupuestoDental();

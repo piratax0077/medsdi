@@ -6,6 +6,36 @@
     $selectorSoloPendientes = $soloPendientes ?? false;
     $selectorAutoRefresh = $autoRefresh ?? true;
     $selectorMostrarMensajeVacio = $mostrarMensajeVacio ?? true;
+    $selectorMostrarEstadoClinico = $mostrarEstadoClinico ?? false;
+
+    // Replica la misma lectura visual usada por odontograma_adulto.blade.php.
+    // La ultima condicion clinica relevante de cada pieza define su imagen.
+    $selectorEstadosVisuales = [];
+    if ($selectorMostrarEstadoClinico) {
+        foreach (collect($historialPiezas ?? []) as $registro) {
+            $numeroRegistro = (string) data_get($registro, 'pieza', '');
+            if ($numeroRegistro === '') {
+                continue;
+            }
+
+            $tratamientoRegistro = mb_strtolower((string) data_get($registro, 'tratamiento', ''));
+            $diagnosticoRegistro = mb_strtolower((string) data_get($registro, 'diagnostico', ''));
+            $estadoRegistro = (int) data_get($registro, 'estado', 0);
+            $estadoVisual = $selectorEstadosVisuales[$numeroRegistro] ?? 'normal';
+
+            if (strpos($diagnosticoRegistro, 'carie') !== false) {
+                $estadoVisual = 'carie';
+            }
+            if (strpos($tratamientoRegistro, 'implante') !== false) {
+                $estadoVisual = $estadoRegistro === 0 ? 'ausente' : 'implante';
+            }
+            if (strpos($tratamientoRegistro, 'endodoncia') !== false || strpos($tratamientoRegistro, 'pulpotomia') !== false || strpos($tratamientoRegistro, 'pulpectomia') !== false) {
+                $estadoVisual = 'endodoncia';
+            }
+
+            $selectorEstadosVisuales[$numeroRegistro] = $estadoVisual;
+        }
+    }
 
     /*
      * Estados que no deben quedar disponibles para volver a seleccionar.
@@ -73,13 +103,24 @@
                         $seleccionada = in_array($numero, $selectorIniciales, true);
                         $item = $selectorMapa->get($numero);
                         $tratamiento = is_object($item) ? ($item->tratamiento ?? null) : (is_array($item) ? ($item['tratamiento'] ?? null) : null);
+                        $codigoImagen = str_replace('.', '', $numero);
+                        $estadoVisual = $selectorEstadosVisuales[$numero] ?? 'normal';
+                        $imagenesPorEstado = [
+                            'carie' => "images/dental/dientes/carie/carie{$codigoImagen}.png",
+                            'ausente' => "images/dental/dientes/diente-ausente/dau{$codigoImagen}.png",
+                            'implante' => "images/dental/dientes/implante/impl{$codigoImagen}.png",
+                            'endodoncia' => "images/dental/dientes/endodoncia/endo{$codigoImagen}.png",
+                        ];
+                        $imagenPieza = $imagenesPorEstado[$estadoVisual]
+                            ?? "images/dental/dientes/d{$codigoImagen}.png";
                     @endphp
                     <button type="button"
                         class="selector-odontograma-generico__pieza {{ $habilitada ? 'is-enabled' : '' }} {{ $seleccionada ? 'is-selected' : '' }}"
                         data-selector-pieza="{{ $numero }}" aria-pressed="{{ $seleccionada ? 'true' : 'false' }}"
                         title="{{ $habilitada ? ($tratamiento ?: 'Pieza disponible') : 'Pieza no disponible' }}"
                         {{ $habilitada ? '' : 'disabled' }}>
-                        <img src="{{ asset('images/dental/dientes/d'.str_replace('.', '', $numero).'.png') }}" alt="">
+                        <img src="{{ asset($imagenPieza) }}" alt="Pieza {{ $numero }}"
+                            data-estado-clinico="{{ $estadoVisual }}">
                         <span>{{ $numero }}</span>
                     </button>
                 @endforeach

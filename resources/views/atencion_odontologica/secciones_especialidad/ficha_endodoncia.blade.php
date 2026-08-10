@@ -247,28 +247,177 @@
     ]);
 @endphp
 
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+@php
+    $piezasEndodonciaPresupuesto = collect($odontograma ?? [])->filter(function ($pieza) {
+        return (int) ($pieza->presupuesto ?? 0) === 1 && (int) ($pieza->urgencia ?? 0) === 0;
+    });
+    $presupuestoEndodonciaPagado = (bool) data_get($presupuesto ?? null, 'pago_completado', false);
+    $piezasEndodonciaFinalizadas = $piezasEndodonciaPresupuesto->isNotEmpty()
+        && $piezasEndodonciaPresupuesto->every(function ($pieza) {
+            return (int) ($pieza->estado ?? 0) === 1;
+        });
+    $endodonciaIniciada = $piezasEndodonciaPresupuesto->contains(function ($pieza) {
+        return in_array((int) ($pieza->estado ?? 0), [1, 2, 3], true);
+    });
+
+    if ($presupuestoEndodonciaPagado && $piezasEndodonciaFinalizadas) {
+        $estadoFlujoEndodoncia = ['codigo' => 'terminado', 'texto' => 'Terminado', 'icono' => 'icon-check-circle'];
+    } elseif ($presupuestoEndodonciaPagado) {
+        $estadoFlujoEndodoncia = ['codigo' => 'pagado', 'texto' => 'Pagado', 'icono' => 'icon-dollar-sign'];
+    } elseif ($endodonciaIniciada) {
+        $estadoFlujoEndodoncia = ['codigo' => 'en-tratamiento', 'texto' => 'En tratamiento', 'icono' => 'icon-activity'];
+    } elseif ($piezasEndodonciaPresupuesto->isNotEmpty()) {
+        $estadoFlujoEndodoncia = ['codigo' => 'presupuestado', 'texto' => 'Presupuestado', 'icono' => 'icon-file-text'];
+    } else {
+        $estadoFlujoEndodoncia = ['codigo' => 'preparacion', 'texto' => 'En preparación', 'icono' => 'icon-edit-3'];
+    }
+@endphp
+
+<style>
+    .ficha-endodoncia .dental-treatment-flow {
+        padding: 1rem 1.15rem;
+        border: 1px solid #dbe4ee;
+        border-radius: .8rem;
+        background: linear-gradient(105deg, #f7fbff 0%, #fff 68%);
+        box-shadow: 0 4px 14px rgba(34, 72, 120, .07);
+    }
+    .ficha-endodoncia .dental-treatment-flow__heading {
+        display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .ficha-endodoncia .dental-treatment-flow__eyebrow {
+        display: block; margin-bottom: .15rem; color: #174ea6; font-size: .72rem;
+        font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .ficha-endodoncia .dental-treatment-flow h5 { margin: 0; font-weight: 700; }
+    .ficha-endodoncia .dental-treatment-flow p { margin: .25rem 0 0; color: #718096; }
+    .ficha-endodoncia .dental-treatment-flow__status {
+        display: inline-flex; align-items: center; gap: .35rem; padding: .65rem .95rem;
+        border-radius: 999px; color: #a15c00; background: #fff3d9; font-weight: 700; white-space: nowrap;
+    }
+    .ficha-endodoncia .dental-treatment-flow__status[data-status="pagado"],
+    .ficha-endodoncia .dental-treatment-flow__status[data-status="terminado"] {
+        color: #26733d; background: #e4f6e9;
+    }
+    .ficha-endodoncia .dental-treatment-flow__status[data-status="en-tratamiento"] {
+        color: #174ea6; background: #e3edff;
+    }
+    .ficha-endodoncia .dental-treatment-steps { display: flex; gap: .65rem; border: 0; }
+    .ficha-endodoncia .dental-treatment-steps .nav-item-secciones { flex: 1 1 0; }
+    .ficha-endodoncia .dental-treatment-steps .nav-secciones {
+        display: flex; align-items: center; justify-content: center; min-height: 56px;
+        padding: .6rem .45rem; border: 1px solid #b8c7dc; border-radius: .65rem;
+        background: #fff; color: #63758d; font-weight: 700; text-align: center;
+    }
+    .ficha-endodoncia .dental-treatment-steps .nav-secciones::before {
+        content: attr(data-step); display: inline-flex; align-items: center; justify-content: center;
+        width: 30px; height: 30px; margin-right: .55rem; border: 1px solid #bfd0e5;
+        border-radius: 50%; background: #fff; color: #63758d;
+    }
+    .ficha-endodoncia .dental-treatment-steps .nav-secciones.active {
+        border-color: #1755b5; color: #1755b5; box-shadow: 0 4px 10px rgba(23, 85, 181, .12);
+    }
+    .ficha-endodoncia .dental-treatment-steps .nav-secciones.active::before {
+        border-color: #1755b5; background: #1755b5; color: #fff;
+    }
+    .ficha-endodoncia .endo-plan-panel {
+        overflow: hidden; border: 1px solid #dbe4ee; border-radius: .85rem;
+        background: #fff; box-shadow: 0 5px 18px rgba(34, 72, 120, .08);
+    }
+    .ficha-endodoncia .endo-plan-panel__header {
+        display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+        padding: 1rem 1.2rem; border-bottom: 1px solid #e4eaf1; background: #f8fbff;
+    }
+    .ficha-endodoncia .endo-plan-panel__header h5 { margin: 0; color: #174ea6; font-weight: 700; }
+    .ficha-endodoncia .endo-plan-panel__header p { margin: .2rem 0 0; color: #718096; }
+    .ficha-endodoncia .endo-piece-planner {
+        margin-bottom: 1rem; padding: 1rem; border: 1px solid #dbe4ee;
+        border-radius: .75rem; background: #fff;
+    }
+    .ficha-endodoncia .endo-piece-planner__title {
+        display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .75rem;
+    }
+    .ficha-endodoncia .endo-piece-planner__title h6 { margin: 0; color: #174ea6; font-weight: 700; }
+    .ficha-endodoncia .endo-piece-planner__title p { margin: .2rem 0 0; color: #718096; }
+    .ficha-endodoncia #table_odontograma {
+        width: 100% !important; min-width: 1160px; table-layout: fixed;
+    }
+    .ficha-endodoncia #table_odontograma th,
+    .ficha-endodoncia #table_odontograma td { vertical-align: middle; }
+    .ficha-endodoncia #table_odontograma th:nth-child(1) { width: 105px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(2) { width: 315px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(3) { width: 75px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(4) { width: 125px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(5) { width: 130px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(6) { width: 90px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(7) { width: 105px; }
+    .ficha-endodoncia #table_odontograma th:nth-child(8) { width: 215px; }
+    .ficha-endodoncia #table_odontograma td:nth-child(2) { white-space: normal !important; }
+    .ficha-endodoncia .dental-treatment-name {
+        display: -webkit-box; overflow: hidden; line-height: 1.3; white-space: normal;
+        overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    }
+    .ficha-endodoncia .dental-table-datetime {
+        display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap;
+    }
+    .ficha-endodoncia .dental-table-datetime strong { color: #34495e; font-size: .8rem; }
+    .ficha-endodoncia .dental-table-datetime small { margin-top: .2rem; color: #718096; font-size: .75rem; }
+    .ficha-endodoncia .dental-table-tooth {
+        display: flex; align-items: center; justify-content: center; gap: .45rem; min-width: 74px;
+    }
+    .ficha-endodoncia .dental-table-tooth img {
+        width: 26px !important; height: 38px !important; max-width: 26px !important;
+        max-height: 38px !important; object-fit: contain;
+    }
+    .ficha-endodoncia .dental-table-tooth strong { color: #174ea6; }
+    .ficha-endodoncia .dental-table-state-control {
+        display: flex; align-items: center; justify-content: center; gap: .5rem; min-width: 190px;
+    }
+    .ficha-endodoncia .dental-table-state-control .dental-piece-status { min-width: 140px; }
+    .ficha-endodoncia .dental-table-state-control .custom-control,
+    .ficha-endodoncia .dental-table-state-control .form-check { flex: 0 0 auto; margin: 0; }
+    .ficha-endodoncia .dental-piece-status:disabled { cursor: wait; opacity: .65; }
+    @media (max-width: 991.98px) {
+        .ficha-endodoncia .dental-treatment-steps { overflow-x: auto; }
+        .ficha-endodoncia .dental-treatment-steps .nav-item-secciones { flex: 0 0 220px; }
+        .ficha-endodoncia .dental-treatment-flow__heading { align-items: flex-start; flex-direction: column; }
+    }
+</style>
+
+<div class="user-profile user-card mt-0 ficha-endodoncia" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
+                <div class="dental-treatment-flow mt-3" aria-label="Flujo de atención de endodoncia">
+                    <div class="dental-treatment-flow__heading">
+                        <div>
+                            <span class="dental-treatment-flow__eyebrow">Endodoncia</span>
+                            <h5>Plan de tratamiento endodóntico</h5>
+                            <p>Evalúe la pieza, registre el tratamiento y prepare el presupuesto del paciente.</p>
+                        </div>
+                        <span class="dental-treatment-flow__status" id="estado_cabecera_plan_endodoncia"
+                            data-status="{{ $estadoFlujoEndodoncia['codigo'] }}">
+                            <i class="feather {{ $estadoFlujoEndodoncia['icono'] }}" aria-hidden="true"></i>
+                            <span>{{ $estadoFlujoEndodoncia['texto'] }}</span>
+                        </span>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs-secciones dental-treatment-steps mb-3 mt-2" id="oft" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_dent_endo_tab" data-toggle="tab" href="#atencion_dent_endo" role="tab" aria-controls="atencion_dent_endo" aria-selected="true">Atención especialidad</a>
+                        <a class="nav-secciones active text-uppercase" data-step="1" id="atencion_dent_endo_tab" data-toggle="tab" href="#atencion_dent_endo" role="tab" aria-controls="atencion_dent_endo" aria-selected="true">Atención endodóntica</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
+                        <a class="nav-secciones text-uppercase" data-step="2" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Periodoncica</a>
+                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación por pieza</a>
                     </li>
-                    {{-- <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación</a>
-                    </li> --}}
-                    {{--  <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
-                    </li>  --}}
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="presupuesto_tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
+                        <a class="nav-secciones text-uppercase" data-step="4" id="tratamiento_tab"
+                            onclick="refrescar_caras_grupos_endodoncia()" data-toggle="tab" href="#tratamiento"
+                            role="tab" aria-controls="tratamiento" aria-selected="false">Plan de tratamiento</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" data-step="5" id="presupuesto_tab" onclick="actualizar_presupuesto()" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
                     </li>
                 </ul>
             </div>
@@ -776,7 +925,113 @@
                         <!--CIERRE: EVALUACION--->
                         <!-- TRATAMIENTO-->
                         <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
-                           @include('atencion_odontologica.generales.tratamiento_presup')
+                            <div class="endo-plan-panel mt-3" id="plan_tratamiento_endodoncia">
+                                <div class="endo-plan-panel__header">
+                                    <div>
+                                        <h5>Plan de tratamiento endodóntico</h5>
+                                        <p>Seleccione una pieza, indique el diagnóstico y agregue la prestación.</p>
+                                    </div>
+                                    <span class="badge badge-light-primary">Dentición adulta</span>
+                                </div>
+                                <div class="card-body">
+                                    @php
+                                        $piezasPlanEndodoncia = [
+                                            '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                            '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                            '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                            '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                        ];
+                                    @endphp
+                                    <div class="endo-piece-planner">
+                                        <div class="endo-piece-planner__title">
+                                            <div>
+                                                <h6>Seleccione una pieza para agregar al tratamiento</h6>
+                                                <p>Presione una pieza para ingresar su diagnóstico y prestación.</p>
+                                            </div>
+                                        </div>
+                                        @include('atencion_odontologica.include.selector_odontograma', [
+                                            'id' => 'selector_plan_tratamiento_endodoncia',
+                                            'inputId' => 'pieza_plan_tratamiento_endodoncia',
+                                            'counter' => 9800,
+                                            'multiple' => false,
+                                            'compacto' => true,
+                                            'autoRefresh' => false,
+                                            'mostrarMensajeVacio' => false,
+                                            'mostrarEstadoClinico' => true,
+                                            'historialPiezas' => $odontograma_historial ?? [],
+                                            'estadosBloqueados' => [],
+                                            'piezasDisponibles' => $piezasPlanEndodoncia,
+                                            'titulo' => 'Odontograma del plan endodóntico',
+                                            'ayuda' => 'Presione una pieza para agregarla al tratamiento',
+                                        ])
+                                        <input type="hidden" id="pieza_plan_tratamiento_endodoncia" value="0">
+                                    </div>
+                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="denticion_plan_endodoncia" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset active" id="plan_endo_adulto_tab"
+                                                data-toggle="tab" href="#plan_endo_adulto" role="tab"
+                                                aria-controls="plan_endo_adulto" aria-selected="true">Adulto</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="plan_endo_infantil_tab"
+                                                data-toggle="tab" href="#plan_endo_infantil" role="tab"
+                                                aria-controls="plan_endo_infantil" aria-selected="false">Infantil</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="contenido_plan_endodoncia">
+                                        <div class="tab-pane fade show active" id="plan_endo_adulto" role="tabpanel"
+                                            aria-labelledby="plan_endo_adulto_tab">
+                                            @include('atencion_odontologica.generales.evaluacion_adulto')
+                                        </div>
+                                        <div class="tab-pane fade" id="plan_endo_infantil" role="tabpanel"
+                                            aria-labelledby="plan_endo_infantil_tab">
+                                            @include('atencion_odontologica.generales.caras_cuadrantes')
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="modal_pieza_plan_endodoncia" tabindex="-1" role="dialog"
+                                aria-labelledby="titulo_modal_pieza_plan_endodoncia" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div>
+                                                <small class="text-uppercase text-c-blue font-weight-bold">Plan endodóntico</small>
+                                                <h5 class="modal-title" id="titulo_modal_pieza_plan_endodoncia">
+                                                    Pieza <span id="numero_pieza_plan_endodoncia"></span>
+                                                </h5>
+                                            </div>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="diagnostico_pieza_plan_endodoncia">Diagnóstico</label>
+                                                <select class="form-control" id="diagnostico_pieza_plan_endodoncia">
+                                                    <option value="0">Seleccione un diagnóstico</option>
+                                                    @foreach ($diagnosticos as $diagnosticoPlanEndodoncia)
+                                                        <option value="{{ $diagnosticoPlanEndodoncia->id }}">{{ $diagnosticoPlanEndodoncia->descripcion }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <label for="tratamiento_pieza_plan_endodoncia">Tratamiento o prestación</label>
+                                                <input type="text" class="form-control tratamiento-autocomplete"
+                                                    id="tratamiento_pieza_plan_endodoncia"
+                                                    placeholder="Busque o describa el tratamiento" autocomplete="off">
+                                                <small class="form-text text-muted">La pieza se incorporará a sus grupos y al presupuesto.</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="guardar_pieza_plan_endodoncia">
+                                                <i class="feather icon-plus"></i> Agregar al plan
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!--CIERRE: TRATAMIENTO--->
                         <!--CIERRE: PRESUPUESTO--->
@@ -809,6 +1064,282 @@
 @section('page-script-ficha-atencion')
 
 <script>
+    let actualizandoPlanEndodoncia = false;
+    let diagnosticoPlanEndodonciaSeleccionado = null;
+
+    function abrirModalPiezaPlanEndodoncia(pieza) {
+        if (!pieza) return;
+        $('#numero_pieza_plan_endodoncia').text(pieza);
+        $('#diagnostico_pieza_plan_endodoncia').val('0');
+        $('#tratamiento_pieza_plan_endodoncia').val('');
+        $('#modal_pieza_plan_endodoncia').modal('show');
+    }
+
+    function sincronizarSelectorPlanEndodoncia(listaOdontograma) {
+        const $selector = $('#selector_plan_tratamiento_endodoncia');
+        if (!$selector.length) return;
+
+        const estadosVisuales = {};
+        (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
+            if (!registro || Number(registro.presupuesto) !== 1 || Number(registro.urgencia) === 1) return;
+
+            const pieza = String(registro.pieza || '');
+            if (!pieza || estadosVisuales[pieza] === 'ausente') return;
+
+            const diagnostico = String(registro.diagnostico || '').toLowerCase();
+            const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
+            let estado = estadosVisuales[pieza] || 'normal';
+
+            if (diagnostico.includes('carie')) estado = 'carie';
+            if (tratamiento.includes('implante')) {
+                estado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
+            }
+            if (estado !== 'ausente' && (
+                tratamiento.includes('endodoncia') ||
+                tratamiento.includes('pulpotomia') ||
+                tratamiento.includes('pulpectomia')
+            )) {
+                estado = 'endodoncia';
+            }
+
+            estadosVisuales[pieza] = estado;
+        });
+
+        const baseImagenes = @json(asset('images/dental/dientes'));
+        $selector.find('[data-selector-pieza]').each(function () {
+            const $boton = $(this);
+            const pieza = String($boton.data('selector-pieza'));
+            const codigo = pieza.replace('.', '');
+            const estado = estadosVisuales[pieza] || 'normal';
+            const rutas = {
+                carie: baseImagenes + '/carie/carie' + codigo + '.png',
+                ausente: baseImagenes + '/diente-ausente/dau' + codigo + '.png',
+                implante: baseImagenes + '/implante/impl' + codigo + '.png',
+                endodoncia: baseImagenes + '/endodoncia/endo' + codigo + '.png',
+                normal: baseImagenes + '/d' + codigo + '.png'
+            };
+
+            $boton.find('img')
+                .attr('src', rutas[estado] || rutas.normal)
+                .attr('data-estado-clinico', estado);
+        });
+
+        $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+        $selector.find('.selector-odontograma-generico__resumen')
+            .html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+        $('#pieza_plan_tratamiento_endodoncia').val('0');
+    }
+
+    function decorarTablaPlanEndodoncia() {
+        const baseImagenes = @json(asset('images/dental/dientes'));
+
+        $('#plan_tratamiento_endodoncia #table_odontograma tbody tr').each(function () {
+            const $fila = $(this);
+            const $celdas = $fila.children('td');
+            if ($celdas.length < 8) return;
+
+            const fechaHora = $.trim($celdas.eq(0).text());
+            const partes = fechaHora.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+            if (!$celdas.eq(0).find('.dental-table-datetime').length && partes) {
+                $celdas.eq(0).html('<div class="dental-table-datetime"><strong>' +
+                    partes[3] + '-' + partes[2] + '-' + partes[1] + '</strong><small>' +
+                    partes[4] + ':' + partes[5] + '</small></div>');
+            }
+
+            if (!$celdas.eq(1).find('.dental-treatment-name').length) {
+                const prestacion = $.trim($celdas.eq(1).text());
+                $celdas.eq(1).empty().append($('<span>', {
+                    class: 'dental-treatment-name', title: prestacion, text: prestacion
+                }));
+            }
+
+            const $seleccion = $celdas.eq(7).find('.checkbox-seleccion');
+            const idTratamiento = Number($seleccion.val() || $fila.data('treatment-id'));
+            const pieza = $.trim($celdas.eq(3).text());
+            if (!pieza) return;
+
+            if (!$celdas.eq(3).find('.dental-table-tooth').length) {
+                const codigo = pieza.replace('.', '');
+                $celdas.eq(3).html('<div class="dental-table-tooth"><img src="' +
+                    baseImagenes + '/d' + codigo + '.png" alt="Pieza ' + pieza + '"><strong>' +
+                    pieza + '</strong></div>');
+            }
+
+            if (!$celdas.eq(7).find('.dental-piece-status').length && idTratamiento) {
+                const registro = (window.odontograma_global || []).find(function (item) {
+                    return Number(item.id) === idTratamiento;
+                });
+                const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
+                const selector = '<select class="form-control form-control-sm dental-piece-status" ' +
+                    'data-original-state="' + estado + '" onchange="actualizarEstadoPiezaPlan(this,' + idTratamiento + ')">' +
+                    '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
+                    '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
+                    '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
+                    '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option></select>';
+                const $control = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
+                $celdas.eq(7).html('<div class="dental-table-state-control">' + selector + '</div>');
+                $celdas.eq(7).find('.dental-table-state-control').append($control);
+            }
+        });
+    }
+
+    let decoracionTablaEndodonciaPendiente = false;
+    function programarDecoracionTablaEndodoncia() {
+        if (decoracionTablaEndodonciaPendiente) return;
+        decoracionTablaEndodonciaPendiente = true;
+        window.requestAnimationFrame(function () {
+            decoracionTablaEndodonciaPendiente = false;
+            decorarTablaPlanEndodoncia();
+        });
+    }
+
+    function actualizarEstadoPiezaPlan(select, idTratamiento) {
+        const $select = $(select);
+        const estadoAnterior = String($select.data('original-state'));
+        const estadoNuevo = String($select.val());
+        $select.prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
+            data: {
+                id_tratamiento: idTratamiento,
+                estado: estadoNuevo,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (respuesta) {
+                if (respuesta.mensaje !== 'OK') {
+                    $select.val(estadoAnterior);
+                    swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error');
+                    return;
+                }
+
+                $select.data('original-state', estadoNuevo);
+                $select.closest('tr').attr('data-clinical-state', estadoNuevo);
+                if (Array.isArray(respuesta.odontograma)) {
+                    window.odontograma_global = respuesta.odontograma;
+                    sincronizarSelectorPlanEndodoncia(respuesta.odontograma);
+                } else {
+                    const registro = (window.odontograma_global || []).find(function (item) {
+                        return Number(item.id) === Number(idTratamiento);
+                    });
+                    if (registro) registro.estado = Number(estadoNuevo);
+                }
+            },
+            error: function () {
+                $select.val(estadoAnterior);
+                swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error');
+            },
+            complete: function () {
+                $select.prop('disabled', false);
+            }
+        });
+    }
+
+    $(document).on('draw.dt init.dt responsive-display.dt', function (event, settings) {
+        if (settings && settings.nTable && settings.nTable.id === 'table_odontograma') {
+            programarDecoracionTablaEndodoncia();
+        }
+    });
+
+    const observadorTablaPlanEndodoncia = new MutationObserver(function (mutaciones) {
+        const debeActualizar = mutaciones.some(function (mutacion) {
+            const nodo = mutacion.target.nodeType === 1 ? mutacion.target : mutacion.target.parentElement;
+            return nodo && (nodo.id === 'table_odontograma' || nodo.closest('#table_odontograma'));
+        });
+        if (debeActualizar) programarDecoracionTablaEndodoncia();
+    });
+    observadorTablaPlanEndodoncia.observe(document.body, { childList: true, subtree: true });
+    $(programarDecoracionTablaEndodoncia);
+
+    // Se usa un listener nativo porque template_endo puede cargar más de una
+    // instancia de jQuery. Así el modal se abre aunque el evento personalizado
+    // del selector haya sido emitido por otra instancia.
+    document.addEventListener('click', function (event) {
+        const botonPieza = event.target.closest(
+            '#selector_plan_tratamiento_endodoncia [data-selector-pieza]'
+        );
+        if (!botonPieza || botonPieza.disabled || !botonPieza.classList.contains('is-enabled')) return;
+
+        const pieza = String(botonPieza.getAttribute('data-selector-pieza') || '');
+        window.setTimeout(function () {
+            // El selector alterna is-selected antes de que el clic llegue al
+            // document. Si el usuario está desmarcando, no se abre el modal.
+            if (!botonPieza.classList.contains('is-selected')) {
+                $('#pieza_plan_tratamiento_endodoncia').val('0');
+                return;
+            }
+            $('#pieza_plan_tratamiento_endodoncia').val(pieza);
+            abrirModalPiezaPlanEndodoncia(pieza);
+        }, 0);
+    });
+
+    $(document).on('click', '#guardar_pieza_plan_endodoncia', function () {
+        const pieza = String($('#pieza_plan_tratamiento_endodoncia').val() || '');
+        const diagnostico = $('#diagnostico_pieza_plan_endodoncia').val();
+        const tratamiento = $.trim($('#tratamiento_pieza_plan_endodoncia').val());
+        const errores = [];
+
+        if (!pieza || pieza === '0') errores.push('Seleccione una pieza dental.');
+        if (!diagnostico || diagnostico === '0') errores.push('Seleccione un diagnóstico.');
+        if (!tratamiento) errores.push('Ingrese un tratamiento o prestación.');
+
+        if (errores.length) {
+            swal({
+                title: 'Datos requeridos',
+                content: { element: 'div', attributes: { innerHTML: errores.join('<br>') } },
+                icon: 'warning'
+            });
+            return;
+        }
+
+        diagnosticoPlanEndodonciaSeleccionado = diagnostico;
+        $('#max_sup, #max_inf').prop('checked', false);
+        $('#piezas_presup').prop('checked', true);
+        $('#paciente_piezas_dentales_ex').val([pieza]).trigger('change');
+        $('#diag_presupuesto_pieza_g').val(tratamiento);
+        $('#modal_pieza_plan_endodoncia').modal('hide');
+        cargar_a_presupuesto_impl_g_confirmar();
+    });
+
+    function refrescar_caras_grupos_endodoncia() {
+        if (actualizandoPlanEndodoncia) return;
+        actualizandoPlanEndodoncia = true;
+
+        $.ajax({
+            type: 'post',
+            url: '{{ ROUTE("dental.refrescar_caras_grupos") }}',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val()
+            },
+            success: function (response) {
+                if (response.estado != 1) return;
+
+                if (response.evaluacion_adulto_html) {
+                    $('#plan_endo_adulto .dental-evaluation-panel')
+                        .replaceWith(response.evaluacion_adulto_html);
+                }
+                if (response.caras_cuadrantes_html) {
+                    $('#plan_endo_infantil .dental-evaluation-panel')
+                        .replaceWith(response.caras_cuadrantes_html);
+                }
+            },
+            error: function (xhr) {
+                console.log('No fue posible actualizar las caras y grupos de Endodoncia:', xhr.responseText);
+            },
+            complete: function () {
+                actualizandoPlanEndodoncia = false;
+            }
+        });
+    }
+
     function abrir_modal_insumos(){
         $('#modal_insumos').modal('show');
     }
@@ -6287,8 +6818,17 @@ function cargar_a_presupuesto_impl_g() {
 
 function cargar_a_presupuesto_impl_g_confirmar(){
     // Obtener los valores seleccionados en el select
-    var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val();
-    var ttoPiezas = $('#diag_presupuesto_pieza_g').val();
+    var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val() || [];
+    if (!Array.isArray(piezasSeleccionadas)) {
+        piezasSeleccionadas = [piezasSeleccionadas].filter(Boolean);
+    }
+    if (piezasSeleccionadas.length === 0) {
+        const piezaSelector = String($('#pieza_plan_tratamiento_endodoncia').val() || '');
+        if (piezaSelector && piezaSelector !== '0') piezasSeleccionadas = [piezaSelector];
+    }
+
+    var ttoPiezas = $('#diag_presupuesto_pieza_g').val()
+        || $.trim($('#tratamiento_pieza_plan_endodoncia').val() || '');
 
     let valido = 1;
     let mensaje = '';
@@ -6319,10 +6859,12 @@ function cargar_a_presupuesto_impl_g_confirmar(){
     let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
     let data = {
         piezas: piezasSeleccionadas,
+        diagnostico: diagnosticoPlanEndodonciaSeleccionado,
         tto: ttoPiezas,
         id_ficha_atencion: $('#id_fc').val(),
         id_lugar_atencion: $('#id_lugar_atencion').val(),
         id_paciente: $('#id_paciente').val(),
+        id_presupuesto: $('#id_presupuesto').val(),
         _token: "{{ csrf_token() }}"
     }
     console.log(data);
@@ -6333,12 +6875,23 @@ function cargar_a_presupuesto_impl_g_confirmar(){
         success: function(resp){
             console.log(resp);
             if(resp.status == 1){
+                diagnosticoPlanEndodonciaSeleccionado = null;
                 swal({
                     icon:'success',
                     title:'Info',
                     text: resp.mensaje
                 });
-                let odontograma = resp.odontograma_paciente;
+                let odontograma = Array.isArray(resp.odontograma_paciente)
+                    ? resp.odontograma_paciente
+                    : [];
+                window.odontograma_global = odontograma;
+                sincronizarSelectorPlanEndodoncia(odontograma);
+                if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                    sincronizarOdontogramaPresupuesto(odontograma, piezasSeleccionadas[0]);
+                }
+                refrescar_caras_grupos_endodoncia();
+                $('#diagnostico_pieza_plan_endodoncia').val('0');
+                $('#tratamiento_pieza_plan_endodoncia').val('');
                 let html = '';
                 odontograma.forEach(function(odonto){
                     html += '<tr>';

@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!-- fileupload-custom css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
@@ -80,9 +81,11 @@
     @yield('styles')
 </head>
 <body>
+    {{-- Mismo orden estructural del template odontológico general, conservando
+         el head, títulos y recursos particulares de Endodoncia. --}}
+    @include('atencion_odontologica.generales.eval_periimplante')
     @include('template.dental.header')
     @include('template.menuProfesional')
-     @include('atencion_odontologica.generales.eval_periimplante')
     @yield('Content')
 
     <!-- Modal de la vista -->
@@ -138,6 +141,8 @@
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/modals_atencion_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/modals_atencion_implantologia.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -195,23 +200,28 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
-            $('#table_trabajos_menores_dental').DataTable();
-            $('#presup_estado_pago').DataTable();
-            $('#table_trabajos_menores_dental').DataTable();
-            $('#table_trabajos_mayores_dental').DataTable();
+            function inicializarDataTable(selector, opciones) {
+                if (!$(selector).length || $.fn.DataTable.isDataTable(selector)) {
+                    return;
+                }
 
-            $('#presup_estado_pago_gral').DataTable();
+                $(selector).DataTable(opciones || {});
+            }
 
-            $('#presup_insumos_pago').DataTable({
-                responsive: 'true'
+            inicializarDataTable('#table_trabajos_menores_dental');
+            inicializarDataTable('#presup_estado_pago');
+            inicializarDataTable('#table_trabajos_mayores_dental');
+            inicializarDataTable('#presup_estado_pago_gral');
+            inicializarDataTable('#presup_insumos_pago', {
+                responsive: true
             });
-            $('#table_profesionales_tons').DataTable({
-                responsive: 'true'
+            inicializarDataTable('#table_profesionales_tons', {
+                responsive: true
             });
-            $('#table_pedido_insumos_materiales').DataTable({
-                responsive: 'true'
+            inicializarDataTable('#table_pedido_insumos_materiales', {
+                responsive: true
             });
-            $('#table_insumos_odon_gral').DataTable();
+            inicializarDataTable('#table_insumos_odon_gral');
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

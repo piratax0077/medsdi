@@ -4751,7 +4751,14 @@ return $ficha;
 
     public function mostrar_nuevo_grupo_post_impl(Request $req){
         $idCounter = $req->counter ? $req->counter : 0;
-        $v = view('atencion_odontologica.include.grupos_dentales_post_impl',['counter' => $idCounter])->render();
+        $odontograma = OdontogramaPaciente::where('id_paciente', $req->id_paciente)
+            ->where('id_ficha_atencion', $req->id_ficha_atencion)
+            ->where('presupuesto', 1)
+            ->get();
+        $v = view('atencion_odontologica.include.grupos_dentales_post_impl', [
+            'counter' => $idCounter,
+            'odontograma' => $odontograma,
+        ])->render();
         return ['mensaje' => 'OK','v' => $v];
     }
 
@@ -10757,6 +10764,109 @@ return $ficha;
                         'tipo' => 'seccion',
                         'personalizada' => false,
                     ],
+                ],
+            ],
+        ];
+    }
+
+
+    /**
+     * Estructura configurable de la ficha de Periodoncia (tipo dental 21).
+     * Odontograma, periodontograma/evaluación periodontal y presupuesto forman
+     * parte del núcleo clínico y se mantienen visibles cuando se marcan como obligatorios.
+     */
+    private function seccionesBasePeriodoncia(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta',
+                'nombre' => 'Motivo de la consulta y examen físico general',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo'=>'motivo','nombre'=>'Motivo de consulta','visible'=>true,'tipo'=>'campo','personalizada'=>false],
+                    ['codigo'=>'antecedentes_especialidad','nombre'=>'Antecedentes de la especialidad','visible'=>true,'tipo'=>'campo','personalizada'=>false],
+                    ['codigo'=>'observaciones_examen','nombre'=>'Observaciones al examen de la especialidad','visible'=>true,'tipo'=>'campo','personalizada'=>false],
+                    ['codigo'=>'anestesia_local','nombre'=>'Anestesia local','visible'=>true,'tipo'=>'modal','personalizada'=>false],
+                    ['codigo'=>'hemorragias','nombre'=>'Hemorragias','visible'=>true,'tipo'=>'modal','personalizada'=>false],
+                    ['codigo'=>'fracturas','nombre'=>'Fracturas','visible'=>true,'tipo'=>'modal','personalizada'=>false],
+                ],
+            ],
+            [
+                'codigo' => 'urgencia_odontologica',
+                'nombre' => 'Urgencia odontológica',
+                'visible' => true,
+                'tipo' => 'seccion',
+                'personalizada' => false,
+            ],
+            [
+                'codigo' => 'examen_odontologico_general',
+                'nombre' => 'Examen odontológico general',
+                'visible' => true,
+                'tipo' => 'seccion',
+                'personalizada' => false,
+            ],
+            [
+                'codigo' => 'evaluacion_periodontal',
+                'nombre' => 'Evaluación Periodóncica',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo'=>'antecedentes_periodontales','nombre'=>'Antecedentes','visible'=>true,'tipo'=>'tab','personalizada'=>false],
+                    ['codigo'=>'examen_periodontal','nombre'=>'Examen Periodontal','visible'=>true,'tipo'=>'tab','personalizada'=>false],
+                    ['codigo'=>'estudio_radiologico','nombre'=>'Estudio radiológico','visible'=>true,'tipo'=>'tab','personalizada'=>false],
+                    ['codigo'=>'evaluacion_diagnostico_periodontal','nombre'=>'Evaluación y Diagnóstico','visible'=>true,'tipo'=>'tab','personalizada'=>false],
+                    ['codigo'=>'planificacion_tratamiento_periodontal','nombre'=>'Planificación Tratamiento | Presupuesto','visible'=>true,'tipo'=>'tab','personalizada'=>false],
+                ],
+            ],
+            [
+                'codigo' => 'procedimientos_periodoncia',
+                'nombre' => 'Procedimientos Periodoncia',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'seccion',
+                'personalizada' => false,
+            ],
+            [
+                'codigo' => 'evoluciones',
+                'nombre' => 'Evoluciones',
+                'visible' => true,
+                'tipo' => 'seccion',
+                'personalizada' => false,
+            ],
+            [
+                'codigo' => 'antecedentes_cronicos_ges',
+                'nombre' => 'Antecedentes, crónicos, GES y confidencial',
+                'visible' => true,
+                'tipo' => 'seccion',
+                'personalizada' => false,
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo'=>'hipotesis_diagnostica','nombre'=>'Hipótesis diagnóstica','visible'=>true,'tipo'=>'campo','personalizada'=>false],
+                    ['codigo'=>'diagnostico_cie10','nombre'=>'Diagnóstico CIE-10','visible'=>true,'tipo'=>'autocomplete','personalizada'=>false],
+                    ['codigo'=>'indicaciones','nombre'=>'Indicaciones','visible'=>true,'tipo'=>'campo','personalizada'=>false],
+                ],
+            ],
+            [
+                'codigo' => 'recetas_examenes',
+                'nombre' => 'Recetas y exámenes',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo'=>'medicamentos','nombre'=>'Medicamentos y recetas','visible'=>true,'tipo'=>'tabla','personalizada'=>false],
+                    ['codigo'=>'examenes','nombre'=>'Exámenes','visible'=>true,'tipo'=>'tabla','personalizada'=>false],
                 ],
             ],
         ];

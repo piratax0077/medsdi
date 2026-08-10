@@ -18,5 +18,5 @@ if(!isset($titulo)) {
 <meta name="keywords" content="">
 <meta name="author" content="Redmedichile"/>
 <link rel="icon" href="../assets/images/sdi-icon.png" type="image/x-icon">
-<link rel="stylesheet" href="../assets/css/style.css?t=<?=time()?>">
-<link rel="stylesheet" href="../assets/css/style_index.css?t=<?=time()?>">
+{{-- Las hojas base se cargan desde template_od_gral mediante asset().
+     Las antiguas rutas relativas ../assets/css generaban respuestas 404. --}}

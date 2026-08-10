@@ -224,7 +224,7 @@
             mostrar_nuevas_imagenes_dent(random);
             mostrar_pieza_dental_examen(random);
             
-            $('#numero_pieza_tto_impl1000').select2();
+            $('select#numero_pieza_tto_impl1000').select2();
             
         });
 

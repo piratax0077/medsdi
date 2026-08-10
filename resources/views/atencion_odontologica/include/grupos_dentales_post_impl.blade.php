@@ -3,12 +3,34 @@
         <div class="card-informacion">
             <div class="card-body">
                 <div class="form-row">
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2 col-xxl-1">
+                    @php
+                        $piezasGrupoDisponibles = collect($odontograma ?? [])
+                            ->pluck('pieza')
+                            ->map(function ($pieza) { return (string) $pieza; })
+                            ->unique()
+                            ->values()
+                            ->all();
+                    @endphp
+                    <div class="col-12 mb-3">
                         <div class="form-group">
-                            <label class="floating-label-activo-sm">Piezas N°</label><!--USAR SELECT 2 ?-->
-                            <select class="js-example-basic-multiple select2-dental" name="pzas_grupo_impl{{ $counter }}" id="pzas_grupo_impl{{ $counter }}" multiple="multiple">
-                                @foreach (['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8','3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8'] as $pieza)
-                                    <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
+                            @include('atencion_odontologica.include.selector_odontograma', [
+                                'id' => 'selector_grupo_implante'.$counter,
+                                'inputId' => 'pzas_grupo_impl'.$counter,
+                                'counter' => 14000 + (int) $counter,
+                                'multiple' => true,
+                                'compacto' => true,
+                                'autoRefresh' => false,
+                                'mostrarMensajeVacio' => true,
+                                'mostrarEstadoClinico' => true,
+                                'historialPiezas' => $odontograma ?? [],
+                                'estadosBloqueados' => [],
+                                'piezasDisponibles' => $piezasGrupoDisponibles,
+                                'titulo' => 'Seleccione los implantes del grupo',
+                                'ayuda' => 'Puede seleccionar una o varias piezas incluidas en el presupuesto',
+                            ])
+                            <select class="d-none" name="pzas_grupo_impl{{ $counter }}[]" id="pzas_grupo_impl{{ $counter }}" multiple aria-hidden="true" tabindex="-1">
+                                @foreach ($piezasGrupoDisponibles as $pieza)
+                                    <option value="{{ $pieza }}">{{ $pieza }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -145,10 +167,6 @@
 
 <input type="hidden" name="counter" id="counter" value="{{ $counter }}">
 <script>
-    $(document).ready(function(){
-        let counter = $('#counter').val();
-        $('#pzas_grupo_impl'+counter).select2();
-    });
     function ocultar_grupo_dental_post_impl(){
         $('#grupo_dental_post_impl').empty();
     }
