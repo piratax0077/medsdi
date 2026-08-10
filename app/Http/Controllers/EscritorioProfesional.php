@@ -957,6 +957,18 @@ class EscritorioProfesional extends Controller
         return view('app.profesional.equipo',['equipos' => $registros,'profesional' => $profesional]);
     }
 
+    public function equipamiento_dental(){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $equipamientos = collect();
+        return view('app.profesional.equipamiento_dental', ['equipamientos' => $equipamientos, 'profesional' => $profesional]);
+    }
+
+    public function gestion_insumos(){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $insumos = collect();
+        return view('app.profesional.gestion_insumos', ['insumos' => $insumos, 'profesional' => $profesional]);
+    }
+
     public function validar_rut(Request $request)
     {
         $email = User::where('email', $request->email)->first();

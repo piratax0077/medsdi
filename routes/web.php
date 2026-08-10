@@ -3275,6 +3275,8 @@ Route::post('/profesional/eliminar_tipo_convenio',[App\Http\Controllers\Escritor
 Route::post('/profesional/aplicar_convenio_tratamiento',[App\Http\Controllers\EscritorioProfesional::class, 'aplicar_convenio_tratamiento'])->name('profesional.aplicar_convenio_tratamiento');
 Route::get('/profesional/tons',[App\Http\Controllers\EscritorioProfesional::class, 'tons'])->name('profesional.tons');
 Route::get('/profesional/mantencion_equipo',[App\Http\Controllers\EscritorioProfesional::class, 'mantencion_equipo'])->name('profesional.mantencion_equipo');
+Route::get('/profesional/equipamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'equipamiento_dental'])->name('profesional.equipamiento_dental');
+Route::get('/profesional/gestion_insumos',[App\Http\Controllers\EscritorioProfesional::class, 'gestion_insumos'])->name('profesional.gestion_insumos');
 Route::post('/profesional/buscar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'buscar_tons'])->name('profesional.buscar_tons');
 Route::post('/profesional/solicitar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'solicitar_tons'])->name('profesional.solicitar_tons');
 Route::post('/profesional/desasociar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'desasociar_tons'])->name('profesional.desasociar_tons');

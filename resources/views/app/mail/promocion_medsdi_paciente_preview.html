@@ -69,7 +69,7 @@
             <table role="presentation" border="0" width="100%" cellspacing="0" cellpadding="0">
               <tr>
                 <td align="left" valign="middle" width="55%" class="header-logo-td">
-                  <img src="{{ asset('images/sdi-color-h.svg') }}" alt="MED-SDI" width="132" style="width:132px;display:block;">
+                  <img src="https://www.med-sdi.cl/images/sdi-color-h.svg" alt="MED-SDI" width="132" style="width:132px;display:block;">
                 </td>
                 <td align="right" valign="middle" width="45%" class="header-status-td">
                   <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;line-height:16px;font-weight:600;letter-spacing:1px;color:#31bebe;text-transform:uppercase;">Hora registrada</p>
@@ -79,7 +79,7 @@
           </td>
         </tr>
 
-        <!-- Linea que divide el encabezado -->
+        <!-- DIVIDER: inset, no llega a los extremos -->
         <tr>
           <td class="px" style="padding:0 56px;">
             <table role="presentation" border="0" width="100%" cellspacing="0" cellpadding="0"><tr>
@@ -88,15 +88,16 @@
           </td>
         </tr>
 
-        <!-- Info para el paciente -->
+        <!-- GREETING -->
         <tr>
           <td class="px" style="padding:24px 32px 6px;">
-            <p class="heading" style="margin:0 0 10px;font-size:21px;line-height:28px;font-weight:700;color:#123a5c;">Hola {{ $detalle['body']['nombre'] ?? 'Paciente' }} </p>
-            <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:17px;line-height:26px;color:#5a6b7d;">¡Tu hora médica fue registrada correctamente!</p>
+            <!-- BLADE: {{ $detalle['body']['nombre'] ?? 'Paciente' }} -->
+            <p class="heading" style="margin:0 0 10px;font-size:21px;line-height:28px;font-weight:700;color:#123a5c;">Hola María González 👋</p>
+            <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;color:#5a6b7d;">Tu hora médica fue registrada correctamente. Queremos contarte que <strong style="color:#123a5c;">MED-SDI</strong> también dispone de herramientas digitales para ayudarte a gestionar tu atención de salud de forma simple, segura y ordenada.</p>
           </td>
         </tr>
 
-        <!-- Descripcion -->
+        <!-- SECTION TITLE - CARD (inicio de la invitación) -->
         <tr>
           <td class="px" style="padding:16px 32px 0;">
             <table role="presentation" border="0" width="100%" cellspacing="0" cellpadding="0" class="pulse-card" style="border-radius:22px;background-color:#1769aa;background-image:radial-gradient(circle at 14% 20%, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 40%),radial-gradient(circle at 88% 78%, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 38%),linear-gradient(120deg,#0d4d80 0%,#1769aa 55%,#2a8fd6 100%);box-shadow:0 14px 28px rgba(23,105,170,.32);">
@@ -111,7 +112,7 @@
           </td>
         </tr>
 
-        <!-- Caracteristica -->
+        <!-- FEATURE GRID -->
         <tr>
           <td class="px" style="padding:26px 24px 0;">
             <table role="presentation" border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -179,7 +180,7 @@
           </td>
         </tr>
 
-        <!-- Seccion para que el pcte se una-->
+        <!-- HIGHLIGHT BAND -->
         <tr>
           <td class="px" style="padding:26px 32px 0;">
             <table role="presentation" border="0" width="100%" cellspacing="0" cellpadding="0" style="background:#eef8f6;border:1px dashed #9fd6cb;border-radius:12px;">
@@ -190,40 +191,41 @@
           </td>
         </tr>
 
+        <!-- CTA -->
         <tr>
           <td align="center" style="padding:28px 32px 6px;">
             <p style="margin:0 0 4px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:14px;color:#5a6b7d;">Empieza hoy a tomar el control de tu salud</p>
             <p class="heading" style="margin:0 0 18px;font-size:17px;font-weight:700;color:#123a5c;">Comienza a disfrutar de una forma más simple de gestionar tu salud</p>
             <table role="presentation" border="0" cellspacing="0" cellpadding="0" class="cta-btn">
               <tr><td align="center" class="pulse-cta" style="border-radius:30px;background:linear-gradient(135deg,#149b9b 0%,#1cbebe 100%);box-shadow:0 8px 20px rgba(20,155,155,.35);">
-                <a target="_blank" href="{{ $detalle['body']['url_promocion'] ?? env('APP_URL') }}" style="display:inline-block;padding:16px 40px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:.3px;">COMENZAR AHORA →</a>
+                <!-- BLADE: href="{{ $detalle['body']['url_promocion'] ?? env('APP_URL') }}" -->
+                <a href="#" target="_blank" style="display:inline-block;padding:16px 40px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:.3px;">COMENZAR AHORA →</a>
               </td></tr>
             </table>
           </td>
         </tr>
 
-        @if(!empty($detalle['body']['profesional']))
-        <!-- Desde que atencion viene este email-->
+        <!-- ATTRIBUTION (BLADE: @if(!empty($detalle['body']['profesional'])) ... @endif) -->
         <tr>
           <td align="center" style="padding:18px 32px 0;">
-            <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#8494a6;">Esta invitación se generó a partir de tu atención con <strong style="color:#5a6b7d; text-transform: text-capitalize!important;">{{ $detalle['body']['profesional'] }}</strong>.</p>
+            <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#8494a6;">Esta invitación se generó a partir de tu atención con <strong style="color:#5a6b7d;">Dr. Juan Pérez</strong>.</p>
           </td>
         </tr>
-        @endif
 
-        <!-- Texto informativo -->
+        <!-- DISCLAIMER -->
         <tr>
           <td align="center" style="padding:16px 32px 30px;">
             <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#a2aebc;">Este mensaje es informativo. No se creó una cuenta de usuario ni se generó una contraseña.</p>
           </td>
         </tr>
 
-        <!-- Footer -->
+        <!-- FOOTER -->
         <tr>
           <td style="padding:16px;text-align:center;background:#f1f5f9;">
+            <!-- BLADE: {{ date('Y') }} -->
             <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:#64748b;line-height:16px;">
               Este correo fue enviado por <strong>SDI</strong><br>
-              &copy; {{ date('Y') }} &middot; Todos los derechos reservados
+              &copy; 2026 &middot; Todos los derechos reservados
             </p>
           </td>
         </tr>
