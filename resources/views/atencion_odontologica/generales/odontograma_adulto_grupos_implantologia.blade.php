@@ -26,7 +26,7 @@
                 if (Str::contains(Str::lower($tratamiento), 'implante')) {
                     if ($estado == '0') {
                         $estadoFinal = 'ausente';
-                        break; // No importa lo demás, es ausente
+                        // Continuar para respetar el estado clinico mas reciente.
                     } else {
                         $estadoFinal = 'implante';
                     }

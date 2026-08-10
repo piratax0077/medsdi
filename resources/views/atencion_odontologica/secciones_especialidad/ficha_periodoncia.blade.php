@@ -8187,42 +8187,14 @@ function ocultar_pieza_impl(counter){
         function sincronizarSelectorPlanPeriodoncia(listaOdontograma) {
             const $selector = $('#selector_plan_tratamiento_periodoncia');
             if (!$selector.length) return;
-
-            const estados = {};
-            (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
-                if (!registro || Number(registro.urgencia) === 1) return;
-                const pieza = String(registro.pieza || '');
-                const diagnostico = String(registro.diagnostico || registro.diagnostico_descripcion || '').toLowerCase();
-                estados[pieza] = diagnostico.includes('carie') ? 'carie' : 'normal';
-            });
-
-            const base = @json(asset('images/dental/dientes'));
-            $selector.find('[data-selector-pieza]').each(function () {
-                const $boton = $(this);
-                const pieza = String($boton.data('selector-pieza'));
-                const codigo = pieza.replace('.', '');
-                const estado = estados[pieza] || 'normal';
-                const imagen = estado === 'carie'
-                    ? base + '/carie/carie' + codigo + '.png'
-                    : base + '/d' + codigo + '.png';
-                $boton.find('img').attr('src', imagen).attr('data-estado-clinico', estado);
-            });
+            window.actualizarEstadosClinicosSelectorOdontograma($selector, listaOdontograma);
 
             $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
             $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
             $('#paciente_piezas_dentales_ex_period').val([]).trigger('change');
 
             const $selectorPrincipal = $('#selector_plan_principal_periodoncia');
-            $selectorPrincipal.find('[data-selector-pieza]').each(function () {
-                const $boton = $(this);
-                const pieza = String($boton.data('selector-pieza'));
-                const codigo = pieza.replace('.', '');
-                const estado = estados[pieza] || 'normal';
-                const imagen = estado === 'carie'
-                    ? base + '/carie/carie' + codigo + '.png'
-                    : base + '/d' + codigo + '.png';
-                $boton.find('img').attr('src', imagen).attr('data-estado-clinico', estado);
-            });
+            window.actualizarEstadosClinicosSelectorOdontograma($selectorPrincipal, listaOdontograma);
             $selectorPrincipal.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
             $selectorPrincipal.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
             $('#pieza_plan_principal_periodoncia').val('0');

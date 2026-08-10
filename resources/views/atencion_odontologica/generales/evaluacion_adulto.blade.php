@@ -137,7 +137,7 @@
                                                                             </td>
                                                                             <td class="px-1 py-1">
                                                                                 <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_1" value="{{ $primer->tratamiento_plan ?? '' }}" readonly />
-                                                                                <button type="button" onclick="registrar_odontograma_primer_cuadrante({{ $loop->index + 1 }},'gral')" style="margin-top:15px" class="btn btn-info btn-sm">Guardar caras</button>
+                                                                                <button type="button" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 1, 'gral', this, {{ (int) ($primer->id_odontograma ?? 0) }})" style="margin-top:15px" class="btn btn-info btn-sm">Guardar caras</button>
                                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}_1" id="odontograma{{ $loop->index + 1 }}_1"
                                                                                     value="1">
                                                                                     <input type="hidden" name="cuadrante" id="cuadrante" value="1">
@@ -252,7 +252,7 @@
                                                                             </td>
                                                                             <td class="px-1 py-1">
                                                                                 <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_1" name="tratamiento_endo_{{ $loop->index + 1 }}_1" placeholder="Tratamiento">
-                                                                                <button type="button" onclick="registrar_odontograma_primer_cuadrante({{ $loop->index + 1 }},'endo')" style="margin-top:15px" class="btn btn-success-light btn-sm">Registrar </button>
+                                                                                <button type="button" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 1, 'endo', this)" style="margin-top:15px" class="btn btn-success-light btn-sm">Registrar </button>
                                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}_1" id="odontograma{{ $loop->index + 1 }}_1"
                                                                                     value="1">
                                                                                     <input type="hidden" name="cuadrante" id="cuadrante" value="1">
@@ -393,7 +393,7 @@
                                                                                     value="0">
                                                                                 <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_2" id="caraP_check_{{ $loop->index + 1 }}_2"
                                                                                     value="0">
-                                                                                <button type="button" onclick="registrar_odontograma_segundo_cuadrante({{ $loop->index + 1 }},'gral')" class="btn btn-info btn-sm">
+                                                                                <button type="button" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 2, 'gral', this, {{ (int) ($segundo->id_odontograma ?? 0) }})" class="btn btn-info btn-sm">
                                                                                     Guardar caras
                                                                                 </button>
                                                                             </td>
@@ -502,7 +502,7 @@
                                                                                     value="0">
                                                                                 <input type="hidden" name="caraP_endo_check_{{ $loop->index + 1 }}_2" id="caraP_endo_check_{{ $loop->index + 1 }}_2"
                                                                                     value="0">
-                                                                                <button type="button" onclick="registrar_odontograma_segundo_cuadrante({{ $loop->index + 1 }},'endo')" class="btn btn-info btn-sm">
+                                                                                <button type="button" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 2, 'endo', this)" class="btn btn-info btn-sm">
                                                                                     Registrar
                                                                                 </button>
                                                                             </td>
@@ -634,7 +634,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_3" id="caraP_check_{{ $loop->index + 1 }}_3"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_tercer_cuadrante({{ $loop->index + 1 }},'gral')">
+                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 3, 'gral', this, {{ (int) ($tercer->id_odontograma ?? 0) }})">
                                                                                 Guardar caras
                                                                             </button>
 
@@ -745,7 +745,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_endo_check_{{ $loop->index + 1 }}_3" id="caraP_endo_check_{{ $loop->index + 1 }}_3"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_tercer_cuadrante({{ $loop->index + 1 }},'endo')">
+                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 3, 'endo', this)">
                                                                                 Registrar
                                                                             </button>
 
@@ -879,7 +879,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_4" id="caraP_check_{{ $loop->index + 1 }}_4"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_cuarto_cuadrante({{ $loop->index + 1 }},'gral')">
+                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 4, 'gral', this, {{ (int) ($cuarto->id_odontograma ?? 0) }})">
                                                                                 Guardar caras
                                                                             </button>
                                                                         </td>
@@ -993,7 +993,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_endo_check_{{ $loop->index + 1 }}_4" id="caraP_endo_check_{{ $loop->index + 1 }}_4"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm"  onclick="registrar_odontograma_cuarto_cuadrante({{ $loop->index + 1 }},'endo')">
+                                                                            <button type="button" class="btn btn-info btn-sm"  onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 4, 'endo', this)">
                                                                                 Registrar
                                                                             </button>
                                                                         </td>
@@ -1130,7 +1130,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_5" id="caraP_check_{{ $loop->index + 1 }}_5"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_quinto_cuadrante({{ $loop->index + 1 }},'gral')">
+                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 5, 'gral', this)">
                                                                                 Registrar
                                                                             </button>
                                                                         </td>
@@ -1244,7 +1244,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_endo_check_{{ $loop->index + 1 }}_5" id="caraP_endo_check_{{ $loop->index + 1 }}_5"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm"  onclick="registrar_odontograma_quinto_cuadrante({{ $loop->index + 1 }},'endo')">
+                                                                            <button type="button" class="btn btn-info btn-sm"  onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 5, 'endo', this)">
                                                                                 Registrar
                                                                             </button>
                                                                         </td>
@@ -1378,7 +1378,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_6" id="caraP_check_{{ $loop->index + 1 }}_6"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_sexto_cuadrante({{ $loop->index + 1 }},'gral')">
+                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 6, 'gral', this)">
                                                                                 Registrar
                                                                             </button>
                                                                         </td>
@@ -1491,7 +1491,7 @@
                                                                                 value="0">
                                                                             <input type="hidden" name="caraP_endo_check_{{ $loop->index + 1 }}_6" id="caraP_endo_check_{{ $loop->index + 1 }}_6"
                                                                                 value="0">
-                                                                            <button type="button" class="btn btn-info btn-sm"  onclick="registrar_odontograma_sexto_cuadrante({{ $loop->index + 1 }},'endo')">
+                                                                            <button type="button" class="btn btn-info btn-sm"  onclick="registrarCarasOdontograma({{ $loop->index + 1 }}, 6, 'endo', this)">
                                                                                 Registrar
                                                                             </button>
                                                                         </td>
@@ -1521,6 +1521,78 @@
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="card-body-aten-a shadow-none">
+            @php
+                $piezasPresupuestadasPorGrupo = collect([1 => [], 2 => [], 3 => [], 4 => []]);
+                $carasPresupuestadasPorPieza = [];
+
+                collect($odontograma ?? [])->filter(function ($registro) {
+                    return (int) ($registro->presupuesto ?? 0) === 1
+                        && (int) ($registro->urgencia ?? 0) === 0
+                        && preg_match('/^[1-4]\.[1-8]$/', (string) ($registro->pieza ?? ''));
+                })->groupBy(function ($registro) {
+                    return (string) $registro->pieza;
+                })->each(function ($registros, $pieza) use ($piezasPresupuestadasPorGrupo) {
+                    $grupo = (int) substr((string) $pieza, 0, 1);
+                    $caras = $registros->flatMap(function ($registro) {
+                        return array_filter(explode('|', (string) ($registro->caras ?? '')));
+                    })->unique()->values()->all();
+                    $carasPresupuestadasPorPieza[(string) $pieza] = $caras;
+
+                    $piezasPresupuestadasPorGrupo->put(
+                        $grupo,
+                        array_merge($piezasPresupuestadasPorGrupo->get($grupo, []), [[
+                            'pieza' => $pieza,
+                            'caras' => $caras,
+                        ]])
+                    );
+                });
+            @endphp
+
+            <div class="dental-budget-teeth-readonly mb-4">
+                <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                    <div>
+                        <h6 class="text-c-blue mb-1">Piezas incluidas en el presupuesto</h6>
+                        <small class="text-muted">Vista de referencia; las caras no pueden modificarse desde esta sección.</small>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center justify-content-end mt-2 mt-md-0">
+                        <button type="button" class="btn btn-outline-info btn-sm mr-2 mb-1"
+                            onclick="abrirModalInsumosPresupuestoDental()">
+                            <i class="fas fa-boxes mr-1"></i> Agregar insumo
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm mb-1"
+                            onclick="boca_completa('gral')">
+                            <i class="fa fa-plus mr-1"></i> Agregar tratamiento sin pieza
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @foreach ([1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'] as $numeroGrupo => $nombreGrupo)
+                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
+                            <div class="dental-budget-group h-100">
+                                <strong class="d-block text-c-blue mb-2">Grupo {{ $nombreGrupo }}</strong>
+                                @forelse ($piezasPresupuestadasPorGrupo->get($numeroGrupo, []) as $piezaPresupuestada)
+                                    <div class="dental-budget-tooth">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <img src="{{ asset('images/dental/dientes/d'.str_replace('.', '', $piezaPresupuestada['pieza']).'.png') }}"
+                                                alt="Pieza {{ $piezaPresupuestada['pieza'] }}">
+                                            <strong class="ml-2">{{ $piezaPresupuestada['pieza'] }}</strong>
+                                        </div>
+                                        <div class="dental-budget-faces" aria-label="Caras registradas">
+                                            @foreach (['M', 'O', 'D', 'V', 'P'] as $cara)
+                                                <span class="{{ in_array($cara, $piezaPresupuestada['caras'], true) ? 'is-selected' : '' }}">{{ $cara }}</span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @empty
+                                    <small class="text-muted">Sin piezas presupuestadas</small>
+                                @endforelse
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -1635,9 +1707,216 @@
         pointer-events: none;
         color: #495057;
     }
+
+    .dental-budget-teeth-readonly {
+        border: 1px solid #dbe5f1;
+        border-radius: 12px;
+        padding: 16px;
+        background: #f8fbff;
+    }
+
+    .dental-budget-group {
+        border: 1px solid #dbe5f1;
+        border-radius: 10px;
+        padding: 12px;
+        background: #fff;
+    }
+
+    .dental-budget-tooth {
+        border-top: 1px solid #edf1f5;
+        padding: 10px 0;
+    }
+
+    .dental-budget-tooth:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+    }
+
+    .dental-budget-tooth img {
+        width: 28px;
+        height: 38px;
+        object-fit: contain;
+    }
+
+    .dental-budget-faces {
+        display: flex;
+        gap: 5px;
+    }
+
+    .dental-budget-faces span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 27px;
+        height: 27px;
+        border-radius: 50%;
+        background: #e9eef5;
+        color: #7a8797;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .dental-budget-faces span.is-selected {
+        background: #2f75dc;
+        color: #fff;
+        box-shadow: 0 0 0 2px rgba(47, 117, 220, .16);
+    }
 </style>
 
 <script>
+function abrirModalInsumosPresupuestoDental() {
+    // Implantologia administra insumos y laboratorio en un modal propio.
+    if (typeof window.abrir_modal_insumos_lab === 'function' && $('#modal_insumos_lab').length) {
+        window.abrir_modal_insumos_lab();
+        return;
+    }
+
+    // El resto de las fichas odontologicas usa el modal general de insumos.
+    if (typeof window.abrir_modal_insumos === 'function' && $('#modal_insumos').length) {
+        window.abrir_modal_insumos();
+        return;
+    }
+
+    if ($('#modal_insumos').length) {
+        $('#modal_insumos').modal('show');
+        return;
+    }
+
+    if ($('#modal_insumos_lab').length) {
+        $('#modal_insumos_lab').modal('show');
+        return;
+    }
+
+    swal({
+        title: 'Insumos no disponibles',
+        text: 'Esta ficha no tiene habilitado el modulo de insumos.',
+        icon: 'warning'
+    });
+}
+
+    function inicializarCarasGuardadas() {
+        const carasPorPieza = @json($carasPresupuestadasPorPieza ?? []);
+
+        $('[id^="pieza_odontograma_"]').each(function () {
+            const coincidencia = this.id.match(/^pieza_odontograma(_endo)?_(\d+)_(\d+)$/);
+            if (!coincidencia) return;
+
+            const esEndodoncia = !!coincidencia[1];
+            const posicion = coincidencia[2];
+            const grupo = coincidencia[3];
+            const pieza = String($(this).val() || '');
+            const caras = carasPorPieza[pieza] || [];
+
+            ['M', 'O', 'D', 'V', 'P'].forEach(function (cara) {
+                const seleccionada = caras.indexOf(cara) !== -1;
+                const prefijoVisual = esEndodoncia ? '#cara' + cara + '_endo' : '#cara' + cara;
+                const prefijoCampo = esEndodoncia ? '#cara' + cara + '_endo_check_' : '#cara' + cara + '_check_';
+
+                $(prefijoCampo + posicion + '_' + grupo).val(seleccionada ? 1 : 0);
+                $(prefijoVisual + posicion + grupo).css(
+                    'background-color',
+                    seleccionada ? '#641070' : '#8AC007'
+                );
+            });
+        });
+    }
+
+    $(document).ready(inicializarCarasGuardadas);
+
+    function registrarCarasOdontograma(posicion, grupo, tipo, boton, idOdontograma) {
+        const esEndodoncia = tipo === 'endo';
+        const prefijo = esEndodoncia ? '_endo' : '';
+        const sufijo = posicion + '_' + grupo;
+        const selectorPieza = esEndodoncia
+            ? '#pieza_odontograma_endo_' + sufijo
+            : '#pieza_odontograma_' + sufijo;
+        const selectorDiagnostico = esEndodoncia
+            ? '#diagnostico_endo_' + sufijo
+            : '#diagnostico_' + sufijo;
+        const selectorTratamiento = esEndodoncia
+            ? '#tratamiento_endo_' + sufijo
+            : '#tratamiento_' + sufijo;
+
+        const data = {
+            id_ficha_atencion: $('#ficha_id_atencion_dental_odon').val(),
+            id_lugar_atencion: $('#ficha_id_lugar_atencion').val(),
+            id_paciente: $('#id_paciente').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
+            id_odontograma: idOdontograma || null,
+            pieza: $(selectorPieza).val(),
+            cuadrante: grupo,
+            posicion_pieza: posicion,
+            caraM: $('#caraM' + prefijo + '_check_' + sufijo).val() || 0,
+            caraO: $('#caraO' + prefijo + '_check_' + sufijo).val() || 0,
+            caraD: $('#caraD' + prefijo + '_check_' + sufijo).val() || 0,
+            caraV: $('#caraV' + prefijo + '_check_' + sufijo).val() || 0,
+            caraP: $('#caraP' + prefijo + '_check_' + sufijo).val() || 0,
+            diagnostico: $(selectorDiagnostico).val(),
+            tratamiento: $(selectorTratamiento).val(),
+            _token: "{{ csrf_token() }}"
+        };
+
+        if (!data.pieza || !data.diagnostico || data.diagnostico === '0' || !data.tratamiento) {
+            swal({
+                title: 'Datos incompletos',
+                text: 'La pieza debe tener diagnóstico y tratamiento antes de guardar sus caras.',
+                icon: 'warning'
+            });
+            return;
+        }
+
+        const $boton = $(boton);
+        const textoOriginal = $boton.html();
+        $boton.prop('disabled', true).html('<span class="spinner-border spinner-border-sm mr-1"></span>Guardando');
+
+        $.ajax({
+            url: "{{ route('dental.registrar_odontograma') }}",
+            type: 'POST',
+            data: data
+        }).done(function (response) {
+            console.log('Respuesta del servidor:', response);
+            if (!response || response.status != 1) {
+                swal({
+                    title: 'Odontograma',
+                    text: response && response.mensaje ? response.mensaje : 'No fue posible guardar las caras.',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            swal({
+                title: 'Odontograma',
+                text: response.mensaje,
+                icon: 'success'
+            }).then(function () {
+                if (typeof refrescar_caras_grupos_implantologia === 'function') {
+                    refrescar_caras_grupos_implantologia();
+                } else if (tipo === 'endo' && typeof refrescar_caras_grupos_endodoncia === 'function') {
+                    refrescar_caras_grupos_endodoncia();
+                } else if (typeof refrescar_caras_grupos === 'function') {
+                    refrescar_caras_grupos();
+                } else if (typeof refrescar_caras_grupos_endodoncia === 'function') {
+                    // La ficha de Endodoncia reutiliza el bloque general para editar
+                    // caras, pero su función de refresco tiene un nombre específico.
+                    refrescar_caras_grupos_endodoncia();
+                }
+                if (typeof actualizar_presupuesto === 'function') {
+                    actualizar_presupuesto();
+                }
+            });
+        }).fail(function (xhr) {
+            swal({
+                title: 'Odontograma',
+                text: xhr.responseJSON && xhr.responseJSON.mensaje
+                    ? xhr.responseJSON.mensaje
+                    : 'No fue posible guardar las caras.',
+                icon: 'error'
+            });
+        }).always(function () {
+            $boton.prop('disabled', false).html(textoOriginal);
+        });
+    }
+
     function registrar_odontograma_primer_cuadrante(count, tipo){
         var id_ficha_atencion = $('#ficha_id_atencion_dental_odon').val();
         var id_lugar_atencion = $('#ficha_id_lugar_atencion').val();

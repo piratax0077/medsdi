@@ -140,6 +140,64 @@
     #{{ $selectorId }} .selector-odontograma-generico__titulo{display:flex;justify-content:space-between;gap:.75rem;margin-bottom:.4rem;color:#174ea6}#{{ $selectorId }} .selector-odontograma-generico__titulo small{color:#748397}#{{ $selectorId }} .selector-odontograma-generico__resumen{min-height:36px;padding:.4rem .55rem;margin-bottom:.55rem;border:1px solid #d7e1ec;border-radius:.5rem}#{{ $selectorId }} .badge{margin-right:.3rem}#{{ $selectorId }} .selector-odontograma-generico__scroll{overflow-x:auto;padding:.45rem;border:1px solid #dce5ef;border-radius:.65rem;background:#f7f9fc}#{{ $selectorId }} .selector-odontograma-generico__fila{display:grid;grid-template-columns:repeat(16,minmax(42px,1fr));gap:.25rem;min-width:740px}#{{ $selectorId }} .selector-odontograma-generico__fila+ .selector-odontograma-generico__fila{margin-top:.65rem}#{{ $selectorId }} .selector-odontograma-generico__pieza{min-height:67px;padding:.2rem;border:1px solid #ccd7e3;border-radius:.5rem;background:#edf1f5;color:#8793a1;opacity:.45}#{{ $selectorId }} .selector-odontograma-generico__pieza img{display:block;width:27px;height:36px;object-fit:contain;margin:auto;filter:grayscale(1)}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-enabled{border-color:#73a5ff;background:#dbeafe;color:#174ea6;cursor:pointer;opacity:1}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-enabled img{filter:none}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-selected{border-color:#7434a4;background:#a460d1;color:#fff;box-shadow:0 0 0 2px rgba(116,52,164,.14)}#{{ $selectorId }}.is-compacto .selector-odontograma-generico__pieza{min-height:58px}#{{ $selectorId }}.is-compacto .selector-odontograma-generico__pieza img{height:29px}
 </style>
 <script>
+if (typeof window.actualizarEstadosClinicosSelectorOdontograma !== 'function') {
+    window.actualizarEstadosClinicosSelectorOdontograma = function ($selector, registros) {
+        if (!$selector || !$selector.length) return;
+
+        const base = @json(asset('images/dental/dientes'));
+        const estados = {};
+
+        // Conservar primero el estado renderizado desde el historial completo.
+        $selector.find('[data-selector-pieza]').each(function () {
+            const pieza = String($(this).data('selector-pieza'));
+            estados[pieza] = String($(this).find('img').attr('data-estado-clinico') || 'normal');
+        });
+
+        // Incorporar los cambios devueltos por la operacion actual sin borrar
+        // condiciones registradas en otras especialidades odontologicas.
+        (Array.isArray(registros) ? registros : []).forEach(function (registro) {
+            if (!registro || Number(registro.urgencia) === 1) return;
+
+            const pieza = String(registro.pieza || '');
+            if (!pieza) return;
+
+            const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
+            const diagnostico = String(registro.diagnostico || registro.diagnostico_descripcion || '').toLowerCase();
+            let estado = estados[pieza] || 'normal';
+
+            if (diagnostico.indexOf('carie') !== -1) estado = 'carie';
+            if (tratamiento.indexOf('implante') !== -1) {
+                estado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
+            }
+            if (tratamiento.indexOf('endodoncia') !== -1 ||
+                tratamiento.indexOf('pulpotomia') !== -1 ||
+                tratamiento.indexOf('pulpectomia') !== -1) {
+                estado = 'endodoncia';
+            }
+
+            estados[pieza] = estado;
+        });
+
+        $selector.find('[data-selector-pieza]').each(function () {
+            const $boton = $(this);
+            const pieza = String($boton.data('selector-pieza'));
+            const codigo = pieza.replace('.', '');
+            const estado = estados[pieza] || 'normal';
+            const rutas = {
+                carie: base + '/carie/carie' + codigo + '.png',
+                ausente: base + '/diente-ausente/dau' + codigo + '.png',
+                implante: base + '/implante/impl' + codigo + '.png',
+                endodoncia: base + '/endodoncia/endo' + codigo + '.png',
+                normal: base + '/d' + codigo + '.png'
+            };
+
+            $boton.find('img')
+                .attr('src', rutas[estado] || rutas.normal)
+                .attr('data-estado-clinico', estado);
+        });
+    };
+}
+
 (function(){
     const rootSelector=@json('#'.$selectorId), inputSelector=@json('#'.$selectorInputId), multiple=@json($selectorMultiple);
     const $root=$(rootSelector);

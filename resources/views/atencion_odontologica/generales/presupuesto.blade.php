@@ -1704,8 +1704,8 @@
 
                                     // Muestra/oculta los banners de saldo a favor o saldo pendiente tras aplicar/quitar un convenio
                                     function manejarSaldoConvenio(resp, avisar){
-                                        const saldoAFavor = Number(resp.saldo_a_favor) || 0;
-                                        const saldoPendiente = Number(resp.saldo_pendiente) || 0;
+                                        const saldoAFavor = Math.max(0, Math.round(Number(resp.saldo_a_favor) || 0));
+                                        const saldoPendiente = Math.max(0, Math.round(Number(resp.saldo_pendiente) || 0));
                                         saldoAFavorDisponible = saldoAFavor;
 
                                         $('#banner_saldo_convenio_wrapper').toggle(saldoAFavor > 0 || saldoPendiente > 0);
@@ -1769,7 +1769,7 @@
                                                     $('#banner_saldo_convenio_wrapper').toggle(saldoAFavorDisponible > 0);
                                                     const tieneDcto = $('#tiene_dcto').val();
                                                     if(tieneDcto && tieneDcto != 0){
-                                                        confirmar_aplicar_convenio_tratamiento(tieneDcto);
+                                                confirmar_aplicar_convenio_tratamiento(tieneDcto, false);
                                                     }
                                                 }else{
                                                     swal({title: 'Error', text: resp.mensaje, icon: 'error'});
@@ -4618,7 +4618,7 @@
         });
     }
 
-    function confirmar_aplicar_convenio_tratamiento(id) {
+    function confirmar_aplicar_convenio_tratamiento(id, avisarSaldo = true) {
         let data = {
             id: id,
             id_paciente: $('#id_paciente').val(),
@@ -4688,7 +4688,7 @@
 
                 sincronizarSelectorPagosPiezas(odontograma);
                 sincronizarDetallePresupuestoClinico(odontograma);
-                manejarSaldoConvenio(resp, true);
+                manejarSaldoConvenio(resp, avisarSaldo);
 
                 let insumos = resp.insumos;
 

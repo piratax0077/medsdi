@@ -1462,28 +1462,41 @@ class DentalController extends Controller
             if (!$profesional || !preg_match('/^[1-8]\.[1-8]$/', (string) $request->pieza)) {
                 return ['status' => 0, 'mensaje' => 'Profesional o número de pieza inválido.'];
             }
+            $presupuestoSeleccionado = null;
             if ($request->id_presupuesto) {
-                $presupuestoValido = PresupuestosDental::where('id', $request->id_presupuesto)
+                $presupuestoSeleccionado = PresupuestosDental::where('id', $request->id_presupuesto)
                     ->where('id_paciente', $request->id_paciente)
                     ->where('id_profesional', $profesional->id)
                     ->where('id_ficha_atencion', $request->id_ficha_atencion)
-                    ->where('estado', 1)
-                    ->exists();
-                if (!$presupuestoValido) {
-                    return ['status' => 0, 'mensaje' => 'El presupuesto no pertenece a esta ficha o no está activo.'];
+                    ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                    ->first();
+                if (!$presupuestoSeleccionado) {
+                    return ['status' => 0, 'mensaje' => 'El presupuesto no pertenece a esta ficha.'];
                 }
             }
 
             $odontograma = null;
             if ($request->id_presupuesto) {
-                $odontograma = OdontogramaPaciente::where('id_presupuesto', $request->id_presupuesto)
+                $odontograma = OdontogramaPaciente::when($request->id_odontograma, function ($query, $idOdontograma) {
+                        return $query->where('id', $idOdontograma);
+                    })
+                    ->where('id_presupuesto', $request->id_presupuesto)
                     ->where('id_paciente', $request->id_paciente)
                     ->where('id_profesional', $profesional->id)
                     ->where('id_ficha_atencion', $request->id_ficha_atencion)
                     ->where('pieza', $request->pieza)
                     ->where('presupuesto', 1)
+                    ->orderByDesc('id')
                     ->first();
             }
+            if ($request->id_odontograma && !$odontograma) {
+                return ['status' => 0, 'mensaje' => 'El tratamiento seleccionado no pertenece a este presupuesto. Recargue la ficha e intente nuevamente.'];
+            }
+            $esNuevoRegistro = !$odontograma;
+            if ($presupuestoSeleccionado && (int) $presupuestoSeleccionado->estado !== 1 && $esNuevoRegistro) {
+                return ['status' => 0, 'mensaje' => 'El presupuesto está cerrado. Solo puede actualizar las caras de piezas que ya pertenecen a él.'];
+            }
+
             if (!$odontograma) {
                 $odontograma = new OdontogramaPaciente();
             }
@@ -1512,6 +1525,7 @@ class DentalController extends Controller
             $odontograma->diagnostico = $request->diagnostico;
             $odontograma->tratamiento = $request->tratamiento;
             $odontograma->caras = $caras;
+
             $odontograma->pieza = $request->pieza;
             $odontograma->id_paciente = $request->id_paciente;
             $odontograma->id_profesional = $profesional->id;
@@ -1523,7 +1537,9 @@ class DentalController extends Controller
                 $odontograma->presupuesto = 1;
             }
             $odontograma->fecha = Carbon::now()->format('Y-m-d H:i:s');
-            $odontograma->estado = 0;
+            if ($esNuevoRegistro) {
+                $odontograma->estado = 0;
+            }
 
             if (!$odontograma->save()) {
                 return ['status' => 0,'mensaje', 'Ocurrio un error al guardar el registro'];
@@ -3141,6 +3157,7 @@ class DentalController extends Controller
 
         $insumos = InsumosTratamientosDental::where('id_ficha_atencion', $presupuesto->id_ficha_atencion)
             ->where('id_paciente', $presupuesto->id_paciente)
+            ->where('id_presupuesto', $presupuesto->id)
             ->where('presupuesto', 1)
             ->where(function ($query) {
                 $query->where('urgencia', 0)->orWhereNull('urgencia');
@@ -3156,14 +3173,16 @@ class DentalController extends Controller
             ->where(function ($query) {
                 $query->where('urgencia', 0)->orWhereNull('urgencia');
             })
-            ->get()->sortBy(function ($pieza) {
-                $prioridad = $pieza->estado_pago === 'ok' ? 0 : ($pieza->estado_pago === 'incompleto' ? 1 : 2);
-                return sprintf('%d-%s-%012d', $prioridad, optional($pieza->created_at)->format('YmdHis') ?: '00000000000000', intval($pieza->id));
+            ->get()->sortBy(function ($pieza) use ($valorNeto) {
+                return sprintf('%012d-%012d', $valorNeto($pieza->valor), intval($pieza->id));
             });
 
         $grupos = $this->dameTratamientosBocaGeneral($presupuesto->id_ficha_atencion)
             ->filter(function ($grupo) {
                 return (int) $grupo->presupuesto === 1;
+            })
+            ->sortBy(function ($grupo) use ($valorNeto) {
+                return sprintf('%012d-%012d', $valorNeto($grupo->valor), intval($grupo->id));
             });
 
         $asignarEstado = function ($modelo, int $monto, string $tipo) use (&$saldo, &$totalPresupuesto) {
@@ -3187,6 +3206,8 @@ class DentalController extends Controller
             }
         };
 
+        // Prioridad clínica de distribución: primero insumos y luego piezas,
+        // ordenando cada categoría desde el menor valor neto al mayor.
         foreach ($insumos as $insumo) {
             $asignarEstado($insumo, $valorNeto(intval($insumo->valor) * max(1, intval($insumo->cantidad))), 'insumo');
         }
@@ -3925,7 +3946,16 @@ class DentalController extends Controller
         if($presupuesto){
             $id_ficha_atencion = $presupuesto->id_ficha_atencion;
             $descuentos = 0;
-            $odontograma_paciente = $this->dame_odontograma_paciente($req->id_paciente, $id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            // Reconciliar primero y usar esos estados persistidos como única fuente
+            // para la tabla principal y el modal de reasignación.
+            $this->reconciliarAsignacionPresupuestoDental($presupuesto, $profesional);
+            $odontograma_paciente = $this->dame_odontograma_paciente(
+                $req->id_paciente,
+                $id_ficha_atencion,
+                $req->id_lugar_atencion,
+                $profesional->id_tipo_especialidad,
+                $presupuesto->id
+            );
             $pagos_presupuesto = $this->dame_pagos_presupuesto($presupuesto->id);
             $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_presupuesto', $presupuesto->id)->get();
             $total_abonado = 0;
@@ -3946,12 +3976,21 @@ class DentalController extends Controller
             $valor_insumos = $valores[2];
             $fichaController = new ficha_atencionController;
             $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $id_ficha_atencion)
+                ->filter(function ($insumo) use ($presupuesto) {
+                    return (int) $insumo->id_presupuesto === (int) $presupuesto->id;
+                })
                 ->sortBy(function ($insumo) {
                     return intval($insumo->valor) * max(1, intval($insumo->cantidad));
                 })
                 ->values();
+            $valor_insumos = (int) $insumos_tratamientos->sum(function ($insumo) {
+                return intval($insumo->valor) * max(1, intval($insumo->cantidad));
+            });
 
-            $resto_insumos = $total_abonado; // inicializamos el "dinero" disponible solo para insumos
+            $monto_piezas_ya_cubiertas = $tiene_reasignacion_persistida
+                ? (int) $odontograma_paciente->where('estado_pago', 'ok')->sum('valor')
+                : 0;
+            $resto_insumos = max(0, $total_abonado - $monto_piezas_ya_cubiertas);
 
             foreach ($insumos_tratamientos as $i) {
                 if($i->urgencia == 1){
@@ -3960,6 +3999,12 @@ class DentalController extends Controller
                 }
 
                 if ((int) $i->presupuesto !== 1) {
+                    continue;
+                }
+
+                if ($tiene_reasignacion_persistida) {
+                    // La conciliación ya determinó el estado usando valores netos
+                    // con descuento; no volver a sobrescribirlo con montos brutos.
                     continue;
                 }
 
@@ -4004,7 +4049,12 @@ class DentalController extends Controller
             }
 
 
-            $total_abonado_sin_insumos = max(0, $total_abonado - $valor_insumos);
+            // Sólo se descuenta del abono el monto que realmente pudo asignarse a
+            // insumos, no el precio completo de un insumo nuevo aún impago.
+            $monto_asignado_insumos = min($valor_insumos, max(0, $total_abonado - $monto_piezas_ya_cubiertas));
+            $total_abonado_sin_insumos = $tiene_reasignacion_persistida
+                ? $total_abonado
+                : max(0, $total_abonado - $monto_asignado_insumos);
 
             $valor_odontograma = $valores[1];
 
@@ -4023,6 +4073,9 @@ class DentalController extends Controller
                     continue;
                 }
                 if($o->presupuesto == 1){
+                    if ($tiene_reasignacion_persistida) {
+                        continue;
+                    }
                     if($resto > 0 && $resto >= intval($o->valor)){
                         $o->estado_pago = 'ok';
                         $resto -= intval($o->valor);
@@ -4060,7 +4113,7 @@ class DentalController extends Controller
                 // if($o->urgencia == 1){
                 //     continue;
                 // }
-                if($o->presupuesto == 1){
+                if($o->presupuesto == 1 && !$tiene_reasignacion_persistida){
                     $valor = intval($o->valor);
                     if ($resto >= $valor) {
                         $o->estado_pago = 'ok';
@@ -4866,7 +4919,8 @@ class DentalController extends Controller
             $req->id_paciente,
             $req->id_ficha_atencion,
             $req->id_lugar_atencion,
-            $profesional->id_tipo_especialidad
+            $profesional->id_tipo_especialidad,
+            $req->id_presupuesto
         );
 
         $fichaController = new ficha_atencionController;
@@ -4972,7 +5026,7 @@ class DentalController extends Controller
 
         // Al quitar el descuento el total vuelve a subir; si lo abonado ya no alcanza
         // a cubrirlo se informa el saldo pendiente, y si sigue sobrando se informa el saldo a favor.
-        $saldoDisponible = $total_abonado - $total_con_descuento;
+        $saldoDisponible = (int) round($total_abonado - $total_con_descuento);
         $saldoAFavor = max(0, $saldoDisponible);
         $saldoPendiente = max(0, -$saldoDisponible);
 

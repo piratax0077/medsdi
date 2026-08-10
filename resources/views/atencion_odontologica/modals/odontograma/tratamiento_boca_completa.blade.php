@@ -345,6 +345,8 @@
         id_profesional,
         id_lugar_atencion,
         id_especialidad,
+        id_presupuesto: $('#id_presupuesto').val(),
+        agregar_presupuesto: 1,
         tipo_examen,
         localizacion_examen,
         especialidad_examen: 'tratamiento',
@@ -356,7 +358,6 @@
         url: "{{ route('profesional.guardar_examen_boca_general') }}",
         data: data,
         success: function (response) {
-            cargar_a_presupuesto(response.examen.id,'gral');
             let diagnosticos = response.todos;
             let table = $('#table_tto_boca_gral').DataTable();
             // Limpiar la tabla completamente
@@ -418,6 +419,9 @@
             $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
             $('#subtotal_clinico').val(formatoMoneda(total_general));
             $('#total_clinico').val(formatoMoneda(total_general));
+            if (typeof actualizar_presupuesto === 'function') {
+                actualizar_presupuesto();
+            }
 
             // Limpia el formulario
             $('#form_diagnostico_tratamiento_inferior')[0].reset();

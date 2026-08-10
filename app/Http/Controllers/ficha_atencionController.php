@@ -2543,10 +2543,19 @@ class ficha_atencionController extends Controller
 
         $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
-        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
-        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
-        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
-        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
+        $id_presupuesto_plan = (int) ($hora->id_presupuesto ?? 0);
+        if (!$id_presupuesto_plan) {
+            $id_presupuesto_plan = (int) PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)
+                ->where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->orderByDesc('id')
+                ->value('id');
+        }
+
+        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
+        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
+        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
+        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
         $quinto_cuadrante = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
         $sexto_cuadrante = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
 
@@ -2582,11 +2591,19 @@ class ficha_atencionController extends Controller
             }
 
         }else{
-            $presupuesto_dental = PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)->first();
+            $presupuesto_dental = $id_presupuesto_plan
+                ? PresupuestosDental::find($id_presupuesto_plan)
+                : PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)->orderByDesc('id')->first();
             $id_ficha = $id_ficha_atencion;
         }
 
-        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha, $request->lugar_atencion_id, $profesional->id_tipo_especialidad,null);
+        $odontograma = $this->dameOdontogramaPaciente(
+            $paciente->id,
+            $id_ficha,
+            $request->lugar_atencion_id,
+            $profesional->id_tipo_especialidad,
+            optional($presupuesto_dental)->id ?: $id_presupuesto_plan
+        );
         $odontograma_historial = $this->dameOdontogramaPacienteHistorial($paciente->id);
 
         $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
@@ -3700,31 +3717,19 @@ class ficha_atencionController extends Controller
     }
 
     public function dameOdontogramaPacienteHistorial($id_paciente){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        if($profesional->id_tipo_especialidad == 16){
-            $odontogramas = OdontogramaPaciente::select(
+        // El odontograma es historial del paciente, no de la especialidad que
+        // esta abriendo la ficha. Los joins anteriores descartaban implantes al
+        // consultar desde Periodoncia y tratamientos generales desde Implantologia.
+        return OdontogramaPaciente::select(
                 'odontogramas_pacientes.*',
-                'tratamientos_implantologia.descripcion',
-                'tratamientos_implantologia.cantidad_bloques',
-                'tratamientos_implantologia.valor',
-                'tratamientos_dental.descripcion as diagnostico')
-                ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
-                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-                ->get();
-        }else{
-            $odontogramas = OdontogramaPaciente::select(
-                'odontogramas_pacientes.*',
-                'diagnosticos_dental.descripcion',
-                'diagnosticos_dental.cantidad_bloques',
-                'diagnosticos_dental.valor',
-                'tratamientos_dental.descripcion as diagnostico')
-                ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-                ->get();
-        }
-        return $odontogramas;
+                'odontogramas_pacientes.tratamiento as descripcion',
+                'tratamientos_dental.descripcion as diagnostico'
+            )
+            ->leftJoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+            ->orderBy('odontogramas_pacientes.fecha')
+            ->orderBy('odontogramas_pacientes.id')
+            ->get();
 
     }
 
@@ -4157,10 +4162,11 @@ class ficha_atencionController extends Controller
         $id_lugar_atencion = $request->id_lugar_atencion;
         $id_ficha_atencion = $request->id_ficha_atencion;
 
-        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
-        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
-        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
-        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion);
+        $id_presupuesto = $request->id_presupuesto;
+        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
+        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
+        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
+        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
 
         $primer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id, 'endodoncia', $profesional->id_tipo_especialidad);
         $segundo_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id, 'endodoncia', $profesional->id_tipo_especialidad);
@@ -4173,7 +4179,7 @@ class ficha_atencionController extends Controller
         $octavo_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaOctavoCuadrante($paciente->id, 'infantil', $profesional->id_tipo_especialidad, $id_ficha_atencion);
 
         $diagnosticos = TratamientosDental::where('estado', 1)->get();
-        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad, null);
+        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad, $id_presupuesto);
 
         $evaluacion_adulto_html = view('atencion_odontologica.generales.evaluacion_adulto', [
             'paciente' => $paciente,
@@ -4208,11 +4214,11 @@ class ficha_atencionController extends Controller
         ]);
     }
 
-    public function dameExamenesPiezaDentalPiezaPrimerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null) {
+    public function dameExamenesPiezaDentalPiezaPrimerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_presupuesto = null) {
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
-            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 1, $id_ficha_atencion);
+            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 1, $id_ficha_atencion, $id_presupuesto);
         }else if($tipo_paciente == 'infantil'){
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
@@ -4237,12 +4243,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaSegundoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null) {
+    public function dameExamenesPiezaDentalPiezaSegundoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_presupuesto = null) {
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
-            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 2, $id_ficha_atencion);
+            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 2, $id_ficha_atencion, $id_presupuesto);
         }else if($tipo_paciente == 'infantil'){
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
@@ -4266,12 +4272,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaTercerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null) {
+    public function dameExamenesPiezaDentalPiezaTercerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_presupuesto = null) {
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
-            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 3, $id_ficha_atencion);
+            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 3, $id_ficha_atencion, $id_presupuesto);
         }else if($tipo_paciente == 'infantil'){
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
@@ -4295,12 +4301,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaCuartoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null) {
+    public function dameExamenesPiezaDentalPiezaCuartoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_presupuesto = null) {
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
-            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 4, $id_ficha_atencion);
+            $examenes = $this->damePiezasPlanificadas($id_paciente, $tipo_especialidad, 4, $id_ficha_atencion, $id_presupuesto);
         }else if($tipo_paciente == 'infantil'){
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
@@ -4446,7 +4452,7 @@ class ficha_atencionController extends Controller
      * para un cuadrante dado; el flag odontogramas_pacientes.presupuesto no sirve para distinguir
      * el presupuesto vigente de presupuestos antiguos/reemplazados del mismo paciente.
      */
-    private function damePiezasPlanificadas($idPaciente, $tipoEspecialidad, $cuadrante, $idFichaAtencion)
+    private function damePiezasPlanificadas($idPaciente, $tipoEspecialidad, $cuadrante, $idFichaAtencion, $idPresupuesto = null)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         if (!$profesional) {
@@ -4465,10 +4471,12 @@ class ficha_atencionController extends Controller
             ->where('odontogramas_pacientes.id_profesional', $profesional->id)
             ->where('odontogramas_pacientes.tipo_especialidad', $tipoEspecialidad)
             ->where('odontogramas_pacientes.presupuesto', 1)
-            ->where('presupuestos_dental.estado', 1)
-            // Un mismo paciente puede tener presupuestos "activos" (estado=1) de fichas/visitas
-            // anteriores; solo interesa el presupuesto vigente de la ficha de atención actual.
             ->where('presupuestos_dental.id_ficha_atencion', $idFichaAtencion)
+            ->when($idPresupuesto, function ($query, $idPresupuesto) {
+                return $query->where('odontogramas_pacientes.id_presupuesto', $idPresupuesto);
+            }, function ($query) {
+                return $query->where('presupuestos_dental.estado', 1);
+            })
             ->whereRaw('CAST(odontogramas_pacientes.pieza AS CHAR) LIKE ?', [$cuadrante.'.%'])
             ->orderByDesc('odontogramas_pacientes.id')
             ->get()

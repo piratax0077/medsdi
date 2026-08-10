@@ -31,7 +31,8 @@
                 if (Str::contains($tratamientoNormalizado, 'implante')) {
                     if ($estado == '0') {
                         $estadoFinal = 'ausente';
-                        break; // No importa lo demás, es ausente
+                        // Un registro posterior finalizado debe poder reemplazar
+                        // el estado pendiente/ausente del mismo implante.
                     } else {
                         $estadoFinal = 'implante';
                     }

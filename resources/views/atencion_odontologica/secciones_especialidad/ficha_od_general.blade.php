@@ -12068,7 +12068,8 @@ setTimeout(function(){
                     _token: '{{ csrf_token() }}',
                     id_ficha_atencion: $('#id_fc').val(),
                     id_paciente: $('#id_paciente').val(),
-                    id_lugar_atencion: $('#id_lugar_atencion').val()
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    id_presupuesto: $('#id_presupuesto').val()
                 },
                 success: function(response){
                     if (response.estado == 1) {

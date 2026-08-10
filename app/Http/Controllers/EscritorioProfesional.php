@@ -2320,7 +2320,8 @@ class EscritorioProfesional extends Controller
             $request->id_paciente,
             $request->id_ficha_atencion,
             $request->id_lugar_atencion,
-            $profesional->id_tipo_especialidad
+            $profesional->id_tipo_especialidad,
+            $request->id_presupuesto
         );
 
         $valores = $this->dameValoresOdontograma(
@@ -2333,7 +2334,9 @@ class EscritorioProfesional extends Controller
         $insumos = $this->dame_insumos_tratamiento(
             $request->id_paciente,
             $request->id_ficha_atencion
-        );
+        )->filter(function ($insumo) use ($request) {
+            return (int) $insumo->id_presupuesto === (int) $request->id_presupuesto;
+        })->values();
 
         $todos = $this->dameTratamientosBocaGeneral(
             $request->id_ficha_atencion
@@ -2417,7 +2420,7 @@ class EscritorioProfesional extends Controller
 
         $total_general = $valores[0] + $valores[1] + $valores[2] + $valores[3];
         $total_con_descuento = $total_general - $descuentos;
-        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
+        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_presupuesto', $request->id_presupuesto)->get();
 
         $resto_pago = 0;
         foreach($pagos_tratamientos_dentales as $p){
@@ -2425,9 +2428,13 @@ class EscritorioProfesional extends Controller
         }
         $total_abonado = $resto_pago;
 
-        // Primero Insumos
+        // Primero insumos, desde el menor valor neto al mayor.
+        $insumos = $insumos->sortBy(function ($insumo) {
+            return intval($insumo->nuevo_valor);
+        })->values();
         foreach ($insumos as $i) {
-            $valor = intval($i->nuevo_valor) * intval($i->cantidad);
+            // nuevo_valor ya corresponde a cantidad × precio menos descuento.
+            $valor = intval($i->nuevo_valor);
             if ($resto_pago >= $valor) {
                 $i->estado_pago = 'ok';
                 $resto_pago -= $valor;
@@ -2437,9 +2444,15 @@ class EscritorioProfesional extends Controller
             } else {
                 $i->estado_pago = 'error';
             }
+            $i->newQuery()->whereKey($i->id)->update([
+                'estado_pago' => $i->estado_pago,
+            ]);
         }
         // return $resto_pago;
-        // PAGO PROGRESIVO - Luego Odontograma
+        // Luego piezas, también desde la más económica a la más cara.
+        $odontograma = $odontograma->sortBy(function ($pieza) {
+            return intval($pieza->nuevo_valor);
+        })->values();
         foreach ($odontograma as $o) {
             if ($o->presupuesto == 1) {
                 // nuevo_valor ya es (valor - valor_descuento); restar valor_descuento otra vez duplicaba el descuento
@@ -2454,9 +2467,15 @@ class EscritorioProfesional extends Controller
                 } else {
                     $o->estado_pago = 'error';
                 }
+                $o->newQuery()->whereKey($o->id)->update([
+                    'estado_pago' => $o->estado_pago,
+                ]);
             }
         }
 
+        $todos = $todos->sortBy(function ($tratamiento) {
+            return intval($tratamiento->nuevo_valor);
+        })->values();
         foreach($todos as $o){
             if($o->presupuesto == 1){
                 $valor = intval($o->nuevo_valor);
@@ -2469,12 +2488,15 @@ class EscritorioProfesional extends Controller
                 } else {
                     $o->estado_pago = 'error';
                 }
+                $o->newQuery()->whereKey($o->id)->update([
+                    'estado_pago' => $o->estado_pago,
+                ]);
             }
         }
 
         // El profesional necesita saber si, tras aplicar el descuento, lo ya abonado
         // supera el nuevo total (saldo a favor del paciente) o si aún queda un saldo pendiente.
-        $saldoDisponible = $total_abonado - $total_con_descuento;
+        $saldoDisponible = (int) round($total_abonado - $total_con_descuento);
         $saldoAFavor = max(0, $saldoDisponible);
         $saldoPendiente = max(0, -$saldoDisponible);
 
@@ -4991,11 +5013,28 @@ return $ficha;
 
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
 
+        $presupuesto = null;
+        if ($req->boolean('agregar_presupuesto')) {
+            $presupuesto = PresupuestosDental::where('id', $req->id_presupuesto)
+                ->where('id_paciente', $req->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->where('id_lugar_atencion', $req->id_lugar_atencion)
+                ->first();
+
+            if (!$presupuesto) {
+                return response()->json([
+                    'mensaje' => 'El presupuesto seleccionado no es válido para este tratamiento.',
+                ], 422);
+            }
+        }
+
         $examen_boca_general = new ExamenesBocaGeneral;
         $examen_boca_general->id_paciente = $req->id_paciente;
-        $examen_boca_general->id_profesional = $req->id_profesional;
+        $examen_boca_general->id_profesional = $profesional->id;
         $examen_boca_general->id_lugar_atencion = $req->id_lugar_atencion;
-        $examen_boca_general->id_ficha_atencion = $req->id_ficha_atencion;
+        $examen_boca_general->id_ficha_atencion = $presupuesto
+            ? $presupuesto->id_ficha_atencion
+            : $req->id_ficha_atencion;
         $examen_boca_general->id_especialidad = $profesional->id_especialidad;
         $examen_boca_general->tipo_especialidad = $profesional->id_tipo_especialidad;
         $examen_boca_general->fecha = $req->fecha;
@@ -5007,11 +5046,12 @@ return $ficha;
         $examen_boca_general->agendar_control = $req->agendar_control == 'Si' ? 1 : 0;
         $examen_boca_general->comentario = $req->comentarios == '' ? 'SIN OBSERVACIONES' : $req->comentarios;
         $examen_boca_general->localizacion = $req->localizacion_examen;
+        $examen_boca_general->presupuesto = $presupuesto ? 1 : 0;
 
         if($examen_boca_general->save()){
             $ficha_atencionController = new ficha_atencionController;
-            $todos = $ficha_atencionController->dameTratamientosBocaGeneral($req->id_ficha_atencion);
-            $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $todos = $ficha_atencionController->dameTratamientosBocaGeneral($examen_boca_general->id_ficha_atencion);
+            $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $examen_boca_general->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
             return [
                 'mensaje' => 'OK',
                 'examen' => $examen_boca_general,
@@ -6349,7 +6389,13 @@ return $ficha;
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
         $fc = new ficha_atencionController();
-        $odontograma = $fc->dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad);
+        $odontograma = $fc->dameOdontogramaPaciente(
+            $id_paciente,
+            $id_ficha_atencion,
+            $id_lugar_atencion,
+            $tipo_especialidad,
+            $id_presupuesto
+        );
         return $odontograma;
     }
 

@@ -2375,6 +2375,15 @@
         function validar_prevision(value){
             let id_clase_bono = value.value;
             console.log(id_clase_bono);
+
+            @if((int) $profesional->id_especialidad === 2)
+                // En odontologia el total corresponde al presupuesto seleccionado.
+                // La forma de pago no debe reemplazarlo por valores de bono/copago.
+                $('#valor_bonificacion').val(0).prop('disabled', false);
+                $('#valor_seguro').val(0).prop('disabled', false);
+                return;
+            @endif
+
             if(id_clase_bono != 2 && id_clase_bono != 0){
                 let url = "{{ ROUTE('profesional.dame_valor_consulta') }}";
                 let data = {

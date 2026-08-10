@@ -3332,33 +3332,45 @@
     function sincronizarSelectorPlanImplantologia(listaOdontograma) {
         const $selector = $('#selector_plan_tratamiento_implantologia');
         if (!$selector.length) return;
-        const estados = {};
-        (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
-            if (!registro || Number(registro.presupuesto) !== 1 || Number(registro.urgencia) === 1) return;
-            const pieza = String(registro.pieza || '');
-            const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
-            const diagnostico = String(registro.diagnostico || '').toLowerCase();
-            let estado = diagnostico.includes('carie') ? 'carie' : 'normal';
-            if (tratamiento.includes('implante')) estado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
-            estados[pieza] = estado;
-        });
-        const base = @json(asset('images/dental/dientes'));
-        $selector.find('[data-selector-pieza]').each(function () {
-            const $boton = $(this);
-            const pieza = String($boton.data('selector-pieza'));
-            const codigo = pieza.replace('.', '');
-            const estado = estados[pieza] || 'normal';
-            const rutas = {
-                carie: base + '/carie/carie' + codigo + '.png',
-                ausente: base + '/diente-ausente/dau' + codigo + '.png',
-                implante: base + '/implante/impl' + codigo + '.png',
-                normal: base + '/d' + codigo + '.png'
-            };
-            $boton.find('img').attr('src', rutas[estado] || rutas.normal).attr('data-estado-clinico', estado);
-        });
+        window.actualizarEstadosClinicosSelectorOdontograma($selector, listaOdontograma);
         $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
         $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
         $('#pieza_plan_tratamiento_implantologia').val('0');
+    }
+
+    let actualizandoCarasImplantologia = false;
+    function refrescar_caras_grupos_implantologia() {
+        if (actualizandoCarasImplantologia) return;
+        actualizandoCarasImplantologia = true;
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ ROUTE("dental.refrescar_caras_grupos") }}',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_presupuesto: $('#id_presupuesto').val()
+            },
+            success: function (response) {
+                if (response.estado != 1 || !response.evaluacion_adulto_html) return;
+
+                $('#eval_adults .dental-evaluation-panel').first()
+                    .replaceWith(response.evaluacion_adulto_html);
+
+                window.requestAnimationFrame(function () {
+                    decorarTablaPlanImplantologia();
+                    inicializarCarasGuardadas();
+                });
+            },
+            error: function (xhr) {
+                console.log('No fue posible refrescar las caras de Implantología:', xhr.responseText);
+            },
+            complete: function () {
+                actualizandoCarasImplantologia = false;
+            }
+        });
     }
 
     function decorarTablaPlanImplantologia() {
@@ -3371,6 +3383,26 @@
         $tablaPlan.find('tbody tr').each(function () {
             const $fila = $(this), $celdas = $fila.children('td');
             if ($celdas.length < 8) return;
+            const $checkPresupuesto = $celdas.eq(6).find('input[type="checkbox"]').first();
+            const idPresupuesto = Number($checkPresupuesto.val() || $fila.data('treatment-id'));
+            if (idPresupuesto) {
+                $fila.attr('data-treatment-id', idPresupuesto);
+            }
+            if ($checkPresupuesto.length && !$checkPresupuesto.hasClass('custom-control-input')) {
+                const idSwitchPresupuesto = 'presupuestoCheck' + idPresupuesto;
+                $checkPresupuesto
+                    .removeClass('form-check-input')
+                    .addClass('custom-control-input checkbox-presupuesto')
+                    .attr('id', idSwitchPresupuesto);
+                $celdas.eq(6).html(
+                    $('<div>', { class: 'custom-control custom-switch' })
+                        .append($checkPresupuesto)
+                        .append($('<label>', {
+                            class: 'custom-control-label',
+                            for: idSwitchPresupuesto
+                        }))
+                );
+            }
             const fechaHora = $.trim($celdas.eq(0).text());
             const partes = fechaHora.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
             if (!$celdas.eq(0).find('.dental-table-datetime').length && partes) {
@@ -7044,13 +7076,13 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                     // }
 
                     // html += '</td>';
-                     // Checkbox para seleccionar el odontograma
+                    // Switch para incorporar o retirar la prestación del presupuesto.
                     html += '<td>';
-                    html += '<div class="form-check">';
-                    html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                    html += '<div class="custom-control custom-switch">';
+                    html += '<input class="custom-control-input checkbox-presupuesto" id="presupuestoCheck' + odonto.id + '" type="checkbox" value="' + odonto.id + '" '
                     html += odonto.presupuesto == 1 ? 'checked ' : '';
                     html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
-                    html += '<label class="form-check-label"></label>';
+                    html += '<label class="custom-control-label" for="presupuestoCheck' + odonto.id + '"></label>';
                     html += '</div>';
                     html += '</td>';
                     html += '<td>';
@@ -7063,8 +7095,10 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                     html += '</td>';
                     html += '</tr>';
                 });
-                $('#contenedor_examenes_grupos_dentales').empty();
-                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                // Mantener el mismo componente de cuatro grupos usado por
+                // odontologia general y endodoncia. La respuesta
+                // vista_presupuestos corresponde a la vista antigua (6 grupos).
+                refrescar_caras_grupos_implantologia();
                 $('#table_odontograma tbody').html(html);
                 decorarTablaPlanImplantologia();
                 $('#contenedor_piezas_dentales_presupuesto').empty();
@@ -7425,8 +7459,7 @@ function cargar_a_presupuesto_rehab_impl_g_confirmar(){
                     html += '</td>';
                     html += '</tr>';
                 });
-                $('#contenedor_examenes_grupos_dentales').empty();
-                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                refrescar_caras_grupos_implantologia();
                 $('#table_odontograma tbody').html(html);
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 $('#table_trabajos_presupuesto tbody').empty();
@@ -7774,8 +7807,7 @@ function cargar_a_presupuesto_rehab_impl_lab_confirmar(){
                     html += '</td>';
                     html += '</tr>';
                 });
-                $('#contenedor_examenes_grupos_dentales').empty();
-                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                refrescar_caras_grupos_implantologia();
                 $('#table_odontograma tbody').html(html);
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 $('#table_trabajos_presupuesto tbody').empty();
@@ -9157,8 +9189,7 @@ function agregar_examenes_ficha() {
                             html += '</td>';
                             html += '</tr>';
                         });
-                        $('#contenedor_examenes_grupos_dentales').empty();
-                        $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                        refrescar_caras_grupos_implantologia();
                         $('#table_odontograma tbody').html(html);
                         $('#contenedor_piezas_dentales_presupuesto').empty();
                         $('#table_trabajos_presupuesto tbody').empty();
