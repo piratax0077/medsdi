@@ -38,6 +38,12 @@
                                         <i class="feather icon-home"></i>
                                     </a>  --}}
                                 </li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip"
+                                        data-placement="top" title="Volver a panel de configuración">
+                                        Panel de Configuración
+                                    </a>
+                                </li>
                                 <li class="breadcrumb-item"><a href="#">Tons</a></li>
                             </ul>
                         </div>
@@ -47,19 +53,22 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header bg-info">
+                        <div class="card-header-principal bg-white">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h4 class="text-white f-20 d-inline">Tons</h4>
-                                        <button type="button" class="btn btn-light btn-xs float-md-right d-inline" data-toggle="modal" data-target="#nueva_tons">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Registrar TONS
+                                    <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 pl-0">
+                                        <h5 class="f-20 d-inline">
+                                            <i class="feather icon-users icono-primary"></i> Tons
+                                        </h5>
+                                    </div>
+                                    <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 text-md-right mt-2 mt-md-0 pr-0">
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#nueva_tons">
+                                            <i class="feather icon-plus"></i> Agregar TONS
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="card-body">
                             <div class="row">
                                 @if (isset($mensaje))
@@ -70,11 +79,11 @@
                                 class="display table table-striped dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="align-middle">Lugar de atención</th>
-                                        <th class="align-middle">Rut</th>
-                                        <th class="align-middle">Tons</th>
-                                        <th class="align-middle">Horario</th>
-                                        <th class="align-middle">Eliminar</th>
+                                        <th>Lugar de atención</th>
+                                        <th>Rut</th>
+                                        <th>Tons</th>
+                                        <th>Horario</th>
+                                        <th>Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -84,14 +93,14 @@
                                         @foreach ($relaciones as $r)
 
                                             <tr>
-                                                <td class="align-middle">{{ $r->nombre_lugar_atencion }}</td>
-                                                <td class="align-middle">{{ $r->rut_tons }}</td>
-                                                <td class="align-middle">{{ $r->nombre_tons }} {{ $r->apellido_tons }}</td>
+                                                <td>{{ $r->nombre_lugar_atencion }}</td>
+                                                <td>{{ $r->rut_tons }}</td>
+                                                <td>{{ $r->nombre_tons }} {{ $r->apellido_tons }}</td>
 
-                                                <td class="align-middle">
+                                                <td>
                                                     {{-- horario --}}
                                                     <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="">
-                                                        <i class="fas fa-clock"></i>
+                                                        <i class="feather icon-clock"></i>
                                                     </button>
 
                                                 </td>
@@ -138,7 +147,7 @@
                         <div class="col-sm-12 col-md-8">
                             <div class="form-group fill">
                                 <label for="rut_tons" class="floating-label-activo-sm">Rut de tons</label>
-                                <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm" oninput="formatoRut(this)">
+                                <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm" oninput="formatoRut(this)"><small><i class="feather icon-info mr-1"></i>Ingrese RUT sin puntos ni guión</small>
                             </div>
                         </div>
                          <div class="col-sm-12 col-md-4 mx-auto">
@@ -181,16 +190,10 @@
                                 <input class="form-control form-control-sm" name="fecha_nac_nueva_tons" id="fecha_nac_nueva_tons" type="date">
                             </div>
                         </div>
-                        <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                 <input class="form-control form-control-sm" name="direccion_nueva_tons" id="direccion_nueva_tons" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Nº</label>
-                                <input class="form-control form-control-sm" name="numero_nueva_tons" id="numero_nueva_tons" type="text">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -444,10 +447,10 @@
                             tons.lugar_atencion,
                             tons.nombre_tons + ' ' + tons.apellido_tons,
 
-                            `<button type="button" class="btn btn-info btn-sm btn-icon accion_editar_horarios">
+                            `<button type="button" class="btn btn-info btn-icon accion_editar_horarios">
                                 <i class="fas fa-clock"></i>
                             </button>`,
-                            `<button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons(${tons.id})" title="Eliminar">
+                            `<button type="button" class="btn btn-danger btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons(${tons.id})" title="Eliminar">
                                 <i class="feather icon-x"></i>
                             </button>`
                         ]);
@@ -645,10 +648,10 @@
                         table.row.add([
                             tons.lugar_atencion,
                             tons.nombre_tons + ' ' + tons.apellido_tons,
-                            `<button type="button" class="btn btn-info btn-sm btn-icon accion_editar_horarios">
+                            `<button type="button" class="btn btn-info  btn-icon accion_editar_horarios">
                                 <i class="fas fa-clock"></i>
                             </button>`,
-                            `<button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons(${tons.id})" title="Eliminar">
+                            `<button type="button" class="btn btn-danger btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons(${tons.id})" title="Eliminar">
                                 <i class="feather icon-x"></i>
                             </button>`
                         ]);
