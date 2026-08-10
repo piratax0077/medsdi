@@ -13,15 +13,11 @@
                             </div>
                             <ul class="breadcrumb mt-3">
                                 <li class="breadcrumb-item">
-                                    @if(Auth::user()->hasRole('Profesional'))
+                                 
                                         <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                             <i class="feather icon-home"></i>
                                         </a>
-                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                        <a href="{{ route('asistente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>
-                                    @endif
+                                 
                                 </li>
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip"
@@ -45,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 pl-0">
                                         <h5 class="f-20 d-inline">
-                                            <img src="{{ asset('images/iconos/equipamiento-odonto.svg') }}" class="wid-30 mr-2" alt="">
+                                            <i class="icono-primary feather icon-file-plus"></i>
                                             Equipamiento Dental
                                         </h5>
                                     </div>
@@ -59,48 +55,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabla_equipamiento">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
-                                            <th>Modelo</th>
-                                            <th>N° Serie</th>
-                                            <th>Fecha Adquisición</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($equipamientos as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->nombre }}</td>
-                                            <td>{{ $item->marca ?? '-' }}</td>
-                                            <td>{{ $item->modelo ?? '-' }}</td>
-                                            <td>{{ $item->numero_serie ?? '-' }}</td>
-                                            <td>{{ $item->fecha_adquisicion ? \Carbon\Carbon::parse($item->fecha_adquisicion)->format('d/m/Y') : '-' }}</td>
-                                            <td>
-                                                @if($item->estado == 1)
-                                                    <span class="badge badge-success">Activo</span>
-                                                @else
-                                                    <span class="badge badge-danger">Inactivo</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-warning" title="Editar">
-                                                    <i class="feather icon-edit"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center text-muted">No hay equipamiento registrado</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                
                             </div>
                         </div>
                     </div>

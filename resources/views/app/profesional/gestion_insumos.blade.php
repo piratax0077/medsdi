@@ -13,15 +13,11 @@
                             </div>
                             <ul class="breadcrumb mt-3">
                                 <li class="breadcrumb-item">
-                                    @if(Auth::user()->hasRole('Profesional'))
+                               
                                         <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                             <i class="feather icon-home"></i>
                                         </a>
-                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                        <a href="{{ route('asistente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>
-                                    @endif
+                                 
                                 </li>
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip"
@@ -29,7 +25,7 @@
                                         Panel de Configuración
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Gestión de Insumos</a></li>
+                                <li class="breadcrumb-item"><a href="#">Gestión de insumos</a></li>
                             </ul>
                         </div>
                     </div>
@@ -45,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 pl-0">
                                         <h5 class="f-20 d-inline">
-                                            <img src="{{ asset('images/iconos/insumos-bodega.png') }}" class="wid-30 mr-2" alt="">
+                                             <i class="feather icon-box icono-primary"></i>
                                             Gestión de Insumos
                                         </h5>
                                     </div>
@@ -63,45 +59,10 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nombre</th>
-                                            <th>Categoría</th>
-                                            <th>Stock</th>
-                                            <th>Unidad</th>
-                                            <th>Stock Mínimo</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
+                                            
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @forelse($insumos as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->nombre }}</td>
-                                            <td>{{ $item->categoria ?? '-' }}</td>
-                                            <td>{{ $item->stock ?? 0 }}</td>
-                                            <td>{{ $item->unidad ?? '-' }}</td>
-                                            <td>{{ $item->stock_minimo ?? '-' }}</td>
-                                            <td>
-                                                @if($item->stock > $item->stock_minimo)
-                                                    <span class="badge badge-success">Normal</span>
-                                                @elseif($item->stock > 0)
-                                                    <span class="badge badge-warning">Stock bajo</span>
-                                                @else
-                                                    <span class="badge badge-danger">Sin stock</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-warning" title="Editar">
-                                                    <i class="feather icon-edit"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center text-muted">No hay insumos registrados</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
+                               
                                 </table>
                             </div>
                         </div>
