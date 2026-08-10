@@ -198,11 +198,10 @@
                         @if($profesional->id_especialidad == 2)
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">
-                                <a href="{{ ROUTE('profesional.mantencion_equipo') }}">
+                                <a href="{{ route('profesional.equipamiento_dental') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-3"
                                         src="{{ asset('images/iconos/equipamiento-odonto.svg') }}"
-
                                         alt="Profesional">
                                         <h5 class="f-16">
                                         Equipamiento Dental
@@ -215,11 +214,10 @@
                         @if($profesional->id_especialidad == 2)
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">
-                                <a href="{{ ROUTE('profesional.mantencion_equipo') }}">
+                                <a href="{{ route('profesional.gestion_insumos') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-3"
                                         src="{{ asset('images/iconos/insumos-bodega.png') }}"
-
                                         alt="Profesional">
                                         <h5 class="f-16">
                                         Gestión de insumos
