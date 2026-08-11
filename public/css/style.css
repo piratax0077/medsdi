@@ -37874,6 +37874,13 @@ SMALL PARA INFORMACIÓN
 }
 
 /**------- SELECTS MODERNOS -------**/
+/* IMPORTANTE: solo cambia la apariencia. No altera el comportamiento,
+   los value, los eventos change ni el llenado por JS.
+   NOTA: la lista que se abre en un <select> nativo la dibuja el sistema
+   operativo y NO se puede estilizar por CSS. Aqui se moderniza la caja
+   del select; el desplegable estilizable es el de Select2 (mas abajo). */
+
+/* Caja del select: flecha propia en vez de la del sistema */
 select.form-control:not([multiple]):not([size]),
 select.form-control-sm:not([multiple]):not([size]) {
     -webkit-appearance: none;
@@ -37886,11 +37893,11 @@ select.form-control-sm:not([multiple]):not([size]) {
     padding-right: 34px;
     cursor: pointer;
 }
-
+/* Quita la flecha nativa en Edge/IE antiguos */
 select.form-control::-ms-expand {
     display: none;
 }
-
+/* Opciones: Firefox y Chrome en Windows lo respetan; macOS lo ignora */
 select.form-control option {
     color: #495057;
     background-color: #fff;
@@ -37898,6 +37905,9 @@ select.form-control option {
 }
 
 /**------- DESPLEGABLE DE SELECT2 -------**/
+/* Se antepone body para ganar especificidad, porque select2.min.css
+   se carga despues de style.css */
+
 /* Panel del desplegable */
 body .select2-dropdown {
     border: 1px solid #e6eaf1;
@@ -37950,3 +37960,8 @@ body .select2-container--default.select2-container--open .select2-selection--sin
     box-shadow: 0 0 0 .18rem rgba(70, 128, 255, .14);
 }
 
+/* ICONOS HEADER SUPERIOR DERECHO */
+
+.icon-header {
+    font-size: 1.2rem!important;
+}

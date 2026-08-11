@@ -14,7 +14,7 @@
                     <li>
                         <div class="dropdown drp-user">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Cambiar escritorio" data-placement="button" >
-                                <i class="feather icon-refresh-cw" style="font-size: 1.2rem !important;"></i>
+                                <i class="feather icon-refresh-cw icon-header"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-notification">
                                 <div class="pro-head">

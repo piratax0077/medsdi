@@ -11,7 +11,7 @@
                         <div class="col-md-6">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN ODONTOLOGÍA Y ESTÉTICA FACIAL</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                                <p class="font-italic mt-0 mb-0 text-white"><i class="feather icon-calendar mr-1"></i>
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
