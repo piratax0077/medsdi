@@ -1,6 +1,39 @@
 @extends('template.profesional.template')
 @section('content')
 
+    <style>
+        /* Buscador con ícono dentro del input */
+        .input-buscador {
+            position: relative;
+        }
+
+        .input-buscador > i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            color: #1a49a3;
+            pointer-events: none;
+        }
+
+        .input-buscador .form-control {
+            padding-left: 42px;
+        }
+
+        .input-buscador .form-control::placeholder {
+            color: #b9c1d1;
+        }
+
+        .pcoded-content .form-control:focus,
+        .modal .form-control:focus,
+        .pcoded-content .custom-select:focus,
+        .modal .custom-select:focus {
+            border-color: #1a49a3;
+            box-shadow: 0 0 0 .18rem rgba(26, 73, 163, .18);
+        }
+    </style>
+
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -94,13 +127,9 @@
                 <div class="card-body py-2">
                     <div class="row align-items-center">
                         <div class="col-sm-12 col-md-4 col-lg-4 mb-2 mb-md-0">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0">
-                                        <i class="feather icon-search text-muted"></i>
-                                    </span>
-                                </div>
-                                <input type="text" id="filtro_busqueda" class="form-control border-left-0"
+                            <div class="input-buscador">
+                                <i class="feather icon-search"></i>
+                                <input type="text" id="filtro_busqueda" class="form-control"
                                     placeholder="Buscar equipo, marca, modelo...">
                             </div>
                         </div>
