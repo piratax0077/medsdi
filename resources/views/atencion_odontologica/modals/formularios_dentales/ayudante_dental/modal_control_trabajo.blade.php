@@ -8,6 +8,11 @@
                          aria-hidden="true">×</span></button>
              </div>
              <div class="modal-body">
+                 @php
+                     $tonsActivasControl = isset($tons_dental)
+                         ? collect($tons_dental)->where('estado', 2)->values()
+                         : collect();
+                 @endphp
                  <form id="form_control_trabajo_laboratorio"
                      action="{{ route('dental.registrar_control_trabajo_laboratorio') }}" method="post">
 
@@ -17,6 +22,37 @@
                          value="{{--  @if ($ficha != null) {{ $ficha->id }} @endif" --}}">
                      <input type="hidden" name="paciente_control_trabajo_laboratorio"
                          id="paciente_control_trabajo_laboratorio" value="{{ $paciente->id }}">
+
+                     <div class="form-row">
+                         <div class="form-group col-12">
+                             <label class="floating-label-activo-sm">TONS responsable</label>
+                             @if ($tonsActivasControl->count() === 1)
+                                 @php $tonsSeleccionada = $tonsActivasControl->first(); @endphp
+                                 <input type="hidden" name="id_profesional_tons"
+                                     value="{{ $tonsSeleccionada->id }}">
+                                 <div class="alert alert-info py-2 mb-2">
+                                     <i class="feather icon-user-check mr-1"></i>
+                                     {{ $tonsSeleccionada->nombre_tons }} {{ $tonsSeleccionada->apellido_tons }}
+                                     <small class="d-block">{{ $tonsSeleccionada->nombre_lugar_atencion }}</small>
+                                 </div>
+                             @elseif ($tonsActivasControl->count() > 1)
+                                 <select name="id_profesional_tons" class="form-control form-control-sm" required>
+                                     <option value="">Seleccione la TONS responsable</option>
+                                     @foreach ($tonsActivasControl as $tonsRelacion)
+                                         <option value="{{ $tonsRelacion->id }}">
+                                             {{ $tonsRelacion->nombre_tons }} {{ $tonsRelacion->apellido_tons }}
+                                             - {{ $tonsRelacion->nombre_lugar_atencion }}
+                                         </option>
+                                     @endforeach
+                                 </select>
+                                 <small class="text-muted">Hay más de una TONS activa asociada a su perfil.</small>
+                             @else
+                                 <div class="alert alert-warning py-2 mb-2">
+                                     No existe una TONS activa asociada. Debe asociarla desde la configuración profesional.
+                                 </div>
+                             @endif
+                         </div>
+                     </div>
 
 
                      <div class="form-row">
@@ -153,7 +189,7 @@
                      <div class="modal-footer">
                          <button type="button" onclick="reset_form('form_control_trabajo_laboratorio')"
                              class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                         <button type="submit" class="btn btn-info">Guardar</button>
+                         <button type="submit" class="btn btn-info" {{ $tonsActivasControl->isEmpty() ? 'disabled' : '' }}>Guardar</button>
                      </div>
                  </form>
              </div>
@@ -162,6 +198,17 @@
      </div>
  </div>
  <script>
+    $('#tons_relacion_activa').on('change', function () {
+        $('select[name="id_profesional_tons"]').val($(this).val());
+    });
+
+    $('#modal_control_trabajo').on('show.bs.modal', function () {
+        var relacionSeleccionada = $('#tons_relacion_activa').val();
+        if (relacionSeleccionada) {
+            $(this).find('select[name="id_profesional_tons"]').val(relacionSeleccionada);
+        }
+    });
+
     function control_trab()
     {
         $('#modal_control_trabajo').modal('show');

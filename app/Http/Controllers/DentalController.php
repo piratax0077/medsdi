@@ -22,6 +22,7 @@ use App\Models\ConstanciaGes;
 use App\Models\ControlBocaCompleta;
 use App\Models\ControlEndodonciaPaciente;
 use App\Models\ControlEnvioLaboratorio;
+use App\Models\ProfesionalTons;
 use App\Models\ControlMaxilarInferior;
 use App\Models\ControlMaxilarSuperior;
 use App\Models\ControlObesidad;
@@ -2194,8 +2195,9 @@ class DentalController extends Controller
             'id_ficha_atencion' => 'required|integer|exists:fichas_atenciones,id',
             'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
             'id_presupuesto' => 'nullable|integer|exists:presupuestos_dental,id',
-            'tto' => 'required|string|max:255',
-            'diagnostico' => 'nullable|integer|exists:diagnosticos_dental,id',
+            'etapa' => 'nullable|in:diagnostico,planificacion,completa',
+            'tto' => 'nullable|required_unless:etapa,diagnostico|string|max:255',
+            'diagnostico' => 'nullable|required_if:etapa,diagnostico|integer|exists:diagnosticos_dental,id',
             'piezas' => 'nullable|array|max:32',
             'piezas.*' => 'string|max:3',
             'tipo' => 'nullable|in:odped,adulto',
@@ -2383,15 +2385,45 @@ class DentalController extends Controller
         }else{
             $piezas = $request->piezas;
             foreach($piezas as $pieza){
-                $odontograma = OdontogramaPaciente::where('id_paciente', $request->id_paciente)
+                $consultaOdontograma = OdontogramaPaciente::where('id_paciente', $request->id_paciente)
                     ->where('id_profesional', $profesional->id)
                     ->where('id_ficha_atencion', $request->id_ficha_atencion)
                     ->where('id_lugar_atencion', $request->id_lugar_atencion)
                     ->where('pieza', $pieza)
-                    ->where('diagnostico', $request->diagnostico)
-                    ->where('tratamiento', $request->tto)
-                    ->where('urgencia', $request->urgencia ? 1 : 0)
-                    ->first();
+                    ->where('urgencia', $request->urgencia ? 1 : 0);
+
+                if ($request->etapa === 'diagnostico') {
+                    // En el examen oral existe un solo diagn&oacute;stico pendiente por
+                    // pieza y presupuesto; a&uacute;n no se exige tratamiento.
+                    $consultaOdontograma->where(function ($query) {
+                        $query->whereNull('tratamiento')->orWhere('tratamiento', '');
+                    });
+                } elseif ($request->etapa === 'planificacion') {
+                    // Completa el mismo registro creado en el examen oral, evitando
+                    // duplicar la pieza al asignarle posteriormente un tratamiento.
+                    $consultaOdontograma->where(function ($query) {
+                        $query->whereNull('tratamiento')->orWhere('tratamiento', '');
+                    });
+                    if ($request->id_presupuesto) {
+                        $consultaOdontograma->where('id_presupuesto', $request->id_presupuesto);
+                    }
+                } elseif ($request->etapa === 'completa') {
+                    // Si un intento anterior alcanz&oacute; a guardar tratamiento y
+                    // caras pero perdi&oacute; el diagn&oacute;stico, completar esa misma
+                    // fila al reintentar en vez de crear una pieza duplicada.
+                    $consultaOdontograma
+                        ->where('tratamiento', $request->tto)
+                        ->where(function ($query) use ($request) {
+                            $query->where('diagnostico', $request->diagnostico)
+                                ->orWhereNull('diagnostico');
+                        });
+                } else {
+                    $consultaOdontograma
+                        ->where('diagnostico', $request->diagnostico)
+                        ->where('tratamiento', $request->tto);
+                }
+
+                $odontograma = $consultaOdontograma->orderByDesc('id')->first();
                 $esNuevaPieza = !$odontograma;
                 if ($esNuevaPieza) {
                     $odontograma = new OdontogramaPaciente();
@@ -2420,8 +2452,12 @@ class DentalController extends Controller
 
                 $request->fecha = Carbon::now();
 
-                $odontograma->diagnostico = $request->diagnostico; // Fractura
-                $odontograma->tratamiento = $request->tto;
+                if ($request->etapa === 'diagnostico') {
+                    $odontograma->diagnostico = $request->diagnostico;
+                    $odontograma->tratamiento = '';
+                } else {
+                    $odontograma->tratamiento = $request->tto;
+                }
                 $odontograma->caras = $caras;
                 $odontograma->pieza = $pieza;
                 $odontograma->fecha = $request->fecha;
@@ -2437,7 +2473,9 @@ class DentalController extends Controller
                 }
                 $odontograma->impl_rehab = $request->rehab ? 1 : 0;
                 $odontograma->urgencia = $request->urgencia ? 1 : 0;
-                $odontograma->diagnostico = $request->diagnostico;
+                if ($request->etapa !== 'planificacion') {
+                    $odontograma->diagnostico = $request->diagnostico;
+                }
 
                 $odontograma->save();
 
@@ -3371,13 +3409,44 @@ class DentalController extends Controller
             $req->id_paciente,
             $presupuesto->id_ficha_atencion,
             $presupuesto->id_lugar_atencion,
-            $profesionalActual->id_tipo_especialidad
+            $profesionalActual->id_tipo_especialidad,
+            $presupuesto->id
         );
         $insumosActuales = (new ficha_atencionController())->dame_insumos_tratamiento(
             $req->id_paciente,
             $presupuesto->id_ficha_atencion
         );
         $todosActuales = $this->dameTratamientosBocaGeneral($presupuesto->id_ficha_atencion);
+
+        // Invariante de pago: sin abonos reales no puede existir ninguna
+        // prestación cubierta. Además de corregir registros antiguos, se
+        // actualizan los modelos que se devolverán al modal en esta respuesta.
+        if ($totalPagado <= 0) {
+            foreach ($odontogramaActual as $pieza) {
+                if ((int) $pieza->presupuesto !== 1 || (int) ($pieza->urgencia ?? 0) === 1) {
+                    continue;
+                }
+                $pieza->estado_pago = 'error';
+                OdontogramaPaciente::whereKey($pieza->id)->update(['estado_pago' => 'error']);
+            }
+            foreach ($insumosActuales as $insumo) {
+                if ((int) $insumo->id_presupuesto !== (int) $presupuesto->id
+                    || (int) $insumo->presupuesto !== 1
+                    || (int) ($insumo->urgencia ?? 0) === 1) {
+                    continue;
+                }
+                $insumo->estado_pago = 'error';
+                InsumosTratamientosDental::whereKey($insumo->id)->update(['estado_pago' => 'error']);
+            }
+            foreach ($todosActuales as $grupo) {
+                if ((int) ($grupo->id_presupuesto ?? 0) !== (int) $presupuesto->id
+                    || (int) $grupo->presupuesto !== 1) {
+                    continue;
+                }
+                $grupo->estado_pago = 'error';
+                ExamenesBocaGeneral::whereKey($grupo->id)->update(['estado_pago' => 'error']);
+            }
+        }
 
         // Se exponen el % y el valor ya descontado por prestación para que el modal de
         // reasignación (y cualquier otra vista que consuma esta respuesta) muestre y
@@ -3414,6 +3483,7 @@ class DentalController extends Controller
 
         return [
             'valor_atencion' => $pago,
+            'total_abonado' => $totalPagado,
             'id_presupuesto' => $req->id_presupuesto,
             'id_prevision' => optional($paciente)->id_prevision,
             'convenio' => optional(optional($paciente)->prevision)->nombre,
@@ -4184,6 +4254,18 @@ class DentalController extends Controller
             }
 
             $suma_adeudado += $total_lab;
+
+            // Mantener el encabezado del presupuesto sincronizado con las
+            // prestaciones que acabamos de consultar. Antes solo se devolv&iacute;a
+            // el total al navegador y el registro quedaba con valor_total = 0.
+            $presupuesto->valor_total = $suma_adeudado;
+            $presupuesto->valor_abonado = $total_abonado;
+            $presupuesto->pago_completado = $suma_adeudado > 0
+                && $total_abonado >= $suma_adeudado;
+            $presupuesto->fecha_pago_completo = $presupuesto->pago_completado
+                ? ($presupuesto->fecha_pago_completo ?: Carbon::now())
+                : null;
+            $presupuesto->save();
 
             return [
                 'estado' => 1,
@@ -8130,6 +8212,15 @@ class DentalController extends Controller
 
         $profesional = Profesional::where('id_usuario', $user)->first();
 
+        $relacionTons = ProfesionalTons::where('id', $request->id_profesional_tons)
+            ->where('id_profesional', $profesional->id)
+            ->where('estado', 2)
+            ->first();
+
+        if (!$relacionTons) {
+            return redirect()->back()->with('error', 'Debe seleccionar una TONS activa asociada a su perfil.');
+        }
+
 
 
         $control_laboratorio  = new ControlEnvioLaboratorio();
@@ -8169,6 +8260,7 @@ class DentalController extends Controller
         $control_laboratorio->id_paciente = $request->paciente_control_trabajo_laboratorio;
 
         $control_laboratorio->id_profesional = $profesional->id;
+        $control_laboratorio->id_profesional_tons = $relacionTons->id;
 
 
 
@@ -8664,10 +8756,11 @@ class DentalController extends Controller
             );
         }
 
-        $diagnosticos = $query
-            ->orderBy('descripcion', 'asc')
-            ->limit(15)
-            ->get();
+        $query->orderBy('descripcion', 'asc');
+        if (!$request->boolean('catalogo')) {
+            $query->limit(15);
+        }
+        $diagnosticos = $query->get();
 
         $response = [];
 
@@ -8683,6 +8776,7 @@ class DentalController extends Controller
                 'descripcion' => $descripcion,
                 'control' => $diagnostico->tipo_examen,
                 'valor' => $diagnostico->valor,
+                'uco' => $diagnostico->uco,
             ];
         }
 
@@ -8768,11 +8862,14 @@ class DentalController extends Controller
     public function getTratamientoImplantologia(Request $request){
         $search = $request->search;
         if ($search == '') {
-            $employees = TratamientosImplantologia::orderby('descripcion', 'asc')->select('id', 'descripcion', 'valor')->limit(15)->get();
+            $query = TratamientosImplantologia::orderby('descripcion', 'asc')->select('id', 'descripcion', 'valor', 'uco', 'tipo_examen');
         } else {
-           //  $employees = DiagnosticoDental::orderby('descripcion', 'asc')->select('id', 'descripcion')->where('descripcion', 'like', '%' . $search . '%')->limit(15)->get();
-            $employees = TratamientosImplantologia::orderby('descripcion', 'asc')->select('id', 'descripcion', 'valor')->where('descripcion', 'like', $search . '%')->limit(15)->get();
+            $query = TratamientosImplantologia::orderby('descripcion', 'asc')->select('id', 'descripcion', 'valor', 'uco', 'tipo_examen')->where('descripcion', 'like', $search . '%');
         }
+        if (!$request->boolean('catalogo')) {
+            $query->limit(15);
+        }
+        $employees = $query->get();
         $response = array();
 
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
@@ -8788,7 +8885,7 @@ class DentalController extends Controller
                     $employee->valor = $d->valor;
                 }
             $employee->descripcion = mb_strtoupper($employee->descripcion, 'UTF-8');
-            $response[] = array("value" => $employee->id, "label" => $employee->descripcion,"descripcion" => $employee->descripcion, "control" => $employee->tipo_examen,'valor' => $employee->valor);
+            $response[] = array("value" => $employee->id, "label" => $employee->descripcion,"descripcion" => $employee->descripcion, "control" => $employee->tipo_examen,'valor' => $employee->valor, 'uco' => $employee->uco);
 
         }
 

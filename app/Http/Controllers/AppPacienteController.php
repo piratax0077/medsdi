@@ -1962,6 +1962,86 @@ class AppPacienteController extends Controller
         ]);
     }
 
+    public function getMisPacientesProfesionalApp(Request $request)
+    {
+        $data = $request->validate([
+            'buscar' => ['nullable', 'string', 'max:100'],
+            'pagina' => ['nullable', 'integer', 'min:1'],
+            'por_pagina' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
+
+        $profesional = Profesional::where('id_usuario', $request->user('api')->id)->first();
+        abort_unless($profesional, 404);
+
+        $atenciones = FichaAtencion::query()
+            ->select('id_paciente')
+            ->selectRaw('MAX(created_at) as ultima_atencion')
+            ->selectRaw('COUNT(*) as total_atenciones')
+            ->where('id_profesional', $profesional->id)
+            ->where('finalizada', 1)
+            ->groupBy('id_paciente');
+
+        $pacientes = Paciente::query()
+            ->joinSub($atenciones, 'atenciones_profesional', function ($join) {
+                $join->on('atenciones_profesional.id_paciente', '=', 'pacientes.id');
+            })
+            ->select([
+                'pacientes.id',
+                'pacientes.nombres',
+                'pacientes.apellido_uno',
+                'pacientes.apellido_dos',
+                'pacientes.rut',
+                'pacientes.email',
+                'pacientes.telefono_uno',
+                'pacientes.fecha_nac',
+                'atenciones_profesional.ultima_atencion',
+                'atenciones_profesional.total_atenciones',
+            ]);
+
+        $buscar = trim((string) ($data['buscar'] ?? ''));
+        if ($buscar !== '') {
+            foreach (preg_split('/\s+/', $buscar) as $termino) {
+                $pacientes->where(function ($query) use ($termino) {
+                    $like = '%'.$termino.'%';
+                    $query->where('pacientes.nombres', 'like', $like)
+                        ->orWhere('pacientes.apellido_uno', 'like', $like)
+                        ->orWhere('pacientes.apellido_dos', 'like', $like)
+                        ->orWhere('pacientes.rut', 'like', $like)
+                        ->orWhere('pacientes.email', 'like', $like)
+                        ->orWhere('pacientes.telefono_uno', 'like', $like);
+                });
+            }
+        }
+
+        $porPagina = (int) ($data['por_pagina'] ?? 20);
+        $resultado = $pacientes
+            ->orderByDesc('atenciones_profesional.ultima_atencion')
+            ->orderBy('pacientes.apellido_uno')
+            ->paginate($porPagina, ['*'], 'pagina', (int) ($data['pagina'] ?? 1));
+
+        return response()->json([
+            'estado' => 1,
+            'registros' => collect($resultado->items())->map(function ($paciente) {
+                return [
+                    'id' => $paciente->id,
+                    'nombre' => trim($paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos),
+                    'rut' => $paciente->rut,
+                    'email' => $paciente->email,
+                    'telefono' => $paciente->telefono_uno,
+                    'fecha_nacimiento' => $paciente->fecha_nac,
+                    'ultima_atencion' => $paciente->ultima_atencion,
+                    'total_atenciones' => (int) $paciente->total_atenciones,
+                ];
+            })->values(),
+            'paginacion' => [
+                'pagina_actual' => $resultado->currentPage(),
+                'ultima_pagina' => $resultado->lastPage(),
+                'por_pagina' => $resultado->perPage(),
+                'total' => $resultado->total(),
+            ],
+        ]);
+    }
+
     public function ingresarVideollamadaApp(Request $request, $hora, $rol)
     {
         $cita = HoraMedica::findOrFail($hora);

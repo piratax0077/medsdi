@@ -173,6 +173,7 @@
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.m_pmateriales')
         @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
         @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+        @include('atencion_odontologica.modals.formularios_dentales.ayudante_dental.modal_control_trabajo')
                 @include("atencion_medica.formularios.modal_atencion_general.modal_indicar_examenes")
     
 

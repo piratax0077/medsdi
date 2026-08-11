@@ -204,6 +204,7 @@ Route::get('/paciente/mis_documentos', [App\Http\Controllers\AppPacienteControll
 Route::get('/paciente/mis_controles', [App\Http\Controllers\AppPacienteController::class, 'getMisControles']);
 Route::middleware('auth:api')->get('/paciente/agenda', [App\Http\Controllers\AppPacienteController::class, 'getAgendaPacienteApp']);
 Route::middleware('auth:api')->get('/profesional/agenda', [App\Http\Controllers\AppPacienteController::class, 'getAgendaProfesionalApp']);
+Route::middleware('auth:api')->get('/profesional/mis_pacientes', [App\Http\Controllers\AppPacienteController::class, 'getMisPacientesProfesionalApp']);
 Route::middleware('auth:api')->get('/perfil', [App\Http\Controllers\AppPacienteController::class, 'getPerfilApp']);
 Route::middleware('auth:api')->put('/perfil', [App\Http\Controllers\AppPacienteController::class, 'actualizarPerfilApp']);
 Route::middleware('auth:api')->get('/perfil/datos', [App\Http\Controllers\AppPacienteController::class, 'getPerfilApp']);

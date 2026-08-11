@@ -339,7 +339,7 @@
                     <div class="card-header-sidebar" id="heading_ayudante">
                         <h2 class="mb-0">
                             <button class="btn btn-light btn-block text-left collapsed {{ $clase }}" type="button"
-                            @if($clase == 'desactivado') disabled @endif
+                            @if($clase == 'disabled') disabled @endif
                             data-toggle="collapse" data-target="#collapse_ayudante"
                             aria-expanded="false" aria-controls="collapse_ayudante">
                             <i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>

@@ -1579,8 +1579,8 @@
                                             <strong class="ml-2">{{ $piezaPresupuestada['pieza'] }}</strong>
                                         </div>
                                         <div class="dental-budget-faces" aria-label="Caras registradas">
-                                            @foreach (['M', 'O', 'D', 'V', 'P'] as $cara)
-                                                <span class="{{ in_array($cara, $piezaPresupuestada['caras'], true) ? 'is-selected' : '' }}">{{ $cara }}</span>
+                                            @foreach (['V' => 'face-v', 'D' => 'face-d', 'O' => 'face-o', 'M' => 'face-m', 'P' => 'face-p'] as $cara => $claseCara)
+                                                <span class="{{ $claseCara }} {{ in_array($cara, $piezaPresupuestada['caras'], true) ? 'is-selected' : '' }}">{{ $cara }}</span>
                                             @endforeach
                                         </div>
                                     </div>
@@ -1725,6 +1725,9 @@
     .dental-budget-tooth {
         border-top: 1px solid #edf1f5;
         padding: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
 
     .dental-budget-tooth:first-of-type {
@@ -1738,28 +1741,45 @@
         object-fit: contain;
     }
 
+    .dental-budget-tooth > .d-flex {
+        min-width: 76px;
+        margin-bottom: 0 !important;
+        flex: 0 0 auto;
+    }
+
     .dental-budget-faces {
-        display: flex;
-        gap: 5px;
+        display: grid;
+        grid-template-columns: repeat(3, 30px);
+        grid-template-rows: repeat(3, 30px);
+        gap: 3px;
+        width: max-content;
+        align-items: center;
+        justify-items: center;
     }
 
     .dental-budget-faces span {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 27px;
-        height: 27px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         background: #e9eef5;
         color: #7a8797;
-        font-size: 11px;
+        font-size: 14px;
         font-weight: 700;
     }
 
+    .dental-budget-faces .face-v { grid-column: 2; grid-row: 1; }
+    .dental-budget-faces .face-d { grid-column: 1; grid-row: 2; }
+    .dental-budget-faces .face-o { grid-column: 2; grid-row: 2; }
+    .dental-budget-faces .face-m { grid-column: 3; grid-row: 2; }
+    .dental-budget-faces .face-p { grid-column: 2; grid-row: 3; }
+
     .dental-budget-faces span.is-selected {
-        background: #2f75dc;
+        background: #7fbd00;
         color: #fff;
-        box-shadow: 0 0 0 2px rgba(47, 117, 220, .16);
+        box-shadow: 0 0 0 2px rgba(127, 189, 0, .16);
     }
 </style>
 
@@ -1778,7 +1798,11 @@ function abrirModalInsumosPresupuestoDental() {
     }
 
     if ($('#modal_insumos').length) {
-        $('#modal_insumos').modal('show');
+        var $modalInsumos = $('[id="modal_insumos"]').last();
+        if (!$modalInsumos.parent().is('body')) {
+            $modalInsumos.appendTo(document.body);
+        }
+        $modalInsumos.modal('show');
         return;
     }
 

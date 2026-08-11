@@ -7221,6 +7221,7 @@ return $ficha;
         'id_ficha_atencion' => 'nullable|integer',
         'id_presupuesto' => 'nullable|integer',
         'solo_pendientes' => 'nullable|boolean',
+        'solo_sin_tratamiento' => 'nullable|boolean',
     ]);
 
     $presupuesto = PresupuestosDental::where('id_paciente', $req->id_paciente)
@@ -7263,6 +7264,12 @@ return $ficha;
         $consulta->where(function ($query) {
             $query->whereNotIn('estado', [1, 3])
                 ->orWhereNull('estado');
+        });
+    }
+
+    if ($req->boolean('solo_sin_tratamiento')) {
+        $consulta->where(function ($query) {
+            $query->whereNull('tratamiento')->orWhere('tratamiento', '');
         });
     }
 
@@ -11712,7 +11719,7 @@ return $ficha;
 
         }
 
-        if($profesional->id_tipo_especialidad != 18)
+        if($profesional->id_tipo_especialidad != 16)
         {
             $mis_trabajos_agregados = DiagnosticosDental::where('id_responsable', $profesional->id)->get();
         }
@@ -11732,9 +11739,9 @@ return $ficha;
 
         $aranceles_lab = DiagnosticosDental::where('tipo_examen',4)->get();
 
-        $url_tratamientos = $profesional->id_tipo_especialidad == 18
-        ? route('dental.getDiagnosticoDental')
-        : route('dental.getTratamientoImplantologia');
+        $url_tratamientos = $profesional->id_tipo_especialidad == 16
+            ? route('dental.getTratamientoImplantologia')
+            : route('dental.getDiagnosticoDental');
 
         return view('app.profesional.aranceles_profesional')->with([
             'aranceles' => $aranceles_lab,
@@ -11866,6 +11873,50 @@ return $ficha;
     public function agregarProcedimientoDental(Request $req){
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        if (is_array($req->procedimientos)) {
+            $valorUco = (float) $req->valor_uco;
+            if ($valorUco <= 0 || count($req->procedimientos) === 0) {
+                return response()->json(['status' => 'error', 'mensaje' => 'Debe indicar el valor UCO y seleccionar tratamientos.'], 422);
+            }
+
+            \DB::transaction(function () use ($req, $profesional, $valorUco) {
+                foreach ($req->procedimientos as $item) {
+                    $id = (int) ($item['id'] ?? 0);
+                    $bloques = max(1, (int) ($item['bloques'] ?? 1));
+                    $uco = max(0, (float) ($item['uco'] ?? 0));
+                    $laboratorio = !empty($item['laboratorio']) ? 1 : 0;
+
+                    $catalogo = $profesional->id_tipo_especialidad == 16
+                        ? TratamientosImplantologia::find($id)
+                        : DiagnosticosDental::where('id', $id)
+                            ->where('estado', 1)
+                            ->whereRaw("FIND_IN_SET(?, REPLACE(id_especialidad, ' ', '')) > 0", [(int) $profesional->id_tipo_especialidad])
+                            ->first();
+
+                    if (!$catalogo) {
+                        continue;
+                    }
+
+                    $arancel = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)
+                        ->where('id_diagnostico', $catalogo->id)
+                        ->first();
+
+                    if (!$arancel) {
+                        $arancel = new DiagnosticosDentalProfesional();
+                        $arancel->id_profesional = $profesional->id;
+                        $arancel->id_diagnostico = $catalogo->id;
+                    }
+
+                    $arancel->laboratorio = $laboratorio;
+                    $arancel->cantidad_bloques = $bloques;
+                    $arancel->cantidad_uco = $uco;
+                    $arancel->valor = $valorUco * $uco;
+                    $arancel->save();
+                }
+            });
+
+            return ['status' => 'ok', 'mensaje' => 'Los aranceles seleccionados fueron guardados.'];
+        }
         if($req->nuevo_procedimiento == 'true'){
             // agregar procedimiento dental
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();

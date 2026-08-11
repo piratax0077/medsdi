@@ -438,7 +438,7 @@
 
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab"
-                            onclick="refrescar_caras_grupos()"
+                            onclick="refrescar_caras_grupos(); refrescar_resaltado_presupuesto_plan_general();"
                             href="#evaluacion_general" role="tab" aria-controls="evaluacion_general"
                             aria-selected="false">Plan de tratamiento</a>
                     </li>
@@ -519,7 +519,7 @@
                                 @include('atencion_odontologica.generales.control_urgencias')
                             @endif
                             @if($mostrarExamenOdontoGeneral)
-                                @include('atencion_odontologica.generales.odonto_gral')
+                                @include('atencion_odontologica.generales.odonto_gral', ['ocultarExamenPorPieza' => true])
                             @endif
 
                             <!--CONTROL ODONTOLOGICO-->
@@ -1217,6 +1217,66 @@
                                                 'titulo' => 'Odontograma del plan de tratamiento',
                                                 'ayuda' => 'Presione una pieza para ingresar su prestacion',
                                             ])
+                                            <style>
+                                                #selector_plan_tratamiento_general [data-selector-pieza].is-in-budget {
+                                                    border-color: #22a06b;
+                                                    background: #dff5e8;
+                                                    color: #147a4b;
+                                                    box-shadow: inset 0 -5px 0 #22a06b, 0 0 0 2px rgba(34, 160, 107, .18);
+                                                }
+                                                #selector_plan_tratamiento_general [data-selector-pieza].is-in-budget.is-selected {
+                                                    border-color: #22a06b;
+                                                    background: #a460d1;
+                                                    color: #fff;
+                                                    box-shadow: inset 0 -5px 0 #22a06b, 0 0 0 2px rgba(34, 160, 107, .25);
+                                                }
+                                            </style>
+                                            <script>
+                                                (function marcarPiezasPresupuestoIniciales() {
+                                                    const piezas = @json($piezasPresupuestadasEstado->pluck('pieza')->map(fn ($pieza) => (string) $pieza)->unique()->values()->all());
+                                                    $('#selector_plan_tratamiento_general [data-selector-pieza]').each(function () {
+                                                        $(this).toggleClass('is-in-budget', piezas.includes(String($(this).data('selector-pieza'))));
+                                                    });
+                                                })();
+
+                                                window.aplicarResaltadoPresupuestoPlanGeneral = function (registros) {
+                                                    const piezas = [...new Set((registros || [])
+                                                        .filter(function (pieza) {
+                                                            return pieza && String(pieza.pieza || '') !== '';
+                                                        })
+                                                        .map(function (pieza) { return String(pieza.pieza); }))];
+
+                                                    $('#selector_plan_tratamiento_general [data-selector-pieza]').each(function () {
+                                                        $(this).toggleClass(
+                                                            'is-in-budget',
+                                                            piezas.includes(String($(this).data('selector-pieza')))
+                                                        );
+                                                    });
+                                                };
+
+                                                window.refrescar_resaltado_presupuesto_plan_general = function () {
+                                                    $.ajax({
+                                                        url: "{{ route('profesional.selector_odontograma.piezas') }}",
+                                                        type: 'POST',
+                                                        data: {
+                                                            id_paciente: $('#id_paciente_fc').val(),
+                                                            id_ficha_atencion: $('#id_fc').val(),
+                                                            id_presupuesto: $('#id_presupuesto').val() || null,
+                                                            _token: "{{ csrf_token() }}"
+                                                        },
+                                                        success: function (respuesta) {
+                                                            window.aplicarResaltadoPresupuestoPlanGeneral(respuesta.piezas || []);
+                                                        },
+                                                        error: function (xhr) {
+                                                            console.error('No fue posible resaltar las piezas del presupuesto.', xhr);
+                                                        }
+                                                    });
+                                                };
+
+                                                $(function () {
+                                                    window.refrescar_resaltado_presupuesto_plan_general();
+                                                });
+                                            </script>
                                             <input type="hidden" id="pieza_plan_tratamiento_general" value="0">
                                         </div>
                                     </div>
@@ -1581,7 +1641,7 @@
         $('#diag_presupuesto_pieza_g').val(tratamiento);
         $('#modal_pieza_plan_tratamiento').modal('hide');
 
-        cargar_a_presupuesto_impl_g_confirmar();
+        cargar_a_presupuesto_impl_g_confirmar('completa');
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -2628,7 +2688,24 @@
 
 
         function abrir_modal_insumos() {
-            $('#modal_insumos').modal('show');
+            // El modal viene incluido dentro de odonto_gral y puede quedar
+            // atrapado por el z-index/overflow de las pestañas de la ficha.
+            // Bootstrap requiere que el modal sea hijo directo del body.
+            var $modal = $('[id="modal_insumos"]').last();
+            if (!$modal.length) {
+                swal({
+                    title: 'Insumos no disponibles',
+                    text: 'No se encontr\u00f3 el modal de insumos en esta ficha.',
+                    icon: 'warning'
+                });
+                return;
+            }
+
+            if (!$modal.parent().is('body')) {
+                $modal.appendTo(document.body);
+            }
+
+            $modal.modal('show');
         }
 
 
@@ -6274,16 +6351,21 @@ setTimeout(function(){
                 });
         }
 
-        function cargar_a_presupuesto_impl_g_confirmar() {
+        function cargar_a_presupuesto_impl_g_confirmar(etapa) {
+            etapa = etapa || 'planificacion';
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val() || [];
-            let diagnosticoPiezas = $('#diagnostico_combo_g_od_gral').val();
-            var ttoPiezas = $('#diag_presupuesto_pieza_g').val();
+            var piezasSeleccionadas = etapa === 'diagnostico'
+                ? ($('#paciente_piezas_diagnostico_od_gral').val() || [])
+                : ($('#paciente_piezas_dentales_ex').val() || []);
+            let diagnosticoPiezas = etapa === 'diagnostico'
+                ? $('#diagnostico_examen_oral_od_gral').val()
+                : (etapa === 'completa' ? $('#diagnostico_combo_g_od_gral').val() : null);
+            var ttoPiezas = etapa === 'diagnostico' ? '' : $('#diag_presupuesto_pieza_g').val();
 
             let valido = 1;
             let mensaje = '';
 
-            if(diagnosticoPiezas == 0) {
+            if((etapa === 'diagnostico' || etapa === 'completa') && diagnosticoPiezas == 0) {
                 valido = 0;
                 mensaje += '<li>Diagnóstico </li>';
             }
@@ -6291,7 +6373,7 @@ setTimeout(function(){
                 valido = 0;
                 mensaje += '<li>Piezas seleccionadas </li>'
             }
-            if (ttoPiezas == '') {
+            if (etapa === 'planificacion' && ttoPiezas == '') {
                 valido = 0;
                 mensaje += '<li>Tratamiento </li>';
             }
@@ -6310,7 +6392,7 @@ setTimeout(function(){
                 return false;
             }
 
-            const grupoSeleccionado = document.getElementById('max_sup').checked
+            const grupoSeleccionado = etapa === 'planificacion' && document.getElementById('max_sup').checked
                 ? 'Maxilar superior'
                 : (document.getElementById('max_inf').checked ? 'Maxilar inferior' : null);
             if (grupoSeleccionado) {
@@ -6323,6 +6405,7 @@ setTimeout(function(){
                 piezas: piezasSeleccionadas,
                 diagnostico: diagnosticoPiezas,
                 tto: ttoPiezas,
+                etapa: etapa,
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_paciente: $('#id_paciente_fc').val(),
@@ -6364,6 +6447,40 @@ setTimeout(function(){
                         });
                         let odontograma = resp.odontograma_paciente;
                         odontograma_global = resp.odontograma_paciente;
+                        const piezasDelPresupuesto = [...new Set(odontograma
+                            .filter(function (pieza) {
+                                return Number(pieza.urgencia) === 0 && Number(pieza.presupuesto) === 1;
+                            })
+                            .map(function (pieza) { return String(pieza.pieza); }))];
+                        const $selectorPresupuesto = $('#selector_plan_tratamiento_general');
+                        $selectorPresupuesto.find('[data-selector-pieza]').each(function () {
+                            const resaltada = piezasDelPresupuesto.includes(String($(this).data('selector-pieza')));
+                            $(this).toggleClass('is-in-budget', resaltada);
+                        });
+                        if (etapa === 'diagnostico') {
+                            const piezasDiagnosticadas = [...new Set(odontograma
+                                .filter(function (pieza) {
+                                    return Number(pieza.urgencia) === 0
+                                        && Number(pieza.presupuesto) === 1
+                                        && String(pieza.tratamiento || '').trim() === '';
+                                })
+                                .map(function (pieza) { return String(pieza.pieza); }))];
+                            $('#paciente_piezas_diagnostico_od_gral').val([]).trigger('change');
+                            $('#diagnostico_examen_oral_od_gral').val('0').trigger('change');
+                            $('#odontograma_plan_od_general .pieza').removeClass('seleccionada');
+                            $('#paciente_piezas_dentales_ex').val(piezasDiagnosticadas).trigger('change');
+                            $('#selector_planificacion_od_general [data-selector-pieza]').each(function () {
+                                const disponible = piezasDiagnosticadas.includes(String($(this).data('selector-pieza')));
+                                $(this)
+                                    .prop('disabled', !disponible)
+                                    .toggleClass('is-enabled', disponible)
+                                    .toggleClass('is-selected', disponible)
+                                    .attr('aria-pressed', disponible ? 'true' : 'false');
+                            });
+                            if (typeof refrescar_piezas_diagnostico_plan_od_gral === 'function') {
+                                refrescar_piezas_diagnostico_plan_od_gral();
+                            }
+                        }
                         let table_odontograma = $('#table_odontograma').DataTable();
 
                         // Vacía la tabla
@@ -12141,6 +12258,55 @@ setTimeout(function(){
                             table_piezas_odontograma.clear().draw();
 
                             let odontograma = response.odontograma;
+                            if (typeof window.renderizarTarjetasPresupuestoClinico === 'function') {
+                                window.renderizarTarjetasPresupuestoClinico(odontograma);
+                            }
+
+                            const piezasPresupuestoClinico = odontograma.filter(function (pieza) {
+                                return Number(pieza.presupuesto) === 1 && Number(pieza.urgencia) === 0;
+                            });
+                            const detallePresupuestoPorPieza = {};
+                            piezasPresupuestoClinico.forEach(function (pieza) {
+                                const numero = String(pieza.pieza);
+                                if (!detallePresupuestoPorPieza[numero]) {
+                                    detallePresupuestoPorPieza[numero] = {
+                                        pieza: numero,
+                                        total: 0,
+                                        descuento: 0,
+                                        a_pagar: 0,
+                                        tratamientos: []
+                                    };
+                                }
+                                const valor = Number(pieza.valor || 0);
+                                const descuento = Number(pieza.valor_descuento || 0);
+                                detallePresupuestoPorPieza[numero].total += valor;
+                                detallePresupuestoPorPieza[numero].descuento += descuento;
+                                detallePresupuestoPorPieza[numero].a_pagar += valor - descuento;
+                                detallePresupuestoPorPieza[numero].tratamientos.push({
+                                    descripcion: pieza.descripcion || pieza.tratamiento || 'Sin tratamiento',
+                                    valor: valor,
+                                    descuento: descuento
+                                });
+                            });
+
+                            const numerosPresupuestoClinico = Object.keys(detallePresupuestoPorPieza);
+                            $('#cantidad_items_presupuesto').text(
+                                piezasPresupuestoClinico.length + ' ' +
+                                (piezasPresupuestoClinico.length === 1 ? 'prestación' : 'prestaciones')
+                            );
+                            $('#presupuesto_clinico_vacio').toggle(piezasPresupuestoClinico.length === 0);
+                            $('#presupuesto_piezas_visor').toggle(piezasPresupuestoClinico.length > 0);
+                            $('#detalle_pieza_presupuesto').data('detalle', detallePresupuestoPorPieza);
+                            $('#selector_presupuesto_piezas [data-selector-pieza]').each(function () {
+                                const disponible = numerosPresupuestoClinico.includes(String($(this).data('selector-pieza')));
+                                $(this)
+                                    .prop('disabled', !disponible)
+                                    .toggleClass('is-enabled', disponible)
+                                    .removeClass('is-selected')
+                                    .attr('aria-pressed', 'false');
+                            });
+                            $('#selector_presupuesto_piezas .selector-odontograma-generico__resumen')
+                                .html('<span class="text-muted">Seleccione una pieza del presupuesto</span>');
 
                             // Recorrer el odontograma y agregar nuevas filas
                             odontograma.forEach(function(odonto) {
@@ -12319,12 +12485,27 @@ setTimeout(function(){
                 error: function(error){
                     console.log(error);
                 }
-            })
-        }
+             })
+         }
+
+         // Si el navegador restaura la ficha directamente en Presupuesto, el
+         // onclick de la pestaña no se ejecuta. En ese caso cargamos desde la
+         // misma fuente usada después de agregar una pieza, evitando que quede
+         // visible el HTML inicial (que puede venir con una colección anterior).
+         $(function () {
+             const $tabPresupuesto = $('#presupuesto_tab');
+             const $panelPresupuesto = $('#presupuesto');
+
+             if ($tabPresupuesto.hasClass('active') || $panelPresupuesto.hasClass('active')) {
+                 window.setTimeout(function () {
+                     actualizar_presupuesto();
+                 }, 0);
+             }
+         });
 
 
 
-        /** MENSAJE*/
+         /** MENSAJE*/
         /** CARGAR mensaje */
         $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio los demás datos se cargan solos. ');
         $('#mensaje_ficha').show();

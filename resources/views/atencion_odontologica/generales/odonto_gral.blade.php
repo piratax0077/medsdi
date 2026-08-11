@@ -16,9 +16,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link-aten text-reset active" id="ex_oral-tab" data-toggle="tab" href="#ex_oral" role="tab" aria-controls="ex_oral" aria-selected="true">Examen Oral</a>
                                 </li>
+                                @unless($ocultarExamenPorPieza ?? false)
                                 <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="endo_pieza-tab" onclick="mostrar_pieza_dental_examen(1000);" data-toggle="tab" href="#endo_pieza" role="tab" aria-controls="orl_flaringe" aria-selected="true">Examen Por Pieza</a>
                                 </li>
+                                @endunless
                                 {{-- <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="examen_general_tab" onclick="mostrar_nueva_pieza_dental(1000);" data-toggle="tab" href="#examen_general" role="tab" aria-controls="examen_general" aria-selected="true">Dolor</a>
                                 </li> --}}
@@ -26,7 +28,7 @@
                                     <a class="nav-link-aten text-reset" id="endo_boca_gral-tab" data-toggle="tab" href="#endo_boca_gral" role="tab" aria-controls="endo_boca_gral" aria-selected="true">Examen Boca General</a>
                                 </li> --}}
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="plan_endo-tab" onclick="$('#paciente_piezas_dentales_ex').select2();" data-toggle="tab" href="#plan_endo" role="tab" aria-controls="cuello" aria-selected="true">Planificación de tratamiento</a>
+                                    <a class="nav-link-aten text-reset" id="plan_endo-tab" onclick="$('#paciente_piezas_dentales_ex').select2(); refrescar_piezas_diagnostico_plan_od_gral();" data-toggle="tab" href="#plan_endo" role="tab" aria-controls="cuello" aria-selected="true">Planificación de tratamiento</a>
                                 </li>
                             </ul>
                         </div>
@@ -256,6 +258,43 @@
                                                         </div> --}}
                                                     </div>
                                                     <div class="row mb-3">
+                                                        <div class="col-sm-12 col-lg-8">
+                                                            <div id="odontograma_plan_od_general">
+                                                                @include('atencion_odontologica.generales.odontograma_adulto_grupos')
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-lg-4 mt-3 mt-lg-0">
+                                                            <div class="card-informacion h-100">
+                                                                <div class="card-top"><h6 class="text-uppercase text-c-blue">Diagn&oacute;stico por piezas</h6></div>
+                                                                <div class="card-body">
+                                                                    <select class="d-none" id="paciente_piezas_diagnostico_od_gral" multiple>
+                                                                        @foreach (['1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1','2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8','4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1','3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8'] as $piezaDiagnostico)
+                                                                            <option value="{{ $piezaDiagnostico }}">{{ $piezaDiagnostico }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Piezas seleccionadas</label>
+                                                                        <div id="resumen_piezas_diagnostico_od_gral" class="form-control form-control-sm h-auto text-muted">Ninguna pieza seleccionada</div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Piezas diagnosticadas</label>
+                                                                        <div id="resumen_piezas_diagnosticadas_guardadas" class="form-control form-control-sm h-auto text-muted">Ninguna pieza diagnosticada</div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Diagn&oacute;stico</label>
+                                                                        <select class="form-control form-control-sm" id="diagnostico_examen_oral_od_gral">
+                                                                            <option value="0">Seleccione</option>
+                                                                            @foreach ($diagnosticos as $d)
+                                                                                <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="guardar_diagnostico_examen_oral_od_gral()"><i class="feather icon-save"></i> Guardar diagn&oacute;stico</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
                                                         <div class="col-12">
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-xs" id="table_tto_boca_gral">
@@ -439,6 +478,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @unless($ocultarExamenPorPieza ?? false)
                                 <!--EXAMEN  POR PIEZA-->
                                 <div class="tab-pane fade show" id="endo_pieza" role="tabpanel" aria-labelledby="endo_pieza-tab">
                                     <div class="row">
@@ -635,10 +675,11 @@
                                     </div>
 
                                 </div>
+                                @endunless
 
                                 <!--EXAMEN  BOCA GENERAL-->
                                 <div class="tab-pane fade show " id="endo_boca_gral" role="tabpanel" aria-labelledby="endo_boca_gral-tab">
-                                    <div class="form-row">
+                                    <div class="form-row mt-3">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
                                             <h6 class="t-aten">Examen boca general</h6>
                                         </div>
@@ -1023,7 +1064,7 @@
                                 </div> --}}
                                 <!--PLANIFICACION TRATAMIENT ODONTO GENERAL-->
                                 <div class="tab-pane fade show" id="plan_endo" role="tabpanel" aria-labelledby="plan_endo">
-                                    <div class="form-row mt-3">
+                                    <div class="form-row mt-3 d-none">
                                         <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                             <div class="card-informacion">
@@ -1093,7 +1134,7 @@
                                                 <div class="card-body">
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <div class="row my-2">
+                                                            <div class="row my-2 d-none">
                                                                 <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                                     <div class="custom-control custom-switch">
                                                                         <input type="checkbox" class="custom-control-input" id="max_sup" onclick="seleccionar_maxilar_superior()">
@@ -1116,11 +1157,44 @@
 
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                                                                    @include('atencion_odontologica.generales.odontograma_adulto_grupos')
+                                                                    @php
+                                                                        $piezasPlanOdGeneral = [
+                                                                            '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                                                            '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                                                            '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                                                            '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                                        ];
+                                                                        $piezasDiagnosticadasPlan = collect($odontograma ?? [])
+                                                                            ->filter(fn ($pieza) => (int) ($pieza->urgencia ?? 0) === 0
+                                                                                && (int) ($pieza->presupuesto ?? 0) === 1
+                                                                                && trim((string) ($pieza->tratamiento ?? '')) === '')
+                                                                            ->unique(fn ($pieza) => (string) $pieza->pieza)
+                                                                            ->values();
+                                                                    @endphp
+                                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                                        'id' => 'selector_planificacion_od_general',
+                                                                        'inputId' => 'paciente_piezas_dentales_ex',
+                                                                        'counter' => 9800,
+                                                                        'multiple' => true,
+                                                                        'compacto' => true,
+                                                                        'autoRefresh' => false,
+                                                                        'mostrarMensajeVacio' => false,
+                                                                        'piezasDisponibles' => $piezasDiagnosticadasPlan,
+                                                                        'piezasSeleccionadas' => $piezasDiagnosticadasPlan->pluck('pieza')->map(fn ($pieza) => (string) $pieza)->all(),
+                                                                        'titulo' => 'Piezas diagnosticadas',
+                                                                        'ayuda' => 'Seleccione las piezas para indicar su tratamiento',
+                                                                    ])
+                                                                    <style>
+                                                                        #selector_planificacion_od_general .selector-odontograma-generico__scroll { overflow-x: hidden; }
+                                                                        #selector_planificacion_od_general .selector-odontograma-generico__fila {
+                                                                            grid-template-columns: repeat(8, minmax(42px, 1fr));
+                                                                            min-width: 0;
+                                                                        }
+                                                                    </style>
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
                                                                     <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                                                                     <div class="form-group">
                                                                         <label for="" class="floating-label-activo-sm">Grupos</label>
                                                                         <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
@@ -1159,7 +1233,7 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                                                                     <div class="form-group">
                                                                         <label class="floating-label-activo-sm">Diagnostico</label>
                                                                         <select class="form-control form-control-sm" id="diagnostico_combo_g_od_gral">
@@ -1177,7 +1251,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar tratamiento</button>
                                                                 </div>
                                                                     </div>
                                                                 </div>
@@ -1272,38 +1346,150 @@
         const odontograma = @json($odontograma);
 
        // Filtrar solo las piezas donde urgencia es igual a 0 y obtener piezas únicas
-        const piezasTto = odontograma.filter(item => item.urgencia == 0);
+        const piezasTto = odontograma.filter(item => item.urgencia == 0
+            && item.presupuesto == 1
+            && String(item.tratamiento || '').trim() === '');
         const piezasUnicas = [...new Set(piezasTto.map(item => item.pieza))];
 
         // Seleccionar el <select> y actualizar sus valores
         const piezasSelect = $('#paciente_piezas_dentales_ex');
-        piezasSelect.val(piezasUnicas).trigger('change');
+        piezasSelect.val(piezasUnicas);
 
-        // Marcar visualmente las piezas en el odontograma
-        piezasUnicas.forEach(pieza => {
-            $(`.pieza[data-pieza="${pieza}"]`).addClass('seleccionada');
-        });
         // Escuchar cambios en el Select2 para actualizar el odontograma visual
         piezasSelect.on('change', function () {
-            const piezasSeleccionadas = $(this).val() || [];
+            const piezasSeleccionadas = ($(this).val() || []).map(String);
 
-            // Recorre todas las piezas visuales
-            $('.pieza').each(function () {
-                const piezaNumero = $(this).data('pieza').toString();
-
-                if (piezasSeleccionadas.includes(piezaNumero)) {
-                    $(this).addClass('seleccionada');
-                } else {
-                    $(this).removeClass('seleccionada');
-                }
+            // Mantener sincronizado el selector compacto de Planificaci&oacute;n
+            // cuando la selecci&oacute;n cambia desde los maxilares o el presupuesto.
+            const $selectorPlan = $('#selector_planificacion_od_general');
+            $selectorPlan.find('[data-selector-pieza]').each(function () {
+                const seleccionada = piezasSeleccionadas.includes(String($(this).data('selector-pieza')));
+                $(this)
+                    .toggleClass('is-selected', seleccionada)
+                    .attr('aria-pressed', seleccionada ? 'true' : 'false');
             });
+            $selectorPlan.find('.selector-odontograma-generico__resumen').html(
+                piezasSeleccionadas.length
+                    ? piezasSeleccionadas.map(function (pieza) {
+                        return '<span class="badge badge-primary">' + pieza + '</span>';
+                    }).join('')
+                    : '<span class="text-muted">Ninguna pieza seleccionada</span>'
+            );
         });
+        piezasSelect.trigger('change');
         $('#selectDestinatarios').select2({
             tags: true,
             width: '100%',
             placeholder: 'Selecciona o ingresa correos',
             dropdownParent: $('#modalEnviarPresupuesto')
         });
+    });
+
+    // Selección manual de piezas. Se usa un evento delegado porque esta
+    // sección puede refrescarse dinámicamente durante la atención.
+    function sincronizar_piezas_diagnostico_od_gral() {
+        const piezas = $('#odontograma_plan_od_general .pieza.seleccionada').map(function () {
+            return String($(this).data('pieza'));
+        }).get();
+
+        window.piezasDiagnosticoOdGeneralSeleccionadas = piezas;
+        $('#paciente_piezas_diagnostico_od_gral').val(piezas);
+        $('#resumen_piezas_diagnostico_od_gral')
+            .toggleClass('text-muted', piezas.length === 0)
+            .html(piezas.length
+                ? piezas.map(function (pieza) {
+                    return '<span class="badge badge-primary mr-1">' + pieza + '</span>';
+                }).join('')
+                : 'Ninguna pieza seleccionada');
+        return piezas;
+    }
+
+    function programar_sincronizacion_diagnostico_od_gral() {
+        setTimeout(sincronizar_piezas_diagnostico_od_gral, 0);
+    }
+
+    (function registrarCapturaOdontogramaDiagnostico() {
+        const odontogramaDiagnostico = document.getElementById('odontograma_plan_od_general');
+        if (!odontogramaDiagnostico || odontogramaDiagnostico.dataset.sincronizacionDiagnostico === '1') return;
+        odontogramaDiagnostico.dataset.sincronizacionDiagnostico = '1';
+        odontogramaDiagnostico.addEventListener('click', function (event) {
+            const pieza = event.target.closest('.pieza');
+            if (!pieza) return;
+
+            // Este odontograma administra su propia selecci&oacute;n. Se detiene el
+            // manejador gen&eacute;rico heredado porque intenta operar elementos que
+            // no existen en esta nueva distribuci&oacute;n y termina lanzando un error.
+            event.preventDefault();
+            event.stopPropagation();
+            pieza.classList.toggle('seleccionada');
+            sincronizar_piezas_diagnostico_od_gral();
+        }, true);
+    })();
+
+    $(document).on('change', '#paciente_piezas_diagnostico_od_gral', function () {
+        const piezas = ($(this).val() || []).map(String);
+        $('#resumen_piezas_diagnostico_od_gral')
+            .toggleClass('text-muted', piezas.length === 0)
+            .html(piezas.length ? piezas.join(', ') : 'Ninguna pieza seleccionada');
+    });
+
+    function guardar_diagnostico_examen_oral_od_gral() {
+        sincronizar_piezas_diagnostico_od_gral();
+        cargar_a_presupuesto_impl_g_confirmar('diagnostico');
+    }
+
+    function aplicar_piezas_diagnostico_plan_od_gral(registros) {
+        const piezas = [...new Set((registros || [])
+            .filter(function (registro) {
+                return registro
+                    && String(registro.pieza || '') !== ''
+                    && String(registro.tratamiento || '').trim() === '';
+            })
+            .map(function (registro) { return String(registro.pieza); }))];
+
+        const $selector = $('#selector_planificacion_od_general');
+        $selector.find('[data-selector-pieza]').each(function () {
+            const disponible = piezas.includes(String($(this).data('selector-pieza')));
+            $(this)
+                .prop('disabled', !disponible)
+                .toggleClass('is-enabled', disponible)
+                .toggleClass('is-selected', disponible)
+                .attr('aria-pressed', disponible ? 'true' : 'false');
+        });
+
+        $('#paciente_piezas_dentales_ex').val(piezas).trigger('change');
+        $selector.find('.selector-odontograma-generico__mensaje-vacio').toggle(piezas.length === 0);
+        $('#resumen_piezas_diagnosticadas_guardadas')
+            .toggleClass('text-muted', piezas.length === 0)
+            .html(piezas.length
+                ? piezas.map(function (pieza) {
+                    return '<span class="badge badge-primary mr-1">' + pieza + '</span>';
+                }).join('')
+                : 'Ninguna pieza diagnosticada');
+    }
+
+    function refrescar_piezas_diagnostico_plan_od_gral() {
+        $.ajax({
+            url: "{{ route('profesional.selector_odontograma.piezas') }}",
+            type: 'POST',
+            data: {
+                id_paciente: $('#id_paciente_fc').val(),
+                id_ficha_atencion: $('#id_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val() || null,
+                solo_sin_tratamiento: 1,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (respuesta) {
+                aplicar_piezas_diagnostico_plan_od_gral(respuesta.piezas || []);
+            },
+            error: function (xhr) {
+                console.error('No fue posible cargar las piezas diagnosticadas.', xhr);
+            }
+        });
+    }
+
+    $(function () {
+        refrescar_piezas_diagnostico_plan_od_gral();
     });
 
     function dame_insumo(id){
@@ -2027,7 +2213,7 @@
     function seleccionar_maxilar_superior() {
         const superiorActivo = document.getElementById("max_sup").checked;
         const select = $('#paciente_piezas_dentales_ex');
-        const piezas = select.closest('.card-body').find('.pieza');
+        const piezas = $('#odontograma_plan_od_general .pieza');
         select.find('option').prop('selected', false);
         document.getElementById('max_inf').checked = false;
         document.getElementById('piezas_presup').checked = false;
@@ -2062,7 +2248,7 @@
     function seleccionar_maxilar_inferior(){
         const superiorActivo = document.getElementById("max_inf").checked;
         const select = $('#paciente_piezas_dentales_ex');
-        const piezas = select.closest('.card-body').find('.pieza');
+        const piezas = $('#odontograma_plan_od_general .pieza');
         select.find('option').prop('selected', false);
         document.getElementById('max_sup').checked = false;
         document.getElementById('piezas_presup').checked = false;
@@ -2116,7 +2302,7 @@
             });
             const select = $('#paciente_piezas_dentales_ex');
             select.val([...seleccion]).trigger('change');
-            const piezas = select.closest('.card-body').find('.pieza');
+            const piezas = $('#odontograma_plan_od_general .pieza');
             piezas.each(function () {
                 $(this).toggleClass('seleccionada', seleccion.has(String($(this).data('pieza'))));
             });

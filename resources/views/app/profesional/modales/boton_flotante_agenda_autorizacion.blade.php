@@ -75,7 +75,7 @@
             @php
                 $active = 0;
                 foreach ($tons_dental as $key => $value) {
-                    if(isset($value->estado) && $value->estado == 1){
+                    if(isset($value->estado) && $value->estado == 2){
                         $active = 1;
                         break;
                     }
@@ -205,11 +205,40 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_autorizacion_fmuLabel">Registro de tons</h5>
+                <h5 class="modal-title" id="modal_autorizacion_fmuLabel">TONS asociadas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_fmu();"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-row">
+                @php
+                    $tonsActivasModal = isset($tons_dental)
+                        ? collect($tons_dental)->where('estado', 2)->values()
+                        : collect();
+                @endphp
+                @if ($tonsActivasModal->count() === 1)
+                    @php $tonsActivaModal = $tonsActivasModal->first(); @endphp
+                    <div class="alert alert-info">
+                        <strong>Asignación automática:</strong>
+                        {{ $tonsActivaModal->nombre_tons }} {{ $tonsActivaModal->apellido_tons }}
+                        <span class="d-block small">{{ $tonsActivaModal->nombre_lugar_atencion }}</span>
+                    </div>
+                @elseif ($tonsActivasModal->count() > 1)
+                    <div class="form-group">
+                        <label for="tons_relacion_activa" class="floating-label-activo-sm">TONS para la atención</label>
+                        <select id="tons_relacion_activa" class="form-control form-control-sm">
+                            @foreach ($tonsActivasModal as $tonsActivaModal)
+                                <option value="{{ $tonsActivaModal->id }}">
+                                    {{ $tonsActivaModal->nombre_tons }} {{ $tonsActivaModal->apellido_tons }} - {{ $tonsActivaModal->nombre_lugar_atencion }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @else
+                    <div class="alert alert-warning">
+                        No tiene TONS activas asociadas.
+                        <a href="{{ route('profesional.tons') }}">Administrar asociaciones</a>
+                    </div>
+                @endif
+                <div class="form-row d-none">
                     <div class="col-12">
                         <div class="form-group fill">
                             <label for="rut_tons" class="floating-label-activo-sm">Rut de tons</label>
@@ -218,7 +247,7 @@
                     </div>
 
                 </div>
-                <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="buscar_tons()"><i class="fas fa-search"></i> Buscar</button>
+                <button type="button" class="btn btn-outline-success btn-sm w-100 my-3 d-none" onclick="buscar_tons()"><i class="fas fa-search"></i> Buscar</button>
                 <div class="form-row d-none" id="contenedor_tons">
                     <span class="badge badge-info" style="font-size: 15px;text-align: center;align-items: center;margin: 10px auto;">No se ha encontrado información. Si desea inscribirla valla al panel de configuración usando este <a href="{{ ROUTE('profesional.tons') }}" _target="blank">link</a>. </span>
                 </div>

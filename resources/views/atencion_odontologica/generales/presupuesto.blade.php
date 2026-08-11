@@ -728,6 +728,67 @@
                                             mejorarExperienciaPresupuestoDental();
                                         }
                                     }
+
+                                    window.renderizarTarjetasPresupuestoClinico = function (listaOdontograma) {
+                                        const $contenedor = $('#contenedor_piezas_dentales_presupuesto');
+                                        if (!$contenedor.length) return;
+
+                                        const prestaciones = (listaOdontograma || []).filter(function (pieza) {
+                                            return Number(pieza.presupuesto) === 1 && Number(pieza.urgencia) === 0;
+                                        });
+
+                                        const escapar = function (valor) {
+                                            return $('<div>').text(valor === null || valor === undefined ? '' : valor).html();
+                                        };
+
+                                        $contenedor.empty();
+                                        prestaciones.forEach(function (pieza) {
+                                            const valor = Number(pieza.valor || 0);
+                                            const descuento = Number(pieza.valor_descuento || 0);
+                                            const total = Math.max(0, valor - descuento);
+                                            $contenedor.append(`
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${escapar(pieza.pieza)}">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-1 col-xl-1">
+                                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                                    <input type="text" class="form-control form-control-sm" value="${escapar(pieza.pieza)}" readonly>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-9 col-lg-4 col-xl-4">
+                                                                    <label class="floating-label-activo-sm">Prestaci&oacute;n</label>
+                                                                    <textarea class="form-control form-control-sm prestacion-dos-lineas" readonly>${escapar(pieza.descripcion || pieza.tratamiento || 'Sin tratamiento')}</textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" value="${formatoMoneda(valor)}" readonly>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" value="${descuento ? formatoMoneda(descuento) : ''}" readonly>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                                                                    <label class="floating-label-activo-sm">Total prestaci&oacute;n</label>
+                                                                    <input type="text" class="form-control form-control-sm" value="${formatoMoneda(total)}" readonly>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-1 col-xl-1 d-flex align-items-center justify-content-center">
+                                                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_odontograma(${Number(pieza.id)})" title="Quitar del presupuesto"><i class="feather icon-x"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            `);
+                                        });
+
+                                        if (typeof mejorarExperienciaPresupuestoDental === 'function') {
+                                            mejorarExperienciaPresupuestoDental();
+                                        }
+                                    };
+
+                                    $(function () {
+                                        window.renderizarTarjetasPresupuestoClinico(@json($odontograma));
+                                    });
                                 </script>
 
                                 <div class="form-row" id="contenedor_piezas_dentales_presupuesto">
@@ -3998,11 +4059,13 @@
             let cubierto = 0;
             let etiqueta = 'Pendiente';
             let clase = 'pendiente';
-            if (item.estado === 'ok') {
+            // Un estado histórico nunca puede representar cobertura si no
+            // existe dinero abonado en el presupuesto actual.
+            if (item.estado === 'ok' && abonado > 0) {
                 cubierto = item.valor;
                 etiqueta = 'Pagado';
                 clase = 'pagado';
-            } else if (item.estado === 'incompleto') {
+            } else if (item.estado === 'incompleto' && abonado > 0) {
                 cubierto = Math.min(item.valor, disponibleParcial);
                 disponibleParcial = Math.max(0, disponibleParcial - cubierto);
                 etiqueta = 'Pago parcial';
@@ -4154,6 +4217,9 @@
         actualizarOrdenVisualReasignacion();
         $('#monto_seleccionado_reasignacion').text(formatoMoneda(0));
         const tieneNuevoAbono = montoDisponibleReasignar > 0;
+        const totalAbonadoRegistrado = datosActualizados
+            ? (parseInt(datosActualizados.total_abonado ?? datosActualizados.valor_atencion) || 0)
+            : (Number($('#total_abonado_presupuesto').val()) || 0);
         $('.valor-checkbox').prop('disabled', function() {
             return !tieneNuevoAbono
                 || $(this).attr('data-info') === 'insumo'
@@ -4163,9 +4229,11 @@
             .attr('class', tieneNuevoAbono ? 'text-muted' : 'text-warning')
             .text(tieneNuevoAbono
                 ? 'Seleccione las piezas o grupos que desea cubrir con el remanente.'
-                : (deudaActual > 0
+                : (totalAbonadoRegistrado <= 0 && deudaActual > 0
+                    ? 'Este presupuesto no registra abonos. Registre un abono antes de asignarlo a una prestación.'
+                    : (deudaActual > 0
                     ? 'Todos los abonos ya fueron asignados. Para cubrir el saldo pendiente debe registrar un nuevo abono.'
-                    : 'Todos los abonos fueron asignados automáticamente.'));
+                    : 'Todos los abonos fueron asignados automáticamente.')));
         $('#btn_confirmar_reasignacion').prop('disabled', true);
         actualizarPendientesModalReasignacion(datosActualizados);
     }
@@ -4514,11 +4582,23 @@
             });
         });
 
-        const cantidadItems = ['contenedor_piezas_dentales_presupuesto', 'contenedor_todos', 'contenedor_insumos']
-            .reduce(function(total, id) {
-                const contenedor = document.getElementById(id);
-                return total + (contenedor ? contenedor.querySelectorAll('.card-informacion').length : 0);
-            }, 0);
+        const detallePiezasPresupuesto = $('#detalle_pieza_presupuesto').data('detalle') || {};
+        const cantidadPiezasVisor = Object.values(detallePiezasPresupuesto).reduce(function(total, pieza) {
+            return total + (Array.isArray(pieza.tratamientos) ? pieza.tratamientos.length : 0);
+        }, 0);
+        const contenedorPiezasAnterior = document.getElementById('contenedor_piezas_dentales_presupuesto');
+        const cantidadPiezasAnterior = contenedorPiezasAnterior
+            ? contenedorPiezasAnterior.querySelectorAll('.card-informacion').length
+            : 0;
+        const cantidadGenerales = document.getElementById('contenedor_todos')
+            ? document.getElementById('contenedor_todos').querySelectorAll('.card-informacion').length
+            : 0;
+        const cantidadInsumos = document.getElementById('contenedor_insumos')
+            ? document.getElementById('contenedor_insumos').querySelectorAll('.card-informacion').length
+            : 0;
+        const cantidadItems = Math.max(cantidadPiezasVisor, cantidadPiezasAnterior)
+            + cantidadGenerales
+            + cantidadInsumos;
         const indicadorCantidad = document.getElementById('cantidad_items_presupuesto');
         const textoCantidad = cantidadItems + (cantidadItems === 1 ? ' prestación' : ' prestaciones');
         if (indicadorCantidad && indicadorCantidad.textContent !== textoCantidad) indicadorCantidad.textContent = textoCantidad;

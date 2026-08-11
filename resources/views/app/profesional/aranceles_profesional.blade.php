@@ -262,6 +262,13 @@
         padding: 14px;
         margin-bottom: 14px;
     }
+    .arancel-catalogo-wrap{max-height:470px;overflow:auto;border:1px solid #e3eaf3;border-radius:10px;background:#fff}
+    #tabla_catalogo_aranceles{min-width:620px}
+    #tabla_catalogo_aranceles thead th{position:sticky;top:0;z-index:2;background:#eef3f9;color:#526174;font-size:11px;text-transform:uppercase;vertical-align:middle}
+    #tabla_catalogo_aranceles td{vertical-align:middle;font-size:12px}
+    #tabla_catalogo_aranceles th:first-child,#tabla_catalogo_aranceles td:first-child{width:58px;text-align:center}
+    #tabla_catalogo_aranceles .catalogo-arancel-bloques{width:72px}
+    #tabla_catalogo_aranceles .catalogo-arancel-uco{width:84px}
 
     .arancel-step {
         display: flex;
@@ -516,6 +523,26 @@
                     </div>
                     <div class="card-body">
                         <div class="arancel-quick-card">
+                            <div class="arancel-step"><span class="arancel-step-number">1</span> Selecciona tratamientos del cat&aacute;logo</div>
+                            <div class="arancel-search mb-2">
+                                <i class="feather icon-search"></i>
+                                <input type="text" id="buscar_catalogo_arancel" placeholder="Filtrar tratamientos disponibles...">
+                            </div>
+                            <small class="medsdi-help d-block mb-2">Configura bloques, UCO y laboratorio para cada tratamiento.</small>
+                            <div class="table-responsive arancel-catalogo-wrap">
+                                <table class="table table-sm mb-0" id="tabla_catalogo_aranceles">
+                                    <thead><tr><th>Agregar</th><th>Tratamiento</th><th>Bloques</th><th>UCO</th><th>Lab.</th></tr></thead>
+                                    <tbody><tr><td colspan="5" class="text-center text-muted py-3">Cargando tratamientos...</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <button class="btn medsdi-btn-primary btn-sm my-2 btn-block" type="button" id="btn_guardar_aranceles_masivos" onclick="guardarArancelesMasivos()">
+                            <i class="feather icon-plus-circle"></i> Agregar tratamientos seleccionados
+                        </button>
+                        <button type="button" class="btn btn-light btn-sm btn-block mb-3" onclick="limpiarSeleccionCatalogoAranceles()"><i class="feather icon-rotate-ccw"></i> Limpiar selecci&oacute;n</button>
+
+                        <div class="d-none" aria-hidden="true">
+                        <div class="arancel-quick-card">
                             <div class="arancel-step"><span class="arancel-step-number">1</span> Selecciona el tratamiento</div>
                             <div class="form-group mb-2">
                                 @if(isset($profesional) && $profesional->id_tipo_especialidad == 16)
@@ -563,6 +590,7 @@
                             <button class="btn medsdi-btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar arancel</button>
                         @endif
                         <button type="button" class="btn btn-light btn-sm btn-block" onclick="limpiarFormularioArancel()"><i class="feather icon-rotate-ccw"></i> Limpiar campos</button>
+                        </div>
 
                     </div>
                 </div>
@@ -732,6 +760,103 @@
             return '$' + (Number(valor || 0)).toLocaleString('es-CL', { maximumFractionDigits: 0 });
         }
 
+        let catalogoArancelesDental = [];
+        const arancelesConfigurados = @json(collect($mis_trabajos_profesional ?? [])->pluck('id_diagnostico')->map(function ($id) { return (int) $id; })->values());
+
+        function escaparHtmlArancel(texto) {
+            return $('<div>').text(String(texto || '')).html();
+        }
+
+        function renderCatalogoAranceles(filtro) {
+            const termino = String(filtro || '').trim().toLowerCase();
+            const filas = catalogoArancelesDental.filter(function (item) {
+                return !termino || String(item.descripcion || item.label || '').toLowerCase().indexOf(termino) !== -1;
+            });
+            const $tbody = $('#tabla_catalogo_aranceles tbody').empty();
+
+            if (!filas.length) {
+                $tbody.html('<tr><td colspan="5" class="text-center text-muted py-3">No se encontraron tratamientos.</td></tr>');
+                return;
+            }
+
+            filas.forEach(function (item) {
+                const id = Number(item.value || item.id);
+                const configurado = arancelesConfigurados.indexOf(id) !== -1;
+                const uco = Number(item.uco || 0);
+                $tbody.append(
+                    '<tr class="catalogo-arancel-fila" data-id="' + id + '">' +
+                        '<td><input type="checkbox" class="catalogo-arancel-check" ' + (configurado ? 'title="Ya configurado; al seleccionar se actualizar&aacute;"' : '') + '></td>' +
+                        '<td><strong>' + escaparHtmlArancel(item.descripcion || item.label) + '</strong>' + (configurado ? '<small class="d-block text-success">Ya configurado</small>' : '') + '</td>' +
+                        '<td><input type="number" class="form-control form-control-sm catalogo-arancel-bloques" min="1" value="1"></td>' +
+                        '<td><input type="number" class="form-control form-control-sm catalogo-arancel-uco" min="0" step="0.01" value="' + uco + '"></td>' +
+                        '<td><input type="checkbox" class="catalogo-arancel-lab"></td>' +
+                    '</tr>'
+                );
+            });
+        }
+
+        function cargarCatalogoAranceles() {
+            $.ajax({
+                url: @json($url_tratamientos),
+                type: 'POST',
+                data: { search: '', catalogo: 1, _token: '{{ csrf_token() }}' },
+                success: function (response) {
+                    catalogoArancelesDental = Array.isArray(response) ? response : [];
+                    renderCatalogoAranceles($('#buscar_catalogo_arancel').val());
+                },
+                error: function () {
+                    $('#tabla_catalogo_aranceles tbody').html('<tr><td colspan="5" class="text-center text-danger py-3">No fue posible cargar el cat&aacute;logo.</td></tr>');
+                }
+            });
+        }
+
+        function limpiarSeleccionCatalogoAranceles() {
+            $('#tabla_catalogo_aranceles .catalogo-arancel-check, #tabla_catalogo_aranceles .catalogo-arancel-lab').prop('checked', false);
+        }
+
+        function guardarArancelesMasivos() {
+            const procedimientos = [];
+            $('#tabla_catalogo_aranceles tbody tr').each(function () {
+                const $fila = $(this);
+                if (!$fila.find('.catalogo-arancel-check').is(':checked')) return;
+                procedimientos.push({
+                    id: Number($fila.data('id')),
+                    bloques: Number($fila.find('.catalogo-arancel-bloques').val() || 1),
+                    uco: Number($fila.find('.catalogo-arancel-uco').val() || 0),
+                    laboratorio: $fila.find('.catalogo-arancel-lab').is(':checked') ? 1 : 0
+                });
+            });
+
+            if (!procedimientos.length) {
+                swal({ title: 'Seleccione tratamientos', text: 'Debe marcar al menos un tratamiento del cat&aacute;logo.', icon: 'warning' });
+                return;
+            }
+            if (!(Number($('#valor_uco').val()) > 0)) {
+                swal({ title: 'Valor UCO requerido', text: 'Ingrese el valor UCO antes de guardar.', icon: 'warning' });
+                return;
+            }
+
+            const $boton = $('#btn_guardar_aranceles_masivos').prop('disabled', true);
+            $.ajax({
+                url: "{{ route('profesional.agregar_procedimiento') }}",
+                type: 'POST',
+                data: { procedimientos: procedimientos, valor_uco: $('#valor_uco').val(), _token: '{{ csrf_token() }}' },
+                success: function (response) {
+                    if (response.status !== 'ok') {
+                        $boton.prop('disabled', false);
+                        swal({ title: 'No fue posible guardar', text: response.mensaje || 'Revise los tratamientos seleccionados.', icon: 'error' });
+                        return;
+                    }
+                    swal({ title: 'Aranceles guardados', text: response.mensaje, icon: 'success' }).then(function () { window.location.reload(); });
+                },
+                error: function (xhr) {
+                    $boton.prop('disabled', false);
+                    const mensaje = xhr.responseJSON && xhr.responseJSON.mensaje ? xhr.responseJSON.mensaje : 'No fue posible guardar los aranceles.';
+                    swal({ title: 'Error', text: mensaje, icon: 'error' });
+                }
+            });
+        }
+
         function actualizarPreviewArancel() {
             const uco = parseFloat($('#cantidad_uco_buscador').val()) || 0;
             const valorUco = parseFloat($('#valor_uco').val()) || 0;
@@ -756,6 +881,11 @@
 
         $(document).ready(function() {
             actualizarPreviewArancel();
+            cargarCatalogoAranceles();
+
+            $('#buscar_catalogo_arancel').on('input', function () {
+                renderCatalogoAranceles(this.value);
+            });
 
             $('#cantidad_uco_buscador, #valor_uco').on('input change', actualizarPreviewArancel);
 

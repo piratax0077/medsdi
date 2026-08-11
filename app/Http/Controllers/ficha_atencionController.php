@@ -3653,8 +3653,8 @@ class ficha_atencionController extends Controller
                 'tratamientos_implantologia.cantidad_bloques',
                 'tratamientos_implantologia.valor',
                 'tratamientos_dental.descripcion as diagnostico')
-                ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
-                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->leftJoin('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
+                ->leftJoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
                 ->where('odontogramas_pacientes.id_profesional', $profesional->id)
@@ -3666,8 +3666,8 @@ class ficha_atencionController extends Controller
                 'diagnosticos_dental.cantidad_bloques',
                 'diagnosticos_dental.valor',
                 'tratamientos_dental.descripcion as diagnostico')
-                ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->leftJoin('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+                ->leftJoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
                 ->where('odontogramas_pacientes.id_profesional', $profesional->id)
@@ -3691,26 +3691,26 @@ class ficha_atencionController extends Controller
             foreach ($odontogramas as $odontograma) {
                 if($profesional->id_tipo_especialidad == 16){
                     $id_diagnostico = TratamientosImplantologia::where('descripcion',$odontograma->tratamiento)->first();
-                    $odontograma->id_diagnostico = $id_diagnostico->id;
+                    $odontograma->id_diagnostico = optional($id_diagnostico)->id;
                     // buscamos el valor del tratamiento en la tabla diagnosticos_dental_profesional
-                    $d = DiagnosticosDentalProfesional::where('id_diagnostico',$id_diagnostico->id)
+                    $d = $id_diagnostico ? DiagnosticosDentalProfesional::where('id_diagnostico',$id_diagnostico->id)
                         ->where('id_profesional',$profesional->id)
-                        ->first();
+                        ->first() : null;
                         if($d){
                             $odontograma->valor = $d->valor;
                         }
                 }else{
                     $id_diagnostico = DiagnosticosDental::where('descripcion',$odontograma->tratamiento)->first();
-                    $odontograma->id_diagnostico = $id_diagnostico->id;
+                    $odontograma->id_diagnostico = optional($id_diagnostico)->id;
                     // buscamos el valor del tratamiento en la tabla diagnosticos_dental_profesional
-                    $d = DiagnosticosDentalProfesional::where('id_diagnostico',$id_diagnostico->id)
+                    $d = $id_diagnostico ? DiagnosticosDentalProfesional::where('id_diagnostico',$id_diagnostico->id)
                         ->where('id_profesional',$profesional->id)
-                        ->first();
+                        ->first() : null;
                         if($d){
                             $odontograma->valor = $d->valor;
                         }
                 }
-                $odontograma->descripcion = mb_strtoupper($odontograma->descripcion, 'UTF-8');
+                $odontograma->descripcion = mb_strtoupper((string) ($odontograma->descripcion ?? ''), 'UTF-8');
             }
 
             return $odontogramas;

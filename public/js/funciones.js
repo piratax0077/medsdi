@@ -33,6 +33,10 @@ function formatoRut(rut)
 }
 
 $(document).ready(function () {
+    if (typeof $.fn.mask !== 'function') {
+        return;
+    }
+
     $('.mask_telefono').mask('+56 Z0 0000 0000', {
         translation: {
             'Z': {
