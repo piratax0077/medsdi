@@ -21,10 +21,9 @@ class PdfController extends Controller
      * @param STRING $template
      * @param STRING $funcionalida
      * @param ARRAY $datos_adicionales
-     * @param STRING $formato 'carta' (Letter, 8.5"x11"), 'a5' (A5) o 'letter' (alias de carta)
      * @return PFD VISTA
      */
-    static function generarPDF($titulo, $detalle, $nombre, $template, $funcionalida = 'V', $datos_adicionales = [], $formato = 'carta')
+    static function generarPDF($titulo, $detalle, $nombre, $template, $funcionalida = 'V', $datos_adicionales = [])
     {
         try {
             ini_set('display_errors', '1');
@@ -35,7 +34,7 @@ class PdfController extends Controller
             $nombre_pdf = str_replace('/', '-', $nombre);
 
             // Combinar datos por defecto con datos adicionales
-            $datos_vista = array_merge(compact('date', 'titulo', 'cuerpo', 'formato'), $datos_adicionales);
+            $datos_vista = array_merge(compact('date', 'titulo', 'cuerpo'), $datos_adicionales);
 
 
             $view =  View::make('PDF.'.$template, $datos_vista)->render();
@@ -47,11 +46,7 @@ class PdfController extends Controller
             /** tamaño de pagina */
             // $customPaper = array(0,0,600,765);
             // $pdf->setPaper($customPaper);
-            if ($formato === 'a5') {
-                $pdf->setPaper('a5', 'portrait');
-            } else {
-                $pdf->setPaper('letter', 'portrait');
-            }
+            $pdf->setPaper('letter', 'portrait');
 
             /** contraseña para editar documento */
             $permitted_chars = '0123456789=!abcdefghijklmnopqrstuvwxyz.$阿贝色德饿艾弗日阿什伊鸡卡艾勒艾马艾娜哦佩苦艾和艾丝特玉维独布勒维伊克斯伊格黑克贼德ABCDEFGHIJKLMNOPQRSTUVWXYZ&בגדהוזחטיכלמנסעפצקרשת';
