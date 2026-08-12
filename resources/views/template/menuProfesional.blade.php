@@ -423,25 +423,24 @@
         </div>
     </nav>
 @endif
-
+<!--MODAL PARA SALIR DE LA ATENCIÓN-->
 <div class="modal fade" id="confirmLogoutModal" tabindex="-1" role="dialog" aria-labelledby="confirmLogoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmLogoutModalLabel">Confirmar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-body my-3">
+                <div id="confirmLogoutModalLabel"></div>
+               {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+                </button>--}}
                 <input type="hidden" name="menu_url_destino" id="menu_url_destino" value="">
                 <input type="hidden" name="menu_nombre_destino" id="menu_nombre_destino" value="">
-                <p>Esta por salir de la Ficha de Atención, los datos serán eliminados.</p>
-                <p>¿Esta seguro que desea continuar?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="menuContinuar();"><i class="feather icon-check"></i>Continuar</button>
+                <i class="feather icon-alert-triangle text-danger justify-content-center d-flex justify-content-center d-flex mb-3" style="font-size: 3rem!important"></i>
+                <h6 class="text-dark f-24 mt-2 d-flex justify-content-center text-center">¿Quieres salir sin finalizar la atención?</h6><br>
+                <p class="text-center px-2">Estás por salir de la Ficha de Atención. Los datos ingresados se eliminarán y no podrán recuperarse. ¿Deseas continuar?</p>
+                <div class="justify-content-center d-flex mt-3">
+                    <button type="button" class="btn btn-light mr-1" data-bs-dismiss="modal"><i class="feather icon-arrow-left"></i> Continuar en la atención</button>
+                    <button type="button" class="btn btn-danger ml-1" onclick="menuContinuar();"><i class="feather icon-check"></i> Salir de la atención</button>
+                </div>
             </div>
         </div>
     </div>

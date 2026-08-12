@@ -240,12 +240,12 @@
         </div>
     </nav>
 @endif
-
+<!--MODAL PARA SALIR DE LA ATENCIÓN-->
 <div class="modal fade" id="confirmLogoutModal" tabindex="-1" role="dialog" aria-labelledby="confirmLogoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmLogoutModalLabel">Confirmar</h5>
+                <h5 class="modal-title" id="confirmLogoutModalLabel"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -253,12 +253,12 @@
             <div class="modal-body">
                 <input type="hidden" name="menu_url_destino" id="menu_url_destino" value="">
                 <input type="hidden" name="menu_nombre_destino" id="menu_nombre_destino" value="">
-                <p>Esta por salir de la Ficha de Atención, los datos serán eliminados.</p>
-                <p>¿Esta seguro que desea continuar?</p>
+                <h5 class="text-dark">¿Quieres salir sin finalizar la atención?</h5>
+                <p>Estás por salir de la Ficha de Atención. Los datos ingresados se eliminarán y no podrán recuperarse. ¿Deseas continuar?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="menuContinuar();"><i class="feather icon-check"></i>Continuar</button>
+                <button type="button" class="btn btn-info-light" data-dismiss="modal"><i class="feather icon-x"></i>Continuar en la atención</button>
+                <button type="button" class="btn btn-danger" onclick="menuContinuar();"><i class="feather icon-check"></i>Salir de la atención</button>
             </div>
         </div>
     </div>

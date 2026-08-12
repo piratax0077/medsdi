@@ -3309,14 +3309,14 @@ select{
 }
 .btn-light {
     color: #343a40!important;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa;
+    background-color: #e2e6ea;
+    border-color: #e2e6ea;
 }
 
 .btn-light:hover {
-    color: #1a49a3;
-    background-color: #e2e6ea;
-    border-color: #dae0e5;
+    color: #343a40;
+    background-color: #d5dade;
+    border-color: #d5dade;
 }
 
 .btn-light:focus, .btn-light.focus {
