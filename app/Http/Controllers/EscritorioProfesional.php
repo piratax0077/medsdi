@@ -12202,7 +12202,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         }
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('app.profesional.pdf.tarjeta_presentacion', compact('profesional', 'lugares'));
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('letter', 'portrait');
         return $pdf->stream('tarjeta_presentacion.pdf');
     }
 

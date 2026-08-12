@@ -534,7 +534,7 @@ class OctavoParController extends Controller
 
             // Generar PDF
             $pdf = Pdf::loadView('app.laboratorio.pdf.audiometria', $data);
-            $pdf->setPaper('A4', 'portrait');            // Crear directorio si no existe
+            $pdf->setPaper('letter', 'portrait');            // Crear directorio si no existe
             $reportesPath = public_path('reportes');
             if (!file_exists($reportesPath)) {
                 mkdir($reportesPath, 0777, true);
