@@ -680,7 +680,6 @@ class RecomendacionController extends Controller
         $datos = array();
         $error = array();
         $valido = 1;
-        $formato = $request->formato === 'media_carta' ? 'media_carta' : 'carta';
 
         if( empty($request->id_ficha_atencion) && empty($request->id_receta) )
         {
@@ -962,9 +961,9 @@ class RecomendacionController extends Controller
                 $fecha_atencion = $ficha_atencion->created_at;
 
                 if($cantidad_recetas > 0)
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes', 'fecha_atencion'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2', 'V', [], $formato);
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes', 'fecha_atencion'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2');
                 else
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes', 'fecha_atencion'), 'Receta Medica ', 'pdf_receta_medica_2', 'V', [], $formato);
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes', 'fecha_atencion'), 'Receta Medica ', 'pdf_receta_medica_2');
                 exit();
 
             }
