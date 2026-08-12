@@ -961,49 +961,48 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_fmu();"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                {{-- Acciones: se ocultan mientras se procesa la autorizacion --}}
+                <div class="proceso-acciones" id="modal_autorizacion_fmu_acciones">
+                    <p class="proceso-acciones__texto text-center mb-3">Administra el acceso a la Ficha Médica Única del paciente.</p>
                     @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-                        <div class="col-md-12 text-center">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled>Solicitar Autorización para ver FMU</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" >Cerrar Autorización para ver FMU</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled><i class="fa fa-unlock-alt mr-1"></i> Solicitar Autorización para ver FMU</button>
+                        <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" ><i class="fa fa-lock mr-1"></i> Cerrar Autorización para ver FMU</button>
                     @else
-                        <div class="col-md-12 text-center ">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();">Solicitar Autorización para ver FMU</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled>Cerrar Autorización para ver FMU</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();"><i class="fa fa-unlock-alt mr-1"></i> Solicitar Autorización para ver FMU</button>
+                        <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled><i class="fa fa-lock mr-1"></i> Cerrar Autorización para ver FMU</button>
                     @endif
                 </div>
-                <div class="row">
-                    <div class="col-md-6" id="modal_autorizacion_fmu_imagen">
-                        {{--  --}}
+
+                {{-- Estado: spinner mientras espera, check al autorizar, cruz si falla --}}
+                <div class="proceso-estado d-none" id="modal_autorizacion_fmu_estado">
+                    <div class="proceso-estado__icono">
+                        <span class="proceso-spinner"></span>
+                        <span class="proceso-check"><i class="fa fa-check"></i></span>
+                        <span class="proceso-error"><i class="fa fa-times"></i></span>
                     </div>
-                    <div class="col-md-6" id="modal_autorizacion_fmu_mensaje">
+                    {{-- contenedor heredado: el JS inyecta aqui los svg antiguos, se mantiene oculto --}}
+                    <div id="modal_autorizacion_fmu_imagen" class="d-none"></div>
+                    <div class="proceso-estado__mensaje" id="modal_autorizacion_fmu_mensaje">
                         {{--  --}}
                     </div>
                 </div>
 
-            </div>
-            <div class="modal-body">
-                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Requiere set_estado_proceso(), definido en
+    // app/profesional/modales/boton_flotante_agenda_autorizacion.blade.php
+    // (el css .proceso-* que usa este modal vive en public/css/style.css).
     // Variables globales para FMU
     var fmu_token = '{{ session("fmu_token") }}';
     var fmu_estado = '{{ session("fmu_estado") }}';
 
     function abrir_autorizacion_fmu() {
         $('#modal_autorizacion_fmu').modal('show');
-        $('#modal_autorizacion_fmu_imagen').html('');
-        $('#modal_autorizacion_fmu_mensaje').html('');
+        set_estado_proceso('modal_autorizacion_fmu', 'idle');
     }
 
     function cerrar_autorizacion_fmu() {
@@ -1013,6 +1012,7 @@
     function solicitar_autorizacion_fmu() {
         $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
         $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+        set_estado_proceso('modal_autorizacion_fmu', 'cargando', 'Enviando solicitud...');
 
         var id_lugar_atencion = $('#id_lugar_atencion').val();
         var id_paciente = $('#id_paciente_fc').val();
@@ -1030,15 +1030,13 @@
                     console.log(data);
                     if(data.estado == 1)
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                        $('#modal_autorizacion_fmu_mensaje').html('<h3>En espera de Aprobación</h3>');
+                        set_estado_proceso('modal_autorizacion_fmu', 'cargando', 'En espera de Aprobación');
 
                         validar_autorizacion_fmu(data.log_users_devices.token);
                     }
                     else
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                        $('#modal_autorizacion_fmu_mensaje').html('<h3>Problema al solicitar Aprobación.</h3>');
+                        set_estado_proceso('modal_autorizacion_fmu', 'error', 'Problema al solicitar Aprobación.');
                     }
                 }
                 else
@@ -1071,7 +1069,7 @@
                 }
                 else if(data.estado == 1)
                 {
-                    $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                    set_estado_proceso('modal_autorizacion_fmu', 'ok');
                     $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
                     $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', false);
 
@@ -1086,7 +1084,7 @@
                 }
                 else if(data.estado == 2)
                 {
-                    $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Rechazado">');
+                    set_estado_proceso('modal_autorizacion_fmu', 'error');
 
                     setTimeout(function(){
                         $('#modal_autorizacion_fmu').modal('hide');
@@ -1099,6 +1097,7 @@
     function cancelar_autorizacion_fmu() {
         $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
         $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+        set_estado_proceso('modal_autorizacion_fmu', 'cargando', 'Cerrando autorización...');
 
         let url = "{{ route('profesional.fmu.cancelar') }}";
         $.ajax({
@@ -1106,8 +1105,7 @@
             type: "GET",
             success:function(data){
                 if(data.estado == 1) {
-                    $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Cancelado">');
-                    $('#modal_autorizacion_fmu_mensaje').html('<h3>Autorización Cancelada</h3>');
+                    set_estado_proceso('modal_autorizacion_fmu', 'ok', 'Autorización Cancelada');
 
                     setTimeout(function(){
                         $('#modal_autorizacion_fmu').modal('hide');

@@ -125,35 +125,32 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                {{-- Acciones: se ocultan mientras se procesa la autorizacion --}}
+                <div class="proceso-acciones" id="modal_autorizacion_acciones">
+                    <p class="proceso-acciones__texto text-center mb-3">Administra el acceso a tus talonarios de receta y licencia médica.</p>
                     @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-                        <div class="col-md-12 text-center">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();" disabled>Abrir mis Talonarios de Receta y Licencia</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" >Cerrar mis Talonarios de Receta y Licencia</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();" disabled><i class="fa fa-unlock-alt mr-1"></i> Abrir mis Talonarios de Receta y Licencia</button>
+                        <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" ><i class="fa fa-lock mr-1"></i> Cerrar mis Talonarios de Receta y Licencia</button>
                     @else
-                        <div class="col-md-12 text-center ">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();">Abrir mis Talonarios de Receta y Licencia</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" disabled>Cerrar mis Talonarios de Receta y Licencia</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();"><i class="fa fa-unlock-alt mr-1"></i> Abrir mis Talonarios de Receta y Licencia</button>
+                        <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" disabled><i class="fa fa-lock mr-1"></i> Cerrar mis Talonarios de Receta y Licencia</button>
                     @endif
                 </div>
-                <div class="row">
-                    <div class="col-md-6 text-center" id="modal_autorizacion_imagen">
-                        {{--  --}}
+
+                {{-- Estado: spinner mientras espera, check al autorizar, cruz si falla --}}
+                <div class="proceso-estado d-none" id="modal_autorizacion_estado">
+                    <div class="proceso-estado__icono">
+                        <span class="proceso-spinner"></span>
+                        <span class="proceso-check"><i class="fa fa-check"></i></span>
+                        <span class="proceso-error"><i class="fa fa-times"></i></span>
                     </div>
-                    <div class="col-md-6" id="modal_autorizacion_mensaje">
+                    {{-- contenedor heredado: el JS inyecta aqui los svg antiguos, se mantiene oculto --}}
+                    <div id="modal_autorizacion_imagen" class="d-none"></div>
+                    <div class="proceso-estado__mensaje" id="modal_autorizacion_mensaje">
                         {{--  --}}
                     </div>
                 </div>
 
-            </div>
-            <div class="modal-body">
-                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion();">Cerrar</button>
             </div>
         </div>
     </div>
@@ -167,35 +164,32 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_fmu();"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                {{-- Acciones: se ocultan mientras se procesa la autorizacion --}}
+                <div class="proceso-acciones" id="modal_autorizacion_fmu_acciones">
+                    <p class="proceso-acciones__texto text-center mb-3">Administra el acceso a la Ficha Médica Única del paciente.</p>
                     @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-                        <div class="col-md-12 text-center">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled>Solicitar Autorización para ver FMU</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" >Cerrar Autorización para ver FMU</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled><i class="fa fa-unlock-alt mr-1"></i> Solicitar Autorización para ver FMU</button>
+                        <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" ><i class="fa fa-lock mr-1"></i> Cerrar Autorización para ver FMU</button>
                     @else
-                        <div class="col-md-12 text-center ">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();">Solicitar Autorización para ver FMU</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled>Cerrar Autorización para ver FMU</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();"><i class="fa fa-unlock-alt mr-1"></i> Solicitar Autorización para ver FMU</button>
+                        <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled><i class="fa fa-lock mr-1"></i> Cerrar Autorización para ver FMU</button>
                     @endif
                 </div>
-                <div class="row">
-                    <div class="col-md-6" id="modal_autorizacion_fmu_imagen">
-                        {{--  --}}
+
+                {{-- Estado: spinner mientras espera, check al autorizar, cruz si falla --}}
+                <div class="proceso-estado d-none" id="modal_autorizacion_fmu_estado">
+                    <div class="proceso-estado__icono">
+                        <span class="proceso-spinner"></span>
+                        <span class="proceso-check"><i class="fa fa-check"></i></span>
+                        <span class="proceso-error"><i class="fa fa-times"></i></span>
                     </div>
-                    <div class="col-md-6" id="modal_autorizacion_fmu_mensaje">
+                    {{-- contenedor heredado: el JS inyecta aqui los svg antiguos, se mantiene oculto --}}
+                    <div id="modal_autorizacion_fmu_imagen" class="d-none"></div>
+                    <div class="proceso-estado__mensaje" id="modal_autorizacion_fmu_mensaje">
                         {{--  --}}
                     </div>
                 </div>
 
-            </div>
-            <div class="modal-body">
-                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
             </div>
         </div>
     </div>
@@ -383,9 +377,6 @@
 
 
                             </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cerrar</button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -398,6 +389,51 @@
         var lic_token = '{{  session('lic_token') }}';
         var lic_estado = '{{  session('lic_estado') }}';
 
+        /**
+         * BLOQUE PORTABLE - acompaña al CSS .proceso-* de public/css/style.css.
+         *
+         * Alterna el cuerpo de cualquier modal con proceso: con 'idle' se ven
+         * los botones; en cualquier otro estado se ocultan y se muestra el
+         * panel con spinner / check / cruz.
+         *
+         * Los modales se cierran solo con la X del header, por eso no hay
+         * ningun pie/footer que ocultar.
+         *
+         * Depende solo de la convencion de ids:
+         *   {prefijo}_acciones  contenedor de botones
+         *   {prefijo}_estado    panel de estado
+         *   {prefijo}_mensaje   texto del estado
+         *   {prefijo}_imagen    contenedor heredado (opcional)
+         *
+         * @param {string} prefijo p.ej. 'modal_autorizacion' o 'modal_autorizacion_fmu'
+         * @param {string} estado  'idle' | 'cargando' | 'ok' | 'error'
+         * @param {string} mensaje texto opcional a mostrar bajo el icono
+         */
+        function set_estado_proceso(prefijo, estado, mensaje)
+        {
+            var $acciones = $('#' + prefijo + '_acciones');
+            var $panel    = $('#' + prefijo + '_estado');
+
+            $panel.removeClass('is-cargando is-ok is-error');
+
+            if (estado === 'idle')
+            {
+                $acciones.removeClass('d-none');
+                $panel.addClass('d-none');
+                $('#' + prefijo + '_imagen').html('');
+                $('#' + prefijo + '_mensaje').html('');
+                return;
+            }
+
+            $acciones.addClass('d-none');
+            $panel.removeClass('d-none').addClass('is-' + estado);
+
+            if (mensaje)
+            {
+                $('#' + prefijo + '_mensaje').html('<h3>' + mensaje + '</h3>');
+            }
+        }
+
         function abrir_tons(){
             $('#modal_tons_dental').modal('show');
         }
@@ -405,8 +441,7 @@
         function  abrir_autorizacion()
         {
             $('#modal_autorizacion').modal('show');
-            $('#modal_autorizacion_imagen').html('');
-            $('#modal_autorizacion_mensaje').html('');
+            set_estado_proceso('modal_autorizacion','idle');
 			$('#modal_autorizacion_btn_solicitar').attr('disabled', false);
         }
 
@@ -419,6 +454,7 @@
         {
             $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
             $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
+            set_estado_proceso('modal_autorizacion','cargando', 'Enviando solicitud...');
 
             var id_lugar_atencion = $('#id_lugar_atencion').val();
             let url = "{{ route('profesional.licencia.solicitar') }}";
@@ -437,15 +473,13 @@
                         console.log(data);
                         if(data.estado == 1)
                         {
-                            $('#modal_autorizacion_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                            $('#modal_autorizacion_mensaje').html('<h3>En espera de Aprobación</h3>');
+                            set_estado_proceso('modal_autorizacion', 'cargando', 'En espera de Aprobación');
 
                             validar_autorizacion_licencia(data.log_users_devices.token);
                         }
                         else
                         {
-                            $('#modal_autorizacion_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                            $('#modal_autorizacion_mensaje').html('<h3>Problema al solicitar Aprobación.</h3>');
+                            set_estado_proceso('modal_autorizacion', 'error', 'Problema al solicitar Aprobación.');
                         }
                     }
                     else
@@ -499,7 +533,7 @@
                     }
                     else if(data.estado == 1)
                     {
-                        $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                        set_estado_proceso('modal_autorizacion', 'ok');
 
                         $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
                         $('#modal_autorizacion_btn_cancelar').attr('disabled', false);
@@ -543,7 +577,7 @@
                     }
                     else if(data.estado == 2)
                     {
-                        $('#modal_autorizacion_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Rechazado">');
+                        set_estado_proceso('modal_autorizacion', 'error');
 
                         $('.btn-agenda-autorizacion').addClass('btn-danger');
                         $('.btn-agenda-autorizacion').removeClass('btn-info');
@@ -575,7 +609,7 @@
                     }
                     else if(data.estado == 3)
                     {
-                        $('#modal_autorizacion_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Cancelado">');
+                        set_estado_proceso('modal_autorizacion', 'error');
 
                         $('.btn-agenda-autorizacion').addClass('btn-danger');
                         $('.btn-agenda-autorizacion').removeClass('btn-info');
@@ -606,7 +640,7 @@
                     }
                     else if(data.estado == 4)
                     {
-                        $('#modal_autorizacion_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Aprobado Expirado">');
+                        set_estado_proceso('modal_autorizacion', 'error');
 
                         $('.btn-agenda-autorizacion').addClass('btn-danger');
                         $('.btn-agenda-autorizacion').removeClass('btn-info');
@@ -670,6 +704,7 @@
         {
             $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
             $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
+            set_estado_proceso('modal_autorizacion', 'cargando', 'Cerrando talonarios...');
 
             let url = "{{ route('profesional.licencia.cancelar') }}";
             $.ajax({
@@ -682,8 +717,7 @@
                         console.log(data);
                         if(data.estado == 1)
                         {
-                            $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
-                            $('#modal_autorizacion_mensaje').html('<h3>Autorización Finalizada</h3>');
+                            set_estado_proceso('modal_autorizacion', 'ok', 'Autorización Finalizada');
                             $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
                             $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
 
@@ -691,8 +725,7 @@
                             $('.btn-agenda-autorizacion').removeClass('btn-info');
 
                             setTimeout(function(){
-                                $('#modal_autorizacion_imagen').html('');
-                                $('#modal_autorizacion_mensaje').html('');
+                                set_estado_proceso('modal_autorizacion', 'idle');
                             },5000);
 
                             $('#nav-licencia').html('<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>');
@@ -718,14 +751,12 @@
                         }
                         else
                         {
-                            $('#modal_autorizacion_imagen').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Error">');
-                            $('#modal_autorizacion_mensaje').html('<h3>Problema al Finalizar Aprobación.</h3>');
+                            set_estado_proceso('modal_autorizacion', 'error', 'Problema al Finalizar Aprobación.');
                             $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
                             $('#modal_autorizacion_btn_cancelar').attr('disabled', false);
 
                             setTimeout(function(){
-                                $('#modal_autorizacion_imagen').html('');
-                                $('#modal_autorizacion_mensaje').html('');
+                                set_estado_proceso('modal_autorizacion', 'idle');
                             },5000);
 
                             $('#nav-licencia').html('<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>');
@@ -773,8 +804,7 @@
         function  abrir_autorizacion_fmu()
         {
             $('#modal_autorizacion_fmu').modal('show');
-            $('#modal_autorizacion_fmu_imagen').html('');
-            $('#modal_autorizacion_fmu_mensaje').html('');
+            set_estado_proceso('modal_autorizacion_fmu', 'idle');
         }
 
         function  cerrar_autorizacion_fmu()
@@ -786,6 +816,7 @@
         {
             $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
             $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+            set_estado_proceso('modal_autorizacion_fmu', 'cargando', 'Enviando solicitud...');
 
             var id_lugar_atencion = $('#id_lugar_atencion').val();
             var id_paciente = $('#id_paciente_fc').val();
@@ -803,15 +834,13 @@
                         console.log(data);
                         if(data.estado == 1)
                         {
-                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                            $('#modal_autorizacion_fmu_mensaje').html('<h3>En espera de Aprobación</h3>');
+                            set_estado_proceso('modal_autorizacion_fmu', 'cargando', 'En espera de Aprobación');
 
                             validar_autorizacion_fmu(data.log_users_devices.token);
                         }
                         else
                         {
-                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                            $('#modal_autorizacion_fmu_mensaje').html('<h3>Problema al solicitar Aprobación.</h3>');
+                            set_estado_proceso('modal_autorizacion_fmu', 'error', 'Problema al solicitar Aprobación.');
                         }
                     }
                     else
@@ -848,7 +877,7 @@
                     }
                     else if(data.estado == 1)
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                        set_estado_proceso('modal_autorizacion_fmu', 'ok');
 
                         $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
                         $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', false);
@@ -870,7 +899,7 @@
                     }
                     else if(data.estado == 2)
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Rechazado">');
+                        set_estado_proceso('modal_autorizacion_fmu', 'error');
 
                         $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
                         $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
@@ -887,7 +916,7 @@
                     }
                     else if(data.estado == 3)
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Cancelado">');
+                        set_estado_proceso('modal_autorizacion_fmu', 'error');
 
                         $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
                         $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
@@ -904,7 +933,7 @@
                     }
                     else if(data.estado == 4)
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Aprobado Expirado">');
+                        set_estado_proceso('modal_autorizacion_fmu', 'error');
 
                         $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
                         $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
@@ -939,6 +968,7 @@
         {
             $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
             $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+            set_estado_proceso('modal_autorizacion_fmu', 'cargando', 'Cerrando autorización...');
 
             let url = "{{ route('profesional.fmu.cancelar') }}";
             $.ajax({
@@ -951,8 +981,7 @@
                         console.log(data);
                         if(data.estado == 1)
                         {
-                            $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
-                            $('#modal_autorizacion_fmu_mensaje').html('<h3>Autorización Finalizada</h3>');
+                            set_estado_proceso('modal_autorizacion_fmu', 'ok', 'Autorización Finalizada');
                             $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', false);
                             $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
 
@@ -960,8 +989,7 @@
                             $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
 
                             setTimeout(function(){
-                                $('#modal_autorizacion_fmu_imagen').html('');
-                                $('#modal_autorizacion_fmu_mensaje').html('');
+                                set_estado_proceso('modal_autorizacion_fmu', 'idle');
                             },5000);
 
                             $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
@@ -972,14 +1000,12 @@
                         }
                         else
                         {
-                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Error">');
-                            $('#modal_autorizacion_fmu_mensaje').html('<h3>Problema al Finalizar Aprobación.</h3>');
+                            set_estado_proceso('modal_autorizacion_fmu', 'error', 'Problema al Finalizar Aprobación.');
                             $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
                             $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', false);
 
                             setTimeout(function(){
-                                $('#modal_autorizacion_imagen_fmu').html('');
-                                $('#modal_autorizacion_mensaje_fmu').html('');
+                                set_estado_proceso('modal_autorizacion_fmu', 'idle');
                             },5000);
 
                             $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');

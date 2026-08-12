@@ -283,36 +283,37 @@
     {{-- Modal autorización talonarios --}}
     <div id="modal_autorizacion" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Autorización</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();"><span aria-hidden="true">&times;</span></button>
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+                <div class="modal-header text-white border-0" style="background: linear-gradient(90deg, #17a2b8, #20c997); padding: 1.1rem 1.5rem;">
+                    <h5 class="modal-title font-weight-bold mb-0"><i class="fa fa-lock mr-2"></i>Autorización</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();" style="opacity: .9; text-shadow: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
+                <div class="modal-body" style="padding: 1.75rem;">
+                    {{-- Acciones: se ocultan mientras se procesa la autorizacion --}}
+                    <div class="proceso-acciones" id="modal_autorizacion_acciones">
+                        <p class="proceso-acciones__texto text-center mb-3">Administra el acceso a tus talonarios de receta y licencia médica.</p>
                         @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-                            <div class="col-md-12 text-center">
-                                <button class="btn btn-xs btn-success" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();" disabled>Abrir mis Talonarios de Receta y Licencia</button>
-                            </div>
-                            <div class="col-md-12 text-center mt-3">
-                                <button class="btn btn-xs btn-danger" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();">Cerrar mis Talonarios de Receta y Licencia</button>
-                            </div>
+                            <button class="btn btn-success btn-block" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();" disabled><i class="fa fa-unlock-alt mr-1"></i> Abrir mis Talonarios de Receta y Licencia</button>
+                            <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();"><i class="fa fa-lock mr-1"></i> Cerrar mis Talonarios de Receta y Licencia</button>
                         @else
-                            <div class="col-md-12 text-center">
-                                <button class="btn btn-xs btn-success" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();">Abrir mis Talonarios de Receta y Licencia</button>
-                            </div>
-                            <div class="col-md-12 text-center mt-3">
-                                <button class="btn btn-xs btn-danger" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" disabled>Cerrar mis Talonarios de Receta y Licencia</button>
-                            </div>
+                            <button class="btn btn-success btn-block" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();"><i class="fa fa-unlock-alt mr-1"></i> Abrir mis Talonarios de Receta y Licencia</button>
+                            <button class="btn btn-outline-danger btn-block mt-2" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" disabled><i class="fa fa-lock mr-1"></i> Cerrar mis Talonarios de Receta y Licencia</button>
                         @endif
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6 text-center" id="modal_autorizacion_imagen"></div>
-                        <div class="col-md-6" id="modal_autorizacion_mensaje"></div>
+
+                    {{-- Estado: spinner mientras espera, check al autorizar, cruz si falla --}}
+                    <div class="proceso-estado d-none" id="modal_autorizacion_estado">
+                        <div class="proceso-estado__icono">
+                            <span class="proceso-spinner"></span>
+                            <span class="proceso-check"><i class="fa fa-check"></i></span>
+                            <span class="proceso-error"><i class="fa fa-times"></i></span>
+                        </div>
+                        {{-- contenedor heredado: el JS inyecta aqui los svg antiguos, se mantiene oculto --}}
+                        <div id="modal_autorizacion_imagen" class="d-none"></div>
+                        <div class="proceso-estado__mensaje" id="modal_autorizacion_mensaje"></div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion();">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -617,6 +618,49 @@ $(document).ready(function() {
     var lic_token  = '{{ session("lic_token") }}';
     var lic_estado = '{{ session("lic_estado") }}';
 
+    /**
+     * BLOQUE PORTABLE - va junto al CSS .proceso-* de style.css.
+     *
+     * Alterna el cuerpo de cualquier modal con proceso: con 'idle' se ven
+     * los botones; en cualquier otro estado se ocultan y se muestra el
+     * panel con spinner / check / cruz. Los modales se cierran solo con la
+     * X del header, por eso no hay ningun pie/footer que ocultar.
+     *
+     * Depende solo de la convencion de ids:
+     *   {prefijo}_acciones  contenedor de botones
+     *   {prefijo}_estado    panel de estado
+     *   {prefijo}_mensaje   texto del estado
+     *   {prefijo}_imagen    contenedor heredado (opcional)
+     *
+     * @param {string} prefijo p.ej. 'modal_autorizacion'
+     * @param {string} estado  'idle' | 'cargando' | 'ok' | 'error'
+     * @param {string} mensaje texto opcional a mostrar bajo el icono
+     */
+    function set_estado_proceso(prefijo, estado, mensaje)
+    {
+        var $acciones = $('#' + prefijo + '_acciones');
+        var $panel    = $('#' + prefijo + '_estado');
+
+        $panel.removeClass('is-cargando is-ok is-error');
+
+        if (estado === 'idle')
+        {
+            $acciones.removeClass('d-none');
+            $panel.addClass('d-none');
+            $('#' + prefijo + '_imagen').html('');
+            $('#' + prefijo + '_mensaje').html('');
+            return;
+        }
+
+        $acciones.addClass('d-none');
+        $panel.removeClass('d-none').addClass('is-' + estado);
+
+        if (mensaje)
+        {
+            $('#' + prefijo + '_mensaje').html('<h3>' + mensaje + '</h3>');
+        }
+    }
+
     // Al salir de la vista, cancelar la autorización automáticamente
     // para que al volver se exija nueva autorización
     window.addEventListener('beforeunload', function() {
@@ -637,8 +681,7 @@ $(document).ready(function() {
             $('#modal_emitir_doc').modal('show');
         } else {
             // Solicitar autorización primero
-            $('#modal_autorizacion_imagen').html('');
-            $('#modal_autorizacion_mensaje').html('');
+            set_estado_proceso('modal_autorizacion', 'idle');
             $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
             $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
             $('#modal_autorizacion').modal('show');
@@ -652,6 +695,7 @@ $(document).ready(function() {
     function solicitar_autorizacion_licencia() {
         $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
         $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
+        set_estado_proceso('modal_autorizacion', 'cargando', 'Enviando solicitud...');
 
         $.ajax({
             url: '{{ route("profesional.licencia.solicitar") }}',
@@ -659,18 +703,20 @@ $(document).ready(function() {
             data: { id_lugar_atencion: $('#id_lugar_atencion').val() },
             success: function(data) {
                 if (data && data.estado == 1) {
-                    $('#modal_autorizacion_imagen').html('<img src="{{ asset("images/spinner.svg") }}" alt="Cargando">');
-                    $('#modal_autorizacion_mensaje').html('<h3>En espera de Aprobación</h3>');
+                    set_estado_proceso('modal_autorizacion', 'cargando', 'En espera de Aprobación');
                     validar_autorizacion_licencia(data.log_users_devices.token);
                 } else {
-                    $('#modal_autorizacion_imagen').html('');
-                    $('#modal_autorizacion_mensaje').html('<h3 class="text-danger">Problema al solicitar aprobación.</h3>');
+                    set_estado_proceso('modal_autorizacion', 'error', 'Problema al solicitar aprobación.');
                     $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+                    // vuelve a mostrar los botones para poder reintentar
+                    setTimeout(function() { set_estado_proceso('modal_autorizacion', 'idle'); }, 4000);
                 }
             },
             error: function() {
-                $('#modal_autorizacion_mensaje').html('<h3 class="text-danger">Error de conexión.</h3>');
+                set_estado_proceso('modal_autorizacion', 'error', 'Error de conexión.');
                 $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+                // vuelve a mostrar los botones para poder reintentar
+                setTimeout(function() { set_estado_proceso('modal_autorizacion', 'idle'); }, 4000);
             }
         });
     }
@@ -694,7 +740,7 @@ $(document).ready(function() {
                     lic_token  = data.lic_token;
                     lic_estado = data.lic_estado;
 
-                    $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset("images/iconos/aprobacion.svg") }}" alt="Aprobado">');
+                    set_estado_proceso('modal_autorizacion', 'ok');
                     $('#modal_autorizacion_btn_cancelar').attr('disabled', false);
 
                     // Esperar 2s, cerrar y abrir el modal de documento
@@ -709,14 +755,14 @@ $(document).ready(function() {
                     // Rechazado
                     lic_token  = '';
                     lic_estado = '';
-                    $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset("images/iconos/error.svg") }}" alt="Rechazado">');
+                    set_estado_proceso('modal_autorizacion', 'error');
                     setTimeout(function() { $('#modal_autorizacion').modal('hide'); }, 3000);
 
                 } else if (data.estado == 3) {
                     // Cancelado
                     lic_token  = '';
                     lic_estado = '';
-                    $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset("images/iconos/error.svg") }}" alt="Cancelado">');
+                    set_estado_proceso('modal_autorizacion', 'error');
                     setTimeout(function() { $('#modal_autorizacion').modal('hide'); }, 3000);
                 }
             }
@@ -724,6 +770,8 @@ $(document).ready(function() {
     }
 
     function cancelar_autorizacion_licencia() {
+        set_estado_proceso('modal_autorizacion', 'cargando', 'Cerrando talonarios...');
+
         $.ajax({
             url: '{{ route("profesional.licencia.cancelar") }}',
             type: 'GET',
@@ -732,8 +780,9 @@ $(document).ready(function() {
                 lic_estado = '';
                 $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
                 $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
-                $('#modal_autorizacion_imagen').html('');
-                $('#modal_autorizacion_mensaje').html('<h3>Talonarios cerrados.</h3>');
+                set_estado_proceso('modal_autorizacion', 'ok', 'Talonarios cerrados.');
+                // vuelve a mostrar los botones ya con el estado actualizado
+                setTimeout(function() { set_estado_proceso('modal_autorizacion', 'idle'); }, 4000);
             }
         });
     }
