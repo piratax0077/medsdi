@@ -13882,6 +13882,7 @@ class ficha_atencionController extends Controller
     public function pdf_orden_examenes(Request $request)
     {
         $datos = array();
+        $formato = $request->formato === 'media_carta' ? 'media_carta' : 'carta';
         $examenesPPF = ExamenPPF::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
 
         if($examenesPPF->count()>0)
@@ -14037,7 +14038,7 @@ class ficha_atencionController extends Controller
                 'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
-            return  PdfController::generarPDF('ORDEN EXAMENES', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_orden','cantidad_recetas'), 'Orden Examenes '.$paciente->rut, 'pdf_orden_examen');
+            return  PdfController::generarPDF('ORDEN EXAMENES', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_orden','cantidad_recetas'), 'Orden Examenes '.$paciente->rut, 'pdf_orden_examen', 'V', [], $formato);
         }
         else
         {
