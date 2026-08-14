@@ -1,4 +1,4 @@
-@extends('template.profesional.template')
+﻿@extends('template.profesional.template')
 
 @section('page-styles')
 <style>
@@ -641,6 +641,7 @@
                                         </td>
                                         <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                                         <td>
+                                            <button class="medsdi-action-btn medsdi-action-view btn-pack-insumos" type="button" title="Configurar pack de insumos" data-arancel-id="{{ $mi_trabajo->id }}" data-arancel-descripcion="{{ $mi_trabajo->descripcion }}"><i class="feather icon-package"></i></button>
                                             <button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
                                             <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
                                         </td>
@@ -655,6 +656,16 @@
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade medsdi-modal" id="modalPackInsumos" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content">
+        <div class="modal-header"><div><h5 class="modal-title"><i class="feather icon-package mr-2"></i>Pack de insumos</h5><small id="pack_insumos_tratamiento"></small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+            <div class="d-flex justify-content-between align-items-center mb-3"><p class="text-muted mb-0">Estos insumos se copiarán automáticamente al presupuesto al agregar el tratamiento.</p><button type="button" class="btn medsdi-btn-soft btn-sm" onclick="agregarFilaPackInsumos()"><i class="feather icon-plus"></i> Agregar insumo</button></div>
+            <div class="table-responsive"><table class="table" id="tabla_pack_insumos"><thead><tr><th>Producto</th><th width="130">Cantidad</th><th width="160">Valor unitario</th><th>Observaciones</th><th width="60"></th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button type="button" class="btn medsdi-btn-primary" onclick="guardarPackInsumos()"><i class="feather icon-save"></i> Guardar pack</button></div>
+    </div></div>
 </div>
 <!-- Modal -->
 <div class="modal fade medsdi-modal" id="modalAgregarDiagnosticoDental" tabindex="-1" aria-labelledby="modalAgregarDiagnosticoDentalLabel" aria-hidden="true">
@@ -756,6 +767,27 @@
 
 @section('page-script')
     <script>
+        let arancelPackActual = null;
+        let productosPackActuales = [];
+        function escaparPack(valor){ return $('<div>').text(valor == null ? '' : valor).html(); }
+        function agregarFilaPackInsumos(item = {}) {
+            const opciones = productosPackActuales.map(p => `<option value="${p.id}" data-valor="${Number(p.precio_compra || p.precio_venta || 0)}" ${Number(item.id_producto) === Number(p.id) ? 'selected' : ''}>${escaparPack((p.codigo_interno ? p.codigo_interno+' · ' : '')+p.nombre)} (stock ${p.stock_actual || 0})</option>`).join('');
+            $('#tabla_pack_insumos tbody').append(`<tr><td><select class="form-control producto-pack"><option value="">Seleccione</option>${opciones}</select></td><td><input type="number" min="0.01" step="0.01" class="form-control cantidad-pack" value="${item.cantidad || 1}"></td><td><input type="number" min="0" step="1" class="form-control valor-pack" value="${item.valor_unitario || 0}"></td><td><input class="form-control observacion-pack" value="${escaparPack(item.observaciones || '')}"></td><td><button type="button" class="btn btn-danger btn-sm" onclick="$(this).closest('tr').remove()"><i class="feather icon-x"></i></button></td></tr>`);
+        }
+        $(document).on('change', '.producto-pack', function(){ const valor=$(this).find(':selected').data('valor'); if(valor !== undefined) $(this).closest('tr').find('.valor-pack').val(valor); });
+        function abrirPackInsumos(id, descripcion) {
+            arancelPackActual=id; $('#pack_insumos_tratamiento').text(descripcion); $('#tabla_pack_insumos tbody').empty();
+            $.get(`{{ url('/profesional/aranceles') }}/${id}/insumos`, function(r){ productosPackActuales=r.productos || []; (r.pack || []).forEach(agregarFilaPackInsumos); if(!(r.pack || []).length) agregarFilaPackInsumos(); $('#modalPackInsumos').modal('show'); });
+        }
+        $(document).on('click', '.btn-pack-insumos', function () {
+            abrirPackInsumos(Number($(this).data('arancel-id')), String($(this).data('arancel-descripcion') || ''));
+        });
+        function guardarPackInsumos(){
+            const insumos=[]; let valido=true;
+            $('#tabla_pack_insumos tbody tr').each(function(){ const p=$(this).find('.producto-pack').val(); if(!p){valido=false;return;} insumos.push({id_producto:p,cantidad:$(this).find('.cantidad-pack').val(),valor_unitario:$(this).find('.valor-pack').val(),observaciones:$(this).find('.observacion-pack').val()}); });
+            if(!valido){ swal('Datos requeridos','Seleccione un producto en cada fila.','warning'); return; }
+            $.post(`{{ url('/profesional/aranceles') }}/${arancelPackActual}/insumos`, {_token:'{{ csrf_token() }}',insumos:insumos}, function(r){ $('#modalPackInsumos').modal('hide'); swal('Pack guardado',r.mensaje,'success'); }).fail(function(x){swal('Error',x.responseJSON?.message || 'No fue posible guardar el pack.','error');});
+        }
         function formatoCLP(valor) {
             return '$' + (Number(valor || 0)).toLocaleString('es-CL', { maximumFractionDigits: 0 });
         }
@@ -1122,7 +1154,7 @@
                             </div>
                             `,
                             p.cantidad_bloques,
-                            `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="fas feather icon-x"></i></button>
+                            `<button class="medsdi-action-btn medsdi-action-view btn-pack-insumos" type="button" title="Insumos" data-arancel-id="${p.id}" data-arancel-descripcion="${escaparPack(p.descripcion)}"><i class="feather icon-package"></i></button><button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="fas feather icon-x"></i></button>
                             <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                         ]);
                     });
@@ -1220,7 +1252,7 @@
                             </div>
                             `,
                             p.cantidad_bloques,
-                            `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                            `<button class="medsdi-action-btn medsdi-action-view btn-pack-insumos" type="button" title="Insumos" data-arancel-id="${p.id}" data-arancel-descripcion="${escaparPack(p.descripcion)}"><i class="feather icon-package"></i></button><button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
                             <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                         ]);
                     });
@@ -1485,7 +1517,7 @@
                                 </div>
                                 `,
                                 p.cantidad_bloques,
-                                `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                                `<button class="medsdi-action-btn medsdi-action-view btn-pack-insumos" type="button" title="Insumos" data-arancel-id="${p.id}" data-arancel-descripcion="${escaparPack(p.descripcion)}"><i class="feather icon-package"></i></button><button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
                                 <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                             ]);
                         });
@@ -1607,7 +1639,7 @@
                                 </div>
                                 `,
                                 p.cantidad_bloques,
-                                `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                                `<button class="medsdi-action-btn medsdi-action-view btn-pack-insumos" type="button" title="Insumos" data-arancel-id="${p.id}" data-arancel-descripcion="${escaparPack(p.descripcion)}"><i class="feather icon-package"></i></button><button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
                                 <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                             ]);
                         });
@@ -1624,3 +1656,4 @@
         }
     </script>
 @endsection
+

@@ -1,5 +1,16 @@
 {{-- Sección "Caras y cuadrantes" (evaluación pediátrica cuadrantes 5-8 + plan de tratamiento/presupuesto) --}}
 {{-- Extraída de ficha_odontopediatria para poder reutilizarse también en ficha_od_general --}}
+@php
+    $cuadrantesPedConPiezas = [
+        5 => collect($quinto_cuadrante_infantil ?? []),
+        6 => collect($sexto_cuadrante_infantil ?? []),
+        7 => collect($septimo_cuadrante_infantil ?? []),
+        8 => collect($octavo_cuadrante_infantil ?? []),
+    ];
+    $cuadrantePedActivo = collect($cuadrantesPedConPiezas)->filter(function ($piezas) {
+        return $piezas->isNotEmpty();
+    })->keys()->first() ?? 5;
+@endphp
     <div class="row bg-white shadow-sm rounded mx-1 dental-evaluation-panel dental-evaluation-pediatric">
         <div class="col-md-12">
             <div class="row">
@@ -13,16 +24,16 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-10 dental-group-tabs" id="od_inf_tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset active" id="od_inf_grupo_5_tab" data-toggle="tab" href="#od_inf_grupo_5" role="tab" aria-controls="od_inf_grupo_5" aria-selected="true">CUADRANTE 5</a>
+                                    <a class="nav-link-aten text-reset {{ $cuadrantePedActivo === 5 ? 'active' : '' }}" id="od_inf_grupo_5_tab" data-toggle="tab" href="#od_inf_grupo_5" role="tab" aria-controls="od_inf_grupo_5" aria-selected="{{ $cuadrantePedActivo === 5 ? 'true' : 'false' }}">CUADRANTE 5</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="od_inf_grupo_6_tab" data-toggle="tab" href="#od_inf_grupo_6" role="tab" aria-controls="od_inf_grupo_6" aria-selected="false">CUADRANTE 6</a>
+                                    <a class="nav-link-aten text-reset {{ $cuadrantePedActivo === 6 ? 'active' : '' }}" id="od_inf_grupo_6_tab" data-toggle="tab" href="#od_inf_grupo_6" role="tab" aria-controls="od_inf_grupo_6" aria-selected="{{ $cuadrantePedActivo === 6 ? 'true' : 'false' }}">CUADRANTE 6</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="od_inf_grupo_7_tab" data-toggle="tab" href="#od_inf_grupo_7" role="tab" aria-controls="od_inf_grupo_7" aria-selected="false">CUADRANTE 7</a>
+                                    <a class="nav-link-aten text-reset {{ $cuadrantePedActivo === 7 ? 'active' : '' }}" id="od_inf_grupo_7_tab" data-toggle="tab" href="#od_inf_grupo_7" role="tab" aria-controls="od_inf_grupo_7" aria-selected="{{ $cuadrantePedActivo === 7 ? 'true' : 'false' }}">CUADRANTE 7</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="od_inf_grupo_8_tab" data-toggle="tab" href="#od_inf_grupo_8" role="tab" aria-controls="od_inf_grupo_8" aria-selected="false">CUADRANTE 8</a>
+                                    <a class="nav-link-aten text-reset {{ $cuadrantePedActivo === 8 ? 'active' : '' }}" id="od_inf_grupo_8_tab" data-toggle="tab" href="#od_inf_grupo_8" role="tab" aria-controls="od_inf_grupo_8" aria-selected="{{ $cuadrantePedActivo === 8 ? 'true' : 'false' }}">CUADRANTE 8</a>
                                 </li>
                             </ul>
                         </div>
@@ -31,7 +42,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="tab-content" >
                                 <!--GRUPO 5-->
-                                <div class="tab-pane fade show active" id="od_inf_grupo_5" role="tabpanel" aria-labelledby="od_inf_grupo_5_tab">
+                                <div class="tab-pane fade {{ $cuadrantePedActivo === 5 ? 'show active' : '' }}" id="od_inf_grupo_5" role="tabpanel" aria-labelledby="od_inf_grupo_5_tab">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="card">
@@ -140,7 +151,7 @@
                                                                                             <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_5" id="caraD_check_{{ $loop->index + 1 }}_5" value="0">
                                                                                             <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_5" id="caraV_check_{{ $loop->index + 1 }}_5" value="0">
                                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_5" id="caraP_check_{{ $loop->index + 1 }}_5" value="0">
-                                                                                            <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_quinto_cuadrante({{ $loop->index + 1 }})">
+                                                                                            <button type="button" class="btn btn-info btn-sm d-none" onclick="registrar_odontograma_quinto_cuadrante({{ $loop->index + 1 }})">
                                                                                                 Guardar caras
                                                                                             </button>
                                                                                         </td>
@@ -163,7 +174,7 @@
                                     </div>
                                 </div>
                                 <!--GRUPO 6-->
-                                <div class="tab-pane fade show" id="od_inf_grupo_6" role="tabpanel" aria-labelledby="od_inf_grupo_6_tab">
+                                <div class="tab-pane fade {{ $cuadrantePedActivo === 6 ? 'show active' : '' }}" id="od_inf_grupo_6" role="tabpanel" aria-labelledby="od_inf_grupo_6_tab">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="card">
@@ -264,7 +275,7 @@
                                                                                         <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_6" id="caraD_check_{{ $loop->index + 1 }}_6" value="0">
                                                                                         <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_6" id="caraV_check_{{ $loop->index + 1 }}_6" value="0">
                                                                                         <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_6" id="caraP_check_{{ $loop->index + 1 }}_6" value="0">
-                                                                                        <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_sexto_cuadrante({{ $loop->index + 1 }})">
+                                                                                        <button type="button" class="btn btn-info btn-sm d-none" onclick="registrar_odontograma_sexto_cuadrante({{ $loop->index + 1 }})">
                                                                                             Guardar caras
                                                                                         </button>
                                                                                     </td>
@@ -287,7 +298,7 @@
                                     </div>
                                 </div>
                                 <!--GRUPO 7-->
-                                <div class="tab-pane fade show" id="od_inf_grupo_7" role="tabpanel" aria-labelledby="od_inf_grupo_7_tab">
+                                <div class="tab-pane fade {{ $cuadrantePedActivo === 7 ? 'show active' : '' }}" id="od_inf_grupo_7" role="tabpanel" aria-labelledby="od_inf_grupo_7_tab">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="card">
@@ -388,7 +399,7 @@
                                                                                         <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_7" id="caraD_check_{{ $loop->index + 1 }}_7" value="0">
                                                                                         <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_7" id="caraV_check_{{ $loop->index + 1 }}_7" value="0">
                                                                                         <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_7" id="caraP_check_{{ $loop->index + 1 }}_7" value="0">
-                                                                                        <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_septimo_cuadrante({{ $loop->index + 1 }})">
+                                                                                        <button type="button" class="btn btn-info btn-sm d-none" onclick="registrar_odontograma_septimo_cuadrante({{ $loop->index + 1 }})">
                                                                                             Guardar caras
                                                                                         </button>
                                                                                     </td>
@@ -411,7 +422,7 @@
                                     </div>
                                 </div>
                                 <!--GRUPO 8-->
-                                <div class="tab-pane fade show" id="od_inf_grupo_8" role="tabpanel" aria-labelledby="od_inf_grupo_8_tab">
+                                <div class="tab-pane fade {{ $cuadrantePedActivo === 8 ? 'show active' : '' }}" id="od_inf_grupo_8" role="tabpanel" aria-labelledby="od_inf_grupo_8_tab">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="card">
@@ -512,7 +523,7 @@
                                                                                         <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_8" id="caraD_check_{{ $loop->index + 1 }}_8" value="0">
                                                                                         <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_8" id="caraV_check_{{ $loop->index + 1 }}_8" value="0">
                                                                                         <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_8" id="caraP_check_{{ $loop->index + 1 }}_8" value="0">
-                                                                                        <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_octavo_cuadrante({{ $loop->index + 1 }})">
+                                                                                        <button type="button" class="btn btn-info btn-sm d-none" onclick="registrar_odontograma_octavo_cuadrante({{ $loop->index + 1 }})">
                                                                                             Guardar caras
                                                                                         </button>
                                                                                     </td>
@@ -700,6 +711,23 @@
 
                     return seleccionadas.length ? seleccionadas.join(', ') : 'Sin caras';
                 }
+
+                $(document).off('click.guardarCaraPediatrica', '#contenedor_examenes_grupos_dentales_odontop [id^="cara"]')
+                    .on('click.guardarCaraPediatrica', '#contenedor_examenes_grupos_dentales_odontop [id^="cara"]', function () {
+                        const coincidencia = String(this.id || '').match(/^cara[VDOMP](\d+)([5-8])$/);
+                        if (!coincidencia) return;
+                        const indice = Number(coincidencia[1]);
+                        const cuadrante = Number(coincidencia[2]);
+                        const guardar = {
+                            5: window.registrar_odontograma_quinto_cuadrante,
+                            6: window.registrar_odontograma_sexto_cuadrante,
+                            7: window.registrar_odontograma_septimo_cuadrante,
+                            8: window.registrar_odontograma_octavo_cuadrante
+                        }[cuadrante];
+                        if (typeof guardar === 'function') {
+                            window.setTimeout(function () { guardar(indice); }, 0);
+                        }
+                    });
             </script>
         </div>
     </div>

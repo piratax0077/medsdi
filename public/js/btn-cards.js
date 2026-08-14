@@ -6,6 +6,7 @@ for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
     this.classList.toggle("card-act-open");
     var panel = this.nextElementSibling;
+    if (!panel) return;
     if (panel.style.maxHeight) {
       panel.style.maxHeight = null;
     } else {
@@ -23,6 +24,7 @@ for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
     this.classList.toggle("card-act-closed");
     var panel = this.nextElementSibling;
+    if (!panel) return;
     if (panel.style.maxHeight) {
       panel.style.maxHeight = null;
     } else {
@@ -41,6 +43,7 @@ for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
     this.classList.toggle("card-open");
     var panel = this.nextElementSibling;
+    if (!panel) return;
     if (panel.style.maxHeight) {
       panel.style.maxHeight = null;
     } else {
@@ -58,6 +61,7 @@ for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
     this.classList.toggle("card-closed");
     var panel = this.nextElementSibling;
+    if (!panel) return;
     if (panel.style.maxHeight) {
       panel.style.maxHeight = null;
     } else {

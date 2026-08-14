@@ -232,6 +232,8 @@
     ]);
 @endphp
 
+@include('atencion_odontologica.include.progreso_circular_tratamiento')
+@include('atencion_odontologica.include.modal_plan_pieza_ui')
 <style>
     .ficha-periodoncia .dental-treatment-steps { display: flex; gap: .65rem; border: 0; }
     .ficha-periodoncia .dental-treatment-steps .nav-item-secciones { flex: 1 1 0; }
@@ -260,7 +262,6 @@
     .ficha-periodoncia .dental-table-datetime small { margin-top: .2rem; color: #718096; }
     .ficha-periodoncia .dental-treatment-name { display: -webkit-box; overflow: hidden; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
     .ficha-periodoncia .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .55rem; min-width: 200px; }
-    .ficha-periodoncia .dental-table-state-control .dental-piece-status { min-width: 145px; }
     @media (max-width: 991.98px) { .ficha-periodoncia .dental-treatment-steps { overflow-x: auto; } .ficha-periodoncia .dental-treatment-steps .nav-item-secciones { flex: 0 0 220px; } }
 </style>
 
@@ -276,7 +277,7 @@
                         <a class="nav-secciones text-uppercase" data-step="2" id="odontograma_gral_tab" data-toggle="tab" href="#odontograma_gral" role="tab" aria-controls="odontograma_gral" aria-selected="false">Odontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación periodontal</a>
+                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Periodontograma</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" data-step="4" id="evaluacion_general_tab" data-toggle="tab" onclick="refrescar_caras_grupos()" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Plan de tratamiento</a>
@@ -2889,19 +2890,20 @@
                             </div>
                         </div>
                         <!--CIERRE: EVALUACION GENERAL --->
-                        <div class="modal fade" id="modal_pieza_plan_periodoncia" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal fade modal-plan-pieza" id="modal_pieza_plan_periodoncia" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <div>
                                             <small class="text-uppercase text-c-blue font-weight-bold">Plan periodontal</small>
-                                            <h5 class="modal-title">Pieza <span id="numero_pieza_plan_periodoncia"></span></h5>
+                                            <h5 class="modal-title">Pieza <span id="numero_pieza_plan_periodoncia" data-modal-numero-pieza></span></h5>
                                         </div>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
+                                        <div class="modal-plan-pieza-visual"><div class="modal-plan-pieza-image-wrap"><img class="modal-plan-pieza-image" src="" alt=""></div><div><small>Pieza seleccionada</small><strong>Pieza</strong><span class="text-muted small">Plan periodontal</span></div></div>
                                         <div class="form-group">
-                                            <label for="diagnostico_pieza_plan_periodoncia">Diagnóstico</label>
+                                            <label class="floating-label-activo-sm" for="diagnostico_pieza_plan_periodoncia">Diagnóstico</label>
                                             <select class="form-control" id="diagnostico_pieza_plan_periodoncia">
                                                 <option value="0">Seleccione un diagnóstico</option>
                                                 @foreach ($diagnosticos as $diagnosticoPeriodoncia)
@@ -2912,7 +2914,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group mb-0">
-                                            <label for="tratamiento_pieza_plan_periodoncia">Tratamiento o prestación</label>
+                                            <label class="floating-label-activo-sm" for="tratamiento_pieza_plan_periodoncia">Tratamiento o prestación</label>
                                             <input type="text" class="form-control tratamiento-autocomplete" id="tratamiento_pieza_plan_periodoncia"
                                                 placeholder="Busque o describa el tratamiento periodontal" autocomplete="off">
                                             <small class="form-text text-muted">La pieza se incorporará al plan y al presupuesto.</small>
@@ -8078,16 +8080,13 @@ function ocultar_pieza_impl(counter){
 
                 const $check = $celdas.eq(7).find('.checkbox-seleccion');
                 const idTratamiento = Number($check.val() || $fila.data('treatment-id'));
-                if (idTratamiento && !$celdas.eq(7).find('.dental-piece-status').length) {
+                if (idTratamiento && !$celdas.eq(7).find('.dental-piece-progress').length) {
                     const registro = (window.odontograma_global || []).find(function (item) {
                         return Number(item.id) === idTratamiento;
                     });
                     const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
-                    const opciones = '<select class="form-control form-control-sm dental-piece-status" data-original-state="' + estado + '" onchange="actualizarEstadoPiezaPlan(this,' + idTratamiento + ')">' +
-                        '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
-                        '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
-                        '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
-                        '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option></select>';
+                    const progreso = Number(registro ? registro.progreso : 0) || (estado === 1 ? 100 : 25);
+                    const opciones = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlan(this,' + idTratamiento + ')');
                     const $seleccion = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
                     $celdas.eq(7).html('<div class="dental-table-state-control">' + opciones + '</div>');
                     $celdas.eq(7).find('.dental-table-state-control').append($seleccion);
@@ -8097,7 +8096,7 @@ function ocultar_pieza_impl(counter){
 
         function actualizarEstadoPiezaPlan(select, idTratamiento) {
             const $select = $(select);
-            const anterior = String($select.data('original-state'));
+            const anterior = String($select.data('original-progress'));
             const nuevo = String($select.val());
             $select.prop('disabled', true);
 
@@ -8106,7 +8105,7 @@ function ocultar_pieza_impl(counter){
                 url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
                 data: {
                     id_tratamiento: idTratamiento,
-                    estado: nuevo,
+                    progreso: nuevo,
                     id_ficha_atencion: $('#id_fc').val(),
                     id_paciente: $('#id_paciente_fc').val(),
                     id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(),
@@ -8119,16 +8118,19 @@ function ocultar_pieza_impl(counter){
                         swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error');
                         return;
                     }
-                    $select.data('original-state', nuevo);
-                    $select.closest('tr').attr('data-clinical-state', nuevo);
+                    $select.data('original-progress', nuevo);
+                    actualizarVisualProgresoDental(select, nuevo);
+                    $select.closest('tr').attr('data-clinical-state', Number(nuevo) === 100 ? 1 : 2);
                     if (Array.isArray(respuesta.odontograma)) {
                         odontograma_global = respuesta.odontograma;
+                        if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
                         sincronizarSelectorPlanPeriodoncia(respuesta.odontograma);
                     }
                 },
                 error: function () {
                     $select.val(anterior);
-                    swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error');
+                    actualizarVisualProgresoDental(select, anterior);
+                    swal('Error', 'No fue posible actualizar el progreso del tratamiento.', 'error');
                 },
                 complete: function () { $select.prop('disabled', false); }
             });
@@ -8150,6 +8152,7 @@ function ocultar_pieza_impl(counter){
 
                 $('#pieza_plan_principal_periodoncia').val(pieza);
                 $('#numero_pieza_plan_periodoncia').text(pieza);
+                actualizarVisualModalPlanPieza('#modal_pieza_plan_periodoncia', pieza, false);
                 $('#diagnostico_pieza_plan_periodoncia').val('0');
                 $('#tratamiento_pieza_plan_periodoncia').val('');
                 $('#modal_pieza_plan_periodoncia').modal('show');

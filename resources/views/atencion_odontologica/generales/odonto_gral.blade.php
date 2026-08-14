@@ -1253,6 +1253,58 @@
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                     <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar tratamiento</button>
                                                                 </div>
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+                                                                    <div class="card-informacion mb-0">
+                                                                        <div class="card-top">
+                                                                            <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
+                                                                            <button type="button" class="btn btn-info btn-xxs float-md-right d-inline" onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
+                                                                        </div>
+                                                                        <div class="card-body">
+                                                                            <div class="table-responsive">
+                                                                                <table id="table_insumos_odon_gral" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Insumo</th>
+                                                                                            <th>Observaciones</th>
+                                                                                            <th>Cantidad</th>
+                                                                                            <th>Valor</th>
+                                                                                            <th>Total</th>
+                                                                                            <th>Acciones</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach ($insumos_tratamientos as $t)
+                                                                                        @if($t->urgencia == 0)
+                                                                                            @php $total = $t->cantidad * $t->valor @endphp
+                                                                                            <tr>
+                                                                                                <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
+                                                                                                <td>{{ $t->observaciones }}</td>
+                                                                                                <td>{{ $t->cantidad }}</td>
+                                                                                                <td>{{ number_format($t->valor)  }}</td>
+                                                                                                <td>{{ number_format($total)  }}</td>
+                                                                                                <td>
+                                                                                                    @if($t->presupuesto == 0 || $t->presupuesto == null)
+                                                                                                    <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-shopping-cart"></i></button>
+                                                                                                    @else
+                                                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-minus"></i></button>
+                                                                                                    @endif
+                                                                                                    <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo({{ $t->id }})"><i class="feather icon-edit"></i></button>
+                                                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        @endif
+                                                                                        @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                            <div class="form-row mt-2">
+                                                                                <div class="col-12 d-flex justify-content-end">
+                                                                                    <button type="button" class="btn btn-success btn-xxs" onclick="abrirModalCorreo()"><i class="fas fa-email"></i> Enviar por correo</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1263,65 +1315,6 @@
                                         </div>
                                      </div>
 
-                                    <div class="form-row">
-                                        <!--TABLA INSUMOS-->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
-                                            <div class="card-informacion">
-                                                <div class="card-top">
-                                                    <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
-                                                    <button type="button" class="btn btn-info btn-xxs float-md-right d-inline d-inline"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="form-row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <div class="table-responsive">
-                                                                <table id="table_insumos_odon_gral" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Insumo</th>
-                                                                            <th>Observaciones</th>
-                                                                            <th>Cantidad</th>
-                                                                            <th>Valor</th>
-                                                                            <th>Total</th>
-                                                                            <th>Acciones</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach ($insumos_tratamientos as $t)
-                                                                        @if($t->urgencia == 0)
-                                                                            @php $total = $t->cantidad * $t->valor @endphp
-                                                                            <tr>
-                                                                                <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
-                                                                                <td>{{ $t->observaciones }}</td>
-                                                                                <td>{{ $t->cantidad }}</td>
-                                                                                <td>{{ number_format($t->valor)  }}</td>
-                                                                                <td>{{ number_format($total)  }}</td>
-                                                                                <td>
-                                                                                    @if($t->presupuesto == 0 || $t->presupuesto == null)
-                                                                                    <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-shopping-cart"></i></button>
-                                                                                    @else
-                                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-minus"></i></button>
-                                                                                    @endif
-                                                                                    <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo({{ $t->id }})"><i class="feather icon-edit"></i></button>
-                                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row mt-2">
-                                                        <div class="col-12 d-flex justify-content-end">
-                                                            <button type="button" class="btn btn-success btn-xxs" onclick="abrirModalCorreo()"><i class="fas fa-email"></i> Enviar por correo</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <!--HOSPITALIZACION-->
                                 {{--  <div class="tab-pane fade show" id="hosp_endodoncia" role="tabpanel" aria-labelledby="hosp_endodoncia-tab">

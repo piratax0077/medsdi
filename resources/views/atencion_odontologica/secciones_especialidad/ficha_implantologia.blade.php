@@ -289,6 +289,8 @@
                 : ($mostrarProximoControlImplante ? 'prox_cont_imp' : null)));
 @endphp
 
+@include('atencion_odontologica.include.progreso_circular_tratamiento')
+@include('atencion_odontologica.include.modal_plan_pieza_ui')
 <style>
     .ficha-implantologia .dental-treatment-steps { display: flex; gap: .65rem; border: 0; }
     .ficha-implantologia .dental-treatment-steps .nav-item-secciones { flex: 1 1 0; }
@@ -324,7 +326,6 @@
     .ficha-implantologia .dental-table-datetime { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; }
     .ficha-implantologia .dental-table-datetime small { margin-top: .2rem; color: #718096; }
     .ficha-implantologia .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .5rem; min-width: 190px; }
-    .ficha-implantologia .dental-table-state-control .dental-piece-status { min-width: 140px; }
     @media (max-width: 991.98px) { .ficha-implantologia .dental-treatment-steps { overflow-x: auto; } .ficha-implantologia .dental-treatment-steps .nav-item-secciones { flex: 0 0 220px; } }
 </style>
 
@@ -340,7 +341,7 @@
                         <a class="nav-secciones text-uppercase" data-step="2" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación preimplantar</a>
+                        <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Periodontograma</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" data-step="4" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Plan de tratamiento</a>
@@ -3270,25 +3271,26 @@
                         </div>
                             </div>
                         <!--CIERRE: TRATAMIENTO--->
-                        <div class="modal fade" id="modal_pieza_plan_implantologia" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal fade modal-plan-pieza" id="modal_pieza_plan_implantologia" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <div>
                                             <small class="text-uppercase text-c-blue font-weight-bold">Plan implantológico</small>
-                                            <h5 class="modal-title">Pieza <span id="numero_pieza_plan_implantologia"></span></h5>
+                                            <h5 class="modal-title">Pieza <span id="numero_pieza_plan_implantologia" data-modal-numero-pieza></span></h5>
                                         </div>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
+                                        <div class="modal-plan-pieza-visual"><div class="modal-plan-pieza-image-wrap"><img class="modal-plan-pieza-image" src="" alt=""></div><div><small>Pieza seleccionada</small><strong>Pieza</strong><span class="text-muted small">Plan implantológico</span></div></div>
                                         <div class="form-group">
-                                            <label for="diagnostico_pieza_plan_implantologia">Diagnóstico</label>
+                                            <label class="floating-label-activo-sm" for="diagnostico_pieza_plan_implantologia">Diagnóstico</label>
                                             <select class="form-control" id="diagnostico_pieza_plan_implantologia">
                                                 <option value="0">Seleccione un diagnóstico</option>
                                             </select>
                                         </div>
                                         <div class="form-group mb-0">
-                                            <label for="tratamiento_pieza_plan_implantologia">Tratamiento o prestación</label>
+                                            <label class="floating-label-activo-sm" for="tratamiento_pieza_plan_implantologia">Tratamiento o prestación</label>
                                             <input type="text" class="form-control tratamiento-autocomplete" id="tratamiento_pieza_plan_implantologia"
                                                 placeholder="Busque o describa el tratamiento implantológico" autocomplete="off">
                                             <small class="form-text text-muted">La pieza se incorporará al plan y al presupuesto.</small>
@@ -3419,14 +3421,11 @@
                 const codigo = pieza.replace('.', '');
                 $celdas.eq(3).html('<div class="dental-table-tooth"><img src="' + base + '/d' + codigo + '.png" alt="Pieza ' + pieza + '"><strong>' + pieza + '</strong></div>');
             }
-            if (id && !$celdas.eq(7).find('.dental-piece-status').length) {
+            if (id && !$celdas.eq(7).find('.dental-piece-progress').length) {
                 const registro = (window.odontograma_global || []).find(function (item) { return Number(item.id) === id; });
                 const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
-                const select = '<select class="form-control form-control-sm dental-piece-status" data-original-state="' + estado + '" onchange="actualizarEstadoPiezaPlanImplantologia(this,' + id + ')">' +
-                    '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
-                    '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
-                    '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
-                    '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option></select>';
+                const progreso = Number(registro ? registro.progreso : 0) || (estado === 1 ? 100 : 25);
+                const select = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlanImplantologia(this,' + id + ')');
                 const $control = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
                 $celdas.eq(7).html('<div class="dental-table-state-control">' + select + '</div>');
                 $celdas.eq(7).find('.dental-table-state-control').append($control);
@@ -3435,17 +3434,18 @@
     }
 
     function actualizarEstadoPiezaPlanImplantologia(select, idTratamiento) {
-        const $select = $(select), anterior = String($select.data('original-state')), nuevo = String($select.val());
+        const $select = $(select), anterior = String($select.data('original-progress')), nuevo = String($select.val());
         $select.prop('disabled', true);
         $.ajax({
             type: 'POST', url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
-            data: { id_tratamiento: idTratamiento, estado: nuevo, id_ficha_atencion: $('#id_fc').val(), id_paciente: $('#id_paciente_fc').val(), id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(), id_lugar_atencion: $('#id_lugar_atencion').val(), _token: "{{ csrf_token() }}" },
+            data: { id_tratamiento: idTratamiento, progreso: nuevo, id_ficha_atencion: $('#id_fc').val(), id_paciente: $('#id_paciente_fc').val(), id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(), id_lugar_atencion: $('#id_lugar_atencion').val(), _token: "{{ csrf_token() }}" },
             success: function (respuesta) {
                 if (respuesta.mensaje !== 'OK') { $select.val(anterior); swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error'); return; }
-                $select.data('original-state', nuevo).closest('tr').attr('data-clinical-state', nuevo);
-                if (Array.isArray(respuesta.odontograma)) { window.odontograma_global = respuesta.odontograma; sincronizarSelectorPlanImplantologia(respuesta.odontograma); }
+                $select.data('original-progress', nuevo).closest('tr').attr('data-clinical-state', Number(nuevo) === 100 ? 1 : 2);
+                actualizarVisualProgresoDental(select, nuevo);
+                if (Array.isArray(respuesta.odontograma)) { window.odontograma_global = respuesta.odontograma; sincronizarSelectorPlanImplantologia(respuesta.odontograma); if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma); }
             },
-            error: function () { $select.val(anterior); swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error'); },
+            error: function () { $select.val(anterior); actualizarVisualProgresoDental(select, anterior); swal('Error', 'No fue posible actualizar el progreso del tratamiento.', 'error'); },
             complete: function () { $select.prop('disabled', false); }
         });
     }
@@ -3477,6 +3477,7 @@
             }
             $('#pieza_plan_tratamiento_implantologia').val(pieza);
             $('#numero_pieza_plan_implantologia').text(pieza);
+            actualizarVisualModalPlanPieza('#modal_pieza_plan_implantologia', pieza, false);
             const $destino = $('#diagnostico_pieza_plan_implantologia');
             const $origen = $('#diagnostico_combo_g');
             if ($origen.length && $destino.find('option').length <= 1) $destino.html($origen.html());

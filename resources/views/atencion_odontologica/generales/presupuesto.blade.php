@@ -1,3 +1,4 @@
+@include('atencion_odontologica.include.progreso_circular_tratamiento')
 <style>
     .status-circle .circle {
         width: 20px;
@@ -554,19 +555,32 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-7 col-xl-8 mb-3 mb-lg-0">
-                                                    @include('atencion_odontologica.include.selector_odontograma', [
-                                                        'id' => 'selector_presupuesto_piezas',
-                                                        'inputId' => 'pieza_presupuesto_detalle',
-                                                        'counter' => 9500,
-                                                        'multiple' => false,
-                                                        'compacto' => true,
-                                                        'autoRefresh' => false,
-                                                        'mostrarMensajeVacio' => false,
-                                                        'estadosBloqueados' => [],
-                                                        'piezasDisponibles' => $piezasPresupuestoDetalle,
-                                                        'titulo' => 'Piezas del presupuesto',
-                                                        'ayuda' => 'Haga clic en una pieza resaltada para ver su detalle',
-                                                    ])
+                                                    @if(!empty($odontogramaPediatrico))
+                                                        @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                            'id' => 'selector_presupuesto_piezas',
+                                                            'inputId' => 'pieza_presupuesto_detalle',
+                                                            'modo' => 'presupuesto',
+                                                            'multiple' => false,
+                                                            'piezasDisponibles' => $piezasPresupuestoDetalle,
+                                                            'piezasPresupuesto' => $piezasPresupuestoDetalle,
+                                                            'titulo' => 'Piezas pediátricas del presupuesto',
+                                                            'ayuda' => 'Haga clic en una pieza resaltada para ver su detalle',
+                                                        ])
+                                                    @else
+                                                        @include('atencion_odontologica.include.selector_odontograma', [
+                                                            'id' => 'selector_presupuesto_piezas',
+                                                            'inputId' => 'pieza_presupuesto_detalle',
+                                                            'counter' => 9500,
+                                                            'multiple' => false,
+                                                            'compacto' => true,
+                                                            'autoRefresh' => false,
+                                                            'mostrarMensajeVacio' => false,
+                                                            'estadosBloqueados' => [],
+                                                            'piezasDisponibles' => $piezasPresupuestoDetalle,
+                                                            'titulo' => 'Piezas del presupuesto',
+                                                            'ayuda' => 'Haga clic en una pieza resaltada para ver su detalle',
+                                                        ])
+                                                    @endif
                                                     <select class="d-none" id="pieza_presupuesto_detalle" name="pieza_presupuesto_detalle" tabindex="-1" aria-hidden="true"></select>
                                                 </div>
                                                 <div class="col-lg-5 col-xl-4">
@@ -671,6 +685,41 @@
                                         const piezas = new Set(prestaciones.map(function(o){ return String(o.pieza); }));
                                         const estadosVisuales = {};
 
+                                        // El estado verde se comparte entre los selectores pediátricos
+                                        // de planificación, presupuesto clínico y pagos. Limpiamos el
+                                        // estado anterior y pintamos sólo las piezas que aún pertenecen
+                                        // al presupuesto recibido desde el servidor.
+                                        $('.selector-odontograma-pediatrico [data-pieza-pediatrica]').each(function(){
+                                            const $pieza = $(this);
+                                            const numero = String($pieza.data('pieza-pediatrica'));
+                                            const presupuestada = piezas.has(numero);
+                                            $pieza.toggleClass('is-in-budget', presupuestada);
+                                            if (!presupuestada) {
+                                                $pieza.removeClass('is-selected').attr('aria-pressed', 'false');
+                                            }
+                                        });
+
+                                        // Presupuesto y pagos sólo permiten interactuar con piezas
+                                        // actualmente incluidas. El selector del plan permanece libre
+                                        // para poder incorporar una pieza nueva.
+                                        $('#selector_presupuesto_piezas, #selector_pagos_piezas').each(function(){
+                                            const $selectorPediatrico = $(this);
+                                            $selectorPediatrico.find('[data-pieza-pediatrica]').each(function(){
+                                                const $pieza = $(this);
+                                                const habilitada = piezas.has(String($pieza.data('pieza-pediatrica')));
+                                                $pieza.prop('disabled', !habilitada)
+                                                    .toggleClass('is-locked', !habilitada)
+                                                    .toggleClass('is-in-budget', habilitada)
+                                                    .attr('aria-disabled', habilitada ? 'false' : 'true');
+                                            });
+                                        });
+
+                                        const cantidadPrestaciones = prestaciones.length;
+                                        $('#cantidad_items_presupuesto').text(
+                                            cantidadPrestaciones + (cantidadPrestaciones === 1 ? ' prestación' : ' prestaciones')
+                                        );
+                                        $('#presupuesto_clinico_vacio').toggle(cantidadPrestaciones === 0);
+
                                         prestaciones.forEach(function(o){
                                             const pieza = String(o.pieza);
                                             if(estadosVisuales[pieza] === 'ausente'){ return; }
@@ -686,13 +735,20 @@
                                         });
 
                                         const base = @json(asset('images/dental/dientes'));
+                                        const basePediatrico = @json(asset('images/dental/odontopediatria'));
+                                        const esOdontogramaPediatrico = @json(!empty($odontogramaPediatrico));
                                         $selector.find('[data-selector-pieza]').each(function(){
                                             const $boton = $(this);
                                             const pieza = String($boton.data('selector-pieza'));
                                             const habilitada = piezas.has(pieza);
                                             const codigo = pieza.replace('.', '');
                                             const estado = estadosVisuales[pieza] || 'normal';
-                                            const rutas = {
+                                            const rutas = esOdontogramaPediatrico ? {
+                                                carie: basePediatrico + '/carie/carie' + codigo + '.png',
+                                                ausente: basePediatrico + '/diente-ausente/dau' + codigo + '.png',
+                                                endodoncia: basePediatrico + '/pulpotomia/pulpotomia' + codigo + '.png',
+                                                normal: basePediatrico + '/diente-sano/diente-sano' + codigo + '.png'
+                                            } : {
                                                 carie: base + '/carie/carie' + codigo + '.png',
                                                 ausente: base + '/diente-ausente/dau' + codigo + '.png',
                                                 implante: base + '/implante/impl' + codigo + '.png',
@@ -700,13 +756,19 @@
                                                 normal: base + '/d' + codigo + '.png'
                                             };
 
-                                            $boton.prop('disabled', !habilitada).toggleClass('is-enabled', habilitada);
+                                            $boton.prop('disabled', !habilitada)
+                                                .toggleClass('is-enabled', habilitada)
+                                                .toggleClass('is-locked', !habilitada)
+                                                .toggleClass('is-in-budget', habilitada);
                                             $boton.find('img').attr('src', rutas[estado] || rutas.normal).attr('data-estado-clinico', estado);
                                             if(!habilitada) $boton.removeClass('is-selected').attr('aria-pressed', 'false');
                                         });
 
                                         $visor.toggle(prestaciones.length > 0);
                                         sincronizarDetallePresupuestoClinico(prestaciones);
+                                        if (typeof window.renderizarTarjetasPresupuestoClinico === 'function') {
+                                            window.renderizarTarjetasPresupuestoClinico(prestaciones);
+                                        }
 
                                         const seleccionActual = String($selector.find('.is-selected').first().data('selector-pieza') || '');
                                         const preferida = piezaPreferida && piezas.has(String(piezaPreferida))
@@ -727,13 +789,28 @@
                                         if(typeof mejorarExperienciaPresupuestoDental === 'function'){
                                             mejorarExperienciaPresupuestoDental();
                                         }
+
+                                        if (typeof window.renderizarPlanOdontop === 'function') {
+                                            window.renderizarPlanOdontop(listaOdontograma || []);
+                                        }
+
+                                        if (typeof sincronizarSelectorPagosPiezas === 'function') {
+                                            sincronizarSelectorPagosPiezas(prestaciones);
+                                        }
+
+                                        $(document).trigger('odontop:selectores-actualizados', [prestaciones]);
                                     }
+
+                                    window.sincronizarOdontogramaPresupuesto = sincronizarOdontogramaPresupuesto;
 
                                     window.renderizarTarjetasPresupuestoClinico = function (listaOdontograma) {
                                         const $contenedor = $('#contenedor_piezas_dentales_presupuesto');
                                         if (!$contenedor.length) return;
 
-                                        const prestaciones = (listaOdontograma || []).filter(function (pieza) {
+                                        const listaNormalizada = Array.isArray(listaOdontograma)
+                                            ? listaOdontograma
+                                            : Object.values(listaOdontograma || {});
+                                        const prestaciones = listaNormalizada.filter(function (pieza) {
                                             return Number(pieza.presupuesto) === 1 && Number(pieza.urgencia) === 0;
                                         });
 
@@ -787,7 +864,7 @@
                                     };
 
                                     $(function () {
-                                        window.renderizarTarjetasPresupuestoClinico(@json($odontograma));
+                                        window.renderizarTarjetasPresupuestoClinico(@json(collect($odontograma)->values()));
                                     });
                                 </script>
 
@@ -1656,19 +1733,32 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="card-informacion mb-3" id="presupuesto_pagos_visor">
                                             <div class="card-body">
-                                                @include('atencion_odontologica.include.selector_odontograma', [
-                                                    'id' => 'selector_pagos_piezas',
-                                                    'inputId' => 'pieza_pagos_detalle',
-                                                    'counter' => 9600,
-                                                    'multiple' => false,
-                                                    'compacto' => true,
-                                                    'autoRefresh' => false,
-                                                    'mostrarMensajeVacio' => false,
-                                                    'estadosBloqueados' => [],
-                                                    'piezasDisponibles' => $piezasPagosDetalle,
-                                                    'titulo' => 'Estado de pago y clínico por pieza',
-                                                    'ayuda' => 'Haga clic en una pieza para filtrar su detalle en la tabla',
-                                                ])
+                                                @if(!empty($odontogramaPediatrico))
+                                                    @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                        'id' => 'selector_pagos_piezas',
+                                                        'inputId' => 'pieza_pagos_detalle',
+                                                        'modo' => 'presupuesto',
+                                                        'multiple' => false,
+                                                        'piezasDisponibles' => $piezasPagosDetalle,
+                                                        'piezasPresupuesto' => $piezasPagosDetalle,
+                                                        'titulo' => 'Estado de pago y clínico por pieza',
+                                                        'ayuda' => 'Haga clic en una pieza temporal para filtrar su detalle en la tabla',
+                                                    ])
+                                                @else
+                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                        'id' => 'selector_pagos_piezas',
+                                                        'inputId' => 'pieza_pagos_detalle',
+                                                        'counter' => 9600,
+                                                        'multiple' => false,
+                                                        'compacto' => true,
+                                                        'autoRefresh' => false,
+                                                        'mostrarMensajeVacio' => false,
+                                                        'estadosBloqueados' => [],
+                                                        'piezasDisponibles' => $piezasPagosDetalle,
+                                                        'titulo' => 'Estado de pago y clínico por pieza',
+                                                        'ayuda' => 'Haga clic en una pieza para filtrar su detalle en la tabla',
+                                                    ])
+                                                @endif
                                                 <select class="d-none" id="pieza_pagos_detalle" name="pieza_pagos_detalle" tabindex="-1" aria-hidden="true"></select>
                                                 <div class="d-flex flex-wrap align-items-center mt-2" id="filtro_pieza_pagos_wrapper" style="display:none;">
                                                     <span class="badge badge-primary px-2 py-1 mr-2" id="filtro_pieza_pagos_texto"></span>
@@ -1682,14 +1772,21 @@
 
                                 <style>
                                     #selector_pagos_piezas .selector-odontograma-generico__pieza{position:relative}
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza{position:relative}
                                     #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-ok::after,
                                     #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-incompleto::after,
-                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-error::after{
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-error::after,
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-ok::after,
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-incompleto::after,
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-error::after{
                                         content:'';position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;box-shadow:0 0 0 2px #fff;
                                     }
                                     #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-ok::after{background:#2bb673}
                                     #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-incompleto::after{background:#f4b942}
                                     #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-error::after{background:#e6534d}
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-ok::after{background:#2bb673}
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-incompleto::after{background:#f4b942}
+                                    #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-error::after{background:#e6534d}
                                 </style>
                                 <script>
                                     // Calcula, por pieza, el color agregado según estado_pago de sus prestaciones (rojo si alguna sin pagar, amarillo si alguna incompleta, verde si todas ok)
@@ -1852,6 +1949,69 @@
                                     });
                                 </script>
 
+                                <script>
+                                    window.progresosPiezasPresupuesto = window.progresosPiezasPresupuesto || {};
+                                    window.progresosPiezasPresupuestoPorPieza = window.progresosPiezasPresupuestoPorPieza || {};
+                                    window.progresosGruposPresupuesto = window.progresosGruposPresupuesto || {};
+                                    window.claveProgresoPresupuesto = function (a, b) {
+                                        return String(a || '').trim().toUpperCase() + '|' + String(b || '').trim().toUpperCase();
+                                    };
+                                    window.actualizarDatosProgresoPresupuesto = function (piezas) {
+                                        (piezas || []).forEach(function (pieza) {
+                                            const progreso = Number(pieza.progreso || 0) || (Number(pieza.estado) === 1 ? 100 : 25);
+                                            window.progresosPiezasPresupuesto[claveProgresoPresupuesto(pieza.descripcion || pieza.tratamiento, pieza.pieza)] = progreso;
+                                            window.progresosPiezasPresupuestoPorPieza[String(pieza.pieza || '').trim()] = progreso;
+                                        });
+                                        window.decorarProgresosPresupuesto();
+                                    };
+                                    window.actualizarDatosProgresoGruposPresupuesto = function (grupos) {
+                                        (grupos || []).forEach(function (grupo) {
+                                            const progreso = Number(grupo.progreso || 0) || (Number(grupo.estado) === 0 ? 100 : 25);
+                                            window.progresosGruposPresupuesto[claveProgresoPresupuesto(grupo.diagnostico_tratamiento, grupo.localizacion)] = progreso;
+                                        });
+                                        window.decorarProgresosPresupuesto();
+                                    };
+                                    window.decorarProgresosPresupuesto = function () {
+                                        $('#presup_estado_pago tbody tr').each(function () {
+                                            const $celdas = $(this).children('td');
+                                            if ($celdas.length < 7) return;
+                                            if ($celdas.eq(6).find('.dental-progress-wheel').length) return;
+                                            let progreso = window.progresosPiezasPresupuesto[claveProgresoPresupuesto($celdas.eq(0).text(), $celdas.eq(1).text())];
+                                            if (!progreso) progreso = window.progresosPiezasPresupuestoPorPieza[String($celdas.eq(1).text() || '').trim()];
+                                            if (progreso) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
+                                        });
+                                        $('#presup_estado_pago_gral tbody tr').each(function () {
+                                            const $celdas = $(this).children('td');
+                                            if ($celdas.length < 7) return;
+                                            let progreso = window.progresosGruposPresupuesto[claveProgresoPresupuesto($celdas.eq(0).text(), $celdas.eq(1).text())];
+                                            if (!progreso) progreso = window.progresosGruposPresupuesto[claveProgresoPresupuesto($celdas.eq(1).text(), $celdas.eq(0).text())];
+                                            if (progreso) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
+                                        });
+                                    };
+                                    actualizarDatosProgresoPresupuesto(@json(collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->values()));
+                                    actualizarDatosProgresoGruposPresupuesto(@json(collect($todos)->where('presupuesto', 1)->values()));
+                                    $(document).on('draw.dt', '#presup_estado_pago, #presup_estado_pago_gral', decorarProgresosPresupuesto);
+                                    $(function () {
+                                        decorarProgresosPresupuesto();
+                                        const contenedor = document.getElementById('form-presup_dent');
+                                        if (!contenedor || window.observadorProgresosPresupuesto) return;
+                                        let pendiente = false;
+                                        window.observadorProgresosPresupuesto = new MutationObserver(function (mutaciones) {
+                                            const afectaTablas = mutaciones.some(function (mutacion) {
+                                                const nodo = mutacion.target.nodeType === 1 ? mutacion.target : mutacion.target.parentElement;
+                                                return nodo && (nodo.closest('#presup_estado_pago') || nodo.closest('#presup_estado_pago_gral'));
+                                            });
+                                            if (!afectaTablas || pendiente) return;
+                                            pendiente = true;
+                                            window.requestAnimationFrame(function () {
+                                                pendiente = false;
+                                                decorarProgresosPresupuesto();
+                                            });
+                                        });
+                                        window.observadorProgresosPresupuesto.observe(contenedor, { childList: true, subtree: true });
+                                    });
+                                </script>
+
                                 <!--P. POR PIEZAS-->
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
@@ -1874,7 +2034,7 @@
                                                                         <th class="align-middle">Descuento</th>
                                                                         <th class="align-middle">Valor a pagar</th>
                                                                         <th class="align-middle">Estado de pago</th>
-                                                                        <th class="align-middle">Estado Prestación
+                                                                        <th class="align-middle">Progreso
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
@@ -1925,7 +2085,8 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    {{ $estado }}
+                                                                                    @php $progresoPresupuesto = (int) ($o->progreso ?? ((int) $o->estado === 1 ? 100 : 25)); @endphp
+                                                                                    <div class="dental-progress-wheel is-readonly" style="--progress:{{ $progresoPresupuesto }}" title="Progreso del tratamiento: {{ $progresoPresupuesto }}%" role="img" aria-label="Progreso del tratamiento: {{ $progresoPresupuesto }}%"><span class="dental-progress-wheel-value">{{ $progresoPresupuesto }}%</span></div>
                                                                                 </td>
 
                                                                             </tr>
@@ -1967,8 +2128,7 @@
                                                                             pagar</th>
                                                                         <th class="text-center align-middle">Estado
                                                                             Pago</th>
-                                                                        <th class="text-center align-middle">Estado
-                                                                            Prestación</th>
+                                                                        <th class="text-center align-middle">Progreso</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -2015,7 +2175,8 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    {{ $estado }}
+                                                                                    @php $progresoGrupo = (int) ($o->progreso ?? ((int) $o->estado === 0 ? 100 : 25)); @endphp
+                                                                                    <div class="dental-progress-wheel is-readonly" style="--progress:{{ $progresoGrupo }}" title="Progreso del tratamiento: {{ $progresoGrupo }}%" role="img" aria-label="Progreso del tratamiento: {{ $progresoGrupo }}%"><span class="dental-progress-wheel-value">{{ $progresoGrupo }}%</span></div>
                                                                                 </td>
                                                                             </tr>
                                                                         @endif

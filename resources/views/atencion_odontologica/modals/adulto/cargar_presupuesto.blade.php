@@ -713,6 +713,15 @@
                             confirmButtonText: 'Aceptar'
                         });
                     }
+                },
+                error: function(xhr){
+                    const respuesta = xhr.responseJSON || {};
+                    swal({
+                        title: 'Error',
+                        text: respuesta.detalle || respuesta.error || 'Ha ocurrido un error al generar el reporte',
+                        icon: 'error',
+                        button: 'Aceptar'
+                    });
                 }
             })
         }
@@ -785,6 +794,15 @@
                             button: "Aceptar"
                         });
                     }
+                },
+                error: function(xhr){
+                    const respuesta = xhr.responseJSON || {};
+                    swal({
+                        title: 'Error',
+                        text: respuesta.detalle || respuesta.error || 'Ha ocurrido un error al generar el reporte',
+                        icon: 'error',
+                        button: 'Aceptar'
+                    });
                 }
             })
         }

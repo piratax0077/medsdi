@@ -215,28 +215,187 @@
     ]);
 @endphp
 
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+@php
+    $piezasPresupuestadasEstado = collect($odontograma ?? [])->filter(function ($pieza) {
+        return (int) ($pieza->presupuesto ?? 0) === 1
+            && (int) ($pieza->urgencia ?? 0) === 0;
+    });
+    $presupuestoPagadoEstado = (bool) data_get($presupuesto ?? null, 'pago_completado', false);
+    $todasLasPiezasFinalizadas = $piezasPresupuestadasEstado->isNotEmpty()
+        && $piezasPresupuestadasEstado->every(function ($pieza) {
+            return (int) ($pieza->estado ?? 0) === 1;
+        });
+    $hayAtencionIniciada = $piezasPresupuestadasEstado->contains(function ($pieza) {
+        return in_array((int) ($pieza->estado ?? 0), [1, 2, 3], true);
+    });
+
+    if ($presupuestoPagadoEstado && $todasLasPiezasFinalizadas) {
+        $estadoCabeceraPlan = ['codigo' => 'terminado', 'texto' => 'Terminado', 'icono' => 'icon-check-circle'];
+    } elseif ($presupuestoPagadoEstado) {
+        $estadoCabeceraPlan = ['codigo' => 'pagado', 'texto' => 'Pagado', 'icono' => 'icon-dollar-sign'];
+    } elseif ($hayAtencionIniciada) {
+        $estadoCabeceraPlan = ['codigo' => 'en-tratamiento', 'texto' => 'En tratamiento', 'icono' => 'icon-activity'];
+    } elseif ($piezasPresupuestadasEstado->isNotEmpty()) {
+        $estadoCabeceraPlan = ['codigo' => 'presupuestado', 'texto' => 'Presupuestado', 'icono' => 'icon-file-text'];
+    } else {
+        $estadoCabeceraPlan = ['codigo' => 'preparacion', 'texto' => 'En preparaci&oacute;n', 'icono' => 'icon-edit-3'];
+    }
+@endphp
+
+@include('atencion_odontologica.include.progreso_circular_tratamiento')
+@include('atencion_odontologica.include.modal_plan_pieza_ui')
+<style>
+    .ficha-odontopediatria .dental-treatment-flow {
+        padding: 1rem 1.15rem;
+        border: 1px solid #dbe4ee;
+        border-radius: .8rem;
+        background: linear-gradient(105deg, #f7fbff 0%, #fff 68%);
+        box-shadow: 0 4px 14px rgba(34, 72, 120, .07);
+    }
+
+    .ficha-odontopediatria .dental-treatment-flow__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .ficha-odontopediatria .dental-treatment-flow__eyebrow {
+        display: block;
+        margin-bottom: .15rem;
+        color: #174ea6;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ficha-odontopediatria .dental-treatment-flow h5 {
+        margin: 0;
+        color: #263b50;
+        font-weight: 700;
+    }
+
+    .ficha-odontopediatria .dental-treatment-flow p {
+        margin: .2rem 0 0;
+        color: #6c7d90;
+    }
+
+    .ficha-odontopediatria .dental-treatment-flow__status {
+        flex: 0 0 auto;
+        padding: .45rem .75rem;
+        border-radius: 2rem;
+        background: #fff4dc;
+        color: #936317;
+        font-size: .78rem;
+        font-weight: 700;
+    }
+
+    .ficha-odontopediatria .dental-treatment-flow__status[data-status="terminado"] { background: #e4f6ea; color: #278447; }
+    .ficha-odontopediatria .dental-treatment-flow__status[data-status="pagado"] { background: #e5f2ff; color: #1768ad; }
+    .ficha-odontopediatria .dental-treatment-flow__status[data-status="en-tratamiento"] { background: #e9edff; color: #4058b8; }
+    .ficha-odontopediatria .dental-treatment-flow__status[data-status="presupuestado"] { background: #eef2f6; color: #586b7d; }
+
+    .ficha-odontopediatria .dental-treatment-steps {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(165px, 1fr));
+        gap: .45rem;
+        padding: .45rem;
+        overflow-x: auto;
+        counter-reset: dental-step;
+        border: 1px solid #dbe4ee;
+        border-radius: .75rem;
+        background: #f4f7fb;
+    }
+
+    .ficha-odontopediatria .dental-treatment-steps .nav-item-secciones {
+        min-width: 165px;
+        counter-increment: dental-step;
+    }
+
+    .ficha-odontopediatria .dental-treatment-steps .nav-secciones {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .45rem;
+        width: 100%;
+        min-height: 44px;
+        padding: .45rem .65rem;
+        border: 0;
+        border-radius: .55rem;
+        color: #617286 !important;
+        font-size: .72rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .ficha-odontopediatria .dental-treatment-steps .nav-secciones::before {
+        content: counter(dental-step);
+        display: inline-flex;
+        flex: 0 0 24px;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border: 1px solid #b7c5d4;
+        border-radius: 50%;
+        background: #fff;
+        color: #617286;
+        font-size: .72rem;
+    }
+
+    .ficha-odontopediatria .dental-treatment-steps .nav-secciones.active {
+        background: #fff;
+        color: #174ea6 !important;
+        box-shadow: 0 2px 9px rgba(34, 72, 120, .14);
+    }
+
+    .ficha-odontopediatria .dental-treatment-steps .nav-secciones.active::before {
+        border-color: #174ea6;
+        background: #174ea6;
+        color: #fff;
+    }
+
+    @media (max-width: 767.98px) {
+        .ficha-odontopediatria .dental-treatment-flow__heading { align-items: flex-start; flex-direction: column; }
+        .ficha-odontopediatria .dental-treatment-steps { display: flex; }
+    }
+</style>
+
+<div class="user-profile user-card mt-0 ficha-odontopediatria" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
+                <div class="dental-treatment-flow mt-3" aria-label="Flujo de atenci&oacute;n odontopedi&aacute;trica">
+                    <div class="dental-treatment-flow__heading">
+                        <div>
+                            <span class="dental-treatment-flow__eyebrow">Odontopediatr&iacute;a</span>
+                            <h5>Plan de tratamiento</h5>
+                            <p>Eval&uacute;e, seleccione las piezas y prepare el presupuesto del paciente.</p>
+                        </div>
+                        <span class="dental-treatment-flow__status" id="estado_cabecera_plan_dental_ped"
+                            data-status="{{ $estadoCabeceraPlan['codigo'] }}"
+                            data-paid="{{ $presupuestoPagadoEstado ? '1' : '0' }}">
+                            <i class="feather {{ $estadoCabeceraPlan['icono'] }}" aria-hidden="true"></i>
+                            <span>{!! $estadoCabeceraPlan['texto'] !!}</span>
+                        </span>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs-secciones dental-treatment-steps mb-3 mt-2" id="oft" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_dent_endo_tab" data-toggle="tab" href="#atencion_dent_endo" role="tab" aria-controls="atencion_dent_endo" aria-selected="true">Atención especialidad</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="odontograma_ped_tab" data-toggle="tab" href="#odontograma_ped" role="tab" aria-controls="odontograma_ped" aria-selected="false">Odontograma Pediátrico</a>
                     </li>
-                    {{--  <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="periodontograma_tab" data-toggle="tab" href="#periodontograma" role="tab" aria-controls="periodontograma" aria-selected="false">PSR</a>
-                    </li>  --}}
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="caras_cuadrantes_tab" data-toggle="tab" href="#caras_cuadrantes" role="tab" aria-controls="caras_cuadrantes" aria-selected="false">Caras y cuadrantes</a>
+                        <a class="nav-secciones text-uppercase" id="caras_cuadrantes_tab" data-toggle="tab" href="#caras_cuadrantes" role="tab" aria-controls="caras_cuadrantes" aria-selected="false">Plan de tratamiento</a>
                     </li>
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
                     </li>  --}}
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="presupuesto_tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
+                        <a class="nav-secciones text-uppercase" id="presupuesto_tab" onclick="actualizar_presupuesto()" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
                     </li>
                 </ul>
             </div>
@@ -306,9 +465,6 @@
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="ex_oral_od_ped-tab" data-toggle="tab" href="#ex_oral_od_ped" role="tab" aria-controls="ex_oral_od_ped" aria-selected="true">Examen Oral</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="endo_od_ped_pieza-tab" data-toggle="tab" href="#endo_od_ped_pieza" role="tab" aria-controls="endo_od_ped_pieza" aria-selected="true" onclick="mostrar_pieza_dental_examen_odontop_(1)">Examen Por Pieza</a>
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="plan_od_ped-tab" data-toggle="tab" href="#plan_od_ped" role="tab" aria-controls="plan_od_ped" aria-selected="true" onclick="$('#table_piezas_presupuesto_odped').DataTable(); $('#table_insumos_odped').DataTable();">Planificación de tratamiento</a>
@@ -920,6 +1076,7 @@
                                                                                             <a class="nav-link-aten text-reset active" id="intraoral_odontop_tab" data-toggle="tab" href="#intraoral_odontop" role="tab" aria-controls="intraoral_odontop" aria-selected="true">Intra-Oral</a>
                                                                                             <a class="nav-link-aten text-reset" id="extraoral_odontop_tab" data-toggle="tab" href="#extraoral_odontop" role="tab" aria-controls="extraoral_odontop" aria-selected="false">Extra Oral</a>
                                                                                             <a class="nav-link-aten text-reset" id="radiologia_odontop_tab" data-toggle="tab" href="#radiologia_odontop" role="tab" aria-controls="radiologia_odontop" aria-selected="false" onclick="mostrar_nueva_pieza_oral_rx_odontop()">Ex. Radiológico por pieza</a>
+                                                                                            <a class="nav-link-aten text-reset" id="diagnostico_pieza_odontop_tab" data-toggle="tab" href="#diagnostico_pieza_odontop" role="tab" aria-controls="diagnostico_pieza_odontop" aria-selected="false">Diagnóstico por pieza</a>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-sm-12 col-md-10 col-xl-10">
@@ -1027,6 +1184,15 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
+                                                                                            <div class="tab-pane fade" id="diagnostico_pieza_odontop" role="tabpanel" aria-labelledby="diagnostico_pieza_odontop_tab">
+                                                                                                @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                                                                    'id' => 'selector_diagnostico_odontop',
+                                                                                                    'modo' => 'diagnostico',
+                                                                                                    'multiple' => true,
+                                                                                                    'titulo' => 'Diagnóstico por pieza',
+                                                                                                    'ayuda' => 'Seleccione una o varias piezas temporales y aplique el diagnóstico.',
+                                                                                                ])
+                                                                                            </div>
                                                                                             <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                     <label class="floating-label-activo-sm">Observaciones Examen Oral</label>
@@ -1042,7 +1208,7 @@
                                                                 </div>
                                                             </div>
                                                             <!--EXAMEN  POR PIEZA-->
-                                                            <div class="tab-pane fade show" id="endo_od_ped_pieza" role="tabpanel" aria-labelledby="endo_od_ped_pieza-tab">
+                                                            <div class="tab-pane fade show d-none" id="endo_od_ped_pieza" role="tabpanel" aria-labelledby="endo_od_ped_pieza-tab">
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
@@ -1388,7 +1554,7 @@
                                                             <!--PLANIFICACION TRATAMIENTO-->
                                                             <div class="tab-pane fade show" id="plan_od_ped" role="tabpanel" aria-labelledby="plan_od_ped-tab">
                                                                  <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 d-none" aria-hidden="true">
                                                                         <div class="card-informacion">
                                                                             <div class="card-top">
                                                                                 <h6 class="text-uppercase text-c-blue">Presupuesto por pieza</h6>
@@ -1451,7 +1617,7 @@
                                                                             <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo de piezas</h6>
                                                                             </div>
                                                                             <div class="card-body">
-                                                                                    <div class="row my-2">
+                                                                                    <div class="row my-2 d-none" aria-hidden="true">
                                                                                         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                                                             <div class="custom-control custom-switch">
                                                                                                 <input type="checkbox" class="custom-control-input" id="max_sup_odped" onclick="seleccionar_maxilar_superior_odped()">
@@ -1473,7 +1639,21 @@
                                                                                     </div>
                                                                                 <div class="row">
                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                                                                                        @include('atencion_odontologica.generales.odontograma_ped_grupos_odped')
+                                                                                        @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                                                            'id' => 'selector_planificacion_odontop',
+                                                                                            'modo' => 'planificacion',
+                                                                                            'multiple' => false,
+                                                                                            'requiereDiagnostico' => true,
+                                                                                            'diagnosticosIniciales' => collect($odontograma ?? [])->filter(function ($pieza) {
+                                                                                                return (int) ($pieza->urgencia ?? 0) === 0
+                                                                                                    && (int) ($pieza->presupuesto ?? 0) === 1
+                                                                                                    && trim((string) ($pieza->tratamiento ?? '')) === ''
+                                                                                                    && !empty($pieza->diagnostico_id ?? $pieza->diagnostico ?? null);
+                                                                                            }),
+                                                                                            'inputId' => 'paciente_piezas_dentales_ex_odped',
+                                                                                            'titulo' => 'Seleccione piezas para el plan',
+                                                                                            'ayuda' => 'Sólo están disponibles las piezas con diagnóstico guardado en Examen oral.',
+                                                                                        ])
                                                                                     </div>
                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
                                                                                         <div class="form-row">
@@ -1506,13 +1686,14 @@
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Diagnostico</label>
-                                                                                                    <select class="form-control form-control-sm" id="diagnostico_combo_g">
+                                                                                                    <label class="floating-label-activo-sm">Diagnóstico guardado</label>
+                                                                                                    <select class="form-control form-control-sm" id="diagnostico_combo_g" disabled>
                                                                                                         <option value="0">Seleccione</option>
                                                                                                         @foreach ($diagnosticos as $d)
                                                                                                             <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
                                                                                                         @endforeach
                                                                                                     </select>
+                                                                                                    <small class="form-text text-muted">Se completa automáticamente al seleccionar una pieza diagnosticada.</small>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1524,6 +1705,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_odped_g()"><i class="feather icon-save"></i> Guardar piezas</button>
                                                                                             </div>
+                                                                                            <div class="col-12 mt-3 px-0" id="contenedor_insumos_plan_odontop"></div>
                                                                                         </div>
                                                                                     </div>
 
@@ -1536,7 +1718,7 @@
                                                                     <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
 
                                                                     <!--TABLA INSUMOS-->
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12" id="bloque_insumos_plan_odontop">
                                                                         <div class="card-informacion">
                                                                             <div class="card-top">
                                                                                 <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
@@ -2249,11 +2431,243 @@
                             </div>
                         </div>
                         <!--CIERRE: PERIODONTOGRAMA--->
-                        <!-- CARAS Y CUADRANTES--->
+                        <!-- PLAN DE TRATAMIENTO: CARAS Y CUADRANTES --->
                         <div class="tab-pane fade" id="caras_cuadrantes" role="tabpanel" aria-labelledby="caras_cuadrantes_tab">
-                            @include('atencion_odontologica.generales.caras_cuadrantes')
+                            <div class="card-informacion mt-3">
+                                <div class="card-top"><h6 class="text-uppercase text-c-blue">Plan de tratamiento pediátrico</h6></div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                'id' => 'selector_plan_completo_odontop',
+                                                'modo' => 'planificacion',
+                                                'multiple' => false,
+                                                'inputId' => 'pieza_plan_completo_odontop',
+                                                'titulo' => 'Seleccione una pieza para agregar al plan',
+                                                'ayuda' => 'Seleccione una pieza temporal y complete diagnóstico y tratamiento.',
+                                                'piezasPresupuesto' => collect($odontograma ?? [])->where('presupuesto', 1)->where('urgencia', 0),
+                                            ])
+                                            <input type="hidden" id="pieza_plan_completo_odontop" value="">
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                            <h5 class="text-c-blue mb-3">Evaluación pediátrica por grupos dentales</h5>
+                                            @php
+                                                $planEditableOdontop = collect($odontograma ?? [])->filter(function ($item) {
+                                                    return (int) data_get($item, 'presupuesto', 0) === 1
+                                                        && (int) data_get($item, 'urgencia', 0) === 0
+                                                        && preg_match('/^[5-8]\.[1-5]$/', (string) data_get($item, 'pieza', ''));
+                                                })->groupBy(function ($item) { return substr((string) data_get($item, 'pieza'), 0, 1); });
+                                                $grupoEditableActivo = $planEditableOdontop->keys()->first() ?? '5';
+                                            @endphp
+                                            <div class="row" id="grupos_plan_odontop">
+                                                <div class="col-12">
+                                                    <div class="tabs-grupo-plan-odontop">
+                                                        @foreach ([5,6,7,8] as $grupoEditablePed)
+                                                            <button type="button" class="tab-grupo-plan-odontop {{ (string) $grupoEditablePed === (string) $grupoEditableActivo ? 'is-active' : '' }}" data-grupo-plan="{{ $grupoEditablePed }}">Cuadrante {{ $grupoEditablePed }}</button>
+                                                        @endforeach
+                                                    </div>
+                                                    @foreach ([5,6,7,8] as $grupoEditablePed)
+                                                        <div class="contenido-grupo-plan-odontop {{ (string) $grupoEditablePed === (string) $grupoEditableActivo ? '' : 'd-none' }}" data-panel-grupo-plan="{{ $grupoEditablePed }}">
+                                                            <h6 class="text-center text-c-blue mb-3">CUADRANTE {{ $grupoEditablePed }}</h6>
+                                                            @forelse ($planEditableOdontop->get((string) $grupoEditablePed, collect()) as $piezaEditablePed)
+                                                                @php
+                                                                    $numeroEditablePed = (string) data_get($piezaEditablePed, 'pieza');
+                                                                    $carasEditablePed = array_filter(explode('|', (string) data_get($piezaEditablePed, 'caras', '')));
+                                                                @endphp
+                                                                <table class="ficha-caras-pediatrica pieza-grupo-plan-odontop" data-id-tratamiento="{{ data_get($piezaEditablePed, 'id') }}">
+                                                                    <thead><tr><th class="col-pieza">Pieza</th><th class="col-caras">Cara</th><th class="col-cuadrante">Cuadrante</th></tr></thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="col-pieza"><div class="form-control mb-2 text-left">{{ $numeroEditablePed }}</div><img class="imagen-pieza-plan" src="{{ asset('images/dental/odontopediatria/diente-sano/diente-sano'.str_replace('.', '', $numeroEditablePed).'.png') }}" alt="Pieza {{ $numeroEditablePed }}"></td>
+                                                                            <td class="col-caras"><div class="caras-cruz-plan-odontop">@foreach (['V','D','O','M','P'] as $caraEditablePed)<button type="button" class="cara-plan-odontop cara-{{ strtolower($caraEditablePed) }} border-0 {{ in_array($caraEditablePed, $carasEditablePed, true) ? 'is-active' : '' }}" data-cara="{{ $caraEditablePed }}">{{ $caraEditablePed }}</button>@endforeach</div></td>
+                                                                            <td class="col-cuadrante"><img class="imagen-cuadrante-plan" src="{{ asset('images/dientes/cuadrante.png') }}" alt="Cuadrante"><div class="text-success font-weight-bold">CUADRANTE</div></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><button type="button" class="btn btn-outline-primary btn-block">Ver historia</button></td>
+                                                                            <td><input type="text" class="form-control" value="{{ data_get($piezaEditablePed, 'diagnostico', data_get($piezaEditablePed, 'descripcion', 'Sin diagnóstico asociado')) }}" readonly></td>
+                                                                            <td><input type="text" class="form-control mb-2" value="{{ data_get($piezaEditablePed, 'tratamiento', 'Sin tratamiento asociado') }}" readonly><button type="button" class="btn btn-info guardar-caras-plan-odontop">Guardar caras</button></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            @empty
+                                                                <div class="text-center text-muted py-4">No hay piezas dentales registradas</div>
+                                                            @endforelse
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 mt-3 mt-lg-0 d-none">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Diagnóstico</label>
+                                                <select class="form-control form-control-sm" id="diagnostico_plan_completo_odontop">
+                                                    <option value="0">Seleccione</option>
+                                                    @foreach ($diagnosticos as $diagnosticoPlanOdontop)
+                                                        <option value="{{ $diagnosticoPlanOdontop->id }}">{{ $diagnosticoPlanOdontop->descripcion }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Tratamiento</label>
+                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete"
+                                                    id="tratamiento_plan_completo_odontop" placeholder="Busque o describa el tratamiento" autocomplete="off">
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-block" id="guardar_plan_completo_odontop">
+                                                <i class="feather icon-save"></i> Agregar al presupuesto
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade modal-plan-pieza modal-plan-pieza-pediatrica" id="modal_plan_completo_odontop" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-info text-white">
+                                            <div><small class="text-uppercase">Plan de tratamiento</small><h5 class="modal-title">Pieza <span id="numero_plan_completo_odontop" data-modal-numero-pieza></span></h5></div>
+                                            <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-plan-pieza-visual"><div class="modal-plan-pieza-image-wrap"><img class="modal-plan-pieza-image" src="" alt=""></div><div><small>Pieza seleccionada</small><strong>Pieza</strong><span class="text-muted small">Plan odontopediátrico</span></div></div>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm" for="diagnostico_modal_plan_odontop">Diagnóstico</label>
+                                                <select class="form-control" id="diagnostico_modal_plan_odontop">
+                                                    <option value="0">Seleccione un diagnóstico</option>
+                                                    @foreach ($diagnosticos as $diagnosticoModalOdontop)
+                                                        <option value="{{ $diagnosticoModalOdontop->id }}">{{ $diagnosticoModalOdontop->descripcion }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <label class="floating-label-activo-sm" for="tratamiento_modal_plan_odontop">Tratamiento o prestación</label>
+                                                <input type="text" class="form-control tratamiento-autocomplete" id="tratamiento_modal_plan_odontop"
+                                                    placeholder="Busque o describa el tratamiento" autocomplete="off">
+                                                <small class="form-text text-muted">Al guardar, la pieza se incorporará a su cuadrante y al presupuesto.</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="agregar_modal_plan_odontop"><i class="feather icon-plus"></i> Agregar al plan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-informacion mt-3" id="resumen_plan_odontop">
+                                <div class="card-top"><h6 class="text-uppercase text-c-blue">Plan de tratamiento y presupuesto</h6></div>
+                                <div class="card-body">
+                                    @php
+                                        $planPediatricoInicial = collect($odontograma ?? [])->filter(function ($item) {
+                                            return (int) data_get($item, 'presupuesto', 0) === 1
+                                                && (int) data_get($item, 'urgencia', 0) === 0
+                                                && preg_match('/^[5-8]\.[1-5]$/', (string) data_get($item, 'pieza', ''));
+                                        })->groupBy(function ($item) { return substr((string) data_get($item, 'pieza'), 0, 1); });
+                                    @endphp
+                                    <div class="row" id="resumen_lectura_plan_odontop">
+                                        @foreach ([5, 6, 7, 8] as $grupoPed)
+                                            <div class="col-sm-12 col-md-6 col-xl-3 mb-3"><div class="grupo-plan-odontop h-100">
+                                                <h6>Cuadrante {{ $grupoPed }}</h6>
+                                                @forelse ($planPediatricoInicial->get((string) $grupoPed, collect()) as $piezaPedPlan)
+                                                    @php
+                                                        $piezaPedNumero = (string) data_get($piezaPedPlan, 'pieza');
+                                                        $carasPed = array_filter(explode('|', (string) data_get($piezaPedPlan, 'caras', '')));
+                                                    @endphp
+                                                    <div class="pieza-grupo-plan-odontop" data-id-tratamiento="{{ data_get($piezaPedPlan, 'id') }}">
+                                                        <img src="{{ asset('images/dental/odontopediatria/diente-sano/diente-sano'.str_replace('.', '', $piezaPedNumero).'.png') }}" alt="Pieza {{ $piezaPedNumero }}">
+                                                        <strong>{{ $piezaPedNumero }}</strong>
+                                                        <div class="caras-cruz-plan-odontop">
+                                                            @foreach (['V','D','O','M','P'] as $caraPed)<button type="button" class="cara-plan-odontop cara-{{ strtolower($caraPed) }} border-0 {{ in_array($caraPed, $carasPed, true) ? 'is-active' : '' }}" data-cara="{{ $caraPed }}">{{ $caraPed }}</button>@endforeach
+                                                        </div>
+                                                    </div>
+                                                @empty
+                                                    <span class="text-muted">Sin piezas presupuestadas</span>
+                                                @endforelse
+                                            </div></div>
+                                        @endforeach
+                                    </div>
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-striped table-hover table-sm" id="tabla_plan_odontop">
+                                            <thead><tr><th>Fecha y hora</th><th>Prestación</th><th>Caras</th><th>Pieza / imagen</th><th>Diagnóstico</th><th>Valor</th><th>Presupuesto</th><th>Progreso</th></tr></thead>
+                                            <tbody>
+                                                @forelse ($planPediatricoInicial->collapse() as $filaPlanPed)
+                                                    @php
+                                                        $numeroFilaPed = (string) data_get($filaPlanPed, 'pieza');
+                                                        $estadoFilaPed = (int) data_get($filaPlanPed, 'estado', 0);
+                                                        $progresoFilaPed = (int) data_get($filaPlanPed, 'progreso', $estadoFilaPed === 1 ? 100 : 25);
+                                                        $fechaFilaPed = data_get($filaPlanPed, 'fecha', data_get($filaPlanPed, 'created_at', ''));
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $fechaFilaPed }}</td>
+                                                        <td>{{ data_get($filaPlanPed, 'tratamiento', data_get($filaPlanPed, 'descripcion', '')) }}</td>
+                                                        <td>{{ data_get($filaPlanPed, 'caras') ?: '-' }}</td>
+                                                        <td><div class="pieza-tabla-plan-odontop"><img src="{{ asset('images/dental/odontopediatria/diente-sano/diente-sano'.str_replace('.', '', $numeroFilaPed).'.png') }}" alt="Pieza {{ $numeroFilaPed }}"><strong>{{ $numeroFilaPed }}</strong></div></td>
+                                                        <td>{{ data_get($filaPlanPed, 'diagnostico', '') }}</td>
+                                                        <td>{{ number_format((float) data_get($filaPlanPed, 'valor', 0), 0, ',', '.') }}</td>
+                                                        <td><span class="badge badge-success">Incluida</span></td>
+                                                        <td>
+                                                            <div class="dental-progress-wheel" style="--progress:{{ $progresoFilaPed }}" title="Progreso del tratamiento: {{ $progresoFilaPed }}%">
+                                                                <span class="dental-progress-wheel-value">{{ $progresoFilaPed }}%</span>
+                                                                <select class="dental-piece-progress" aria-label="Progreso del tratamiento" onchange="actualizarEstadoPiezaPlanOdontop(this, {{ data_get($filaPlanPed, 'id') }})" data-original-progress="{{ $progresoFilaPed }}">
+                                                                    @foreach ([25, 50, 75, 100] as $porcentajePed)<option value="{{ $porcentajePed }}" {{ $progresoFilaPed === $porcentajePed ? 'selected' : '' }}>{{ $porcentajePed }}%</option>@endforeach
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr><td colspan="8" class="text-center text-muted py-4">No hay piezas incorporadas al plan</td></tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <style>
+                                #caras_cuadrantes .grupo-plan-odontop{padding:1rem;border:1px solid #dbe4ee;border-radius:.7rem;background:#fff}
+                                #caras_cuadrantes .grupo-plan-odontop h6{color:#174ea6;font-weight:700}
+                                #caras_cuadrantes .tabs-grupo-plan-odontop{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-bottom:1rem}
+                                #caras_cuadrantes .tab-grupo-plan-odontop{padding:.7rem;border:1px solid #d5dfeb;border-radius:.55rem;background:#f3f6f9;color:#68798c;font-weight:700;text-transform:uppercase}
+                                #caras_cuadrantes .tab-grupo-plan-odontop.is-active{border-color:#73a5ff;background:#cfe0ff;color:#174ea6}
+                                #caras_cuadrantes .contenido-grupo-plan-odontop{min-height:180px;padding:1rem 1.25rem;border:1px solid #dbe4ee;border-radius:.7rem;background:#fff}
+                                #caras_cuadrantes .contenido-grupo-plan-odontop .piezas-grupo-plan-odontop{display:block}
+                                #caras_cuadrantes table.ficha-caras-pediatrica{display:table!important;width:100%!important;margin-bottom:1.25rem;border:1px solid #dbe4ee;table-layout:fixed}
+                                #caras_cuadrantes table.ficha-caras-pediatrica thead{display:table-header-group}
+                                #caras_cuadrantes table.ficha-caras-pediatrica tbody{display:table-row-group}
+                                #caras_cuadrantes table.ficha-caras-pediatrica tr{display:table-row}
+                                #caras_cuadrantes table.ficha-caras-pediatrica th,#caras_cuadrantes table.ficha-caras-pediatrica td{display:table-cell}
+                                #caras_cuadrantes .ficha-caras-pediatrica th{padding:.55rem;background:#eaf0f6;text-align:center;text-transform:uppercase;color:#3e4b59}
+                                #caras_cuadrantes .ficha-caras-pediatrica td{padding:.45rem;border:1px solid #dbe4ee;vertical-align:middle}
+                                #caras_cuadrantes .ficha-caras-pediatrica .col-pieza{width:19%;text-align:center}
+                                #caras_cuadrantes .ficha-caras-pediatrica .col-caras{width:44%;text-align:center}
+                                #caras_cuadrantes .ficha-caras-pediatrica .col-cuadrante{width:37%;text-align:center}
+                                #caras_cuadrantes .ficha-caras-pediatrica .imagen-pieza-plan{width:52px;height:72px;object-fit:contain}
+                                #caras_cuadrantes .ficha-caras-pediatrica .imagen-cuadrante-plan{width:110px;max-height:75px;object-fit:contain}
+                                #caras_cuadrantes .grupo-lectura-plan-odontop{min-height:260px;padding:1rem;border:1px solid #dbe4ee;border-radius:.7rem;background:#fff}
+                                #caras_cuadrantes .pieza-lectura-plan-odontop{display:grid;grid-template-columns:38px 42px 104px;align-items:center;gap:.5rem;padding:.7rem 0;border-bottom:1px solid #e6ecf2}
+                                #caras_cuadrantes .pieza-lectura-plan-odontop:last-child{border-bottom:0}
+                                #caras_cuadrantes .pieza-lectura-plan-odontop img{width:30px;height:44px;object-fit:contain}
+                                #caras_cuadrantes .caras-cruz-lectura-odontop{display:grid;grid-template-columns:repeat(3,30px);grid-template-rows:repeat(3,30px);gap:2px;justify-content:center}
+                                #caras_cuadrantes .cara-lectura-odontop{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#e9eef4;color:#77889a;font-weight:700}
+                                #caras_cuadrantes .cara-lectura-odontop.is-active{background:#76bd00;color:#fff}
+                                #caras_cuadrantes .caras-cruz-lectura-odontop .cara-v{grid-column:2;grid-row:1}.caras-cruz-lectura-odontop .cara-d{grid-column:1;grid-row:2}.caras-cruz-lectura-odontop .cara-o{grid-column:2;grid-row:2}.caras-cruz-lectura-odontop .cara-m{grid-column:3;grid-row:2}.caras-cruz-lectura-odontop .cara-p{grid-column:2;grid-row:3}
+                                #caras_cuadrantes div.pieza-grupo-plan-odontop{display:grid;grid-template-columns:40px 48px 112px;align-items:center;gap:.55rem;padding:.75rem 0;border-bottom:1px solid #e6ecf2}
+                                #caras_cuadrantes div.pieza-grupo-plan-odontop:last-child{border-bottom:0}
+                                #caras_cuadrantes div.pieza-grupo-plan-odontop img,#caras_cuadrantes .pieza-tabla-plan-odontop img{width:30px;height:42px;object-fit:contain}
+                                #caras_cuadrantes .cara-plan-odontop{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin:1px;border-radius:50%;background:#e9eef4;color:#77889a;font-weight:700}
+                                #caras_cuadrantes .cara-plan-odontop.is-active{background:#76bd00;color:#fff;box-shadow:0 0 0 2px rgba(118,189,0,.18)}
+                                #caras_cuadrantes .ficha-caras-pediatrica .cara-plan-odontop{width:46px;height:46px;font-size:25px}
+                                #caras_cuadrantes .caras-cruz-plan-odontop{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:2px;justify-content:center}
+                                #caras_cuadrantes .caras-cruz-plan-odontop .cara-v{grid-column:2;grid-row:1}
+                                #caras_cuadrantes .caras-cruz-plan-odontop .cara-d{grid-column:1;grid-row:2}
+                                #caras_cuadrantes .caras-cruz-plan-odontop .cara-o{grid-column:2;grid-row:2}
+                                #caras_cuadrantes .caras-cruz-plan-odontop .cara-m{grid-column:3;grid-row:2}
+                                #caras_cuadrantes .caras-cruz-plan-odontop .cara-p{grid-column:2;grid-row:3}
+                                #caras_cuadrantes .pieza-tabla-plan-odontop{display:flex;align-items:center;gap:.45rem;white-space:nowrap}
+                                #caras_cuadrantes #tabla_plan_odontop thead th{background:#eaf0f6;color:#34495e;text-transform:uppercase;vertical-align:middle}
+                                #caras_cuadrantes #tabla_plan_odontop td{vertical-align:middle}
+                                #modal_plan_completo_odontop .modal-header{background:#35aeb8!important}
+                            </style>
                         </div>
-                        <!--CIERRE: CARAS Y CUADRANTES--->
+                        <!-- CIERRE: PLAN DE TRATAMIENTO --->
 
 
                         <!-- TRATAMIENTO-->
@@ -2321,7 +2735,7 @@
                         </div>
                         <!--CIERRE: TRATAMIENTO--->
                         <div class="tab-pane fade" id="presupuesto" role="tabpanel" aria-labelledby="presupuesto_tab">
-                            @include('atencion_odontologica.generales.presupuesto')
+                            @include('atencion_odontologica.generales.presupuesto', ['odontogramaPediatrico' => true])
                         </div>
                         <!--CIERRE: PRESUPUESTO--->
                     </div>
@@ -2330,6 +2744,322 @@
         </div>
     </div>
 </div>
+<script>
+    window.nombreEstadoTratamientoDental = window.nombreEstadoTratamientoDental || function (estado) {
+        const estados = {
+            0: 'PENDIENTE',
+            1: 'FINALIZADO',
+            2: 'EN PROCESO',
+            3: 'CITADO A CONTROL'
+        };
+        return estados[parseInt(estado, 10)] || 'SIN ESTADO';
+    };
+
+    window.formatearCarasLectura = window.formatearCarasLectura || function (caras) {
+        const carasValidas = ['M', 'O', 'D', 'V', 'P'];
+        const seleccionadas = String(caras || '').split('|').map(function (cara) {
+            return cara.trim().toUpperCase();
+        }).filter(function (cara, indice, lista) {
+            return carasValidas.includes(cara) && lista.indexOf(cara) === indice;
+        });
+        return seleccionadas.length ? seleccionadas.join(', ') : 'Sin caras';
+    };
+
+    window.cargarPackInsumosTratamientoOdontop = function (tratamiento) {
+        tratamiento = $.trim(tratamiento || '');
+        if (!tratamiento) return;
+        $.get("{{ route('profesional.aranceles.insumos.tratamiento') }}", { tratamiento: tratamiento })
+            .done(function (respuesta) {
+                const insumos = respuesta.insumos || [];
+                const filas = insumos.map(function (item) {
+                    const cantidad = Number(item.cantidad || 0);
+                    const valor = Number(item.valor || 0);
+                    return [
+                        item.insumo + ' <span class="badge badge-info ml-1">Pack automático</span>',
+                        item.observaciones || '',
+                        cantidad.toLocaleString('es-CL'),
+                        valor.toLocaleString('es-CL'),
+                        (cantidad * valor).toLocaleString('es-CL'),
+                        '<span class="text-muted small">Se agregará al guardar piezas</span>'
+                    ];
+                });
+                if ($.fn.dataTable.isDataTable('#table_insumos_odped')) {
+                    const tabla = $('#table_insumos_odped').DataTable();
+                    tabla.clear();
+                    filas.forEach(function (fila) { tabla.row.add(fila); });
+                    tabla.draw();
+                } else {
+                    $('#table_insumos_odped tbody').html(filas.length ? filas.map(function (fila) {
+                        return '<tr>' + fila.map(function (celda) { return '<td>' + celda + '</td>'; }).join('') + '</tr>';
+                    }).join('') : '<tr><td colspan="6" class="text-center text-muted">El tratamiento no tiene un pack de insumos configurado.</td></tr>');
+                }
+            });
+    };
+
+    $(document).on('autocompleteselect', '#diag_presupuesto_pieza_g_odped, #tratamiento_plan_completo_odontop, #tratamiento_modal_plan_odontop', function (event, ui) {
+        const tratamiento = ui && ui.item ? (ui.item.value || ui.item.label) : $(this).val();
+        window.setTimeout(function () { cargarPackInsumosTratamientoOdontop(tratamiento); }, 0);
+    });
+    $(document).on('change', '#diag_presupuesto_pieza_g_odped, #tratamiento_plan_completo_odontop, #tratamiento_modal_plan_odontop', function () {
+        cargarPackInsumosTratamientoOdontop($(this).val());
+    });
+
+    window.renderizarPlanOdontop = function (odontograma) {
+        const listaOdontograma = Array.isArray(odontograma)
+            ? odontograma
+            : Object.values(odontograma || {});
+        const registros = listaOdontograma.filter(function (item) {
+            return item && Number(item.urgencia || 0) === 0 && Number(item.presupuesto) === 1
+                && /^[5-8]\.[1-5]$/.test(String(item.pieza || ''));
+        });
+        const baseImagen = @json(asset('images/dental/odontopediatria/diente-sano'));
+        const grupos = {5: [], 6: [], 7: [], 8: []};
+        registros.forEach(function (item) { (grupos[String(item.pieza).charAt(0)] || []).push(item); });
+        window.piezasPlanOdontop = {};
+        registros.forEach(function (item) { window.piezasPlanOdontop[String(item.pieza)] = item; });
+        $('#selector_plan_completo_odontop [data-pieza-pediatrica]').each(function () {
+            $(this).toggleClass('is-in-budget', !!window.piezasPlanOdontop[String($(this).data('pieza-pediatrica'))]);
+        });
+
+        const grupoActivo = [5, 6, 7, 8].find(function (grupo) { return grupos[grupo].length; }) || 5;
+        const tabsGrupos = [5, 6, 7, 8].map(function (grupo) {
+            return '<button type="button" class="tab-grupo-plan-odontop ' + (grupo === grupoActivo ? 'is-active' : '') + '" data-grupo-plan="' + grupo + '">Cuadrante ' + grupo + '</button>';
+        }).join('');
+        const panelesGrupos = [5, 6, 7, 8].map(function (grupo) {
+            const piezas = grupos[grupo];
+            const contenido = piezas.length ? piezas.map(function (item) {
+                const caras = String(item.caras || '').split('|').filter(Boolean);
+                const codigo = String(item.pieza).replace('.', '');
+                const diagnostico = String(item.diagnostico || item.diagnostico_descripcion || 'Sin diagnóstico asociado');
+                const tratamiento = String(item.tratamiento || item.descripcion || 'Sin tratamiento asociado');
+                const botones = ['V','D','O','M','P'].map(function (cara) {
+                    return '<button type="button" class="cara-plan-odontop cara-' + cara.toLowerCase() + ' border-0 ' + (caras.includes(cara) ? 'is-active' : '') + '" data-cara="' + cara + '" aria-pressed="' + (caras.includes(cara) ? 'true' : 'false') + '">' + cara + '</button>';
+                }).join('');
+                return '<table class="ficha-caras-pediatrica pieza-grupo-plan-odontop" data-id-tratamiento="' + item.id + '">' +
+                    '<thead><tr><th class="col-pieza">Pieza</th><th class="col-caras">Cara</th><th class="col-cuadrante">Cuadrante</th></tr></thead>' +
+                    '<tbody><tr><td class="col-pieza"><div class="form-control mb-2 text-left">' + item.pieza + '</div><img class="imagen-pieza-plan" src="' + baseImagen + '/diente-sano' + codigo + '.png" alt="Pieza ' + item.pieza + '"></td>' +
+                    '<td class="col-caras"><div class="caras-cruz-plan-odontop">' + botones + '</div></td>' +
+                    '<td class="col-cuadrante"><img class="imagen-cuadrante-plan" src="{{ asset('images/dientes/cuadrante.png') }}" alt="Cuadrante"><div class="text-success font-weight-bold">CUADRANTE</div></td></tr>' +
+                    '<tr><td><button type="button" class="btn btn-outline-primary btn-block">Ver historia</button></td>' +
+                    '<td><input type="text" class="form-control" value="' + $('<div>').text(diagnostico).html() + '" readonly></td>' +
+                    '<td><input type="text" class="form-control mb-2" value="' + $('<div>').text(tratamiento).html() + '" readonly><button type="button" class="btn btn-info guardar-caras-plan-odontop">Guardar caras</button></td></tr></tbody></table>';
+            }).join('') : '<span class="text-muted">Sin piezas presupuestadas</span>';
+            return '<div class="contenido-grupo-plan-odontop ' + (grupo === grupoActivo ? '' : 'd-none') + '" data-panel-grupo-plan="' + grupo + '"><h6 class="text-center mb-3">Cuadrante ' + grupo + '</h6><div class="piezas-grupo-plan-odontop">' + contenido + '</div></div>';
+        }).join('');
+        $('#grupos_plan_odontop').html('<div class="col-12"><div class="tabs-grupo-plan-odontop">' + tabsGrupos + '</div>' + panelesGrupos + '</div>');
+
+        $('#resumen_lectura_plan_odontop').html([5, 6, 7, 8].map(function (grupo) {
+            const piezas = grupos[grupo];
+            const contenido = piezas.length ? piezas.map(function (item) {
+                const caras = String(item.caras || '').split('|').filter(Boolean);
+                const codigo = String(item.pieza).replace('.', '');
+                const carasLectura = ['V','D','O','M','P'].map(function (cara) {
+                    return '<span class="cara-lectura-odontop cara-' + cara.toLowerCase() + ' ' + (caras.includes(cara) ? 'is-active' : '') + '">' + cara + '</span>';
+                }).join('');
+                return '<div class="pieza-lectura-plan-odontop"><img src="' + baseImagen + '/diente-sano' + codigo + '.png" alt="Pieza ' + item.pieza + '"><strong>' + item.pieza + '</strong><div class="caras-cruz-lectura-odontop">' + carasLectura + '</div></div>';
+            }).join('') : '<span class="text-muted">Sin piezas presupuestadas</span>';
+            return '<div class="col-sm-12 col-md-6 col-xl-3 mb-3"><div class="grupo-lectura-plan-odontop h-100"><h6 class="text-c-blue">Cuadrante ' + grupo + '</h6>' + contenido + '</div></div>';
+        }).join(''));
+
+        $('#tabla_plan_odontop tbody').html(registros.length ? registros.map(function (item) {
+            const codigo = String(item.pieza).replace('.', '');
+            const fecha = String(item.fecha || item.created_at || '').replace('T', ' ').substring(0, 16);
+            const estado = Number(item.estado || 0);
+            const progreso = Number(item.progreso || 0) || (estado === 1 ? 100 : 25);
+            const controlProgreso = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlanOdontop(this,' + item.id + ')');
+            return '<tr><td>' + fecha + '</td><td>' + (item.tratamiento || item.descripcion || '') + '</td><td>' + (item.caras || '-') + '</td>' +
+                '<td><div class="pieza-tabla-plan-odontop"><img src="' + baseImagen + '/diente-sano' + codigo + '.png"><strong>' + item.pieza + '</strong></div></td>' +
+                '<td>' + (item.diagnostico || '') + '</td><td>' + Number(item.valor || 0).toLocaleString('es-CL') + '</td>' +
+                '<td><span class="badge badge-success">Incluida</span></td><td>' + controlProgreso + '</td></tr>';
+        }).join('') : '<tr><td colspan="8" class="text-center text-muted py-4">No hay piezas incorporadas al plan</td></tr>');
+    };
+
+    $(document).on('click', '.tab-grupo-plan-odontop', function () {
+        const grupo = String($(this).data('grupo-plan'));
+        $('.tab-grupo-plan-odontop').removeClass('is-active');
+        $(this).addClass('is-active');
+        $('[data-panel-grupo-plan]').addClass('d-none');
+        $('[data-panel-grupo-plan="' + grupo + '"]').removeClass('d-none');
+    });
+
+    $(document).on('click', '.pieza-grupo-plan-odontop .cara-plan-odontop', function () {
+        const activa = !$(this).hasClass('is-active');
+        $(this).toggleClass('is-active', activa).attr('aria-pressed', activa ? 'true' : 'false');
+    });
+
+    $(document).on('click', '.guardar-caras-plan-odontop', function () {
+        guardarCarasPiezaPlanOdontop($(this).closest('.pieza-grupo-plan-odontop'));
+    });
+
+    window.guardarCarasPiezaPlanOdontop = function ($pieza) {
+        const caras = $pieza.find('.cara-plan-odontop.is-active').map(function () { return $(this).data('cara'); }).get();
+        const $caras = $pieza.find('.cara-plan-odontop').prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.guardar_caras_pediatrico') }}",
+            data: {
+                id_tratamiento: $pieza.data('id-tratamiento'),
+                caras: caras,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (respuesta) {
+                if (respuesta.mensaje !== 'OK') {
+                    swal('No fue posible guardar', respuesta.error || 'Intente nuevamente.', 'error');
+                    return;
+                }
+                window.odontograma_global = respuesta.odontograma || [];
+                window.renderizarPlanOdontop(window.odontograma_global);
+                swal({ icon: 'success', title: 'Caras guardadas', timer: 1200, buttons: false });
+            },
+            error: function (xhr) {
+                const mensaje = xhr.responseJSON && (xhr.responseJSON.message || xhr.responseJSON.error);
+                swal('Error', mensaje || 'No fue posible guardar las caras.', 'error');
+            },
+            complete: function () { $caras.prop('disabled', false); }
+        });
+    };
+
+    window.actualizarEstadoPiezaPlanOdontop = function (select, idTratamiento) {
+        const $select = $(select), anterior = $select.data('original-progress'), nuevo = $select.val();
+        $select.prop('disabled', true);
+        $.ajax({
+            type: 'POST', url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
+            data: { id_tratamiento: idTratamiento, progreso: nuevo, id_ficha_atencion: $('#id_fc').val(), id_paciente: $('#id_paciente_fc').val(), id_profesional: $('#id_profesional_fc').val(), id_lugar_atencion: $('#id_lugar_atencion').val(), _token: "{{ csrf_token() }}" },
+            success: function (respuesta) {
+                if (respuesta.mensaje !== 'OK') { $select.val(anterior); return; }
+                $select.data('original-progress', nuevo);
+                actualizarVisualProgresoDental(select, nuevo);
+                if (Array.isArray(respuesta.odontograma)) { window.odontograma_global = respuesta.odontograma; window.renderizarPlanOdontop(respuesta.odontograma); if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma); }
+            },
+            error: function () { $select.val(anterior); actualizarVisualProgresoDental(select, anterior); swal('Error', 'No fue posible actualizar el progreso.', 'error'); },
+            complete: function () { $select.prop('disabled', false); }
+        });
+    };
+
+    $(document).on('odontograma-pediatrico:change', '#selector_plan_completo_odontop', function (event, piezas) {
+        const pieza = (piezas || [])[0];
+        if (!pieza) return;
+        const registro = (window.piezasPlanOdontop || {})[String(pieza)] || null;
+        $('#numero_plan_completo_odontop').text(pieza);
+        actualizarVisualModalPlanPieza('#modal_plan_completo_odontop', pieza, true);
+        $('#diagnostico_modal_plan_odontop').val(registro ? String(registro.diagnostico_id || registro.diagnostico_plan || 0) : '0').trigger('change');
+        $('#tratamiento_modal_plan_odontop').val(registro ? String(registro.tratamiento || registro.descripcion || '') : '');
+        $('#modal_plan_completo_odontop').data('editando', !!registro);
+        $('#modal_plan_completo_odontop').modal('show');
+    });
+
+    $(document).on('click', '#agregar_modal_plan_odontop', function () {
+        $('#diagnostico_plan_completo_odontop').val($('#diagnostico_modal_plan_odontop').val());
+        $('#tratamiento_plan_completo_odontop').val($('#tratamiento_modal_plan_odontop').val());
+        $('#guardar_plan_completo_odontop').data('etapa', $('#modal_plan_completo_odontop').data('editando') ? 'actualizacion' : 'completa');
+        $('#guardar_plan_completo_odontop').trigger('click');
+    });
+
+    window.recargarPlanOdontop = function () {
+        return $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.obtener_plan_pediatrico') }}",
+            data: {
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (respuesta) {
+                if (respuesta.mensaje === 'OK' && respuesta.odontograma) {
+                    const odontogramaActualizado = Array.isArray(respuesta.odontograma)
+                        ? respuesta.odontograma
+                        : Object.values(respuesta.odontograma);
+                    window.odontograma_global = odontogramaActualizado;
+                    window.renderizarPlanOdontop(odontogramaActualizado);
+                }
+            }
+        });
+    };
+
+    $(function () {
+        window.renderizarPlanOdontop(@json(collect($odontograma ?? [])->values()));
+        window.recargarPlanOdontop();
+    });
+
+    $(document).on('shown.bs.tab', '#caras_cuadrantes_tab', function () {
+        window.recargarPlanOdontop();
+    });
+
+    $(document).on('click', '#guardar_plan_completo_odontop', function () {
+        const pieza = String($('#pieza_plan_completo_odontop').val() || '');
+        const diagnostico = $('#diagnostico_plan_completo_odontop').val();
+        const tratamiento = $.trim($('#tratamiento_plan_completo_odontop').val());
+
+        if (!pieza || diagnostico === '0' || !tratamiento) {
+            swal('Datos requeridos', 'Seleccione una pieza, un diagnóstico y un tratamiento.', 'warning');
+            return;
+        }
+
+        const $boton = $(this).prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.cargar_tratamiento_presupuesto_period') }}",
+            data: {
+                piezas: [pieza],
+                diagnostico: diagnostico,
+                tto: tratamiento,
+                etapa: String($boton.data('etapa') || 'completa'),
+                tipo: 'odped',
+                urgencia: 0,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val() || null,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (respuesta) {
+                if (Number(respuesta.status) !== 1) {
+                    swal('No fue posible guardar', respuesta.mensaje || 'Intente nuevamente.', 'error');
+                    return;
+                }
+                if (respuesta.presupuesto && respuesta.presupuesto.id) $('#id_presupuesto').val(respuesta.presupuesto.id);
+                window.odontograma_global = respuesta.odontograma_paciente || [];
+                $('#diagnostico_plan_completo_odontop').val('0');
+                $('#tratamiento_plan_completo_odontop').val('');
+                $('#pieza_plan_completo_odontop').val('');
+                $('#selector_plan_completo_odontop [data-pieza-pediatrica]').removeClass('is-selected').attr('aria-pressed', 'false');
+                if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                    sincronizarOdontogramaPresupuesto(window.odontograma_global, pieza);
+                }
+                window.renderizarPlanOdontop(window.odontograma_global);
+                $('#modal_plan_completo_odontop').modal('hide');
+                swal({ icon: 'success', title: 'Tratamiento agregado', text: respuesta.mensaje });
+            },
+            error: function (xhr) {
+                const mensaje = xhr.responseJSON && (xhr.responseJSON.message || xhr.responseJSON.mensaje);
+                swal('Error', mensaje || 'No fue posible agregar el tratamiento.', 'error');
+            },
+            complete: function () { $boton.prop('disabled', false); }
+        });
+    });
+
+    (function ubicarInsumosPlanOdontop() {
+        function moverInsumos() {
+        const $bloqueInsumos = $('#bloque_insumos_plan_odontop');
+        const $contenedorInsumos = $('#contenedor_insumos_plan_odontop');
+
+        if ($bloqueInsumos.length && $contenedorInsumos.length) {
+            $bloqueInsumos
+                .detach()
+                .attr('class', 'w-100')
+                .appendTo($contenedorInsumos);
+        }
+        }
+
+        moverInsumos();
+        $(moverInsumos);
+        $(document).on('shown.bs.tab', 'a[href="#plan_od_ped"]', moverInsumos);
+    })();
+</script>
 @include('atencion_odontologica.modals.infantil.tratamiento_boca_completainf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_inferiorinf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
@@ -6280,6 +7010,7 @@
                 id_presupuesto: $('#id_presupuesto').val(),
                 urgencia: 0,
                 diagnostico: diagnostico,
+                etapa: 'planificacion',
                 tipo: 'odped',
                 _token: "{{ csrf_token() }}"
             }
@@ -8827,7 +9558,13 @@
         }
 
         var formatoMoneda = (valor) => {
-            return valor.toLocaleString('es-CL', {
+            let normalizado = valor;
+            if (typeof normalizado === 'string') {
+                normalizado = normalizado.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
+            }
+            const numero = Number(normalizado);
+            const valorSeguro = Number.isFinite(numero) ? numero : 0;
+            return valorSeguro.toLocaleString('es-CL', {
                 style: 'currency',
                 currency: 'CLP',
                 minimumFractionDigits: 0,

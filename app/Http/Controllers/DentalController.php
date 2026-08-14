@@ -57,6 +57,8 @@ use App\Models\Instituciones;
 use App\Models\IngresoPacienteCirugia;
 use App\Models\Interconsulta;
 use App\Models\InsumosTratamientosDental;
+use App\Models\TratamientoProfesionalInsumo;
+use App\Models\Producto;
 use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
 use App\Models\MarcasImplantes;
@@ -1592,6 +1594,14 @@ class DentalController extends Controller
             $id_lugar_atencion = $request->id_lugar_atencion;
             foreach($ids as $id){
                 $odontograma = OdontogramaPaciente::find($id);
+                if (!$odontograma) {
+                    continue;
+                }
+
+                // Los insumos cargados desde el pack pertenecen a esta prestacion.
+                // Si se conserva alguno, el presupuesto queda desfasado aunque la
+                // pieza ya no exista visualmente.
+                InsumosTratamientosDental::where('id_tratamiento', $odontograma->id)->delete();
                 $odontograma->delete();
             }
 
@@ -2195,12 +2205,14 @@ class DentalController extends Controller
             'id_ficha_atencion' => 'required|integer|exists:fichas_atenciones,id',
             'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
             'id_presupuesto' => 'nullable|integer|exists:presupuestos_dental,id',
-            'etapa' => 'nullable|in:diagnostico,planificacion,completa',
+            'etapa' => 'nullable|in:diagnostico,planificacion,completa,actualizacion',
             'tto' => 'nullable|required_unless:etapa,diagnostico|string|max:255',
-            'diagnostico' => 'nullable|required_if:etapa,diagnostico|integer|exists:diagnosticos_dental,id',
+            // El campo diagnostico de odontogramas_pacientes referencia
+            // tratamientos_dental (igual que en odontologia general).
+            'diagnostico' => 'nullable|required_if:etapa,diagnostico|integer|exists:tratamientos_dental,id',
             'piezas' => 'nullable|array|max:32',
             'piezas.*' => 'string|max:3',
-            'tipo' => 'nullable|in:odped,adulto',
+            'tipo' => 'nullable|in:odped,adulto,endo',
         ]);
 
         $fichaValida = FichaAtencion::where('id', $request->id_ficha_atencion)
@@ -2304,6 +2316,9 @@ class DentalController extends Controller
                 }else{
                     $odontograma->id_presupuesto = $presupuesto->id;
                     $odontograma->save();
+                }
+                if ($request->etapa !== 'diagnostico') {
+                    $this->agregarPackInsumosTratamiento($odontograma, $profesional);
                 }
                 $odontograma_paciente = $this->dame_odontograma_paciente($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
 
@@ -2417,6 +2432,13 @@ class DentalController extends Controller
                             $query->where('diagnostico', $request->diagnostico)
                                 ->orWhereNull('diagnostico');
                         });
+                } elseif ($request->etapa === 'actualizacion') {
+                    // Desde el selector del plan se edita la prestación vigente
+                    // de la pieza presupuestada en lugar de duplicarla.
+                    $consultaOdontograma->where('presupuesto', 1);
+                    if ($request->id_presupuesto) {
+                        $consultaOdontograma->where('id_presupuesto', $request->id_presupuesto);
+                    }
                 } else {
                     $consultaOdontograma
                         ->where('diagnostico', $request->diagnostico)
@@ -2508,6 +2530,9 @@ class DentalController extends Controller
                 }else{
                     $odontograma->id_presupuesto = $presupuesto->id;
                     $odontograma->save();
+                }
+                if ($request->etapa !== 'diagnostico') {
+                    $this->agregarPackInsumosTratamiento($odontograma, $profesional);
                 }
                 $odontograma_paciente = $this->dame_odontograma_paciente($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
 
@@ -2607,6 +2632,45 @@ class DentalController extends Controller
             return ['status' => 1, 'mensaje' => 'Piezas agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto,'vista_presupuestos' => $vista_presupuestos,'odontograma_paciente_vista' => $odontograma_paciente_vista];
         }
 
+    }
+
+    private function agregarPackInsumosTratamiento(OdontogramaPaciente $odontograma, Profesional $profesional): void
+    {
+        if (!$odontograma->id_presupuesto || !$odontograma->tratamiento) return;
+        $catalogo = DiagnosticosDental::where('descripcion', $odontograma->tratamiento)->first();
+        if (!$catalogo) return;
+        $arancel = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)
+            ->where('id_diagnostico', $catalogo->id)->first();
+        if (!$arancel) return;
+
+        $pack = TratamientoProfesionalInsumo::where('id_diagnostico_profesional', $arancel->id)
+            ->where('estado', 1)->get();
+        foreach ($pack as $plantilla) {
+            $producto = Producto::find($plantilla->id_producto);
+            if (!$producto) continue;
+            InsumosTratamientosDental::firstOrCreate([
+                'id_tratamiento' => $odontograma->id,
+                'id_pack_origen' => $plantilla->id,
+                'id_presupuesto' => $odontograma->id_presupuesto,
+            ], [
+                'id_producto' => $producto->id,
+                'id_paciente' => $odontograma->id_paciente,
+                'id_profesional' => $profesional->id,
+                'id_ficha_atencion' => $odontograma->id_ficha_atencion,
+                'id_lugar_atencion' => $odontograma->id_lugar_atencion,
+                'id_especialidad' => $profesional->id_especialidad,
+                'tipo' => 'pack_automatico',
+                'insumos' => $producto->nombre,
+                'cantidad' => max(1, (int) ceil($plantilla->cantidad)),
+                'observaciones' => $plantilla->observaciones,
+                'valor' => $plantilla->valor_unitario,
+                'estado' => 1,
+                'presupuesto' => 1,
+                'urgencia' => 0,
+                'impl_rehab' => 0,
+                'estado_pago' => 'error',
+            ]);
+        }
     }
 
     public function modificar_evolucion(Request $request){
@@ -6901,6 +6965,16 @@ class DentalController extends Controller
                     if ($request->det_tpo_oclusion_dent_permanente) $obs_oral .= 'Oclusión Permanente: ' . $request->det_tpo_oclusion_dent_permanente . '. ';
                     if ($request->aprec_periodonto) $obs_oral .= 'Periodonto: ' . $request->aprec_periodonto . '. ';
                     if ($request->det_intra_general) $obs_oral .= 'Aspecto General: ' . $request->det_intra_general . '. ';
+                    $diagnosticosPiezaOdontop = json_decode($request->diagnosticos_pieza_odontop ?? '[]', true);
+                    if (is_array($diagnosticosPiezaOdontop)) {
+                        foreach ($diagnosticosPiezaOdontop as $diagnosticoPiezaOdontop) {
+                            $piezaOdontop = trim((string) ($diagnosticoPiezaOdontop['pieza'] ?? ''));
+                            $descripcionOdontop = trim((string) ($diagnosticoPiezaOdontop['diagnostico'] ?? ''));
+                            if ($piezaOdontop !== '' && $descripcionOdontop !== '') {
+                                $obs_oral .= 'Pieza ' . $piezaOdontop . ': ' . $descripcionOdontop . '. ';
+                            }
+                        }
+                    }
                     $ficha_odonto->obs_ex_oral = $obs_oral ?: null;
 
                     // Campos de radiología
@@ -8810,14 +8884,22 @@ class DentalController extends Controller
        try {
         $req->validate([
             'id_tratamiento' => 'required|integer|exists:odontogramas_pacientes,id',
-            'estado' => 'required|integer|in:0,1,2,3',
+            'estado' => 'required_without:progreso|nullable|integer|in:0,1,2,3',
+            'progreso' => 'required_without:estado|nullable|integer|in:25,50,75,100',
         ]);
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $pieza = OdontogramaPaciente::where('id', $req->id_tratamiento)
             ->where('id_paciente', $req->id_paciente)
             ->where('id_profesional', $profesional->id)
             ->firstOrFail();
-        $pieza->estado = (int) $req->estado;
+        if ($req->filled('progreso')) {
+            $pieza->progreso = (int) $req->progreso;
+            // Se conserva el estado clínico como dato de compatibilidad para los
+            // cierres de presupuesto y las otras especialidades.
+            $pieza->estado = (int) $req->progreso === 100 ? 1 : 2;
+        } else {
+            $pieza->estado = (int) $req->estado;
+        }
         $presupuestoClinicamenteFinalizado = false;
         if($pieza->save()){
             if ($pieza->id_presupuesto) {
@@ -8857,6 +8939,65 @@ class DentalController extends Controller
         ];
        }
 
+    }
+
+    public function guardarCarasPediatrico(Request $request)
+    {
+        $request->validate([
+            'id_tratamiento' => 'required|integer|exists:odontogramas_pacientes,id',
+            'id_paciente' => 'required|integer',
+            'id_ficha_atencion' => 'required|integer',
+            'id_lugar_atencion' => 'required|integer',
+            'caras' => 'nullable|array|max:5',
+            'caras.*' => 'string|in:V,D,O,M,P',
+        ]);
+
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        $pieza = OdontogramaPaciente::where('id', $request->id_tratamiento)
+            ->where('id_paciente', $request->id_paciente)
+            ->where('id_ficha_atencion', $request->id_ficha_atencion)
+            ->where('id_profesional', $profesional->id)
+            ->where('presupuesto', 1)
+            ->where('urgencia', 0)
+            ->firstOrFail();
+
+        abort_unless(preg_match('/^[5-8]\.[1-5]$/', (string) $pieza->pieza), 422, 'La pieza no corresponde a dentición temporal.');
+
+        $caras = array_values(array_unique($request->input('caras', [])));
+        $pieza->caras = count($caras) ? implode('|', $caras) . '|' : '';
+        $pieza->save();
+
+        return response()->json([
+            'mensaje' => 'OK',
+            'odontograma' => $this->dame_odontograma_paciente(
+                $request->id_paciente,
+                $request->id_ficha_atencion,
+                $request->id_lugar_atencion,
+                $profesional->id_tipo_especialidad
+            ),
+        ]);
+    }
+
+    public function obtenerPlanPediatrico(Request $request)
+    {
+        $request->validate([
+            'id_paciente' => 'required|integer',
+            'id_ficha_atencion' => 'required|integer',
+            'id_lugar_atencion' => 'required|integer',
+        ]);
+
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        $odontograma = $this->dame_odontograma_paciente(
+            $request->id_paciente,
+            $request->id_ficha_atencion,
+            $request->id_lugar_atencion,
+            $profesional->id_tipo_especialidad
+        );
+
+        return response()->json([
+            'mensaje' => 'OK',
+            'odontograma' => $odontograma,
+        ]);
     }
 
     public function getTratamientoImplantologia(Request $request){

@@ -265,6 +265,7 @@
 @endphp
 
 
+@include('atencion_odontologica.include.modal_plan_pieza_ui')
 <style>
     .ficha-odontologia-general .dental-treatment-flow {
         padding: 1rem 1.15rem;
@@ -433,7 +434,7 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab"
                             href="#eval_periimpl" role="tab" aria-controls="eval_periimpl"
-                            aria-selected="false">Evaluación-Periodontológica</a>
+                            aria-selected="false">Periodontograma</a>
                     </li>
 
                     <li class="nav-item-secciones">
@@ -1106,9 +1107,70 @@
                                 #evaluacion_general .dental-table-datetime strong { color: #34495e; font-size: .8rem; }
                                 #evaluacion_general .dental-table-datetime small { margin-top: .2rem; color: var(--dental-muted); font-size: .75rem; }
                                 #evaluacion_general .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .5rem; min-width: 190px; }
-                                #evaluacion_general .dental-table-state-control .dental-piece-status { min-width: 140px; }
+                                #evaluacion_general .dental-progress-wheel {
+                                    --progress: 25;
+                                    position: relative;
+                                    width: 58px;
+                                    height: 58px;
+                                    flex: 0 0 58px;
+                                    border-radius: 50%;
+                                    background: conic-gradient(
+                                        #20b7c5 0 calc(var(--progress) * 1%),
+                                        #e4ebf3 calc(var(--progress) * 1%) 100%
+                                    );
+                                    box-shadow: 0 2px 7px rgba(31, 67, 111, .18);
+                                    transition: background .25s ease, transform .2s ease;
+                                }
+                                #evaluacion_general .dental-progress-wheel::before {
+                                    content: '';
+                                    position: absolute;
+                                    inset: 7px;
+                                    border-radius: 50%;
+                                    background: #fff;
+                                    box-shadow: inset 0 0 0 1px #dbe5f1;
+                                }
+                                #evaluacion_general .dental-progress-wheel::after {
+                                    content: '';
+                                    position: absolute;
+                                    inset: 0;
+                                    border-radius: 50%;
+                                    pointer-events: none;
+                                    background:
+                                        linear-gradient(90deg, transparent calc(50% - 1px), #fff calc(50% - 1px), #fff calc(50% + 1px), transparent calc(50% + 1px)),
+                                        linear-gradient(0deg, transparent calc(50% - 1px), #fff calc(50% - 1px), #fff calc(50% + 1px), transparent calc(50% + 1px));
+                                    -webkit-mask: radial-gradient(circle, transparent 0 29%, #000 31% 100%);
+                                    mask: radial-gradient(circle, transparent 0 29%, #000 31% 100%);
+                                }
+                                #evaluacion_general .dental-progress-wheel:hover { transform: scale(1.06); }
+                                #evaluacion_general .dental-progress-wheel-value {
+                                    position: absolute;
+                                    inset: 0;
+                                    z-index: 2;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: #2455a4;
+                                    font-size: .76rem;
+                                    font-weight: 700;
+                                    pointer-events: none;
+                                }
+                                #evaluacion_general .dental-progress-wheel .dental-piece-progress {
+                                    position: absolute;
+                                    inset: 0;
+                                    z-index: 3;
+                                    width: 100%;
+                                    height: 100%;
+                                    border: 0;
+                                    border-radius: 50%;
+                                    opacity: 0;
+                                    cursor: pointer;
+                                }
+                                #evaluacion_general .dental-progress-wheel:focus-within {
+                                    outline: 3px solid rgba(32, 183, 197, .28);
+                                    outline-offset: 3px;
+                                }
                                 #evaluacion_general .dental-table-state-control .custom-control { flex: 0 0 auto; margin: 0; }
-                                #evaluacion_general .dental-piece-status:disabled { cursor: wait; opacity: .65; }
+                                #evaluacion_general .dental-piece-progress:disabled { cursor: wait; }
 
                                 #evaluacion_general .dental-evaluation-panel .tab-content .card {
                                     margin: .55rem 1rem 1rem;
@@ -1280,7 +1342,7 @@
                                             <input type="hidden" id="pieza_plan_tratamiento_general" value="0">
                                         </div>
                                     </div>
-                                    <div class="modal fade" id="modal_pieza_plan_tratamiento" tabindex="-1" role="dialog"
+                                    <div class="modal fade modal-plan-pieza" id="modal_pieza_plan_tratamiento" tabindex="-1" role="dialog"
                                         aria-labelledby="titulo_modal_pieza_plan_tratamiento" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -1288,7 +1350,7 @@
                                                     <div>
                                                         <small class="text-uppercase text-c-blue font-weight-bold">Plan de tratamiento</small>
                                                         <h5 class="modal-title" id="titulo_modal_pieza_plan_tratamiento">
-                                                            Pieza <span id="numero_pieza_plan_tratamiento"></span>
+                                                            Pieza <span id="numero_pieza_plan_tratamiento" data-modal-numero-pieza></span>
                                                         </h5>
                                                     </div>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -1296,8 +1358,9 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <div class="modal-plan-pieza-visual"><div class="modal-plan-pieza-image-wrap"><img class="modal-plan-pieza-image" src="" alt=""></div><div><small>Pieza seleccionada</small><strong>Pieza</strong><span class="text-muted small">Diagnóstico y prestación asociados</span></div></div>
                                                     <div class="form-group">
-                                                        <label for="diagnostico_pieza_plan_tratamiento">Diagn&oacute;stico</label>
+                                                        <label class="floating-label-activo-sm" for="diagnostico_pieza_plan_tratamiento">Diagn&oacute;stico</label>
                                                         <select class="form-control" id="diagnostico_pieza_plan_tratamiento">
                                                             <option value="0">Seleccione un diagn&oacute;stico</option>
                                                             @foreach ($diagnosticos as $diagnosticoPlan)
@@ -1306,7 +1369,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group mb-0">
-                                                        <label for="tratamiento_pieza_plan_tratamiento">Tratamiento o prestaci&oacute;n</label>
+                                                        <label class="floating-label-activo-sm" for="tratamiento_pieza_plan_tratamiento">Tratamiento o prestaci&oacute;n</label>
                                                         <input type="text" class="form-control tratamiento-autocomplete"
                                                             id="tratamiento_pieza_plan_tratamiento"
                                                             placeholder="Busque o describa el tratamiento" autocomplete="off">
@@ -1429,10 +1492,10 @@
         $estado.find('span').text(estado.texto);
     }
 
-    function actualizarEstadoPiezaPlan(select, idTratamiento) {
+    function actualizarProgresoPiezaPlan(select, idTratamiento) {
         const $select = $(select);
-        const estadoAnterior = String($select.data('original-state'));
-        const estadoNuevo = String($select.val());
+        const progresoAnterior = String($select.data('original-progress'));
+        const progresoNuevo = String($select.val());
 
         $select.prop('disabled', true);
         $select.siblings('.dental-piece-status-feedback').remove();
@@ -1442,7 +1505,7 @@
             url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
             data: {
                 id_tratamiento: idTratamiento,
-                estado: estadoNuevo,
+                progreso: progresoNuevo,
                 id_ficha_atencion: $('#id_fc').val(),
                 id_paciente: $('#id_paciente_fc').val(),
                 id_profesional: $('#id_profesional_fc').val(),
@@ -1451,36 +1514,54 @@
             },
             success: function (respuesta) {
                 if (respuesta.mensaje !== 'OK') {
-                    $select.val(estadoAnterior);
-                    swal('No fue posible actualizar', 'El estado de la pieza no pudo guardarse.', 'error');
+                    $select.val(progresoAnterior);
+                    swal('No fue posible actualizar', 'El progreso del tratamiento no pudo guardarse.', 'error');
                     return;
                 }
 
-                $select.data('original-state', estadoNuevo);
-                $select.closest('tr').attr('data-clinical-state', estadoNuevo);
-                $('<small class="dental-piece-status-feedback text-success d-block mt-1"><i class="feather icon-check"></i> Estado actualizado</small>')
+                $select.data('original-progress', progresoNuevo);
+                $select.closest('.dental-progress-wheel')
+                    .css('--progress', progresoNuevo)
+                    .attr('title', 'Progreso del tratamiento: ' + progresoNuevo + '%')
+                    .find('.dental-progress-wheel-value').text(progresoNuevo + '%');
+                $select.closest('tr')
+                    .attr('data-progress', progresoNuevo)
+                    .attr('data-clinical-state', Number(progresoNuevo) === 100 ? 1 : 2);
+                $('<small class="dental-piece-status-feedback text-success d-block mt-1"><i class="feather icon-check"></i> Progreso actualizado</small>')
                     .insertAfter($select)
                     .delay(2200)
                     .fadeOut(250, function () { $(this).remove(); });
 
                 if (Array.isArray(respuesta.odontograma)) {
                     odontograma_global = respuesta.odontograma;
+                    if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
                 } else {
                     const piezaActualizada = (odontograma_global || []).find(function (pieza) {
                         return Number(pieza.id) === Number(idTratamiento);
                     });
-                    if (piezaActualizada) piezaActualizada.estado = Number(estadoNuevo);
+                    if (piezaActualizada) {
+                        piezaActualizada.progreso = Number(progresoNuevo);
+                        piezaActualizada.estado = Number(progresoNuevo) === 100 ? 1 : 2;
+                    }
                 }
                 actualizarEstadoCabeceraPlanDental();
             },
             error: function () {
-                $select.val(estadoAnterior);
-                swal('Error', 'No fue posible actualizar el estado de la pieza.', 'error');
+                $select.val(progresoAnterior);
+                $select.closest('.dental-progress-wheel')
+                    .css('--progress', progresoAnterior)
+                    .attr('title', 'Progreso del tratamiento: ' + progresoAnterior + '%')
+                    .find('.dental-progress-wheel-value').text(progresoAnterior + '%');
+                swal('Error', 'No fue posible actualizar el progreso del tratamiento.', 'error');
             },
             complete: function () {
                 $select.prop('disabled', false);
             }
         });
+    }
+
+    function actualizarEstadoPiezaPlan(select, idTratamiento) {
+        return actualizarProgresoPiezaPlan(select, idTratamiento);
     }
 
     function decorarTablaPlanTratamiento() {
@@ -1511,7 +1592,7 @@
             }
 
             const decoracionVigente = $celdas.eq(3).find('.dental-table-tooth').length
-                && $celdas.eq(7).find('.dental-piece-status').length;
+                && $celdas.eq(7).find('.dental-piece-progress').length;
 
             if ($celdas.length < 8 || decoracionVigente) {
                 return;
@@ -1529,6 +1610,7 @@
                 return Number(item.id) === idTratamiento;
             });
             const estado = Number($fila.attr('data-clinical-state') || (tratamiento ? tratamiento.estado : 0));
+            const progreso = Number($fila.attr('data-progress') || (tratamiento ? tratamiento.progreso : 0) || (estado === 1 ? 100 : 25));
             const archivoPieza = numeroPieza.replace('.', '');
 
             $celdas.eq(3).html(
@@ -1539,13 +1621,16 @@
             );
 
             const selectorEstado =
-                '<select class="form-control form-control-sm dental-piece-status" data-original-state="' + estado + '" ' +
-                    'onchange="actualizarEstadoPiezaPlan(this,' + idTratamiento + ')">' +
-                    '<option value="0" ' + (estado === 0 ? 'selected' : '') + '>Pendiente</option>' +
-                    '<option value="2" ' + (estado === 2 ? 'selected' : '') + '>En proceso</option>' +
-                    '<option value="3" ' + (estado === 3 ? 'selected' : '') + '>Citado a control</option>' +
-                    '<option value="1" ' + (estado === 1 ? 'selected' : '') + '>Finalizado</option>' +
-                '</select>';
+                '<div class="dental-progress-wheel" style="--progress:' + progreso + '" title="Progreso del tratamiento: ' + progreso + '%">' +
+                    '<span class="dental-progress-wheel-value">' + progreso + '%</span>' +
+                    '<select class="dental-piece-progress" aria-label="Progreso del tratamiento" data-original-progress="' + progreso + '" ' +
+                        'onchange="actualizarProgresoPiezaPlan(this,' + idTratamiento + ')">' +
+                        '<option value="25" ' + (progreso === 25 ? 'selected' : '') + '>25%</option>' +
+                        '<option value="50" ' + (progreso === 50 ? 'selected' : '') + '>50%</option>' +
+                        '<option value="75" ' + (progreso === 75 ? 'selected' : '') + '>75%</option>' +
+                        '<option value="100" ' + (progreso === 100 ? 'selected' : '') + '>100%</option>' +
+                    '</select>' +
+                '</div>';
 
             const $controlSeleccion = $celdas.eq(7).find('.custom-control').detach();
             $celdas.eq(7).html('<div class="dental-table-state-control">' + selectorEstado + '</div>');
@@ -1599,6 +1684,7 @@
         }
 
         $('#numero_pieza_plan_tratamiento').text(pieza);
+        actualizarVisualModalPlanPieza('#modal_pieza_plan_tratamiento', pieza, false);
         $('#diagnostico_pieza_plan_tratamiento').val('0');
         $('#tratamiento_pieza_plan_tratamiento').val('');
         $('#modal_pieza_plan_tratamiento').modal('show');

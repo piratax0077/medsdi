@@ -82,6 +82,8 @@ use App\Models\InformeMedico;
 use App\Models\Interconsulta;
 use App\Models\Instituciones;
 use App\Models\InsumosTratamientosDental;
+use App\Models\TratamientoProfesionalInsumo;
+use App\Models\Producto;
 use App\Models\LugarAtencion;
 use App\Models\LiquidacionRecibo;
 use App\Models\LogUsersDevices;
@@ -6014,7 +6016,7 @@ return $ficha;
             file_put_contents($filePath, $pdf->output());
 
             // Devolver la ruta accesible del archivo PDF
-            return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+            return response()->json(['ruta' => '/reportes/' . rawurlencode($fileName)]);
 
         } catch (\Exception $e) {
             //throw $th;
@@ -6293,7 +6295,10 @@ return $ficha;
             $insumos = $ficha_atencionController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
 
             // Renderizar la vista del presupuesto dental
-            $pdf = Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
+            // Usar DomPDF de forma explícita. El alias global PDF también es
+            // registrado por laravel-snappy y en Windows terminaba intentando
+            // ejecutar el binario Linux /usr/local/bin/wkhtmltopdf.
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
                 'odontograma',
                 'paciente',
                 'valores_odontograma',
@@ -6317,9 +6322,18 @@ return $ficha;
             file_put_contents($filePath, $pdf->output());
 
             // Devolver la ruta accesible del archivo PDF
-            return response()->json(['ruta' => asset('reportes/' . $fileName)]);
-        } catch (\Exception $e) {
-            return $e->getMessage();
+            return response()->json(['ruta' => '/reportes/' . rawurlencode($fileName)]);
+        } catch (\Throwable $e) {
+            \Log::error('No fue posible generar el PDF del presupuesto dental.', [
+                'id_paciente' => $req->id_paciente,
+                'id_ficha_atencion' => $req->id_ficha_atencion,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'error' => 'No fue posible generar el PDF del presupuesto dental.',
+                'detalle' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
         }
 
     }
@@ -6354,7 +6368,7 @@ return $ficha;
 
 
             // Renderizar la vista del presupuesto dental
-            $pdf = Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
                 'odontograma',
                 'paciente',
                 'valores_odontograma',
@@ -6380,9 +6394,17 @@ return $ficha;
 
             // Devolver la ruta accesible del archivo PDF
             return response()->json(['ruta' => asset('reportes/' . $fileName)]);
-        } catch (\Exception $e) {
-            //throw $th;
-            return response()->json(['error' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            \Log::error('No fue posible generar el PDF histórico del presupuesto dental.', [
+                'id_paciente' => $req->id_paciente,
+                'id_ficha_atencion' => $req->id_ficha_atencion,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'error' => 'No fue posible generar el PDF histórico del presupuesto dental.',
+                'detalle' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
         }
 
     }
@@ -6397,6 +6419,69 @@ return $ficha;
             $id_presupuesto
         );
         return $odontograma;
+    }
+
+    public function insumosArancel($arancel)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        $trabajo = DiagnosticosDentalProfesional::where('id', $arancel)
+            ->where('id_profesional', $profesional->id)->firstOrFail();
+
+        $productos = Producto::orderBy('nombre')->get(['id', 'codigo_interno', 'nombre', 'precio_compra', 'precio_venta', 'stock_actual']);
+        $pack = TratamientoProfesionalInsumo::where('id_diagnostico_profesional', $trabajo->id)
+            ->where('estado', 1)->get();
+
+        return response()->json(['productos' => $productos, 'pack' => $pack]);
+    }
+
+    public function guardarInsumosArancel(Request $request, $arancel)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        $trabajo = DiagnosticosDentalProfesional::where('id', $arancel)
+            ->where('id_profesional', $profesional->id)->firstOrFail();
+        $request->validate([
+            'insumos' => 'array',
+            'insumos.*.id_producto' => 'required|integer|exists:productos,id',
+            'insumos.*.cantidad' => 'required|numeric|min:0.01',
+            'insumos.*.valor_unitario' => 'required|numeric|min:0',
+            'insumos.*.observaciones' => 'nullable|string|max:255',
+        ]);
+
+        \DB::transaction(function () use ($request, $trabajo) {
+            TratamientoProfesionalInsumo::where('id_diagnostico_profesional', $trabajo->id)->delete();
+            foreach ($request->input('insumos', []) as $item) {
+                TratamientoProfesionalInsumo::create([
+                    'id_diagnostico_profesional' => $trabajo->id,
+                    'id_producto' => $item['id_producto'],
+                    'cantidad' => $item['cantidad'],
+                    'valor_unitario' => $item['valor_unitario'],
+                    'observaciones' => $item['observaciones'] ?? null,
+                    'estado' => 1,
+                ]);
+            }
+        });
+
+        return response()->json(['mensaje' => 'Pack de insumos guardado correctamente.']);
+    }
+
+    public function insumosPorTratamiento(Request $request)
+    {
+        $request->validate(['tratamiento' => 'required|string|max:255']);
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        $catalogo = DiagnosticosDental::where('descripcion', $request->tratamiento)->first();
+        if (!$catalogo) return response()->json(['insumos' => []]);
+
+        $arancel = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)
+            ->where('id_diagnostico', $catalogo->id)->first();
+        if (!$arancel) return response()->json(['insumos' => []]);
+
+        $insumos = TratamientoProfesionalInsumo::from('tratamientos_profesional_insumos as tpi')
+            ->join('productos as p', 'p.id', '=', 'tpi.id_producto')
+            ->where('tpi.id_diagnostico_profesional', $arancel->id)
+            ->where('tpi.estado', 1)
+            ->get(['tpi.id', 'tpi.id_producto', 'p.nombre as insumo', 'tpi.observaciones', 'tpi.cantidad', 'tpi.valor_unitario as valor']);
+
+        return response()->json(['insumos' => $insumos]);
     }
 
     public function dameTratamientosImplante($id_paciente, $id_ficha_atencion = null, $id_lugar_atencion = null, $id_presupuesto = null)
@@ -7277,6 +7362,7 @@ return $ficha;
         ->orderBy('pieza')
         ->get([
             'pieza',
+            'diagnostico',
             'tratamiento',
             'estado',
         ])

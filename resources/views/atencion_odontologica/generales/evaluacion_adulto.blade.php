@@ -1608,7 +1608,7 @@
                                         <th>Valor</th>
                                         <th>Presupuesto</th>
                                         <th class="text-center">
-                                            Estado / Seleccionar
+                                            Progreso / Seleccionar
                                             <button
                                                 type="button"
                                                 class="btn btn-outline-danger btn-sm ml-2"
@@ -1625,7 +1625,7 @@
                                     @if(isset($odontograma))
                                     @foreach ($odontograma as $odonto)
                                     @if($odonto->urgencia == 0)
-                                    <tr data-treatment-id="{{ $odonto->id }}" data-clinical-state="{{ (int) ($odonto->estado ?? 0) }}">
+                                    <tr data-treatment-id="{{ $odonto->id }}" data-clinical-state="{{ (int) ($odonto->estado ?? 0) }}" data-progress="{{ (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 25)) }}">
                                         <td>
                                             <div class="dental-table-datetime">
                                                 <strong>{{ \Carbon\Carbon::parse($odonto->fecha)->format('d-m-Y') }}</strong>
@@ -1668,14 +1668,19 @@
 
                                         <td>
                                             <div class="dental-table-state-control">
-                                                <select class="form-control form-control-sm dental-piece-status"
-                                                    data-original-state="{{ (int) ($odonto->estado ?? 0) }}"
-                                                    onchange="actualizarEstadoPiezaPlan(this, {{ $odonto->id }})">
-                                                    <option value="0" {{ (int) ($odonto->estado ?? 0) === 0 ? 'selected' : '' }}>Pendiente</option>
-                                                    <option value="2" {{ (int) ($odonto->estado ?? 0) === 2 ? 'selected' : '' }}>En proceso</option>
-                                                    <option value="3" {{ (int) ($odonto->estado ?? 0) === 3 ? 'selected' : '' }}>Citado a control</option>
-                                                    <option value="1" {{ (int) ($odonto->estado ?? 0) === 1 ? 'selected' : '' }}>Finalizado</option>
-                                                </select>
+                                                @php $progresoPieza = (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 25)); @endphp
+                                                <div class="dental-progress-wheel" style="--progress: {{ $progresoPieza }}"
+                                                    title="Progreso del tratamiento: {{ $progresoPieza }}%">
+                                                    <span class="dental-progress-wheel-value">{{ $progresoPieza }}%</span>
+                                                    <select class="dental-piece-progress"
+                                                        aria-label="Progreso del tratamiento"
+                                                        data-original-progress="{{ $progresoPieza }}"
+                                                        onchange="actualizarEstadoPiezaPlan(this, {{ $odonto->id }})">
+                                                        @foreach ([25, 50, 75, 100] as $porcentaje)
+                                                            <option value="{{ $porcentaje }}" {{ $progresoPieza === $porcentaje ? 'selected' : '' }}>{{ $porcentaje }}%</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             <div class="custom-control custom-switch">
                                                 <input
                                                     type="checkbox"

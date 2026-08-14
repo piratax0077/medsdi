@@ -19,27 +19,10 @@
                                         aria-selected="true">Examen Oral</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="endo_pieza_end-tab"
-                                        onclick="mostrar_pieza_dental_examen_end(1000)" data-toggle="tab"
-                                        href="#endo_pieza_end" role="tab" aria-controls="endo_pieza_end"
-                                        aria-selected="true">Examen Por Pieza</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="plan_endo_end-tab" data-toggle="tab"
+                                    <a class="nav-link-aten text-reset" id="plan_endo_end-tab"
+                                        onclick="refrescar_piezas_diagnostico_plan_endodoncia()" data-toggle="tab"
                                         href="#plan_endo_end" role="tab" aria-controls="plan_endo_end"
                                         aria-selected="true">Planificación de tratamiento</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="hosp_endodoncia-tab" data-toggle="tab"
-                                        href="#hosp_endodoncia" role="tab" aria-controls="hosp_endodoncia"
-                                        aria-selected="true">Hospitalización</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="control_endo-tab" data-toggle="tab"
-                                        href="#control_endo" role="tab" aria-controls="control_endo"
-                                        aria-selected="true" onclick="proxima_atencion_paciente()">Control e
-                                        indicaciones</a>
                                 </li>
                             </ul>
                         </div>
@@ -192,6 +175,39 @@
                                                                                 onclick="prest_lab();"><i class="feather icon-edit-1"></i>Solicitud de laboratorio</button>
 
                                                                         </div> --}}
+                                                                    </div>
+                                                                    <div class="row mb-3">
+                                                                        <div class="col-sm-12 col-lg-8">
+                                                                            <div id="odontograma_diagnostico_endodoncia">
+                                                                                @include('atencion_odontologica.generales.odontograma_adulto_grupos_endodoncia')
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-lg-4 mt-3 mt-lg-0">
+                                                                            <div class="card-informacion h-100">
+                                                                                <div class="card-top"><h6 class="text-uppercase text-c-blue">Diagnóstico por piezas</h6></div>
+                                                                                <div class="card-body">
+                                                                                    <select class="d-none" id="paciente_piezas_diagnostico_endodoncia" multiple>
+                                                                                        @foreach (['1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1','2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8','4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1','3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8'] as $piezaEndodoncia)
+                                                                                            <option value="{{ $piezaEndodoncia }}">{{ $piezaEndodoncia }}</option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Piezas seleccionadas</label>
+                                                                                        <div id="resumen_piezas_diagnostico_endodoncia" class="form-control form-control-sm h-auto text-muted">Ninguna pieza seleccionada</div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Diagnóstico</label>
+                                                                                        <select class="form-control form-control-sm" id="diagnostico_examen_oral_endodoncia">
+                                                                                            <option value="0">Seleccione</option>
+                                                                                            @foreach ($diagnosticos as $d)
+                                                                                                <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="guardar_diagnostico_examen_oral_endodoncia()"><i class="feather icon-save"></i> Guardar diagnóstico</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-12">
@@ -1098,7 +1114,7 @@
 
                                     <div class="form-row">
                                         <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 d-none">
                                             <div class="card-informacion">
                                                 <div class="card-top">
                                                     <h6 class="text-uppercase text-c-blue">Tratamientos en piezas o
@@ -1163,9 +1179,42 @@
                                                 <div class="card-top">
                                                     <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo
                                                         de piezas</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="row my-2">
+                                                 </div>
+                                                 <div class="card-body planificacion-endodoncia-grid">
+                                                    @php
+                                                        $piezasDiagnosticadasEndodoncia = collect($odontograma ?? [])
+                                                            ->filter(fn ($pieza) => (int) ($pieza->urgencia ?? 0) === 0
+                                                                && (int) ($pieza->presupuesto ?? 0) === 1
+                                                                && trim((string) ($pieza->tratamiento ?? '')) === '')
+                                                            ->unique(fn ($pieza) => (string) $pieza->pieza)
+                                                            ->values();
+                                                    @endphp
+                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                        'id' => 'selector_planificacion_endodoncia',
+                                                        'inputId' => 'paciente_piezas_dentales_end_ex_',
+                                                        'counter' => 9810,
+                                                        'multiple' => true,
+                                                        'compacto' => true,
+                                                        'autoRefresh' => false,
+                                                        'mostrarMensajeVacio' => true,
+                                                        'piezasDisponibles' => $piezasDiagnosticadasEndodoncia,
+                                                        'piezasSeleccionadas' => [],
+                                                        'titulo' => 'Piezas diagnosticadas',
+                                                        'ayuda' => 'Seleccione las piezas para indicar su tratamiento',
+                                                    ])
+                                                    <style>
+                                                        #selector_planificacion_endodoncia .selector-odontograma-generico__scroll { overflow-x: hidden; }
+                                                        #selector_planificacion_endodoncia .selector-odontograma-generico__fila { grid-template-columns: repeat(8, minmax(42px, 1fr)); min-width: 0; }
+                                                        .planificacion-endodoncia-grid { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:1rem; align-items:start; }
+                                                        .planificacion-endodoncia-grid > #selector_planificacion_endodoncia { grid-column:1; }
+                                                        .planificacion-endodoncia-grid > .planificacion-endodoncia-tratamiento { grid-column:2; margin:0!important; }
+                                                        @media (max-width:991.98px) {
+                                                            .planificacion-endodoncia-grid { grid-template-columns:1fr; }
+                                                            .planificacion-endodoncia-grid > #selector_planificacion_endodoncia,
+                                                            .planificacion-endodoncia-grid > .planificacion-endodoncia-tratamiento { grid-column:1; }
+                                                        }
+                                                    </style>
+                                                    <div class="row my-2 d-none">
                                                         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                             <div class="custom-control custom-switch">
                                                                 <input type="checkbox" class="custom-control-input"
@@ -1196,14 +1245,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                                                            @include('atencion_odontologica.generales.odontograma_adulto_grupos_endodoncia')
+                                                    <div class="row planificacion-endodoncia-tratamiento">
+                                                        <div class="d-none">
+                                                            {{-- El odontograma gráfico se utiliza en Examen Oral. --}}
                                                         </div>
-                                                        <div
-                                                            class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
+                                                        <div class="col-12 p-0">
                                                             <div class="form-row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                                                                     <div class="form-group">
                                                                         <label for=""
                                                                             class="floating-label-activo-sm">Grupos</label>
@@ -1246,7 +1294,7 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
                                                                     <div class="form-group">
                                                                         <label
                                                                             class="floating-label-activo-sm">Diagnostico</label>
@@ -1366,6 +1414,16 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-informacion mt-3">
+                                        <div class="card-top">
+                                            <button class="btn btn-link btn-block text-left p-0 text-c-blue" type="button" data-toggle="collapse" data-target="#opciones_clinicas_endodoncia">
+                                                Hospitalización, control e indicaciones
+                                            </button>
+                                        </div>
+                                        <div id="opciones_clinicas_endodoncia" class="collapse">
+                                            <div class="card-body" id="contenido_opciones_clinicas_endodoncia"></div>
                                         </div>
                                     </div>
                                 </div>

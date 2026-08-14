@@ -3662,6 +3662,7 @@ class ficha_atencionController extends Controller
         }else{
             $query = OdontogramaPaciente::select(
                 'odontogramas_pacientes.*',
+                'odontogramas_pacientes.diagnostico as diagnostico_id',
                 'diagnosticos_dental.descripcion',
                 'diagnosticos_dental.cantidad_bloques',
                 'diagnosticos_dental.valor',

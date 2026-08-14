@@ -595,6 +595,17 @@ $('#motivo_urg_odped').select2();
 
                             let odontograma = response.odontograma_paciente;
                             odontograma_global = odontograma;
+
+                            // Actualizar primero el presupuesto clinico. Asi, aunque
+                            // alguna tabla legacy no exista en esta ficha, la pieza
+                            // eliminada desaparece inmediatamente de toda la vista.
+                            if (typeof window.sincronizarOdontogramaPresupuesto === 'function') {
+                                window.sincronizarOdontogramaPresupuesto(odontograma);
+                            } else if (typeof window.renderizarTarjetasPresupuestoClinico === 'function') {
+                                window.renderizarTarjetasPresupuestoClinico(odontograma);
+                            }
+                            $(document).trigger('odontop:presupuesto-actualizado', [odontograma]);
+
                             let table_odped_ = $('#table_odontograma').DataTable();
 
                             // Vacía la tabla
@@ -884,6 +895,7 @@ $('#motivo_urg_odped').select2();
                             });
                             $('#odontograma_ped_completo').empty();
                             $('#odontograma_ped_completo').append(response.odontograma_paciente_vista);
+
                         }
                     },
                     error: function(error) {

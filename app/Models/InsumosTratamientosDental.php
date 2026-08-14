@@ -9,4 +9,5 @@ class InsumosTratamientosDental extends Model
 {
     use HasFactory;
     protected $table = 'insumos_tratamientos_dental';
+    protected $guarded = [];
 }
