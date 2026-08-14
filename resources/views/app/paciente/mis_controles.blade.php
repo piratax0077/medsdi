@@ -8,13 +8,28 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Controles</h5>
+                                <h5 class="m-b-10 font-weight-bold"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="#">Controles</a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis controles</a></li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media">
+                                <img class="wid-50 align-self-start mr-3" src="{{ asset('images/iconos/p-cronico.png') }}">
+                              <div class="media-body">
+                               <h4 class="text-c-blue">Mis controles</h4>
+                               <p>Registra tus parámetros de salud en casa de forma fácil y ordenada.</p>
+                              </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -24,7 +39,7 @@
                     <div class="card subir py-auto">
                         <a href="#" onclick="ctrl_presion();">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/presion.png') }}">
+                                <img class="wid-40 text-center mb-1" src="{{ asset('images/iconos/presion.png') }}">
                                 <h5 class="mt-1 mb-0">Presión arterial</h5>
                             </div>
                         </a>
@@ -34,7 +49,7 @@
                     <div class="card subir py-auto">
                         <a href="#" onclick="ctrl_glicemia();">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/glicemia.png') }}">
+                                <img class="wid-40 text-center mb-1" src="{{ asset('images/iconos/glicemia.png') }}">
                                 <h5 class="mt-1 mb-0">Glicemia</h5>
                             </div>
                         </a>
@@ -44,7 +59,7 @@
                     <div class="card subir py-auto">
                         <a href="#" onclick="ctrl_peso();">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/peso.png') }}">
+                                <img class="wid-40 text-center mb-1" src="{{ asset('images/iconos/peso.png') }}">
                                 <h5 class="mt-1 mb-0">Peso</h5>
                             </div>
                         </a>
@@ -54,7 +69,7 @@
                 <div class="card subir py-auto">
                     <a href="#" onclick="ctrl_oxig();">
                         <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-50 text-center mb-1" src="{{ asset('images/iconos/oxigeno.png') }}">
+                            <img class="wid-40 text-center mb-1" src="{{ asset('images/iconos/oxigeno.png') }}">
                             <h5 class="mt-1 mb-0">Control Oxigeno</h5>
                         </div>
                     </a>
@@ -64,7 +79,7 @@
                 <div class="card subir py-auto">
                     <a href="#" onclick="ctrl_orina();">
                         <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/vol_orina1.png') }}">
+                            <img class="wid-40 text-center mb-1" src="{{ asset('images/iconos/orina.png') }}">
                             <h5 class="mt-1 mb-0">Volumen de Orina</h5>
                         </div>
                     </a>

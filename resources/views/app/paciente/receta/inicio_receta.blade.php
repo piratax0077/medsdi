@@ -9,7 +9,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Receta Online</h5>
+                            <h5 class="m-b-10 font-weight-bold"></h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
@@ -98,9 +98,9 @@
                         <a href="{{ ROUTE('paciente.mis_controles') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-3"
-                                    src="{{ asset('images/iconos/certificados-ro.svg') }}" alt="Mis certificados">
+                                    src="{{ asset('images/iconos/p-cronico.png') }}" alt="Mis controles">
                                 <h5 class="titulos_tarjetas">
-                                    Mis controles diarios
+                                    Mis controles
                                 </h5>
                             </div>
                         </a>

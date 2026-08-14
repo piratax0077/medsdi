@@ -208,84 +208,102 @@
 
 <div class="pcoded-main-container">
     <div class="pcoded-content">
-        <div class="msg-page-wrap">
-
-            <div class="page-header mb-3">
+            <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
-                            <ul class="breadcrumb mb-0 pt-3">
+                            <div class="page-header-title"></div>
+                            <ul class="breadcrumb mt-2">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                    <a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip"
+                                       data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Mis mensajes</a></li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Mis mensajes</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="msg-hero">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h4><i class="feather icon-mail mr-1"></i> Centro de mensajes</h4>
-                        <div>Revise aquí los mensajes enviados por sus profesionales o el centro médico.</div>
-                    </div>
-                    <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                        @if($mensajesNoLeidos > 0)
-                            <span class="badge badge-danger p-2">{{ $mensajesNoLeidos }} sin leer</span>
-                        @else
-                            <span class="badge badge-light p-2">Sin mensajes pendientes</span>
-                        @endif
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="media">
+                                        <img class="wid-50 align-self-start mr-3" src="{{ asset('images/iconos/msje.png') }}">
+                                      <div class="media-body">
+                                       <h4 class="text-c-blue">Centro de mensajes</h4>
+                                       <p>Revise aquí los mensajes enviados por sus profesionales o el centro médico</p>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-md-right mt-3 mt-md-0">
+                                    @if($mensajesNoLeidos > 0)
+                                        <span class="badge-pill badge-danger f-12 text-dark font-weight-bold p-2">{{ $mensajesNoLeidos }} sin leer</span>
+                                    @else
+                                        <span class="badge-pill badge-light-secondary  f-12 text-dark font-weight-bold p-2">Sin mensajes pendientes</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-sm-12 col-md-4 mb-3 mb-md-0">
-                    <div class="msg-stat-card">
-                        <div class="d-flex align-items-center">
-                            <span class="msg-stat-icon red"><i class="feather icon-bell"></i></span>
-                            <div>
-                                <div class="text-muted small">Sin leer</div>
-                                <h4 class="mb-0">{{ $mensajesNoLeidos }}</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <span class="msg-stat-icon red"><i class="feather icon-bell"></i></span>
+                                <div>
+                                    <div class="text-muted small">Sin leer</div>
+                                    <h4 class="mb-0">{{ $mensajesNoLeidos }}</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-4 mb-3 mb-md-0">
-                    <div class="msg-stat-card">
-                        <div class="d-flex align-items-center">
-                            <span class="msg-stat-icon blue"><i class="feather icon-inbox"></i></span>
-                            <div>
-                                <div class="text-muted small">Total mensajes</div>
-                                <h4 class="mb-0">{{ $totalMensajes }}</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <span class="msg-stat-icon blue"><i class="feather icon-inbox"></i></span>
+                                <div>
+                                    <div class="text-muted small">Total mensajes</div>
+                                    <h4 class="mb-0">{{ $totalMensajes }}</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4">
-                    <div class="msg-stat-card">
-                        <div class="d-flex align-items-center">
-                            <span class="msg-stat-icon green"><i class="feather icon-check-circle"></i></span>
-                            <div>
-                                <div class="text-muted small">Leídos</div>
-                                <h4 class="mb-0">{{ $mensajesLeidos }}</h4>
+                <div class="col-sm-12 col-md-4 mb-3 mb-md-0">
+                     <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <span class="msg-stat-icon green"><i class="feather icon-check-circle"></i></span>
+                                <div>
+                                    <div class="text-muted small">Leídos</div>
+                                    <h4 class="mb-0">{{ $mensajesLeidos }}</h4>
+                                </div>
                             </div>
-                        </div>
+                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-5 col-xl-4 mb-3 mb-lg-0">
-                    <div class="msg-panel">
-                        <div class="msg-panel-header">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="mb-0"><i class="feather icon-inbox mr-1"></i> Bandeja</h5>
-                                <span class="badge badge-light">{{ $totalMensajes }}</span>
+                                <h5 class="mb-0 text-c-blue"><i class="feather icon-inbox mr-1"></i> Mi Bandeja</h5>
+                                <span class="badge badge-light-secondary text-dark f-14 font-weight-bold">{{ $totalMensajes }}</span>
                             </div>
 
                             <div class="msg-search-wrap">
@@ -330,13 +348,13 @@
                                             </div>
                                             <div class="mt-2">
                                                 @if($esDifusion)
-                                                    <span class="msg-badge-soft msg-badge-difusion"><i class="feather icon-radio mr-1"></i>Difusión</span>
+                                                    <span class="badge-pill badge-primary-light font-weight-bold p-2"><i class="feather icon-radio mr-1"></i>Difusión</span>
                                                 @else
-                                                    <span class="msg-badge-soft msg-badge-direct"><i class="feather icon-user mr-1"></i>Personal</span>
+                                                    <span class="badge-pill badge-primary-light font-weight-bold p-2"><i class="feather icon-user mr-1"></i>Personal</span>
                                                 @endif
 
                                                 @if($tieneAdjuntos)
-                                                    <span class="badge badge-light"><i class="feather icon-paperclip"></i> {{ count($archivos) }}</span>
+                                                    <span class="badge-pill badge-primary-light font-weight-bold p-2"><i class="feather icon-paperclip"></i> {{ count($archivos) }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -357,9 +375,9 @@
                 </div>
 
                 <div class="col-lg-7 col-xl-8">
-                    <div class="msg-panel">
+                    <div class="card">
                         @if($mensajeActual)
-                            <div class="msg-panel-header">
+                            <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h5 class="mb-1 text-c-blue">{{ $asuntoActual }}</h5>
@@ -369,9 +387,9 @@
                                     </div>
                                     <div class="text-right">
                                         @if(($tipoEnvioActual ?? '') === 'difusion_pacientes')
-                                            <span class="msg-badge-soft msg-badge-difusion"><i class="feather icon-radio mr-1"></i>Difusión</span>
+                                            <span class="badge-pill badge-primary-light font-weight-bold p-2n"><i class="feather icon-radio mr-1"></i>Difusión</span>
                                         @else
-                                            <span class="msg-badge-soft msg-badge-direct"><i class="feather icon-user mr-1"></i>Mensaje personal</span>
+                                            <span class="badge-pill badge-primary-light font-weight-bold p-2"><i class="feather icon-user mr-1"></i>Mensaje personal</span>
                                         @endif
                                     </div>
                                 </div>
@@ -431,8 +449,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
     </div>
 </div>
 @endsection
