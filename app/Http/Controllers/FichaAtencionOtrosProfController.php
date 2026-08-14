@@ -4191,7 +4191,7 @@ class FichaAtencionOtrosProfController extends Controller
             ];
 
             $pdf = Pdf::loadView('PDF.pdf_valoracion_equilibrio', $data);
-            $pdf->setPaper('A4', 'portrait');
+            $pdf->setPaper('letter', 'portrait');
 
             $reportesPath = public_path('reportes');
             if (!file_exists($reportesPath)) {
@@ -4237,7 +4237,7 @@ class FichaAtencionOtrosProfController extends Controller
             ];
 
             $pdf = Pdf::loadView('PDF.pdf_informe_rehab_vestibular', $data);
-            $pdf->setPaper('A4', 'portrait');
+            $pdf->setPaper('letter', 'portrait');
 
             $reportesPath = public_path('reportes');
             if (!file_exists($reportesPath)) {

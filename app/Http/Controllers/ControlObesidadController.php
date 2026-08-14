@@ -42,7 +42,7 @@ class ControlObesidadController extends Controller
         ];
 
         $pdf = Pdf::loadView('app.centro_enfermeria_integral.pdf.reporte_cronico', $data);
-        $pdf->setPaper('A4', 'portrait');
+        $pdf->setPaper('letter', 'portrait');
 
         $rut      = str_replace(['.', '-'], '', $paciente->rut ?? $idPaciente);
         $filename = 'reporte_' . $tipo . '_' . $rut . '_' . now()->format('Ymd') . '.pdf';

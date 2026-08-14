@@ -3309,14 +3309,14 @@ select{
 }
 .btn-light {
     color: #343a40!important;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa;
+    background-color: #e2e6ea;
+    border-color: #e2e6ea;
 }
 
 .btn-light:hover {
-    color: #1a49a3;
-    background-color: #e2e6ea;
-    border-color: #dae0e5;
+    color: #343a40;
+    background-color: #d5dade;
+    border-color: #d5dade;
 }
 
 .btn-light:focus, .btn-light.focus {
@@ -37874,6 +37874,13 @@ SMALL PARA INFORMACIÓN
 }
 
 /**------- SELECTS MODERNOS -------**/
+/* IMPORTANTE: solo cambia la apariencia. No altera el comportamiento,
+   los value, los eventos change ni el llenado por JS.
+   NOTA: la lista que se abre en un <select> nativo la dibuja el sistema
+   operativo y NO se puede estilizar por CSS. Aqui se moderniza la caja
+   del select; el desplegable estilizable es el de Select2 (mas abajo). */
+
+/* Caja del select: flecha propia en vez de la del sistema */
 select.form-control:not([multiple]):not([size]),
 select.form-control-sm:not([multiple]):not([size]) {
     -webkit-appearance: none;
@@ -37886,11 +37893,11 @@ select.form-control-sm:not([multiple]):not([size]) {
     padding-right: 34px;
     cursor: pointer;
 }
-
+/* Quita la flecha nativa en Edge/IE antiguos */
 select.form-control::-ms-expand {
     display: none;
 }
-
+/* Opciones: Firefox y Chrome en Windows lo respetan; macOS lo ignora */
 select.form-control option {
     color: #495057;
     background-color: #fff;
@@ -37898,6 +37905,9 @@ select.form-control option {
 }
 
 /**------- DESPLEGABLE DE SELECT2 -------**/
+/* Se antepone body para ganar especificidad, porque select2.min.css
+   se carga despues de style.css */
+
 /* Panel del desplegable */
 body .select2-dropdown {
     border: 1px solid #e6eaf1;
@@ -37950,3 +37960,115 @@ body .select2-container--default.select2-container--open .select2-selection--sin
     box-shadow: 0 0 0 .18rem rgba(70, 128, 255, .14);
 }
 
+/* ICONOS HEADER SUPERIOR DERECHO */
+
+.icon-header {
+    font-size: 1.2rem!important;
+}
+
+/* =================== MODALES DE AUTORIZACIONES BASE ===============*/
+.proceso-acciones .btn {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: .65rem 1rem;
+    font-size: .82rem;
+    transition: .2s;
+}
+
+.proceso-acciones .btn:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+}
+
+.proceso-acciones__texto {
+    font-size: .8rem;
+    color: #8c8c8c;
+}
+
+.proceso-estado {
+    text-align: center;
+    padding: 1.25rem 0 .75rem;
+}
+
+.proceso-estado__icono {
+    height: 76px;
+    margin-bottom: 1rem;
+}
+
+.proceso-estado__icono > span {
+    display: none;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto;
+    border-radius: 50%;
+    line-height: 76px;
+    font-size: 2.1rem;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+/* En espera */
+.proceso-estado.is-cargando .proceso-spinner {
+    display: block;
+    border: 5px solid #eceff3;
+    border-top-color: #17a2b8;
+    animation: proceso-spin .8s linear infinite;
+}
+
+@keyframes proceso-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Exito */
+.proceso-estado.is-ok .proceso-check {
+    display: block;
+    background: #28a745;
+    box-shadow: 0 0 0 8px rgba(40, 167, 69, .14);
+    animation: proceso-pop .35s cubic-bezier(.17, .89, .32, 1.28);
+}
+
+/* Rechazado / cancelado / error */
+.proceso-estado.is-error .proceso-error {
+    display: block;
+    background: #dc3545;
+    box-shadow: 0 0 0 8px rgba(220, 53, 69, .14);
+    animation: proceso-pop .35s cubic-bezier(.17, .89, .32, 1.28);
+}
+
+@keyframes proceso-pop {
+    0%   { transform: scale(.4); opacity: 0; }
+    100% { transform: scale(1);  opacity: 1; }
+}
+
+/* El JS inyecta <h3> con el mensaje del backend */
+.proceso-estado__mensaje h1,
+.proceso-estado__mensaje h2,
+.proceso-estado__mensaje h3,
+.proceso-estado__mensaje h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #3f4254;
+}
+
+.proceso-estado.is-cargando .proceso-estado__mensaje h3 { color: #17a2b8; }
+.proceso-estado.is-ok       .proceso-estado__mensaje h3 { color: #28a745; }
+.proceso-estado.is-error    .proceso-estado__mensaje h3 { color: #dc3545; }
+
+/* Barra de progreso indeterminada mientras espera */
+.proceso-estado.is-cargando .proceso-estado__mensaje::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 4px;
+    margin: .85rem auto 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #eceff3 0%, #17a2b8 50%, #eceff3 100%);
+    background-size: 200% 100%;
+    animation: proceso-barra 1.3s ease-in-out infinite;
+}
+
+@keyframes proceso-barra {
+    0%   { background-position: 150% 0; }
+    100% { background-position: -50% 0; }
+}

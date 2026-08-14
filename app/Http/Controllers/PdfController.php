@@ -46,13 +46,13 @@ class PdfController extends Controller
             /** tamaño de pagina */
             // $customPaper = array(0,0,600,765);
             // $pdf->setPaper($customPaper);
-            // $pdf->setPaper('A4', 'portrait');
+            $pdf->setPaper('letter', 'portrait');
 
             /** contraseña para editar documento */
             $permitted_chars = '0123456789=!abcdefghijklmnopqrstuvwxyz.$阿贝色德饿艾弗日阿什伊鸡卡艾勒艾马艾娜哦佩苦艾和艾丝特玉维独布勒维伊克斯伊格黑克贼德ABCDEFGHIJKLMNOPQRSTUVWXYZ&בגדהוזחטיכלמנסעפצקרשת';
 
             $tempPass = substr(str_shuffle($permitted_chars), 0, 150);
-            $pdf->get_canvas()->get_cpdf()->setEncryption('',$tempPass,array( 'modify','add' ));
+            $pdf->get_canvas()->get_cpdf()->setEncryption('',$tempPass,array( 'print','modify','add' ));
 
 
             $pdf->loadHTML(ob_get_clean());

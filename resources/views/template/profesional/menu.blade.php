@@ -240,12 +240,12 @@
         </div>
     </nav>
 @endif
-
+<!--MODAL PARA SALIR DE LA ATENCIÓN-->
 <div class="modal fade" id="confirmLogoutModal" tabindex="-1" role="dialog" aria-labelledby="confirmLogoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmLogoutModalLabel">Confirmar</h5>
+                <h5 class="modal-title" id="confirmLogoutModalLabel"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -253,12 +253,12 @@
             <div class="modal-body">
                 <input type="hidden" name="menu_url_destino" id="menu_url_destino" value="">
                 <input type="hidden" name="menu_nombre_destino" id="menu_nombre_destino" value="">
-                <p>Esta por salir de la Ficha de Atención, los datos serán eliminados.</p>
-                <p>¿Esta seguro que desea continuar?</p>
+                <h5 class="text-dark">¿Quieres salir sin finalizar la atención?</h5>
+                <p>Estás por salir de la Ficha de Atención. Los datos ingresados se eliminarán y no podrán recuperarse. ¿Deseas continuar?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="menuContinuar();"><i class="feather icon-check"></i>Continuar</button>
+                <button type="button" class="btn btn-info-light" data-dismiss="modal" onclick="menuCerrarModalSalida();"><i class="feather icon-x"></i>Continuar en la atención</button>
+                <button type="button" class="btn btn-danger" onclick="menuContinuar();"><i class="feather icon-check"></i>Salir de la atención</button>
             </div>
         </div>
     </div>
@@ -278,6 +278,44 @@
         $('#menu_url_destino').val('');
         $('#menu_nombre_destino').val('');
         window.location.href = temp;
+    }
+
+    /**
+     * Cierra el modal de salida de la ficha desde JS.
+     *
+     * No se depende solo de data-dismiss/data-bs-dismiss porque el proyecto
+     * carga Bootstrap 5.1.3 por CDN y despues Bootstrap 4.3.1 local: el plugin
+     * de BS4 termina sobrescribiendo al de BS5, asi que solo se escucha
+     * data-dismiss y el atributo data-bs-dismiss nunca dispara.
+     * Esta funcion cubre las dos versiones y deja un respaldo manual.
+     */
+    function menuCerrarModalSalida()
+    {
+        var el = document.getElementById('confirmLogoutModal');
+        if (!el) return;
+
+        // 1) Plugin de jQuery (Bootstrap 4 o 5). Es la via normal en el sistema,
+        //    porque el modal se abre con $('#confirmLogoutModal').modal('show').
+        if (window.jQuery && typeof jQuery(el).modal === 'function') {
+            jQuery(el).modal('hide');
+            return;
+        }
+
+        // 2) API nativa de Bootstrap 5
+        if (window.bootstrap && window.bootstrap.Modal) {
+            var inst = window.bootstrap.Modal.getInstance(el) || new window.bootstrap.Modal(el);
+            inst.hide();
+            return;
+        }
+
+        // 3) Respaldo manual si no hubiera ninguna libreria disponible
+        el.classList.remove('show');
+        el.style.display = 'none';
+        el.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+        var backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop && backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
     }
 
     function imprimir_tarjeta_presentacion_profesional(id) {

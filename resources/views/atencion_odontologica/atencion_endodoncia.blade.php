@@ -26,7 +26,7 @@
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1 float-left"><strong>ATENCIÓN ENDODÓNCIA</strong>
                                 </h5>
-                                <h6 class="font-weight-bold mt-0 mb-0 text-white float-md-right">
+                                <h6 class="font-weight-bold mt-0 mb-0 text-white float-md-right"><i class="feather icon-calendar mr-1"></i>
                                     @php
                                         $meses = [
                                             'Enero',
