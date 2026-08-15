@@ -1,5 +1,5 @@
 <style>
-    .dental-progress-wheel{--progress:25;position:relative;width:58px;height:58px;flex:0 0 58px;border-radius:50%;background:conic-gradient(#20b7c5 0 calc(var(--progress) * 1%),#e4ebf3 calc(var(--progress) * 1%) 100%);box-shadow:0 2px 7px rgba(31,67,111,.18);transition:background .25s ease,transform .2s ease}
+    .dental-progress-wheel{--progress:0;position:relative;width:58px;height:58px;flex:0 0 58px;border-radius:50%;background:conic-gradient(#20b7c5 0 calc(var(--progress) * 1%),#e4ebf3 calc(var(--progress) * 1%) 100%);box-shadow:0 2px 7px rgba(31,67,111,.18);transition:background .25s ease,transform .2s ease}
     .dental-progress-wheel::before{content:'';position:absolute;inset:7px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px #dbe5f1}
     .dental-progress-wheel::after{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;background:linear-gradient(90deg,transparent calc(50% - 1px),#fff calc(50% - 1px),#fff calc(50% + 1px),transparent calc(50% + 1px)),linear-gradient(0deg,transparent calc(50% - 1px),#fff calc(50% - 1px),#fff calc(50% + 1px),transparent calc(50% + 1px));-webkit-mask:radial-gradient(circle,transparent 0 29%,#000 31% 100%);mask:radial-gradient(circle,transparent 0 29%,#000 31% 100%)}
     .dental-progress-wheel:hover{transform:scale(1.06)}
@@ -11,8 +11,8 @@
 </style>
 <script>
     window.crearProgresoCircularDental = window.crearProgresoCircularDental || function (progreso, funcionCambio) {
-        progreso = [25, 50, 75, 100].includes(Number(progreso)) ? Number(progreso) : 25;
-        const opciones = [25, 50, 75, 100].map(function (valor) {
+        progreso = [0, 25, 50, 75, 100].includes(Number(progreso)) ? Number(progreso) : 0;
+        const opciones = [0, 25, 50, 75, 100].map(function (valor) {
             return '<option value="' + valor + '" ' + (valor === progreso ? 'selected' : '') + '>' + valor + '%</option>';
         }).join('');
         return '<div class="dental-progress-wheel" style="--progress:' + progreso + '" title="Progreso del tratamiento: ' + progreso + '%">' +
@@ -25,7 +25,7 @@
             .find('.dental-progress-wheel-value').text(progreso + '%');
     };
     window.crearProgresoCircularDentalLectura = window.crearProgresoCircularDentalLectura || function (progreso) {
-        progreso = [25, 50, 75, 100].includes(Number(progreso)) ? Number(progreso) : 25;
+        progreso = [0, 25, 50, 75, 100].includes(Number(progreso)) ? Number(progreso) : 0;
         return '<div class="dental-progress-wheel is-readonly" style="--progress:' + progreso + '" title="Progreso del tratamiento: ' + progreso + '%" role="img" aria-label="Progreso del tratamiento: ' + progreso + '%">' +
             '<span class="dental-progress-wheel-value">' + progreso + '%</span></div>';
     };

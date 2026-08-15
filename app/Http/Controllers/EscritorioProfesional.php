@@ -84,6 +84,8 @@ use App\Models\Instituciones;
 use App\Models\InsumosTratamientosDental;
 use App\Models\TratamientoProfesionalInsumo;
 use App\Models\Producto;
+use App\Models\TipoProducto;
+use App\Models\Unidades_medidas;
 use App\Models\LugarAtencion;
 use App\Models\LiquidacionRecibo;
 use App\Models\LogUsersDevices;
@@ -92,6 +94,7 @@ use App\Models\MensajesDifusion;
 use App\Models\Mensajes;
 use App\Models\NotificacionConfirmacion;
 use App\Models\MaterialesImplantologia;
+use App\Models\MarcasImplantes;
 use App\Models\OdontogramaPaciente;
 use App\Models\OftalmoExamenNeurologico;
 use App\Models\Orden;
@@ -344,20 +347,26 @@ class EscritorioProfesional extends Controller
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
             // Validar que existan todos los campos requeridos
+            $piezas = $req->input('piezas', $req->filled('pieza') ? [$req->pieza] : []);
+            $req->merge(['piezas' => is_array($piezas) ? $piezas : [$piezas]]);
+
             $req->validate([
-                'pieza' => 'required',
+                'piezas' => 'required|array|min:1',
+                'piezas.*' => ['required', 'string', 'regex:/^[1-8]\.[1-8]$/'],
                 'id_ficha_atencion' => 'required|exists:fichas_atenciones,id',
                 'id_paciente' => 'required|exists:pacientes,id',
                 'id_lugar_atencion' => 'required'
             ]);
 
             // Verificar si ya existe una evaluación para esta pieza en esta ficha
-            $evaluacion_existente = EvaluacionPeriodoncia::where([
-                'pieza' => $req->pieza,
-                'id_ficha_atencion' => $req->id_ficha_atencion
-            ])->first();
+            $piezas = array_values(array_unique(array_map('strval', $req->piezas)));
+            $piezasExistentes = EvaluacionPeriodoncia::where('id_ficha_atencion', $req->id_ficha_atencion)
+                ->whereIn('pieza', $piezas)
+                ->pluck('pieza')
+                ->all();
 
-            if ($evaluacion_existente) {
+            if (!empty($piezasExistentes)) {
+                $req->merge(['pieza' => implode(', ', $piezasExistentes)]);
                 return response()->json([
                     'mensaje' => 'ERROR',
                     'error' => 'Ya existe una evaluación para la pieza ' . $req->pieza . ' en esta ficha de atención'
@@ -365,21 +374,27 @@ class EscritorioProfesional extends Controller
             }
 
             // Crear nueva evaluación de periodoncia
-            $evaluacion = new EvaluacionPeriodoncia();
-            $evaluacion->pieza = $req->pieza;
-            $evaluacion->antecedentes_molestias = $req->antecedentes_molestias;
-            $evaluacion->evaluacion_clinica = $req->evaluacion_clinica;
-            $evaluacion->estudio_rx = $req->estudio_rx;
-            $evaluacion->diagnostico = $req->diagnostico;
-            $evaluacion->lesion_sistemica = $req->lesion_sistemica;
-            $evaluacion->dg_period = $req->dg_period;
-            $evaluacion->observaciones = $req->observaciones;
-            $evaluacion->id_ficha_atencion = $req->id_ficha_atencion;
-            $evaluacion->id_paciente = $req->id_paciente;
-            $evaluacion->id_lugar_atencion = $req->id_lugar_atencion;
-            $evaluacion->id_profesional = $profesional->id;
+            $evaluacionesCreadas = DB::transaction(function () use ($piezas, $req, $profesional) {
+                return collect($piezas)->map(function ($pieza) use ($req, $profesional) {
+                    $evaluacion = new EvaluacionPeriodoncia();
+                    $evaluacion->pieza = $pieza;
+                    $evaluacion->antecedentes_molestias = $req->antecedentes_molestias;
+                    $evaluacion->evaluacion_clinica = $req->evaluacion_clinica;
+                    $evaluacion->estudio_rx = $req->estudio_rx;
+                    $evaluacion->diagnostico = $req->diagnostico;
+                    $evaluacion->lesion_sistemica = $req->lesion_sistemica;
+                    $evaluacion->dg_period = $req->dg_period;
+                    $evaluacion->observaciones = $req->observaciones;
+                    $evaluacion->id_ficha_atencion = $req->id_ficha_atencion;
+                    $evaluacion->id_paciente = $req->id_paciente;
+                    $evaluacion->id_lugar_atencion = $req->id_lugar_atencion;
+                    $evaluacion->id_profesional = $profesional->id;
+                    $evaluacion->save();
+                    return $evaluacion;
+                });
+            });
 
-            if ($evaluacion->save()) {
+            if ($evaluacionesCreadas->isNotEmpty()) {
                 // Obtener todas las evaluaciones de esta ficha para retornar la vista actualizada
                 $evaluaciones = EvaluacionPeriodoncia::where('id_ficha_atencion', $req->id_ficha_atencion)
                     ->orderBy('pieza')
@@ -392,7 +407,7 @@ class EscritorioProfesional extends Controller
 
                 return response()->json([
                     'mensaje' => 'OK',
-                    'data' => $evaluacion,
+                    'data' => $evaluacionesCreadas,
                     'v' => $vista_evaluaciones,
                     'evaluaciones' => $evaluaciones,
                     'total_evaluaciones' => $evaluaciones->count()
@@ -967,8 +982,107 @@ class EscritorioProfesional extends Controller
 
     public function gestion_insumos(){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $insumos = collect();
-        return view('app.profesional.gestion_insumos', ['insumos' => $insumos, 'profesional' => $profesional]);
+        $insumos = Producto::with(['tipoProducto', 'unidadMedida', 'marcaImplante'])
+            ->where(function ($query) use ($profesional) {
+                $query->where('id_profesional', $profesional->id)->orWhereNull('id_profesional');
+            })
+            ->where('estado', 1)
+            ->orderBy('nombre')
+            ->get();
+        $categorias = TipoProducto::orderBy('nombre')->get();
+        $unidades = Unidades_medidas::orderBy('nombre')->get();
+        $marcasImplantesGestion = MarcasImplantes::where('estado', 1)->orderBy('descripcion')->get();
+        $ubicaciones = $insumos->pluck('ubicacion')->filter()->unique()->sort()->values();
+        $resumen = [
+            'productos' => $insumos->count(),
+            'stock_total' => (int) $insumos->sum('stock_actual'),
+            'bajo_stock' => $insumos->filter(fn ($i) => (int) $i->stock_actual <= (int) $i->stock_minimo)->count(),
+            'por_vencer' => 0,
+            'vencidos' => 0,
+        ];
+
+        return view('app.profesional.gestion_insumos', compact(
+            'insumos', 'profesional', 'categorias', 'unidades', 'ubicaciones', 'resumen', 'marcasImplantesGestion'
+        ));
+    }
+
+    public function guardarInsumoGestion(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        $productoId = (int) $request->input('id', 0);
+        $request->validate([
+            'codigo' => ['required', 'string', 'max:100', \Illuminate\Validation\Rule::unique('productos', 'codigo_interno')->ignore($productoId)],
+            'nombre' => 'required|string|max:255',
+            'categoria' => 'required|integer|exists:tipo_producto,id',
+            'unidad' => 'required|integer|exists:unidades_medidas,id',
+            'ubicacion' => 'nullable|string|max:100',
+            'stock_inicial' => 'nullable|integer|min:0',
+            'stock_seguridad' => 'nullable|integer|min:0',
+            'stock_minimo' => 'nullable|integer|min:0',
+            'precio_venta' => 'required|numeric|min:0',
+            'descripcion' => 'nullable|string|max:1000',
+            'uso_implantologia' => 'nullable|boolean',
+            'tipo_insumo_implantologia' => 'nullable|required_if:uso_implantologia,1|integer|between:1,9',
+            'marca_implante' => 'nullable|required_if:tipo_insumo_implantologia,1|integer|exists:marcas_implantes_dental,id',
+        ]);
+
+        $producto = $productoId
+            ? Producto::whereKey($productoId)->where('id_profesional', $profesional->id)->firstOrFail()
+            : new Producto();
+        $usoImplantologia = (int) $request->input('uso_implantologia', 0) === 1;
+        $producto->fill([
+            'id_profesional' => $profesional->id,
+            'codigo_interno' => $request->codigo,
+            'nombre' => $request->nombre,
+            'id_tipo_producto' => $request->categoria,
+            'id_unidad_medida' => $request->unidad,
+            'ubicacion' => $request->ubicacion,
+            'stock_actual' => (int) $request->input('stock_inicial', 0),
+            'stock_seguridad' => (int) $request->input('stock_seguridad', 0),
+            'stock_minimo' => (int) $request->input('stock_minimo', 0),
+            'precio_venta' => $request->input('precio_venta', 0),
+            'descripcion' => $request->input('descripcion', ''),
+            'estado' => 1,
+            'es_implante' => $usoImplantologia,
+            'id_tipo_insumo_implantologia' => $usoImplantologia ? $request->input('tipo_insumo_implantologia') : null,
+            'id_marca_implante' => $usoImplantologia && (int) $request->input('tipo_insumo_implantologia') === 1
+                ? $request->input('marca_implante') : null,
+        ]);
+        $producto->stock_maximo = max((int) $producto->stock_actual, (int) $producto->stock_minimo);
+        $producto->imagen = $producto->imagen ?: '';
+        $producto->id_marca = $producto->id_marca ?: 0;
+        $producto->save();
+
+        if ($producto->es_implante) {
+            MaterialesImplantologia::updateOrCreate(
+                ['id_producto' => $producto->id],
+                [
+                    'id_tipo_insumo' => $producto->id_tipo_insumo_implantologia,
+                    'descripcion' => $producto->nombre,
+                    'valor' => $producto->precio_venta,
+                    'estado' => 1,
+                    'observaciones' => $producto->descripcion,
+                ]
+            );
+        } else {
+            MaterialesImplantologia::where('id_producto', $producto->id)->update(['estado' => 0]);
+        }
+
+        return redirect()->route('profesional.gestion_insumos')
+            ->with('success', $productoId ? 'Insumo actualizado correctamente.' : 'Insumo creado correctamente. Ya puede asociarlo a sus tratamientos.');
+    }
+
+    public function eliminarInsumoGestion(Producto $producto)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+        abort_unless((int) $producto->id_profesional === (int) $profesional->id, 404);
+        $enUso = TratamientoProfesionalInsumo::where('id_producto', $producto->id)->where('estado', 1)->exists();
+        if ($enUso) {
+            return response()->json(['mensaje' => 'El insumo está asociado a uno o más tratamientos y no puede eliminarse.'], 422);
+        }
+        $producto->estado = 0;
+        $producto->save();
+        return response()->json(['mensaje' => 'Insumo eliminado correctamente.']);
     }
 
     public function validar_rut(Request $request)
@@ -2300,23 +2414,35 @@ class EscritorioProfesional extends Controller
 
     public function aplicar_convenio_tratamiento(Request $request)
     {
-
-        $convenio = EmpresasConvenios::find($request->id);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $convenio = $profesional
+            ? EmpresasConvenios::whereKey($request->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado_convenio', 1)
+                ->first()
+            : null;
+        if (!$profesional || !$convenio) {
+            return response()->json(['message' => 'El convenio no está disponible para este profesional.'], 422);
+        }
 
         $porcentaje_descuento = intval($convenio->porcentaje);
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         // Persistimos qué convenio quedó aplicado para que se mantenga tras recargar la ficha.
         $presupuesto = $request->filled('id_presupuesto')
-            ? PresupuestosDental::find($request->id_presupuesto)
+            ? PresupuestosDental::whereKey($request->id_presupuesto)
+                ->where('id_paciente', $request->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->first()
             : PresupuestosDental::where('id_paciente', $request->id_paciente)
                 ->where('id_ficha_atencion', $request->id_ficha_atencion)
+                ->where('id_profesional', $profesional->id)
                 ->where('estado', 1)
                 ->first();
-        if ($presupuesto) {
-            $presupuesto->id_convenio_aplicado = $convenio->id;
-            $presupuesto->save();
+        if (!$presupuesto) {
+            return response()->json(['message' => 'El presupuesto clínico no es válido.'], 422);
         }
+        $presupuesto->id_convenio_aplicado = $convenio->id;
+        $presupuesto->save();
 
         $odontograma = $this->dameOdontogramaPaciente(
             $request->id_paciente,
@@ -2324,31 +2450,51 @@ class EscritorioProfesional extends Controller
             $request->id_lugar_atencion,
             $profesional->id_tipo_especialidad,
             $request->id_presupuesto
-        );
+        )->filter(function ($pieza) {
+            return (int) $pieza->presupuesto === 1
+                && (int) ($pieza->urgencia ?? 0) === 0;
+        })->values();
 
         $valores = $this->dameValoresOdontograma(
             $request->id_paciente,
             $request->id_ficha_atencion,
             $request->id_lugar_atencion,
-            $profesional->id_tipo_especialidad
+            $profesional->id_tipo_especialidad,
+            $request->id_presupuesto
         );
 
         $insumos = $this->dame_insumos_tratamiento(
             $request->id_paciente,
             $request->id_ficha_atencion
         )->filter(function ($insumo) use ($request) {
-            return (int) $insumo->id_presupuesto === (int) $request->id_presupuesto;
+            return (int) $insumo->id_presupuesto === (int) $request->id_presupuesto
+                && (int) $insumo->presupuesto === 1
+                && (int) ($insumo->urgencia ?? 0) === 0;
         })->values();
 
         $todos = $this->dameTratamientosBocaGeneral(
             $request->id_ficha_atencion
-        );
+        )->filter(function ($tratamiento) use ($request) {
+            return (int) $tratamiento->id_presupuesto === (int) $request->id_presupuesto
+                && (int) $tratamiento->presupuesto === 1
+                && (int) ($tratamiento->urgencia ?? 0) === 0;
+        })->values();
 
         $total_lab = 0;
 
         $fc = new ficha_atencionController();
-        $ordenes_trabajo_menor = $fc->dameOrdenesTrabajoMenor($request->id_paciente,$profesional->id, $request->id_ficha_atencion);
-        $ordenes_trabajo_mayor = $fc->dameOrdenesTrabajoMayor($request->id_paciente,$profesional->id, $request->id_ficha_atencion);
+        $ordenes_trabajo_menor = $fc->dameOrdenesTrabajoMenor(
+            $request->id_paciente,
+            $profesional->id,
+            $request->id_presupuesto,
+            $request->id_ficha_atencion
+        );
+        $ordenes_trabajo_mayor = $fc->dameOrdenesTrabajoMayor(
+            $request->id_paciente,
+            $profesional->id,
+            $request->id_presupuesto,
+            $request->id_ficha_atencion
+        );
 
         foreach($ordenes_trabajo_menor as $ot){
             if($ot->presupuesto == 1){
@@ -2501,6 +2647,17 @@ class EscritorioProfesional extends Controller
         $saldoDisponible = (int) round($total_abonado - $total_con_descuento);
         $saldoAFavor = max(0, $saldoDisponible);
         $saldoPendiente = max(0, -$saldoDisponible);
+
+        if ($presupuesto) {
+            $presupuesto->valor_total = (int) round($total_con_descuento);
+            $presupuesto->valor_abonado = (int) $total_abonado;
+            $presupuesto->pago_completado = $total_con_descuento > 0
+                && $total_abonado >= $total_con_descuento;
+            $presupuesto->fecha_pago_completo = $presupuesto->pago_completado
+                ? ($presupuesto->fecha_pago_completo ?: Carbon::now())
+                : null;
+            $presupuesto->save();
+        }
 
 
 
@@ -3301,12 +3458,32 @@ class EscritorioProfesional extends Controller
                 $totalPresupuesto = (int) ($presupuestoHora->valor_total ?? 0);
                 $totalAbonado = (int) PagosPresupuestoDental::where('id_presupuesto', $presupuestoHora->id)->sum('total');
                 $pagoCompletado = (bool) $presupuestoHora->pago_completado || ($totalPresupuesto > 0 && $totalAbonado >= $totalPresupuesto);
+                $convenioPresupuesto = $presupuestoHora->id_convenio_aplicado
+                    ? EmpresasConvenios::find($presupuestoHora->id_convenio_aplicado)
+                    : null;
+                if (!$convenioPresupuesto && $paciente->prevision) {
+                    $nombrePrevision = trim((string) $paciente->prevision->nombre);
+                    $convenioPresupuesto = EmpresasConvenios::where('id_profesional', $presupuestoHora->id_profesional)
+                        ->where('estado_convenio', 1)
+                        ->whereRaw('LOWER(nombre_convenio) = ?', [mb_strtolower($nombrePrevision)])
+                        ->orderByDesc('id')
+                        ->first();
+                }
                 $pagoPresupuesto = [
                     'id' => $presupuestoHora->id,
+                    'id_paciente' => $presupuestoHora->id_paciente,
+                    'id_ficha_atencion' => $presupuestoHora->id_ficha_atencion,
+                    'id_lugar_atencion' => $presupuestoHora->id_lugar_atencion,
                     'total' => $totalPresupuesto,
                     'abonado' => $totalAbonado,
                     'saldo' => max(0, $totalPresupuesto - $totalAbonado),
                     'pagado' => $pagoCompletado,
+                    'descuento' => $convenioPresupuesto ? [
+                        'id' => $convenioPresupuesto->id,
+                        'nombre' => $convenioPresupuesto->nombre_convenio,
+                        'porcentaje' => (float) $convenioPresupuesto->porcentaje,
+                        'aplicado' => (int) $presupuestoHora->id_convenio_aplicado === (int) $convenioPresupuesto->id,
+                    ] : null,
                 ];
 
                 $prestacionesAgendadas = [];
@@ -4992,7 +5169,23 @@ return $ficha;
         $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
         $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $idPresupuesto = $req->id_presupuesto;
+        if (!$idPresupuesto) {
+            $idPresupuesto = PresupuestosDental::where('id_paciente', $req->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->where('id_ficha_atencion', $req->id_ficha_atencion)
+                ->where('id_lugar_atencion', $req->id_lugar_atencion)
+                ->where('estado', 1)
+                ->orderByDesc('id')
+                ->value('id');
+        }
+        $odontograma = $this->dameOdontogramaPaciente(
+            $req->id_paciente,
+            $req->id_ficha_atencion,
+            $req->id_lugar_atencion,
+            $profesional->id_tipo_especialidad,
+            $idPresupuesto
+        );
         $v = view('atencion_odontologica.include.piezas_dental_tto_impl_rehab',[
             'counter' => $idCounter,
             'tratamientos_implantologia' => $tratamientos_implantologia,
@@ -6277,6 +6470,8 @@ return $ficha;
             $ficha_atencionController = new ficha_atencionController();
             $paciente = Paciente::find($req->id_paciente);
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $profesional->loadMissing('TipoEspecialidad');
+            $lugarAtencion = LugarAtencion::with('Direccion.Ciudad')->find($req->id_lugar_atencion);
             $maxilar_superior_gral_tratamiento = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad);
             $maxilar_superior_gral_diagnostico = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
             $maxilar_inferior_gral_tratamiento = $ficha_atencionController->dameMaxilarInferiorGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad);
@@ -6289,10 +6484,54 @@ return $ficha;
             $maxilar_superior_gral_diagnosticos_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($paciente->id, $profesional->id_tipo_especialidad);
             $boca_completa_gral_tratamiento_endo = $ficha_atencionController->dameCompletaEndoTratamiento($paciente->id, $profesional->id_tipo_especialidad);
             $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
-            $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $valores_odontograma = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $idPresupuesto = $req->filled('id_presupuesto') ? (int) $req->id_presupuesto : null;
+            $esPresupuestoUrgencia = $req->boolean('urgencia');
+            $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad, $idPresupuesto)
+                ->where('presupuesto', 1)
+                ->where('urgencia', $esPresupuestoUrgencia ? 1 : 0)
+                ->values();
 
             $insumos = $ficha_atencionController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
+            if (!is_null($idPresupuesto)) {
+                $insumos = $insumos->where('id_presupuesto', $idPresupuesto)->values();
+            }
+            $insumos = $insumos->where('presupuesto', 1)
+                ->where('urgencia', $esPresupuestoUrgencia ? 1 : 0)
+                ->values();
+
+            $presupuestoReporte = $idPresupuesto
+                ? PresupuestosDental::whereKey($idPresupuesto)
+                    ->where('id_paciente', $req->id_paciente)
+                    ->first()
+                : null;
+            $idConvenioReporte = $presupuestoReporte
+                ? ($esPresupuestoUrgencia
+                    ? $presupuestoReporte->id_convenio_urgencia_aplicado
+                    : $presupuestoReporte->id_convenio_aplicado)
+                : null;
+            $convenioAplicado = null;
+            if ($idConvenioReporte) {
+                $consultaConvenioReporte = EmpresasConvenios::whereKey($idConvenioReporte)
+                    ->where('id_profesional', $profesional->id)
+                    ->where('estado_convenio', 1);
+
+                if ($esPresupuestoUrgencia) {
+                    $nombrePrevision = trim((string) optional(optional($paciente)->prevision)->nombre);
+                    $consultaConvenioReporte->whereRaw(
+                        'LOWER(TRIM(nombre_convenio)) = ?',
+                        [mb_strtolower($nombrePrevision)]
+                    );
+                }
+
+                $convenioAplicado = $consultaConvenioReporte->first();
+            }
+            $porcentajeDescuento = $convenioAplicado ? (float) $convenioAplicado->porcentaje : 0;
+            $subtotalPiezas = (float) $odontograma->sum('valor');
+            $subtotalInsumos = (float) $insumos->sum(fn ($insumo) => (float) $insumo->valor * max(1, (int) $insumo->cantidad));
+            $subtotalPresupuesto = $subtotalPiezas + $subtotalInsumos;
+            $valores_odontograma = [0, $subtotalPiezas, $subtotalInsumos, 0];
+            $descuentoPresupuesto = (int) round($subtotalPresupuesto * ($porcentajeDescuento / 100));
+            $totalPresupuesto = max(0, (int) round($subtotalPresupuesto) - $descuentoPresupuesto);
 
             // Renderizar la vista del presupuesto dental
             // Usar DomPDF de forma explícita. El alias global PDF también es
@@ -6314,10 +6553,21 @@ return $ficha;
                 'maxilar_superior_gral_diagnosticos_endo',
                 'boca_completa_gral_tratamiento_endo',
                 'boca_completa_gral_diagnostico_endo',
-                'insumos'
+                'insumos',
+                'presupuestoReporte',
+                'convenioAplicado',
+                'porcentajeDescuento',
+                'subtotalPresupuesto',
+                'descuentoPresupuesto',
+                'totalPresupuesto',
+                'profesional',
+                'lugarAtencion'
+                ,'esPresupuestoUrgencia'
             ));
             // Guardar el PDF en la carpeta public
-            $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
+            $fileName = ($esPresupuestoUrgencia ? 'presupuesto_urgencia_' : 'presupuesto_dental_') . $req->id_paciente
+                . ($idPresupuesto ? '_presupuesto_' . $idPresupuesto : '')
+                . '_' . time() . '.pdf';
             $filePath = public_path('reportes/' . $fileName);
             file_put_contents($filePath, $pdf->output());
 
@@ -6336,6 +6586,67 @@ return $ficha;
             ], 500);
         }
 
+    }
+
+    public function enviar_presupuesto_dental_email(Request $req)
+    {
+        $req->validate([
+            'id_paciente' => 'required|integer',
+            'id_ficha_atencion' => 'required|integer',
+            'id_lugar_atencion' => 'required|integer',
+            'id_presupuesto' => 'nullable|integer',
+            'email' => 'required|email:rfc',
+        ]);
+
+        $paciente = Paciente::find($req->id_paciente);
+        if (!$paciente) {
+            return response()->json([
+                'mensaje' => 'No fue posible identificar al paciente.',
+            ], 404);
+        }
+        $correoDestino = trim((string) $req->email);
+
+        $respuestaPdf = $this->generar_pdf_presupuesto($req);
+        if ($respuestaPdf->getStatusCode() !== 200) {
+            return $respuestaPdf;
+        }
+
+        $datosPdf = $respuestaPdf->getData(true);
+        $nombreArchivo = basename(urldecode(parse_url($datosPdf['ruta'] ?? '', PHP_URL_PATH)));
+        $rutaArchivo = public_path('reportes/' . $nombreArchivo);
+        if ($nombreArchivo === '' || !is_file($rutaArchivo)) {
+            return response()->json([
+                'mensaje' => 'No fue posible generar el archivo del presupuesto.',
+            ], 500);
+        }
+
+        try {
+            Mail::raw(
+                'Adjuntamos el presupuesto dental emitido durante su atención.',
+                function ($mensaje) use ($correoDestino, $rutaArchivo, $nombreArchivo) {
+                    $mensaje->to($correoDestino)
+                        ->subject('Presupuesto dental')
+                        ->attach($rutaArchivo, [
+                            'as' => $nombreArchivo,
+                            'mime' => 'application/pdf',
+                        ]);
+                }
+            );
+
+            return response()->json([
+                'mensaje' => 'El presupuesto fue enviado correctamente a ' . $correoDestino . '.',
+            ]);
+        } catch (\Throwable $e) {
+            \Log::error('No fue posible enviar el presupuesto dental por correo.', [
+                'id_paciente' => $paciente->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'mensaje' => 'No fue posible enviar el presupuesto por correo.',
+                'detalle' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
+        }
     }
 
     public function generar_pdf_presupuesto_hist(Request $req){
@@ -6427,9 +6738,17 @@ return $ficha;
         $trabajo = DiagnosticosDentalProfesional::where('id', $arancel)
             ->where('id_profesional', $profesional->id)->firstOrFail();
 
-        $productos = Producto::orderBy('nombre')->get(['id', 'codigo_interno', 'nombre', 'precio_compra', 'precio_venta', 'stock_actual']);
         $pack = TratamientoProfesionalInsumo::where('id_diagnostico_profesional', $trabajo->id)
             ->where('estado', 1)->get();
+        $productosPack = $pack->pluck('id_producto');
+        $productos = Producto::where(function ($query) use ($profesional, $productosPack) {
+                $query->where('id_profesional', $profesional->id)
+                    ->orWhereNull('id_profesional')
+                    ->orWhereIn('id', $productosPack);
+            })
+            ->where('estado', 1)
+            ->orderBy('nombre')
+            ->get(['id', 'codigo_interno', 'nombre', 'precio_compra', 'precio_venta', 'stock_actual']);
 
         return response()->json(['productos' => $productos, 'pack' => $pack]);
     }
@@ -6682,9 +7001,9 @@ return $ficha;
 
     }
 
-    public function dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad){
+    public function dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad, $id_presupuesto = null){
         $fichaController = new ficha_atencionController;
-        $valores = $fichaController->dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad);
+        $valores = $fichaController->dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad, $id_presupuesto);
         return $valores;
     }
 
@@ -6833,7 +7152,21 @@ return $ficha;
         if(!$opt){
             $v = view('atencion_odontologica.include.imagenes_dental',['counter' => $idCounter,'opt' => $opt])->render();
         }elseif($opt == 'preimplante' || $opt == 'periodoncica'){
-            $v = view('atencion_odontologica.include.imagenes_preimplante',['count' => $idCounter,'opt' => $opt])->render();
+            $odontograma = collect();
+            if ($opt === 'periodoncica' && $req->id_paciente && $req->id_ficha_atencion && $req->id_lugar_atencion) {
+                $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+                $odontograma = $this->dameOdontogramaPaciente(
+                    $req->id_paciente,
+                    $req->id_ficha_atencion,
+                    $req->id_lugar_atencion,
+                    $profesional->id_tipo_especialidad
+                );
+            }
+            $v = view('atencion_odontologica.include.imagenes_preimplante', [
+                'count' => $idCounter,
+                'opt' => $opt,
+                'odontograma' => $odontograma,
+            ])->render();
         }elseif($opt == 'odontop'){
             $v = view('atencion_odontologica.include.imagenes_odontopediatria',['count' => $idCounter,'opt' => $opt])->render();
         }
@@ -7309,7 +7642,13 @@ return $ficha;
         'solo_sin_tratamiento' => 'nullable|boolean',
     ]);
 
+    $profesional = Profesional::where('id_usuario', Auth::id())->first();
+    if (!$profesional) {
+        return response()->json(['mensaje' => 'ERROR', 'piezas' => []], 403);
+    }
+
     $presupuesto = PresupuestosDental::where('id_paciente', $req->id_paciente)
+        ->where('id_profesional', $profesional->id)
         ->when(
             $req->id_presupuesto,
             fn ($query) => $query->where('id', $req->id_presupuesto)
@@ -7335,14 +7674,10 @@ return $ficha;
             'id_paciente',
             $req->id_paciente
         )
+        ->where('id_profesional', $profesional->id)
         ->where('presupuesto', 1)
-        ->where(function ($query) use ($presupuesto) {
-            $query->where('id_presupuesto', $presupuesto->id)
-                ->orWhere(
-                    'id_ficha_atencion',
-                    $presupuesto->id_ficha_atencion
-                );
-        })
+        ->where('urgencia', 0)
+        ->where('id_presupuesto', $presupuesto->id)
         ->whereNotNull('pieza');
 
     if ($req->boolean('solo_pendientes')) {
@@ -12621,7 +12956,12 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 ->leftjoin('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
                 ->leftjoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_presupuesto', $presupuesto_dental->id)
+                ->where('odontogramas_pacientes.urgencia', 0)
                 ->whereIn('odontogramas_pacientes.estado', [0, 2, 3])
+                ->where(function ($query) {
+                    $query->whereNull('odontogramas_pacientes.progreso')
+                        ->orWhere('odontogramas_pacientes.progreso', '<', 100);
+                })
                 ->where(function ($query) {
                     $query->whereNull('odontogramas_pacientes.atendido')
                         ->orWhere('odontogramas_pacientes.atendido', 0);
@@ -12637,7 +12977,12 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 ->leftjoin('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
                 ->leftjoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_presupuesto', $presupuesto_dental->id)
+                ->where('odontogramas_pacientes.urgencia', 0)
                 ->whereIn('odontogramas_pacientes.estado', [0, 2, 3])
+                ->where(function ($query) {
+                    $query->whereNull('odontogramas_pacientes.progreso')
+                        ->orWhere('odontogramas_pacientes.progreso', '<', 100);
+                })
                 ->where(function ($query) {
                     $query->whereNull('odontogramas_pacientes.atendido')
                         ->orWhere('odontogramas_pacientes.atendido', 0);
@@ -13585,7 +13930,18 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 $tipo = $seleccion['tipo'] ?? null;
                 $id = (int) ($seleccion['id'] ?? 0);
                 $valido = $tipo === 'pieza'
-                    ? OdontogramaPaciente::where('id', $id)->where('id_presupuesto', $presupuesto->id)->where('estado', 0)->exists()
+                    ? OdontogramaPaciente::where('id', $id)
+                        ->where('id_presupuesto', $presupuesto->id)
+                        ->where('presupuesto', 1)
+                        ->where('urgencia', 0)
+                        ->whereIn('estado', [0, 2, 3])
+                        ->where(function ($query) {
+                            $query->whereNull('progreso')->orWhere('progreso', '<', 100);
+                        })
+                        ->where(function ($query) {
+                            $query->whereNull('atendido')->orWhere('atendido', 0);
+                        })
+                        ->exists()
                     : ($tipo === 'grupo' && ExamenesBocaGeneral::where('id', $id)
                         ->where('id_paciente', $presupuesto->id_paciente)
                         ->where('id_profesional', $presupuesto->id_profesional)

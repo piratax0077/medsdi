@@ -1625,7 +1625,7 @@
                                     @if(isset($odontograma))
                                     @foreach ($odontograma as $odonto)
                                     @if($odonto->urgencia == 0)
-                                    <tr data-treatment-id="{{ $odonto->id }}" data-clinical-state="{{ (int) ($odonto->estado ?? 0) }}" data-progress="{{ (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 25)) }}">
+                                    <tr data-treatment-id="{{ $odonto->id }}" data-clinical-state="{{ (int) ($odonto->estado ?? 0) }}" data-progress="{{ (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 0)) }}">
                                         <td>
                                             <div class="dental-table-datetime">
                                                 <strong>{{ \Carbon\Carbon::parse($odonto->fecha)->format('d-m-Y') }}</strong>
@@ -1668,7 +1668,7 @@
 
                                         <td>
                                             <div class="dental-table-state-control">
-                                                @php $progresoPieza = (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 25)); @endphp
+                                                @php $progresoPieza = (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 0)); @endphp
                                                 <div class="dental-progress-wheel" style="--progress: {{ $progresoPieza }}"
                                                     title="Progreso del tratamiento: {{ $progresoPieza }}%">
                                                     <span class="dental-progress-wheel-value">{{ $progresoPieza }}%</span>
@@ -1676,7 +1676,7 @@
                                                         aria-label="Progreso del tratamiento"
                                                         data-original-progress="{{ $progresoPieza }}"
                                                         onchange="actualizarEstadoPiezaPlan(this, {{ $odonto->id }})">
-                                                        @foreach ([25, 50, 75, 100] as $porcentaje)
+                                                    @foreach ([0, 25, 50, 75, 100] as $porcentaje)
                                                             <option value="{{ $porcentaje }}" {{ $progresoPieza === $porcentaje ? 'selected' : '' }}>{{ $porcentaje }}%</option>
                                                         @endforeach
                                                     </select>

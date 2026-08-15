@@ -1,29 +1,45 @@
 <div class="form row">
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="form-row">
-        <div class="col-md-2">
-            <ul class="nav flex-column nav-pills mb-3" id="tto_period" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link-aten text-reset active" id="pieza_dental_period_tab" data-toggle="tab" href="#pieza_dental_period" role="tab" aria-controls="pieza_dental_period" aria-selected="true">Pieza dental</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link-aten text-reset" id="grupo_dental_period_tab" data-toggle="tab" href="#grupo_dental_period" role="tab" aria-controls="grupo_dental_period" aria-selected="true">Grupo dental</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="tab-content" id="tto_periodContent">
                 <div class="tab-pane fade show active" id="pieza_dental_period" role="tabpanel" aria-labelledby="pieza_dental_period_tab">
                     <div class="form-row">
                         <div class="col-md-12">
                             <div class="card-informacion">
-                                <div class="card-body">
-                                    <div class="form-row">
+                                <div class="card-body examen-periodontal-layout" id="examen_periodontal_layout_{{ $counter }}">
+                                    @php
+                                        $piezasExamenPeriodontal = [
+                                            '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                            '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                            '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                            '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                        ];
+                                    @endphp
+                                    <div class="selector-examen-periodontal-columna">
+                                        @include('atencion_odontologica.include.selector_odontograma', [
+                                            'id' => 'selector_examen_periodontal_'.$counter,
+                                            'inputId' => 'numero_pieza_tto_period'.$counter,
+                                            'counter' => 9800 + (int) $counter,
+                                            'multiple' => false,
+                                            'compacto' => true,
+                                            'autoRefresh' => false,
+                                            'mostrarMensajeVacio' => false,
+                                            'mostrarEstadoClinico' => true,
+                                            'historialPiezas' => $odontograma ?? [],
+                                            'estadosBloqueados' => [],
+                                            'piezasDisponibles' => $piezasExamenPeriodontal,
+                                            'piezasSeleccionadas' => [],
+                                            'titulo' => 'Seleccione una pieza para el examen periodontal',
+                                            'ayuda' => 'La información clínica se guardará asociada a la pieza seleccionada',
+                                        ])
+                                    </div>
+                                    <div class="form-row formulario-examen-periodontal-columna">
                                         <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 mt-3">
                                             <div class="card-informacion">
                                                 <div class="card-body">
                                                     <div class="form-row">
-                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <div class="d-none" aria-hidden="true">
                                                             <div class="form-group fill">
                                                                 <label class="floating-label-activo-sm">Pieza N°</label>
                                                                 <select name="numero_pieza_tto_period{{ $counter }}" id="numero_pieza_tto_period{{ $counter }}" class="form-control form-control-sm">
@@ -172,6 +188,31 @@
                                         
                                     </div>
                                 </div>
+                                <style>
+                                    #selector_examen_periodontal_{{ $counter }} .selector-odontograma-generico__scroll {
+                                        overflow-x: hidden;
+                                    }
+                                    #selector_examen_periodontal_{{ $counter }} .selector-odontograma-generico__fila {
+                                        grid-template-columns: repeat(8, minmax(42px, 1fr));
+                                        min-width: 0;
+                                    }
+                                    @media (min-width: 1200px) {
+                                        #examen_periodontal_layout_{{ $counter }} {
+                                            display: grid;
+                                            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                                            align-items: start;
+                                            gap: 1rem;
+                                        }
+                                        #examen_periodontal_layout_{{ $counter }} > .selector-examen-periodontal-columna,
+                                        #examen_periodontal_layout_{{ $counter }} > .formulario-examen-periodontal-columna {
+                                            min-width: 0;
+                                        }
+                                        #examen_periodontal_layout_{{ $counter }} > .formulario-examen-periodontal-columna > [class*="col-"] {
+                                            flex: 0 0 100%;
+                                            max-width: 100%;
+                                        }
+                                    }
+                                </style>
                                 <div class="card-footer">
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

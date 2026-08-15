@@ -12,12 +12,15 @@ class Producto extends Model
     use HasFactory;
     protected $table = 'productos';
     protected $fillable = [
+        'id_profesional',
         'codigo_interno',
         'numero_serie',
         'nombre',
         'stock_minimo',
         'stock_maximo',
         'stock_actual',
+        'stock_seguridad',
+        'ubicacion',
         'imagen',
         'descripcion',
         'id_tipo_producto',
@@ -32,8 +35,12 @@ class Producto extends Model
         'image_path',
         'otros',
         'precio_unitario', // Precio del producto
+        'precio_compra',
         'precio_venta',    // Precio de venta (opcional)
         'estado',          // Estado del producto (activo/inactivo)
+        'es_implante',
+        'id_marca_implante',
+        'id_tipo_insumo_implantologia',
     ];
 
     // Relaciones
@@ -42,9 +49,19 @@ class Producto extends Model
         return $this->belongsTo(TipoProducto::class, 'id_tipo_producto');
     }
 
+    public function unidadMedida()
+    {
+        return $this->belongsTo(Unidades_medidas::class, 'id_unidad_medida');
+    }
+
     public function marca()
     {
         return $this->belongsTo(Marcas_productos::class, 'id_marca');
+    }
+
+    public function marcaImplante()
+    {
+        return $this->belongsTo(MarcasImplantes::class, 'id_marca_implante');
     }
 
      public function bodega()

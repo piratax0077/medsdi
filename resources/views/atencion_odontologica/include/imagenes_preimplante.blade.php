@@ -1,8 +1,36 @@
-<div class="form-row">
+<div class="form-row {{ $opt == 'periodoncica' ? 'estudio-radiologico-periodontal-layout' : '' }}" id="estudio_radiologico_periodontal_layout_{{ $count }}">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
             <h6 class="t-aten d-inline">Estudio de Imágenes Dentales</h6>
         </div>
-    <div class="col-sm-8 mt-2">
+    @if($opt == 'periodoncica')
+        @php
+            $piezasEstudioPeriodontal = [
+                '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+            ];
+        @endphp
+        <div class="col-sm-12 mt-2 selector-estudio-radiologico-periodontal">
+            @include('atencion_odontologica.include.selector_odontograma', [
+                'id' => 'selector_estudio_radiologico_periodontal_'.$count,
+                'inputId' => 'numero_pieza_ex_period'.$count,
+                'counter' => 9900 + (int) $count,
+                'multiple' => false,
+                'compacto' => true,
+                'autoRefresh' => false,
+                'mostrarMensajeVacio' => false,
+                'mostrarEstadoClinico' => true,
+                'historialPiezas' => $odontograma ?? [],
+                'estadosBloqueados' => [],
+                'piezasDisponibles' => $piezasEstudioPeriodontal,
+                'piezasSeleccionadas' => [],
+                'titulo' => 'Seleccione la pieza del estudio radiológico',
+                'ayuda' => 'La imagen y sus observaciones quedarán asociadas a esta pieza',
+            ])
+        </div>
+    @endif
+    <div class="col-sm-8 mt-2 formulario-estudio-radiologico-periodontal">
         <div class="card-informacion" id="img">
             <div class="card-body">
             <div class="form-row">
@@ -46,7 +74,7 @@
                     </div>
                     @else
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                        <div class="form-group">
+                        <div class="form-group d-none" aria-hidden="true">
                             <label for="numero_pieza_ex_period" class="floating-label-activo-sm">N° Pieza</label>
                             <select name="numero_pieza_ex_period{{ $count }}" id="numero_pieza_ex_period{{ $count }}" class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
@@ -67,7 +95,7 @@
         </div>
     </div>
     @if($opt == 'preimplante' || $opt == 'periodoncica')
-        <div class="col-sm-4" >
+        <div class="col-sm-4 biopsia-estudio-radiologico-periodontal" >
             <div class="card-informacion">
                 <div class="card-body">
                     <div class="form-group">
@@ -117,6 +145,43 @@
         </div>
     @endif
 </div>
+
+@if($opt == 'periodoncica')
+<style>
+    #selector_estudio_radiologico_periodontal_{{ $count }} .selector-odontograma-generico__scroll {
+        overflow-x: hidden;
+    }
+    #selector_estudio_radiologico_periodontal_{{ $count }} .selector-odontograma-generico__fila {
+        grid-template-columns: repeat(8, minmax(42px, 1fr));
+        min-width: 0;
+    }
+    @media (min-width: 1200px) {
+        #estudio_radiologico_periodontal_layout_{{ $count }} {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            align-items: start;
+            gap: 1rem;
+        }
+        #estudio_radiologico_periodontal_layout_{{ $count }} > :first-child {
+            grid-column: 1 / -1;
+        }
+        #estudio_radiologico_periodontal_layout_{{ $count }} > .selector-estudio-radiologico-periodontal {
+            grid-column: 1;
+            grid-row: 2 / span 2;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+        #estudio_radiologico_periodontal_layout_{{ $count }} > .formulario-estudio-radiologico-periodontal,
+        #estudio_radiologico_periodontal_layout_{{ $count }} > .biopsia-estudio-radiologico-periodontal {
+            grid-column: 2;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+    }
+</style>
+@endif
 
 
 <div class="form-row">

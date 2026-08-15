@@ -754,6 +754,7 @@
                 id_paciente: id_paciente,
                 id_ficha_atencion: id_ficha_atencion,
                 id_lugar_atencion: id_lugar_atencion,
+                id_presupuesto: $('#id_presupuesto').val(),
                 _token: "{{ csrf_token() }}"
             }
 

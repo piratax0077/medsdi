@@ -9,4 +9,5 @@ class MaterialesImplantologia extends Model
 {
     use HasFactory;
     protected $table = 'materiales_implantologia';
+    protected $guarded = [];
 }

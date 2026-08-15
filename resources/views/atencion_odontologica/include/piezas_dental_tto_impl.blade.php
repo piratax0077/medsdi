@@ -1,5 +1,5 @@
 <div class="form-row">
-    <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 mb-3">
+    <div class="d-none" aria-hidden="true">
         <ul class="nav flex-column nav-pills mb-3" id="coloc_impl" role="tablist">
             <li class="nav-item">
                 <a class="nav-link-aten text-reset active" id="pieza_dental_impl_tab" data-toggle="tab" href="#pieza_dental_impl" role="tab" aria-controls="pieza_dental_impl" aria-selected="true">Pieza dental</a>
@@ -9,7 +9,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-sm-12 col-md-12 col-lg-10 col-xl-10 col-xxl-11 mb-3">
+    <div class="col-12 mb-3">
         <div class="tab-content">
             <!--PIEZA DENTAL-->
             <div class="tab-pane fade show active" id="pieza_dental_impl" role="tabpanel" aria-labelledby="pieza_dental_impl_tab">
@@ -30,7 +30,7 @@
                                             ->values()
                                             ->all();
                                     @endphp
-                                    <div class="col-12 mb-3">
+                                    <div class="col-sm-12 col-lg-6 mb-3 implantologia-procedimiento-odontograma">
                                         <div class="form-group">
                                             @include('atencion_odontologica.include.selector_odontograma', [
                                                 'id' => 'selector_procedimiento_implantologia'.$counter,
@@ -38,6 +38,7 @@
                                                 'counter' => 11000 + (int) $counter,
                                                 'multiple' => false,
                                                 'compacto' => true,
+                                                'cuatroFilas' => true,
                                                 'autoRefresh' => false,
                                                 'mostrarMensajeVacio' => true,
                                                 'mostrarEstadoClinico' => true,
@@ -57,6 +58,8 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-sm-12 col-lg-6 implantologia-procedimiento-formulario">
+                                    <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Procedimiento</label>
@@ -298,9 +301,16 @@
                                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_impl{{ $counter }}" id="obs_impl{{ $counter }}"></textarea>
                                         </div>
                                     </div>
+                                    <div class="col-12 d-flex justify-content-end mt-2">
+                                        <button type="button" class="btn btn-xxs btn-warning-light-c" onclick="abrirConfirmacionProcedimientoImplantologia({{ $counter }})">
+                                            <i class="fas fa-check"></i> Presione para finalizar prestación en curso
+                                        </button>
+                                    </div>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-none">
                                 <div class="float-right">
                                     {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-x"></i> </button> --}}
                                     <button type="button" class="btn btn-xxs btn-warning-light-c" onclick="abrirConfirmacionProcedimientoImplantologia({{ $counter }})">
@@ -313,7 +323,7 @@
                 </div>
             </div>
             <!--GRUPO DENTAL-->
-            <div class="tab-pane fade" id="grupo_dental_impl" role="tabpanel" aria-labelledby="grupo_dental_impl_tab">
+            <div class="tab-pane fade d-none" id="grupo_dental_impl" role="tabpanel" aria-labelledby="grupo_dental_impl_tab" aria-hidden="true">
                 <div class="form-row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="card-informacion">

@@ -2,14 +2,23 @@
     $selectorPedId = $id ?? 'selector_odontograma_pediatrico';
     $selectorPedModo = $modo ?? 'planificacion';
     $selectorPedMultiple = $multiple ?? ($selectorPedModo === 'planificacion');
+    $selectorPedCompacto = $compacto ?? false;
     $selectorPedInput = $inputId ?? null;
     $selectorPedRequiereDiagnostico = $requiereDiagnostico ?? false;
+    $selectorPedFiltrarUrgencias = fn ($item) => (int) data_get($item, 'urgencia', 0) === 0;
+    $selectorPedEstadosPago = collect($piezasDisponibles ?? [])->filter($selectorPedFiltrarUrgencias)->mapWithKeys(function ($item) {
+        $pieza = (string) data_get($item, 'pieza', '');
+        $color = (string) data_get($item, 'color_pago', '');
+        return $pieza === '' || !in_array($color, ['ok', 'incompleto', 'error'], true)
+            ? []
+            : [$pieza => $color];
+    });
     $selectorPedDisponibles = isset($piezasDisponibles)
-        ? collect($piezasDisponibles)->map(function ($item) {
+        ? collect($piezasDisponibles)->filter($selectorPedFiltrarUrgencias)->map(function ($item) {
             return (string) data_get($item, 'pieza', $item);
         })->all()
         : null;
-    $selectorPedPresupuestadas = collect($piezasPresupuesto ?? [])->map(function ($item) {
+    $selectorPedPresupuestadas = collect($piezasPresupuesto ?? [])->filter($selectorPedFiltrarUrgencias)->map(function ($item) {
         return (string) data_get($item, 'pieza', $item);
     })->unique()->values()->all();
     $selectorPedDiagnosticosIniciales = collect($diagnosticosIniciales ?? [])->mapWithKeys(function ($item) {
@@ -29,13 +38,27 @@
         })
         ->values()
         ->toJson();
+    $selectorPedEstadosVisuales = [];
+    foreach (collect($historialPiezas ?? [])->filter($selectorPedFiltrarUrgencias) as $registroVisualPed) {
+        $piezaVisualPed = (string) data_get($registroVisualPed, 'pieza', '');
+        if ($piezaVisualPed === '') continue;
+        $diagnosticoVisualPed = mb_strtolower((string) data_get($registroVisualPed, 'diagnostico_descripcion', data_get($registroVisualPed, 'diagnostico', '')));
+        $tratamientoVisualPed = mb_strtolower((string) data_get($registroVisualPed, 'tratamiento', data_get($registroVisualPed, 'descripcion', '')));
+        $estadoVisualPed = $selectorPedEstadosVisuales[$piezaVisualPed] ?? 'normal';
+        if (str_contains($diagnosticoVisualPed, 'carie')) $estadoVisualPed = 'carie';
+        if (str_contains($diagnosticoVisualPed, 'fractura')) $estadoVisualPed = 'fractura';
+        if (str_contains($tratamientoVisualPed, 'pulpotomia') || str_contains($tratamientoVisualPed, 'pulpotomía')) $estadoVisualPed = 'pulpotomia';
+        if (str_contains($tratamientoVisualPed, 'pulpectomia') || str_contains($tratamientoVisualPed, 'pulpectomía')) $estadoVisualPed = 'pulpectomia';
+        if (str_contains($tratamientoVisualPed, 'obturacion') || str_contains($tratamientoVisualPed, 'obturación')) $estadoVisualPed = 'obturacion';
+        $selectorPedEstadosVisuales[$piezaVisualPed] = $estadoVisualPed;
+    }
     $selectorPedPiezas = [
         ['5.5', '5.4', '5.3', '5.2', '5.1', '6.1', '6.2', '6.3', '6.4', '6.5'],
         ['8.5', '8.4', '8.3', '8.2', '8.1', '7.1', '7.2', '7.3', '7.4', '7.5'],
     ];
 @endphp
 
-<div class="selector-odontograma-pediatrico" id="{{ $selectorPedId }}"
+<div class="selector-odontograma-pediatrico {{ $selectorPedCompacto ? 'is-compacto' : '' }}" id="{{ $selectorPedId }}"
     data-modo="{{ $selectorPedModo }}" data-multiple="{{ $selectorPedMultiple ? 1 : 0 }}"
     data-input-id="{{ $selectorPedInput }}" data-requiere-diagnostico="{{ $selectorPedRequiereDiagnostico ? 1 : 0 }}">
     <div class="selector-odontograma-pediatrico__encabezado">
@@ -57,16 +80,26 @@
                             $diagnosticoInicial = $selectorPedDiagnosticosIniciales->get($pieza);
                             $piezaBloqueada = !$piezaDisponible || ($selectorPedRequiereDiagnostico && !$diagnosticoInicial);
                             $piezaPresupuestada = in_array($pieza, $selectorPedPresupuestadas, true);
+                            $estadoPagoPed = $selectorPedEstadosPago->get($pieza);
+                            $estadoVisualPed = $selectorPedEstadosVisuales[$pieza] ?? 'normal';
+                            $rutasVisualesPed = [
+                                'carie' => "images/dental/odontopediatria/carie/carie{$codigoPieza}.png",
+                                'fractura' => "images/dental/odontopediatria/fractura/fractura{$codigoPieza}.png",
+                                'pulpotomia' => "images/dientes/pulpotomia/pulpotomia{$codigoPieza}.png",
+                                'pulpectomia' => "images/dientes/pulpectomia/pulpectomia_{$codigoPieza}.png",
+                                'obturacion' => "images/dental/odontopediatria/obturacion/obturacion{$codigoPieza}.png",
+                            ];
+                            $imagenVisualPed = $rutasVisualesPed[$estadoVisualPed] ?? "images/dientes/d{$codigoPieza}.png";
                         @endphp
                         <button type="button"
-                            class="selector-odontograma-pediatrico__pieza {{ $piezaBloqueada ? 'is-locked' : '' }} {{ $diagnosticoInicial ? 'has-diagnosis' : '' }} {{ $piezaPresupuestada ? 'is-in-budget' : '' }}"
+                            class="selector-odontograma-pediatrico__pieza {{ $piezaBloqueada ? 'is-locked' : '' }} {{ $diagnosticoInicial ? 'has-diagnosis' : '' }} {{ $piezaPresupuestada ? 'is-in-budget' : '' }} {{ $estadoPagoPed ? 'estado-pago-'.$estadoPagoPed : '' }}"
                             data-pieza-pediatrica="{{ $pieza }}" data-selector-pieza="{{ $pieza }}" aria-pressed="false"
                             data-diagnostico-id="{{ data_get($diagnosticoInicial, 'id', '') }}"
                             data-diagnostico-texto="{{ data_get($diagnosticoInicial, 'diagnostico', '') }}"
                             aria-disabled="{{ $piezaBloqueada ? 'true' : 'false' }}"
                             title="{{ $piezaBloqueada ? 'Registre primero el diagnóstico de esta pieza' : 'Seleccionar pieza' }}">
-                            <img src="{{ asset('images/dental/odontopediatria/diente-sano/diente-sano'.$codigoPieza.'.png') }}"
-                                alt="Pieza {{ $pieza }}">
+                            <img src="{{ asset($imagenVisualPed) }}" alt="Pieza {{ $pieza }}"
+                                data-estado-clinico="{{ $estadoVisualPed }}">
                             <strong>{{ $pieza }}</strong>
                         </button>
                     @endforeach
@@ -118,6 +151,12 @@
     #{{ $selectorPedId }} .selector-odontograma-pediatrico__pieza.has-diagnosis{border-color:#22a06b;background:#dff5e8;color:#147a4b;filter:none;opacity:1}
     #{{ $selectorPedId }} .selector-odontograma-pediatrico__pieza.is-in-budget{border-color:#22a06b;background:#dff5e8;color:#147a4b;box-shadow:inset 0 -5px 0 #22a06b,0 0 0 2px rgba(34,160,107,.16);filter:none;opacity:1}
     #{{ $selectorPedId }} .selector-odontograma-pediatrico__pieza.is-in-budget.is-selected{border-color:#174ea6;background:#2453aa;color:#fff;box-shadow:inset 0 -5px 0 #22a06b,0 0 0 2px rgba(34,160,107,.24)}
+    #{{ $selectorPedId }}.is-compacto .selector-odontograma-pediatrico__encabezado{padding:.65rem .8rem;background:#fff}
+    #{{ $selectorPedId }}.is-compacto .selector-odontograma-pediatrico__contenido{padding:.55rem;background:#f7f9fc}
+    #{{ $selectorPedId }}.is-compacto .selector-odontograma-pediatrico__fila{grid-template-columns:repeat(10,minmax(42px,1fr));gap:.25rem;min-width:620px}
+    #{{ $selectorPedId }}.is-compacto .selector-odontograma-pediatrico__fila+.selector-odontograma-pediatrico__fila{margin-top:.65rem}
+    #{{ $selectorPedId }}.is-compacto .selector-odontograma-pediatrico__pieza{min-height:67px;padding:.2rem;border-radius:.5rem}
+    #{{ $selectorPedId }}.is-compacto .selector-odontograma-pediatrico__pieza img{width:27px;height:36px;margin:auto;object-fit:contain}
     #{{ $selectorPedId }} .diagnostico-pieza-ped-item{display:flex;justify-content:space-between;gap:.5rem;padding:.45rem .6rem;margin-top:.4rem;border-radius:.4rem;background:#edf4ff;color:#174ea6}
     @media(max-width:991.98px){#{{ $selectorPedId }} .selector-odontograma-pediatrico__contenido{grid-template-columns:1fr}}
 </style>
@@ -129,6 +168,24 @@
     const inputId = String($selector.data('input-id') || '');
     const diagnosticos = {};
     const diagnosticosIniciales = {!! $selectorPedDiagnosticosInicialesJson !!};
+    const baseImagenPediatrica = @json(asset('images'));
+    const actualizarImagenDiagnostico = function (pieza, diagnostico) {
+        const codigo = String(pieza).replace('.', '');
+        const texto = String(diagnostico || '').toLowerCase();
+        let estado = 'normal';
+        let ruta = baseImagenPediatrica + '/dientes/d' + codigo + '.png';
+        if (texto.includes('carie')) {
+            estado = 'carie';
+            ruta = baseImagenPediatrica + '/dental/odontopediatria/carie/carie' + codigo + '.png';
+        } else if (texto.includes('fractura')) {
+            estado = 'fractura';
+            ruta = baseImagenPediatrica + '/dental/odontopediatria/fractura/fractura' + codigo + '.png';
+        }
+        $selector.find('[data-pieza-pediatrica="' + pieza + '"] img')
+            .attr('src', ruta)
+            .attr('data-estado-clinico', estado)
+            .attr('title', 'Pieza ' + pieza + ' · Estado: ' + estado);
+    };
     diagnosticosIniciales.forEach(function (item) { diagnosticos[item.pieza] = item; });
     if (diagnosticosIniciales.length) {
         window.diagnosticosPiezaOdontop = Object.values(diagnosticos);
@@ -186,6 +243,7 @@
                 if (respuesta.presupuesto && respuesta.presupuesto.id) $('#id_presupuesto').val(respuesta.presupuesto.id);
                 piezas.forEach(function (pieza) {
                     diagnosticos[pieza] = { pieza: pieza, id: diagnosticoId, diagnostico: textoDiagnosticoPersistente };
+                    actualizarImagenDiagnostico(pieza, textoDiagnosticoPersistente);
                 });
                 const registrosPersistidos = Object.values(diagnosticos);
                 window.diagnosticosPiezaOdontop = registrosPersistidos;

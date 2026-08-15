@@ -370,7 +370,7 @@
                     <div class="dental-treatment-flow__heading">
                         <div>
                             <span class="dental-treatment-flow__eyebrow">Odontopediatr&iacute;a</span>
-                            <h5>Plan de tratamiento</h5>
+                            <h5>Tratamiento</h5>
                             <p>Eval&uacute;e, seleccione las piezas y prepare el presupuesto del paciente.</p>
                         </div>
                         <span class="dental-treatment-flow__status" id="estado_cabecera_plan_dental_ped"
@@ -389,7 +389,7 @@
                         <a class="nav-secciones text-uppercase" id="odontograma_ped_tab" data-toggle="tab" href="#odontograma_ped" role="tab" aria-controls="odontograma_ped" aria-selected="false">Odontograma Pediátrico</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="caras_cuadrantes_tab" data-toggle="tab" href="#caras_cuadrantes" role="tab" aria-controls="caras_cuadrantes" aria-selected="false">Plan de tratamiento</a>
+                        <a class="nav-secciones text-uppercase" id="caras_cuadrantes_tab" data-toggle="tab" href="#caras_cuadrantes" role="tab" aria-controls="caras_cuadrantes" aria-selected="false">Tratamiento</a>
                     </li>
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
@@ -1189,6 +1189,7 @@
                                                                                                     'id' => 'selector_diagnostico_odontop',
                                                                                                     'modo' => 'diagnostico',
                                                                                                     'multiple' => true,
+                                                                                                    'historialPiezas' => $odontograma_historial ?? [],
                                                                                                     'titulo' => 'Diagnóstico por pieza',
                                                                                                     'ayuda' => 'Seleccione una o varias piezas temporales y aplique el diagnóstico.',
                                                                                                 ])
@@ -2442,10 +2443,12 @@
                                                 'id' => 'selector_plan_completo_odontop',
                                                 'modo' => 'planificacion',
                                                 'multiple' => false,
+                                                'compacto' => true,
                                                 'inputId' => 'pieza_plan_completo_odontop',
                                                 'titulo' => 'Seleccione una pieza para agregar al plan',
                                                 'ayuda' => 'Seleccione una pieza temporal y complete diagnóstico y tratamiento.',
                                                 'piezasPresupuesto' => collect($odontograma ?? [])->where('presupuesto', 1)->where('urgencia', 0),
+                                                'historialPiezas' => $odontograma_historial ?? [],
                                             ])
                                             <input type="hidden" id="pieza_plan_completo_odontop" value="">
                                         </div>
@@ -2593,7 +2596,7 @@
                                                     @php
                                                         $numeroFilaPed = (string) data_get($filaPlanPed, 'pieza');
                                                         $estadoFilaPed = (int) data_get($filaPlanPed, 'estado', 0);
-                                                        $progresoFilaPed = (int) data_get($filaPlanPed, 'progreso', $estadoFilaPed === 1 ? 100 : 25);
+                                                        $progresoFilaPed = (int) data_get($filaPlanPed, 'progreso', $estadoFilaPed === 1 ? 100 : 0);
                                                         $fechaFilaPed = data_get($filaPlanPed, 'fecha', data_get($filaPlanPed, 'created_at', ''));
                                                     @endphp
                                                     <tr>
@@ -2608,7 +2611,7 @@
                                                             <div class="dental-progress-wheel" style="--progress:{{ $progresoFilaPed }}" title="Progreso del tratamiento: {{ $progresoFilaPed }}%">
                                                                 <span class="dental-progress-wheel-value">{{ $progresoFilaPed }}%</span>
                                                                 <select class="dental-piece-progress" aria-label="Progreso del tratamiento" onchange="actualizarEstadoPiezaPlanOdontop(this, {{ data_get($filaPlanPed, 'id') }})" data-original-progress="{{ $progresoFilaPed }}">
-                                                                    @foreach ([25, 50, 75, 100] as $porcentajePed)<option value="{{ $porcentajePed }}" {{ $progresoFilaPed === $porcentajePed ? 'selected' : '' }}>{{ $porcentajePed }}%</option>@endforeach
+                                                                    @foreach ([0, 25, 50, 75, 100] as $porcentajePed)<option value="{{ $porcentajePed }}" {{ $progresoFilaPed === $porcentajePed ? 'selected' : '' }}>{{ $porcentajePed }}%</option>@endforeach
                                                                 </select>
                                                             </div>
                                                         </td>
@@ -2812,13 +2815,74 @@
             return item && Number(item.urgencia || 0) === 0 && Number(item.presupuesto) === 1
                 && /^[5-8]\.[1-5]$/.test(String(item.pieza || ''));
         });
-        const baseImagen = @json(asset('images/dental/odontopediatria/diente-sano'));
+        const baseImagen = @json(asset('images'));
+        const historialVisual = @json(collect($odontograma_historial ?? [])->values());
+        const estadosVisuales = {};
+        historialVisual.concat(listaOdontograma).forEach(function (item) {
+            if (!item || Number(item.urgencia || 0) === 1) return;
+            const pieza = String(item.pieza || '');
+            if (!/^[5-8]\.[1-5]$/.test(pieza)) return;
+
+            const diagnostico = String(item.diagnostico_descripcion || item.diagnostico || '').toLowerCase();
+            const tratamiento = String(item.tratamiento || item.descripcion || '').toLowerCase();
+            let estado = estadosVisuales[pieza] || 'diente-sano';
+            if (diagnostico.includes('carie')) estado = 'carie';
+            if (diagnostico.includes('fractura')) estado = 'fractura';
+            if (diagnostico.includes('ausente')) estado = 'diente-ausente';
+            if (diagnostico.includes('impactado')) estado = 'impactado';
+            if (diagnostico.includes('sin erupcionar')) estado = 'sin-erupcionar';
+            if (tratamiento.includes('pulpotomia') || tratamiento.includes('pulpotomía')) estado = 'pulpotomia';
+            if (tratamiento.includes('pulpectomia') || tratamiento.includes('pulpectomía')) estado = 'pulpectomia';
+            if (tratamiento.includes('obturacion') || tratamiento.includes('obturación')) estado = 'obturacion';
+            if (tratamiento.includes('sellante')) estado = 'sellante';
+            if (tratamiento.includes('extraccion') || tratamiento.includes('extracción')) estado = 'extraccion';
+            estadosVisuales[pieza] = estado;
+        });
+        const imagenEstadoPediatrico = function (numero) {
+            const codigo = String(numero || '').replace('.', '');
+            const estado = estadosVisuales[String(numero)] || 'diente-sano';
+            const rutas = {
+                'diente-sano': baseImagen + '/dientes/d' + codigo + '.png',
+                'carie': baseImagen + '/dental/odontopediatria/carie/carie' + codigo + '.png',
+                'fractura': baseImagen + '/dental/odontopediatria/fractura/fractura' + codigo + '.png',
+                'diente-ausente': baseImagen + '/dientes/diente-ausente/dau' + codigo + '.png',
+                'impactado': baseImagen + '/dental/odontopediatria/impactado/impactado' + codigo + '.png',
+                'sin-erupcionar': baseImagen + '/dental/odontopediatria/sin-erupcionar/sin-erupcionar' + codigo + '.png',
+                'pulpotomia': baseImagen + '/dientes/pulpotomia/pulpotomia' + codigo + '.png',
+                'pulpectomia': baseImagen + '/dientes/pulpectomia/pulpectomia_' + codigo + '.png',
+                'obturacion': baseImagen + '/dental/odontopediatria/obturacion/obturacion' + codigo + '.png',
+                'sellante': baseImagen + '/dientes/sellante/sellante_' + codigo + '.png',
+                'extraccion': baseImagen + '/dental/odontopediatria/extraccion/extraccion' + codigo + '.png'
+            };
+            return rutas[estado] || rutas['diente-sano'];
+        };
         const grupos = {5: [], 6: [], 7: [], 8: []};
         registros.forEach(function (item) { (grupos[String(item.pieza).charAt(0)] || []).push(item); });
         window.piezasPlanOdontop = {};
         registros.forEach(function (item) { window.piezasPlanOdontop[String(item.pieza)] = item; });
         $('#selector_plan_completo_odontop [data-pieza-pediatrica]').each(function () {
-            $(this).toggleClass('is-in-budget', !!window.piezasPlanOdontop[String($(this).data('pieza-pediatrica'))]);
+            const $pieza = $(this);
+            const numero = String($pieza.data('pieza-pediatrica'));
+            const codigo = numero.replace('.', '');
+            const estado = estadosVisuales[numero] || 'diente-sano';
+            const rutas = {
+                'diente-sano': baseImagen + '/dientes/d' + codigo + '.png',
+                'carie': baseImagen + '/dental/odontopediatria/carie/carie' + codigo + '.png',
+                'fractura': baseImagen + '/dental/odontopediatria/fractura/fractura' + codigo + '.png',
+                'diente-ausente': baseImagen + '/dientes/diente-ausente/dau' + codigo + '.png',
+                'impactado': baseImagen + '/dental/odontopediatria/impactado/impactado' + codigo + '.png',
+                'sin-erupcionar': baseImagen + '/dental/odontopediatria/sin-erupcionar/sin-erupcionar' + codigo + '.png',
+                'pulpotomia': baseImagen + '/dientes/pulpotomia/pulpotomia' + codigo + '.png',
+                'pulpectomia': baseImagen + '/dientes/pulpectomia/pulpectomia_' + codigo + '.png',
+                'obturacion': baseImagen + '/dental/odontopediatria/obturacion/obturacion' + codigo + '.png',
+                'sellante': baseImagen + '/dientes/sellante/sellante_' + codigo + '.png',
+                'extraccion': baseImagen + '/dental/odontopediatria/extraccion/extraccion' + codigo + '.png'
+            };
+            $pieza.toggleClass('is-in-budget', !!window.piezasPlanOdontop[numero]);
+            $pieza.find('img')
+                .attr('src', imagenEstadoPediatrico(numero))
+                .attr('data-estado-clinico', estado)
+                .attr('title', 'Pieza ' + numero + ' · Estado: ' + estado.replace(/-/g, ' '));
         });
 
         const grupoActivo = [5, 6, 7, 8].find(function (grupo) { return grupos[grupo].length; }) || 5;
@@ -2837,7 +2901,7 @@
                 }).join('');
                 return '<table class="ficha-caras-pediatrica pieza-grupo-plan-odontop" data-id-tratamiento="' + item.id + '">' +
                     '<thead><tr><th class="col-pieza">Pieza</th><th class="col-caras">Cara</th><th class="col-cuadrante">Cuadrante</th></tr></thead>' +
-                    '<tbody><tr><td class="col-pieza"><div class="form-control mb-2 text-left">' + item.pieza + '</div><img class="imagen-pieza-plan" src="' + baseImagen + '/diente-sano' + codigo + '.png" alt="Pieza ' + item.pieza + '"></td>' +
+                    '<tbody><tr><td class="col-pieza"><div class="form-control mb-2 text-left">' + item.pieza + '</div><img class="imagen-pieza-plan" src="' + imagenEstadoPediatrico(item.pieza) + '" alt="Pieza ' + item.pieza + '"></td>' +
                     '<td class="col-caras"><div class="caras-cruz-plan-odontop">' + botones + '</div></td>' +
                     '<td class="col-cuadrante"><img class="imagen-cuadrante-plan" src="{{ asset('images/dientes/cuadrante.png') }}" alt="Cuadrante"><div class="text-success font-weight-bold">CUADRANTE</div></td></tr>' +
                     '<tr><td><button type="button" class="btn btn-outline-primary btn-block">Ver historia</button></td>' +
@@ -2856,7 +2920,7 @@
                 const carasLectura = ['V','D','O','M','P'].map(function (cara) {
                     return '<span class="cara-lectura-odontop cara-' + cara.toLowerCase() + ' ' + (caras.includes(cara) ? 'is-active' : '') + '">' + cara + '</span>';
                 }).join('');
-                return '<div class="pieza-lectura-plan-odontop"><img src="' + baseImagen + '/diente-sano' + codigo + '.png" alt="Pieza ' + item.pieza + '"><strong>' + item.pieza + '</strong><div class="caras-cruz-lectura-odontop">' + carasLectura + '</div></div>';
+                return '<div class="pieza-lectura-plan-odontop"><img src="' + imagenEstadoPediatrico(item.pieza) + '" alt="Pieza ' + item.pieza + '"><strong>' + item.pieza + '</strong><div class="caras-cruz-lectura-odontop">' + carasLectura + '</div></div>';
             }).join('') : '<span class="text-muted">Sin piezas presupuestadas</span>';
             return '<div class="col-sm-12 col-md-6 col-xl-3 mb-3"><div class="grupo-lectura-plan-odontop h-100"><h6 class="text-c-blue">Cuadrante ' + grupo + '</h6>' + contenido + '</div></div>';
         }).join(''));
@@ -2865,10 +2929,10 @@
             const codigo = String(item.pieza).replace('.', '');
             const fecha = String(item.fecha || item.created_at || '').replace('T', ' ').substring(0, 16);
             const estado = Number(item.estado || 0);
-            const progreso = Number(item.progreso || 0) || (estado === 1 ? 100 : 25);
+            const progreso = item.progreso !== null && item.progreso !== undefined ? Number(item.progreso) : (estado === 1 ? 100 : 0);
             const controlProgreso = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlanOdontop(this,' + item.id + ')');
             return '<tr><td>' + fecha + '</td><td>' + (item.tratamiento || item.descripcion || '') + '</td><td>' + (item.caras || '-') + '</td>' +
-                '<td><div class="pieza-tabla-plan-odontop"><img src="' + baseImagen + '/diente-sano' + codigo + '.png"><strong>' + item.pieza + '</strong></div></td>' +
+                '<td><div class="pieza-tabla-plan-odontop"><img src="' + imagenEstadoPediatrico(item.pieza) + '"><strong>' + item.pieza + '</strong></div></td>' +
                 '<td>' + (item.diagnostico || '') + '</td><td>' + Number(item.valor || 0).toLocaleString('es-CL') + '</td>' +
                 '<td><span class="badge badge-success">Incluida</span></td><td>' + controlProgreso + '</td></tr>';
         }).join('') : '<tr><td colspan="8" class="text-center text-muted py-4">No hay piezas incorporadas al plan</td></tr>');
@@ -7253,7 +7317,7 @@
                                     0,
                                     formatoMoneda(formatoMoneda(odonto.valor)),
                                     '<div class="circle ' + clase + '"></div>',
-                                    estado, // Columna vacía
+                                    crearProgresoCircularDentalLectura(odonto.progreso != null ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : (Number(odonto.estado) === 2 ? 25 : 0))),
 
                                 ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -7528,7 +7592,7 @@
                                 0,
                                 formatoMoneda(formatoMoneda(odonto.valor)),
                                 '<div class="circle '+clase+'"></div>',
-                                estado, // Columna vacía
+                                crearProgresoCircularDentalLectura(odonto.progreso != null ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : (Number(odonto.estado) === 2 ? 25 : 0))),
 
                             ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -7676,7 +7740,7 @@
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         '<div class="circle ' + clase + '"></div>',
-                                        estado, // Columna vacía
+                                        crearProgresoCircularDentalLectura(odonto.progreso != null ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : (Number(odonto.estado) === 2 ? 25 : 0))),
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -9111,7 +9175,7 @@
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         '',
-                                        '', // Columna vacía
+                                        crearProgresoCircularDentalLectura(odonto.progreso != null ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : (Number(odonto.estado) === 2 ? 25 : 0))),
                                         `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -9369,7 +9433,7 @@
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         '<div class="circle ' + clase + '"></div>',
-                                        estado, // Columna vacía
+                                        crearProgresoCircularDentalLectura(odonto.progreso != null ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : (Number(odonto.estado) === 2 ? 25 : 0))),
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -9726,7 +9790,7 @@
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         '<div class="circle ' + clase + '"></div>',
-                                        estado, // Columna vacía
+                                        crearProgresoCircularDentalLectura(odonto.progreso != null ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : (Number(odonto.estado) === 2 ? 25 : 0))),
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -10373,3 +10437,4 @@ function confirmarEliminarImagenRx(id){
 
 
 @endsection
+@include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')

@@ -553,7 +553,7 @@
             <div class="row">
                 <div class="col-md-12 mt-3 mb-0">
                     <h6 class="f-16 text-c-blue">Plan de tratamiento y presupuesto</h6>
-                    <p class="text-muted mb-2">Tratamientos asociados a cada pieza. Active o desactive su inclusión en el presupuesto, o seleccione registros para eliminarlos.</p>
+                    <p class="text-muted mb-2">Tratamientos asociados a cada pieza. Active o desactive su inclusión en el presupuesto, actualice su progreso o seleccione registros para eliminarlos.</p>
                 </div>
             </div>
             <div class="row">
@@ -561,24 +561,24 @@
                     <div class="card border-0 shadow-sm odontograma-plan-card">
                         <div class="card-body p-3">
                             <div class="table-responsive">
-                                    <table class="table table-sm table-hover mb-0" id="table_odontograma_infantil">
+                                    <table class="table table-xs" id="table_odontograma_infantil">
                                         <thead>
                                             <tr>
-                                                <th>Fecha</th>
-                                                <th>Tratamiento</th>
+                                                <th>Fecha y hora</th>
+                                                <th>Prestación</th>
                                                 <th>Caras</th>
-                                                <th>Pieza</th>
+                                                <th>Pieza / Imagen</th>
                                                 <th>Diagnóstico</th>
                                                 <th>Valor</th>
                                                 <th>Presupuesto</th>
-                                                <th class="text-center odontograma-acciones">
-                                                    <span>Acciones</span>
+                                                <th class="text-center">
+                                                    Progreso / Seleccionar
                                                     <button
                                                         type="button"
                                                         class="btn btn-outline-danger btn-sm ml-2"
                                                         onclick="eliminar_seleccionados()"
                                                         title="Eliminar tratamientos seleccionados">
-                                                        <i class="fas fa-trash mr-1"></i> Eliminar
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </th>
                                             </tr>
@@ -587,18 +587,24 @@
                                             @if(isset($odontograma))
                                         @foreach ($odontograma as $odonto)
                                         @if($odonto->urgencia == 0)
-                                        <tr>
-                                            <td>{{ $odonto->fecha }}</td>
-                                            <td>{{ $odonto->tratamiento }}</td>
-                                            @php
-                                                $carasLectura = collect(explode('|', (string) $odonto->caras))
-                                                    ->filter()
-                                                    ->implode(', ');
-                                            @endphp
-                                            <td><span class="badge badge-light border caras-modo-lectura">{{ $carasLectura ?: 'Sin caras' }}</span></td>
-                                            <td><span class="badge badge-primary">{{ $odonto->pieza }}</span></td>
+                                        <tr data-treatment-id="{{ $odonto->id }}" data-clinical-state="{{ (int) ($odonto->estado ?? 0) }}" data-progress="{{ (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 0)) }}">
+                                            <td>
+                                                <div class="dental-table-datetime">
+                                                    <strong>{{ \Carbon\Carbon::parse($odonto->fecha)->format('d-m-Y') }}</strong>
+                                                    <small>{{ \Carbon\Carbon::parse($odonto->fecha)->format('H:i') }}</small>
+                                                </div>
+                                            </td>
+                                            <td><span class="dental-treatment-name" title="{{ $odonto->tratamiento }}">{{ $odonto->tratamiento }}</span></td>
+                                            <td>{{ $odonto->caras }}</td>
+                                            <td>
+                                                <div class="dental-table-tooth">
+                                                    <img src="{{ asset('images/dental/dientes/d'.str_replace('.', '', (string) $odonto->pieza).'.png') }}"
+                                                        alt="Pieza {{ $odonto->pieza }}">
+                                                    <strong>{{ $odonto->pieza }}</strong>
+                                                </div>
+                                            </td>
                                             <td>{{ $odonto->diagnostico }}</td>
-                                            <td class="font-weight-bold">${{ number_format($odonto->valor,0,',','.') }}</td>
+                                            <td>{{ number_format($odonto->valor,0,',','.') }}</td>
                                             {{-- <td>
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma({{ $odonto->id }})"><i class="feather icon-x"></i>Eliminar</button>
                                                 @if($odonto->presupuesto == 0)
@@ -623,6 +629,20 @@
                                             </td>
 
                                             <td>
+                                                <div class="dental-table-state-control">
+                                                    @php $progresoPiezaInfantil = (int) ($odonto->progreso ?? ((int) ($odonto->estado ?? 0) === 1 ? 100 : 0)); @endphp
+                                                    <div class="dental-progress-wheel" style="--progress: {{ $progresoPiezaInfantil }}"
+                                                        title="Progreso del tratamiento: {{ $progresoPiezaInfantil }}%">
+                                                        <span class="dental-progress-wheel-value">{{ $progresoPiezaInfantil }}%</span>
+                                                        <select class="dental-piece-progress"
+                                                            aria-label="Progreso del tratamiento"
+                                                            data-original-progress="{{ $progresoPiezaInfantil }}"
+                                                            onchange="actualizarEstadoPiezaPlan(this, {{ $odonto->id }})">
+                                                            @foreach ([0, 25, 50, 75, 100] as $porcentaje)
+                                                                <option value="{{ $porcentaje }}" {{ $progresoPiezaInfantil === $porcentaje ? 'selected' : '' }}>{{ $porcentaje }}%</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 <div class="custom-control custom-switch">
                                                     <input
                                                         type="checkbox"
@@ -631,6 +651,7 @@
                                                         value="{{ $odonto->id }}"
                                                         onchange="toggleSeleccion({{ $odonto->id }}, this.checked)">
                                                     <label class="custom-control-label" for="seleccionCheckInf{{ $odonto->id }}"></label>
+                                                </div>
                                                 </div>
                                             </td>
 
@@ -664,13 +685,6 @@
                     vertical-align: middle;
                     white-space: nowrap;
                 }
-                .caras-modo-lectura {
-                    min-width: 64px;
-                    padding: .35rem .55rem;
-                    color: #24415f;
-                    font-size: .78rem;
-                    letter-spacing: .08em;
-                }
                 #table_odontograma_infantil tbody td {
                     vertical-align: middle;
                     padding-top: .65rem;
@@ -683,9 +697,6 @@
                     display: flex;
                     justify-content: center;
                     padding-left: 2.25rem;
-                }
-                .odontograma-acciones {
-                    min-width: 145px;
                 }
             </style>
             <script>

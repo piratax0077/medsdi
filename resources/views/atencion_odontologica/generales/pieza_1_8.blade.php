@@ -557,6 +557,11 @@
 
     function cargar18a(){
 
+        const campos18a = ['ae18', 'mg18-a', 'mg18-b', 'mg18-c', 'ps18-a', 'ps18-b', 'ps18-c'];
+        if (campos18a.some(function (id) { return !document.getElementById(id); })) {
+            return;
+        }
+
         var datoae18=document.getElementById('ae18').value;
 
         var datomg18a=document.getElementById('mg18-a').value;

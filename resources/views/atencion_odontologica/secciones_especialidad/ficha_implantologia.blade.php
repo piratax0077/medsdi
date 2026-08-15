@@ -303,6 +303,8 @@
     .ficha-implantologia .impl-plan-panel__header h5, .ficha-implantologia .impl-piece-planner h6 { margin: 0; color: #174ea6; font-weight: 700; }
     .ficha-implantologia .impl-plan-panel__header p, .ficha-implantologia .impl-piece-planner p { margin: .2rem 0 0; color: #718096; }
     .ficha-implantologia .impl-piece-planner { margin-bottom: 1rem; padding: 1rem; border: 1px solid #dbe4ee; border-radius: .75rem; background: #fff; }
+    .ficha-implantologia #selector_plan_tratamiento_implantologia .selector-odontograma-generico__pieza.is-in-budget { border-color: #22a06b; background: #dff5e8; color: #147a4b; box-shadow: inset 0 -5px 0 #22a06b, 0 0 0 2px rgba(34,160,107,.16); opacity: 1; }
+    .ficha-implantologia #selector_plan_tratamiento_implantologia .selector-odontograma-generico__pieza.is-in-budget img { filter: none; }
     .ficha-implantologia #table_odontograma { width: 100% !important; min-width: 1320px; table-layout: fixed; }
     .ficha-implantologia #table_odontograma th,
     .ficha-implantologia #table_odontograma td { vertical-align: middle; padding-left: .75rem; padding-right: .75rem; }
@@ -344,7 +346,7 @@
                         <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Periodontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" data-step="4" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Plan de tratamiento</a>
+                        <a class="nav-secciones text-uppercase" data-step="4" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" data-step="5" id="presupuesto_tab" onclick="actualizar_presupuesto()" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
@@ -462,13 +464,53 @@
                                                         <div class="tab-content" id="v-pills-tabContent">
 
                                                             <!-- EVALUACION PLANIFICACION REHABILITACION IMPLANTE -->
+                                                            <style>
+                                                                .implant-plan-rehab-layout {
+                                                                    display: grid;
+                                                                    grid-template-columns: minmax(0, 2fr) minmax(340px, 1fr);
+                                                                    gap: 1rem;
+                                                                    align-items: start;
+                                                                }
+                                                                .implant-plan-rehab-layout > .row.my-2 {
+                                                                    grid-column: 1 / -1;
+                                                                    margin-left: 0;
+                                                                    margin-right: 0;
+                                                                }
+                                                                .implant-plan-rehab-odontograma {
+                                                                    grid-column: 1;
+                                                                    margin: 0;
+                                                                    min-width: 0;
+                                                                }
+                                                                .implant-plan-rehab-controles {
+                                                                    grid-column: 2;
+                                                                    margin: 0;
+                                                                    min-width: 0;
+                                                                }
+                                                                .implant-plan-rehab-controles > [class*="col-"] {
+                                                                    flex: 0 0 100%;
+                                                                    max-width: 100%;
+                                                                    padding-left: 0;
+                                                                    padding-right: 0;
+                                                                }
+                                                                .implant-plan-rehab-insumos {
+                                                                    padding: 0 !important;
+                                                                    margin-top: .75rem;
+                                                                }
+                                                                .implant-plan-rehab-insumos .card-informacion {
+                                                                    margin-bottom: 0;
+                                                                }
+                                                                @media (max-width: 991.98px) {
+                                                                    .implant-plan-rehab-layout { display: block; }
+                                                                    .implant-plan-rehab-controles { margin-top: 1rem; }
+                                                                }
+                                                            </style>
                                                             <div class="tab-pane fade {{ $mostrarPlanRehabilitacion ? ($tabRehabilitacionActivo === 'plan_rehab' ? 'show active' : '') : 'd-none' }}" id="plan_rehab" role="tabpanel" aria-labelledby="plan_rehab_tab">
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
                                                                         <h6 class="t-aten d-inline"> Evaluación planificación rehabilitación implante</h6>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-row mt-3">
+                                                                <div class="form-row mt-3 d-none" aria-hidden="true">
                                                                     <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                                                         <div class="card-informacion">
@@ -524,7 +566,7 @@
                                                                             <div class="card-top">
                                                                             <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo de piezas</h6>
                                                                             </div>
-                                                                            <div class="card-body">
+                                                                            <div class="card-body implant-plan-rehab-layout">
                                                                                     <div class="row my-2">
                                                                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                                                         <div class="custom-control custom-switch">
@@ -545,13 +587,13 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="row">
+                                                                                <div class="row implant-plan-rehab-odontograma">
                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                                                                         @include('atencion_odontologica.generales.odontograma_adulto_grupos_rehab')
                                                                                     </div>
                                                                                 </div>
 
-                                                                                        <div class="form-row mt-2">
+                                                                                        <div class="form-row mt-2 implant-plan-rehab-controles">
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
                                                                                                     <label for="" class="floating-label-activo-sm">Grupos</label>
@@ -672,7 +714,7 @@
                                                                     <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
 
                                                                     <!--TABLA INSUMOS-->
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 implant-plan-rehab-insumos">
                                                                         <div class="card-informacion">
                                                                             <div class="card-top">
                                                                                 <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
@@ -733,6 +775,15 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <script>
+                                                                $(function () {
+                                                                    var $controles = $('.implant-plan-rehab-controles');
+                                                                    var $insumos = $('.implant-plan-rehab-insumos');
+                                                                    if ($controles.length && $insumos.length && !$insumos.parent().is($controles)) {
+                                                                        $insumos.appendTo($controles);
+                                                                    }
+                                                                });
+                                                            </script>
                                                             <!-- TRATAMIENTO DE REHABILITACION DE IMPLANTE -->
                                                             <div class="tab-pane fade {{ $mostrarTratamientoRehabilitacion ? ($tabRehabilitacionActivo === 'tto_rehab' ? 'show active' : '') : 'd-none' }}" id="tto_rehab" role="tabpanel" aria-labelledby="tto_rehab_tab">
                                                                 <div class="form-row">
@@ -3206,7 +3257,7 @@
                             <div class="impl-plan-panel">
                                 <div class="impl-plan-panel__header">
                                     <div>
-                                        <h5>Plan de tratamiento implantológico</h5>
+                                        <h5>Tratamiento</h5>
                                         <p>Seleccione una pieza, indique el diagnóstico y agregue la prestación al presupuesto.</p>
                                     </div>
                                     <span class="badge badge-light-primary">Dentición adulta</span>
@@ -3218,7 +3269,7 @@
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill mb-10" id="gral_od_adulto" role="tablist">
+                                                        <ul class="nav nav-tabs-aten nav-fill mb-10 d-none" id="gral_od_adulto" role="tablist" aria-hidden="true">
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset active" id="eval_adults_tab" data-toggle="tab" href="#eval_adults" role="tab" aria-controls="eval_adults" aria-selected="true">Adulto</a>
                                                             </li>
@@ -3256,9 +3307,6 @@
                                                                 @include('atencion_odontologica.generales.evaluacion_adulto')
                                                             </div>
                                                             <!--NIÑOS-->
-                                                            <div class="tab-pane fade" id="eval_infts" role="tabpanel" aria-labelledby="eval_infts_tab">
-                                                                @include('atencion_odontologica.generales.evaluacion_infantil')
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -3334,11 +3382,26 @@
     function sincronizarSelectorPlanImplantologia(listaOdontograma) {
         const $selector = $('#selector_plan_tratamiento_implantologia');
         if (!$selector.length) return;
-        window.actualizarEstadosClinicosSelectorOdontograma($selector, listaOdontograma);
+        const registros = Array.isArray(listaOdontograma) ? listaOdontograma : [];
+        const piezasPresupuesto = new Set(registros.filter(function (registro) {
+            return registro && Number(registro.presupuesto) === 1 && Number(registro.urgencia) !== 1;
+        }).map(function (registro) {
+            return String(registro.pieza || '');
+        }).filter(Boolean));
+
+        window.actualizarEstadosClinicosSelectorOdontograma($selector, registros);
+        $selector.find('[data-selector-pieza]').each(function () {
+            const $pieza = $(this);
+            $pieza.toggleClass('is-in-budget', piezasPresupuesto.has(String($pieza.data('selector-pieza'))));
+        });
         $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
         $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
         $('#pieza_plan_tratamiento_implantologia').val('0');
     }
+
+    $(function () {
+        sincronizarSelectorPlanImplantologia(@json($odontograma ?? []));
+    });
 
     let actualizandoCarasImplantologia = false;
     function refrescar_caras_grupos_implantologia() {
@@ -3424,7 +3487,7 @@
             if (id && !$celdas.eq(7).find('.dental-piece-progress').length) {
                 const registro = (window.odontograma_global || []).find(function (item) { return Number(item.id) === id; });
                 const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
-                const progreso = Number(registro ? registro.progreso : 0) || (estado === 1 ? 100 : 25);
+                const progreso = registro && registro.progreso !== null && registro.progreso !== undefined ? Number(registro.progreso) : (estado === 1 ? 100 : 0);
                 const select = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlanImplantologia(this,' + id + ')');
                 const $control = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
                 $celdas.eq(7).html('<div class="dental-table-state-control">' + select + '</div>');
@@ -6983,6 +7046,76 @@ function cargar_a_presupuesto_impl_g() {
     });
 }
 
+function refrescarInsumosPreimplanteImplantologia(insumos) {
+    const $tabla = $('#table_insumos_preimplante').last();
+    if (!$tabla.length) return;
+
+    const filas = Array.isArray(insumos) ? insumos : [];
+    const construirFila = function(insumo) {
+        const totalInsumo = Number(insumo.cantidad || 0) * Number(insumo.valor || 0);
+        const nombreMarca = insumo.nombre_marca ? ' ' + insumo.nombre_marca : '';
+        let botonesInsumo = '';
+
+        if (insumo.presupuesto == 0 || insumo.presupuesto == null) {
+            botonesInsumo = `
+                <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                    <i class="feather icon-shopping-cart"></i>
+                </button>`;
+        } else {
+            botonesInsumo = `
+                <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                    <i class="fas fa-minus"></i>
+                </button>`;
+        }
+
+        botonesInsumo += `
+            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"></i></button>`;
+
+        return [
+            (insumo.insumos || '') + nombreMarca,
+            insumo.observaciones || '',
+            insumo.cantidad,
+            formatoMoneda(insumo.valor),
+            formatoMoneda(totalInsumo),
+            botonesInsumo
+        ];
+    };
+
+    if ($.fn.DataTable && $.fn.DataTable.isDataTable($tabla[0])) {
+        const tablaInsumos = $tabla.DataTable();
+        tablaInsumos.clear();
+        filas.forEach(function(insumo) {
+            tablaInsumos.row.add(construirFila(insumo));
+        });
+        tablaInsumos.draw();
+        return;
+    }
+
+    const $tbody = $tabla.find('tbody').empty();
+    filas.forEach(function(insumo) {
+        const celdas = construirFila(insumo);
+        $tbody.append('<tr>' + celdas.map(function(celda) {
+            return '<td>' + (celda == null ? '' : celda) + '</td>';
+        }).join('') + '</tr>');
+    });
+}
+
+function actualizarTotalesPreimplanteImplantologia(valores) {
+    const totales = Array.isArray(valores) ? valores.map(function(valor) {
+        return Number(valor || 0);
+    }) : [0, 0, 0, 0];
+    const totalGeneral = totales[0] + totales[1] + totales[2] + totales[3];
+
+    $('#valores_examenes_presupuesto, #valores_examenes_presupuesto_conf').html(formatoMoneda(totales[0]));
+    $('#valores_piezas_presupuesto, #valores_piezas_presupuesto_conf').html(formatoMoneda(totales[1]));
+    $('#valores_insumos_presupuesto, #valores_insumos_presupuesto_conf').html(formatoMoneda(totales[2]));
+    $('#valores_laboratorio_presupuesto, #valores_laboratorio_presupuesto_conf').html(formatoMoneda(totales[3]));
+    $('#valores_total_final_presupuesto, #valores_total_final_presupuesto_conf').html(formatoMoneda(totalGeneral));
+    $('#total_presupuesto_dental').val(totalGeneral);
+    $('#total_presupuesto').val(formatoMoneda(totalGeneral));
+}
+
 function cargar_a_presupuesto_impl_g_confirmar(){
     // Obtener los valores seleccionados en el select
     var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_impl').val() || [];
@@ -7045,6 +7178,11 @@ function cargar_a_presupuesto_impl_g_confirmar(){
         success: function(resp){
             console.log(resp);
             if(resp.status == 1){
+                // Actualizar primero los componentes esenciales. El resto de esta
+                // funcion contiene tablas historicas opcionales y un error en una
+                // de ellas no debe impedir mostrar ni sumar los insumos del pack.
+                refrescarInsumosPreimplanteImplantologia(resp.insumos || []);
+                actualizarTotalesPreimplanteImplantologia(resp.valores || []);
                 diagnosticoPlanImplantologiaSeleccionado = null;
                 swal({
                     icon:'success',
@@ -7295,6 +7433,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#odon_adults').append(resp.odontograma_paciente_vista);
                 $('#odonto_adulto').empty();
                 $('#odonto_adulto').append(resp.odontograma_paciente_vista);
+
             }else{
                 swal({
                     icon:'error',
@@ -8059,6 +8198,7 @@ function mostrar_nueva_pieza_dental_tto_impl(counter){
             id_paciente: $('#id_paciente_fc').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
             counter: counter,
             _token: '{{ csrf_token() }}'
         },
@@ -8093,6 +8233,7 @@ let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto_impl_rehab') }}"
             id_paciente: $('#id_paciente_fc').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
             counter: counter,
             _token: '{{ csrf_token() }}'
         },
@@ -10995,3 +11136,4 @@ function ocultar_pieza_impl(counter){
 
         }
 </script>
+@include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')

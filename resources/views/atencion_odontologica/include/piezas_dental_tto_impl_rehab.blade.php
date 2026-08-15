@@ -1,5 +1,5 @@
 <div class="form-row">
-    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-1">
+    <div class="d-none" aria-hidden="true">
         <ul class="nav flex-column nav-pills mb-3" id="coloc_impl" role="tablist">
             <li class="nav-item">
                 <a class="nav-link-aten text-reset active" id="pieza_dental_impl_rehab_tab"  data-toggle="tab" href="#pieza_dental_impl_rehab" role="tab" aria-controls="pieza_dental_impl_rehab" aria-selected="true">Pieza dental</a>
@@ -9,7 +9,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 col-xxl-11">
+    <div class="col-12">
         <div class="tab-content">
             <!--PIEZA DENTAL-->
             <div class="tab-pane fade show active" id="pieza_dental_impl_rehab" role="tabpanel" aria-labelledby="pieza_dental_impl_rehab_tab">
@@ -19,24 +19,49 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     @php
-                                        $piezasUnicas = [];
+                                        $piezasUnicas = collect($odontograma ?? [])
+                                            ->filter(function ($pieza) {
+                                                return (int) data_get($pieza, 'presupuesto', 0) === 1
+                                                    && (int) data_get($pieza, 'urgencia', 0) === 0;
+                                            })
+                                            ->pluck('pieza')
+                                            ->map(function ($pieza) { return (string) $pieza; })
+                                            ->unique()
+                                            ->values()
+                                            ->all();
                                     @endphp
 
-                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                                    <div class="col-sm-12 col-lg-6 mb-3 implantologia-rehab-procedimiento-odontograma">
+                                        @include('atencion_odontologica.include.selector_odontograma', [
+                                            'id' => 'selector_procedimiento_rehab_implantologia'.$counter,
+                                            'inputId' => 'pieza_selector_procedimiento_rehab_implantologia'.$counter,
+                                            'counter' => 12000 + (int) $counter,
+                                            'multiple' => false,
+                                            'compacto' => true,
+                                            'cuatroFilas' => true,
+                                            'autoRefresh' => false,
+                                            'mostrarMensajeVacio' => false,
+                                            'mostrarEstadoClinico' => true,
+                                            'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                            'estadosBloqueados' => [],
+                                            'piezasDisponibles' => $piezasUnicas,
+                                            'titulo' => 'Piezas incluidas en el presupuesto rehabilitador',
+                                            'ayuda' => 'Seleccione una pieza para cargar su procedimiento',
+                                        ])
+                                        <input type="hidden" id="pieza_selector_procedimiento_rehab_implantologia{{ $counter }}" value="0">
+                                        <div class="d-none" aria-hidden="true">
                                         <label class="floating-label-activo-sm">Pieza Nº</label>
                                         <select name="numero_pieza_tto_rehab_impl{{ $counter }}" id="numero_pieza_tto_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl_rehab(this.value, {{ $counter }}, 'pieza')">
                                             <option value="0">Seleccione</option>
-                                            @foreach ($odontograma as $o)
-                                                @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
-                                                    <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                                    @php
-                                                        $piezasUnicas[] = $o->pieza;
-                                                    @endphp
-                                                @endif
+                                            @foreach ($piezasUnicas as $piezaPresupuestada)
+                                                <option value="{{ $piezaPresupuestada }}">{{ $piezaPresupuestada }}</option>
                                             @endforeach
                                         </select>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-10 col-xxl-5">
+                                    <div class="col-sm-12 col-lg-6 implantologia-rehab-procedimiento-formulario">
+                                    <div class="form-row">
+                                    <div class="form-group col-sm-12">
                                         <label class="floating-label-activo-sm">Procedimiento</label>
                                         <select name="tto_rehab_impl{{ $counter }}" id="tto_rehab_impl{{ $counter }}" class="form-control form-control-sm">
                                             <option value="0">Seleccione</option>
@@ -172,6 +197,8 @@
                                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_anclaje_rehab_impl{{ $counter }}" id="obs_tipo_anclaje_rehab_impl{{ $counter }}"></textarea>
                                         </div>
                                     </div>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -185,7 +212,7 @@
                 </div>
             </div>
             <!--GRUPO DENTAL-->
-            <div class="tab-pane fade" id="grupo_dental_impl_rehab" role="tabpanel" aria-labelledby="grupo_dental_impl_rehab_tab">
+            <div class="tab-pane fade d-none" id="grupo_dental_impl_rehab" role="tabpanel" aria-labelledby="grupo_dental_impl_rehab_tab" aria-hidden="true">
                 <div class="form-row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="card">
@@ -364,8 +391,33 @@
 <script>
 
     $(document).ready(function(){
-        $('select#numero_pieza_tto_impl1000').select2();
-        $('select#numero_pieza_tto_impl_grupo1000').select2();
+        // El selector visible es ahora el odontograma; el select se conserva
+        // oculto para mantener compatibilidad con el guardado existente.
+    });
+
+    document.addEventListener('click', function (event) {
+        const boton = event.target.closest('#selector_procedimiento_rehab_implantologia{{ $counter }} [data-selector-pieza]');
+        if (!boton || boton.disabled || !boton.classList.contains('is-enabled')) return;
+
+        const pieza = String(boton.getAttribute('data-selector-pieza') || '');
+        window.setTimeout(function () {
+            const $selectPieza = $('#numero_pieza_tto_rehab_impl{{ $counter }}');
+            const $selectProcedimiento = $('#tto_rehab_impl{{ $counter }}');
+
+            if (!boton.classList.contains('is-selected')) {
+                $('#pieza_selector_procedimiento_rehab_implantologia{{ $counter }}').val('0');
+                $selectPieza.val('0');
+                $selectProcedimiento.empty().append('<option value="0">Seleccione</option>');
+                return;
+            }
+
+            $('#pieza_selector_procedimiento_rehab_implantologia{{ $counter }}').val(pieza);
+            if (!$selectPieza.find('option[value="' + pieza + '"]').length) {
+                $selectPieza.append(new Option(pieza, pieza));
+            }
+            $selectPieza.val(pieza);
+            dame_tratamientos_pieza_impl_rehab(pieza, {{ $counter }}, 'pieza');
+        }, 0);
     });
 
     function dame_tratamientos_pieza_impl_rehab(pieza, counter, tipo) {
@@ -407,6 +459,9 @@
                     $.each(resp.tratamientos, function(index, value) {
                         $('#tto_rehab_impl' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
                     });
+                    if (resp.tratamientos && resp.tratamientos.length === 1) {
+                        $('#tto_rehab_impl' + counter).val(resp.tratamientos[0].id).trigger('change');
+                    }
                 }
             }
         });

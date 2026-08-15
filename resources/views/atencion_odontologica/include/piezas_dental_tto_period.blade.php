@@ -121,12 +121,40 @@
 <div class="form-row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="card-informacion">
-                            <div class="card-body">
-                                <div class="form-row">
+                            <div class="card-body tratamiento-periodontal-layout" id="tratamiento_periodontal_layout_{{ $counter }}">
+                                @php
+                                    $piezasTratamientoPeriodontal = collect($odontograma ?? [])
+                                        ->filter(fn ($registro) => (int) ($registro->presupuesto ?? 0) === 1
+                                            && (int) ($registro->urgencia ?? 0) === 0
+                                            && in_array((int) ($registro->estado ?? 0), [0, 2], true)
+                                            && trim((string) ($registro->pieza ?? '')) !== '')
+                                        ->unique(fn ($registro) => (string) $registro->pieza)
+                                        ->values();
+                                @endphp
+                                <div class="mb-3 selector-tratamiento-periodontal-columna">
+                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                        'id' => 'selector_tratamiento_periodontal_'.$counter,
+                                        'inputId' => 'n_pieza_tto_period'.$counter,
+                                        'counter' => 9600 + (int) $counter,
+                                        'multiple' => false,
+                                        'compacto' => true,
+                                        'autoRefresh' => false,
+                                        'mostrarMensajeVacio' => true,
+                                        'mostrarEstadoClinico' => true,
+                                        'historialPiezas' => $odontograma ?? [],
+                                        'estadosBloqueados' => [],
+                                        'piezasDisponibles' => $piezasTratamientoPeriodontal,
+                                        'piezasSeleccionadas' => [],
+                                        'titulo' => 'Piezas incluidas en el tratamiento periodontal',
+                                        'ayuda' => 'Seleccione una pieza para cargar su procedimiento',
+                                    ])
+                                </div>
+                                <h6 class="text-c-blue mb-2 detalle-tratamiento-periodontal-titulo">Detalle del procedimiento periodontal</h6>
+                                <div class="form-row detalle-tratamiento-periodontal-formulario">
                                     @php
                                         $piezasUnicas = [];
                                     @endphp
-                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                                    <div class="d-none">
                                         <div class="form-group">
                                                 <label for="n_pieza_tto_period{{ $counter }}" class="floating-label-activo-sm">Pieza Nº</label>
                                                 <select name="n_pieza_tto_period{{ $counter }}" id="n_pieza_tto_period{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_period(this.value, {{ $counter }}, 'pieza')">
@@ -142,7 +170,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9 col-xxl-9">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Procedimiento</label>
                                             <select name="tto_period{{ $counter }}" id="tto_period{{ $counter }}" class="form-control form-control-sm">
@@ -378,6 +406,35 @@
                                     </div>
                                 </div>
                             </div>
+                            <style>
+                                @media (min-width: 1200px) {
+                                    #tratamiento_periodontal_layout_{{ $counter }} {
+                                        display: grid;
+                                        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                                        grid-template-rows: auto 1fr;
+                                        align-items: start;
+                                        column-gap: 1rem;
+                                    }
+
+                                    #tratamiento_periodontal_layout_{{ $counter }} > .selector-tratamiento-periodontal-columna {
+                                        grid-column: 1;
+                                        grid-row: 1 / span 2;
+                                        min-width: 0;
+                                        margin-bottom: 0 !important;
+                                    }
+
+                                    #tratamiento_periodontal_layout_{{ $counter }} > .detalle-tratamiento-periodontal-titulo {
+                                        grid-column: 2;
+                                        grid-row: 1;
+                                    }
+
+                                    #tratamiento_periodontal_layout_{{ $counter }} > .detalle-tratamiento-periodontal-formulario {
+                                        grid-column: 2;
+                                        grid-row: 2;
+                                        min-width: 0;
+                                    }
+                                }
+                            </style>
                             <div class="card-footer">
                                 <div class="float-right">
                                     {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_period()"><i class="feather icon-x"></i> </button> --}}
@@ -456,6 +513,9 @@
                     $.each(resp.tratamientos, function(index, value) {
                         $('#tto_period' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
                     });
+                    if (resp.tratamientos && resp.tratamientos.length === 1) {
+                        $('#tto_period' + counter).val(String(resp.tratamientos[0].id)).trigger('change');
+                    }
                 }
             }
         });

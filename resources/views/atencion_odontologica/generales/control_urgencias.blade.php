@@ -54,11 +54,16 @@
         'presupuesto urgencia',
     ]);
 
+    // Tratamiento express habilitable por cada ficha odontológica que reutiliza
+    // este componente (actualmente Odontología General y Endodoncia).
+    $mostrarTratamientoUrgencia = (bool) ($habilitarTratamientoUrgencia ?? false);
+
     $subseccionUrgenciaActiva = collect([
         'motivo_urgencia' => $mostrarMotivoUrgencia,
         'eval_urg_ad' => $mostrarEvaluacionAdultoUrgencia,
         'eval_urg_ped' => $mostrarEvaluacionPediatricaUrgencia,
         'ind_urgencia' => $mostrarIndicacionesUrgencia,
+        'tratamiento_urgencia' => $mostrarTratamientoUrgencia,
         'presup_urgencia' => $mostrarPresupuestoUrgencia,
     ])->search(true, true);
 
@@ -76,6 +81,13 @@
     #presup_urgencia .urgencia-resumen-destacado { min-height:68px; padding:10px 12px; color:#fff; }
     #presup_urgencia .urgencia-resumen-destacado h5, #presup_urgencia .urgencia-resumen-destacado p { margin:0; color:#fff!important; }
     #presup_urgencia .urgencia-insumos-encabezado { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    #tratamiento_urgencia .urgencia-tratamiento-card{border:1px solid #dbe5f1;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(31,55,86,.08);overflow:hidden}
+    #tratamiento_urgencia .urgencia-tratamiento-card__header{padding:14px 18px;border-bottom:1px solid #dbe5f1;background:#f7f9fc}
+    #tratamiento_urgencia .urgencia-caras{display:flex;flex-wrap:wrap;gap:4px;min-width:190px}
+    #tratamiento_urgencia .urgencia-cara{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid #cad6e3;border-radius:50%;background:#edf1f5;color:#65758a;font-weight:700;cursor:pointer}
+    #tratamiento_urgencia .urgencia-cara.is-active{border-color:#76bd00;background:#76bd00;color:#fff;box-shadow:0 0 0 2px rgba(118,189,0,.16)}
+    #tratamiento_urgencia .pieza-urgencia-visual{display:flex;align-items:center;gap:8px;white-space:nowrap}
+    #tratamiento_urgencia .pieza-urgencia-visual img{width:28px;height:40px;object-fit:contain}
     @media (max-width:991.98px) { #presup_urgencia .urgencia-resumen-metrica { border-bottom:1px solid #edf1f6; } }
 </style>
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -134,6 +146,14 @@
                                                     role="tab"
                                                     aria-controls="ind_urgencia"
                                                     aria-selected="false">Indicaciones</a>
+                                                @if ($mostrarTratamientoUrgencia)
+                                                <a class="nav-link-aten text-reset {{ $subseccionUrgenciaActiva === 'tratamiento_urgencia' ? 'active' : '' }}"
+                                                    id="tratamiento_urgencia_tab" data-toggle="tab" href="#tratamiento_urgencia"
+                                                    role="tab" aria-controls="tratamiento_urgencia" aria-selected="false"
+                                                    onclick="actualizarTratamientoUrgenciaExpress(window.odontograma_global || [])">
+                                                    Tratamiento Urgencia
+                                                </a>
+                                                @endif
                                                 <a class="nav-link-aten text-reset {{ !$mostrarPresupuestoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'presup_urgencia' ? 'active' : '') }}" id="presup_urgencia_tab" data-toggle="tab" href="#presup_urgencia" role="tab" aria-controls="presup_urgencia"
                                                     aria-selected="false" onclick="$('#presup_estado_pago_urg').DataTable(); $('#presup_estado_pago_gral_urg').DataTable();actualizar_presupuesto_urgencia()">Presupuesto Urgencia</a>
                                                 {{--  <a class="nav-link-aten text-reset" id="fotos_oped_tab" data-toggle="tab" href="#fotos_oped" role="tab" aria-controls="fotos_oped" aria-selected="false">Fotos</a>  --}}
@@ -1225,11 +1245,81 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @if ($mostrarTratamientoUrgencia)
+                                                <div class="tab-pane fade {{ $subseccionUrgenciaActiva === 'tratamiento_urgencia' ? 'show active' : '' }}"
+                                                    id="tratamiento_urgencia" role="tabpanel" aria-labelledby="tratamiento_urgencia_tab">
+                                                    @php
+                                                        $tratamientosPresupuestoUrgencia = collect($odontograma ?? [])->filter(function ($registroUrgencia) {
+                                                            return (int) data_get($registroUrgencia, 'urgencia', 0) === 1
+                                                                && (int) data_get($registroUrgencia, 'presupuesto', 0) === 1;
+                                                        });
+                                                    @endphp
+                                                    <div class="urgencia-tratamiento-card">
+                                                        <div class="urgencia-tratamiento-card__header">
+                                                            <h6 class="text-c-blue mb-1">Tratamiento del presupuesto de urgencia</h6>
+                                                            <small class="text-muted">Registre las caras tratadas y el avance clínico sin mezclarlo con el plan de tratamiento habitual.</small>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-hover mb-0" id="tabla_tratamiento_urgencia_express">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Pieza</th><th>Diagnóstico</th><th>Prestación</th><th>Caras tratadas</th><th class="text-center">Avance</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse ($tratamientosPresupuestoUrgencia as $tratamientoUrgencia)
+                                                                        @php
+                                                                            $carasUrgencia = array_filter(explode('|', (string) data_get($tratamientoUrgencia, 'caras', '')));
+                                                                            $progresoUrgencia = (int) data_get($tratamientoUrgencia, 'progreso', (int) data_get($tratamientoUrgencia, 'estado', 0) === 1 ? 100 : 0);
+                                                                            $piezaUrgencia = (string) data_get($tratamientoUrgencia, 'pieza', '');
+                                                                            $esPiezaTemporalUrgencia = preg_match('/^[5-8]\.[1-5]$/', $piezaUrgencia);
+                                                                            $imagenUrgencia = $esPiezaTemporalUrgencia
+                                                                                ? 'images/dental/odontopediatria/diente-sano/diente-sano'.str_replace('.', '', $piezaUrgencia).'.png'
+                                                                                : 'images/dental/dientes/d'.str_replace('.', '', $piezaUrgencia).'.png';
+                                                                        @endphp
+                                                                        <tr data-id-tratamiento-urgencia="{{ data_get($tratamientoUrgencia, 'id') }}">
+                                                                            <td><div class="pieza-urgencia-visual"><img src="{{ asset($imagenUrgencia) }}" alt="Pieza {{ $piezaUrgencia }}"><strong>{{ $piezaUrgencia }}</strong></div></td>
+                                                                            <td>{{ data_get($tratamientoUrgencia, 'diagnostico') }}</td>
+                                                                            <td>{{ data_get($tratamientoUrgencia, 'tratamiento', data_get($tratamientoUrgencia, 'descripcion')) }}</td>
+                                                                            <td>
+                                                                                <div class="urgencia-caras">
+                                                                                    @foreach (['V','D','O','M','P'] as $caraUrgencia)
+                                                                                        <button type="button" class="urgencia-cara {{ in_array($caraUrgencia, $carasUrgencia, true) ? 'is-active' : '' }}" data-cara="{{ $caraUrgencia }}">{{ $caraUrgencia }}</button>
+                                                                                    @endforeach
+                                                                                    <button type="button" class="btn btn-outline-info btn-sm guardar-caras-urgencia ml-1" title="Guardar caras"><i class="feather icon-save"></i></button>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <div class="dental-progress-wheel mx-auto" style="--progress:{{ $progresoUrgencia }}" title="Avance: {{ $progresoUrgencia }}%">
+                                                                                    <span class="dental-progress-wheel-value">{{ $progresoUrgencia }}%</span>
+                                                                                    <select class="dental-piece-progress progreso-tratamiento-urgencia" data-original-progress="{{ $progresoUrgencia }}">
+                                                                                        @foreach ([0,25,50,75,100] as $porcentajeUrgencia)
+                                                                                            <option value="{{ $porcentajeUrgencia }}" {{ $progresoUrgencia === $porcentajeUrgencia ? 'selected' : '' }}>{{ $porcentajeUrgencia }}%</option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr><td colspan="5" class="text-center text-muted py-4">Aún no hay piezas agregadas al presupuesto de urgencia.</td></tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
                                                 <div class="tab-pane fade {{ !$mostrarPresupuestoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'presup_urgencia' ? 'show active' : '') }}" id="presup_urgencia" role="tabpanel"
                                                     aria-labelledby="presup_urgencia_tab">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <h6 class="tit-gen">Abonos y estados de pago Urgencia</h6>
+                                                            <div id="convenio_urgencia_resumen" class="alert alert-success py-2 px-3 mb-3" style="display:none">
+                                                                <i class="fas fa-percentage mr-1"></i>
+                                                                <strong id="convenio_urgencia_nombre"></strong>
+                                                                <span>— descuento automático de </span>
+                                                                <strong id="convenio_urgencia_porcentaje"></strong>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1620,6 +1710,9 @@
                                                         @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
 
+                                                            <button type="button" class="btn btn-outline-primary text-center"
+                                                                onclick="generar_pdf_urg()"><i class="fas fa-print"></i> Imprimir presupuesto</button>
+
                                                             <button type="button" class="btn btn-info text-center"
                                                                 onclick="pagar_presupuesto_urg()"><i class="fas fa-plus"></i> Pagar</button>
                                                             <button type="button" class="btn btn-warning text-center"
@@ -1887,6 +1980,7 @@
                     table_piezas_odontograma.clear().draw();
 
                     let odontograma = response.odontograma;
+                    actualizarTratamientoUrgenciaExpress(odontograma);
 
                     // Recorrer el odontograma y agregar nuevas filas
                     odontograma.forEach(function(odonto) {
@@ -1914,8 +2008,8 @@
                                 odonto.descripcion,
                                 odonto.pieza,
                                 formatoMoneda(formatoMoneda(odonto.valor)),
-                                0,
-                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                formatoMoneda(odonto.valor_descuento || 0),
+                                formatoMoneda(odonto.nuevo_valor ?? odonto.valor),
                                 '<div class="circle ' + clase + '"></div>',
                                 estado, // Columna vacía
 
@@ -1947,8 +2041,8 @@
                                     insumo.observaciones,
                                     insumo.cantidad, // Nombre del insumo
                                     formatoMoneda(insumo.valor), // Cantidad utilizada
-                                    0, // Unidad de medida
-                                    formatoMoneda(total),
+                                    formatoMoneda(insumo.valor_descuento || 0),
+                                    formatoMoneda(insumo.nuevo_valor ?? total),
                                     ' <div class="circle ' + clase + '"></div>',
 
                                 ]).draw(false).node();
@@ -1976,16 +2070,17 @@
 
                     // Cargar tabla de pagos
                     cargarTablaPagosUrgencia(response.pagos_urgencia);
-                    $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
-                    $('#valores_abonado_presupuesto').html(formatoMoneda(0));
-                    $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(0)));
                     $('#valores_total_final_presupuesto_conf_urg').html(formatoMoneda(parseInt(response.insumos_por_pagar) + parseInt(response.piezas_por_pagar)));
+                    $('#valores_descuentos_presupuesto_conf_urg').html(formatoMoneda(response.descuentos || 0));
+                    if (Number(response.porcentaje_descuento || 0) > 0) {
+                        $('#convenio_urgencia_nombre').text(response.convenio_urgencia || 'Convenio vigente');
+                        $('#convenio_urgencia_porcentaje').text(Number(response.porcentaje_descuento) + '%');
+                        $('#convenio_urgencia_resumen').show();
+                    } else {
+                        $('#convenio_urgencia_resumen').hide();
+                    }
                     $('#valores_insumos_presupuesto_conf_urg').html(formatoMoneda(response.insumos_por_pagar));
                     $('#valores_piezas_presupuesto_conf_urg').html(formatoMoneda(response.piezas_por_pagar));
-                    $('#total_abonado_presupuesto').val(parseInt(0));
-                    $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
-                    $('#abonos_presup').val(formatoMoneda(0));
-                    $('#subtotal_presup').val(formatoMoneda(0));
                     $('#valores_total_abonado_presupuesto_conf_urg').html(formatoMoneda(parseInt(response.pagos)));
                     $('#saldo_pendiente_presupuesto_urg').html(formatoMoneda(Math.max(0, monto_pendiente)));
                     let todos = response.todos;
@@ -2035,6 +2130,42 @@
                 console.log(error);
             }
         })
+    }
+
+    function generar_pdf_urg() {
+        const idPresupuesto = $('#id_presupuesto').val();
+        if (!idPresupuesto) {
+            swal('Presupuesto no disponible', 'Primero debe guardar prestaciones en el presupuesto de urgencia.', 'warning');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("profesional.generar_pdf_presupuesto_dental") }}',
+            data: {
+                _token: CSRF_TOKEN,
+                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_presupuesto: idPresupuesto,
+                urgencia: 1
+            },
+            beforeSend: function () {
+                swal({ title: 'Generando presupuesto...', buttons: false, closeOnClickOutside: false });
+            },
+            success: function (respuesta) {
+                swal.close();
+                if (respuesta.ruta) {
+                    window.open(respuesta.ruta, '_blank');
+                    return;
+                }
+                swal('No fue posible imprimir', respuesta.error || 'No se recibió el documento.', 'error');
+            },
+            error: function (xhr) {
+                swal.close();
+                swal('No fue posible imprimir', xhr.responseJSON?.error || 'Ocurrió un error al generar el PDF.', 'error');
+            }
+        });
     }
 
     function finalizar_atencion_urg(){
@@ -4532,6 +4663,10 @@
                                 icon: 'success'
                             });
                             actualizar_presupuesto_urgencia();
+                            // La actualización anterior refresca exclusivamente las tablas y
+                            // métricas de urgencia. No continuar con el bloque heredado, ya que
+                            // usa IDs del presupuesto clínico y sobrescribe sus abonos/estados.
+                            return;
                             let pagos = response.pagos;
                             let table = $('#table_pagos_presupuesto').DataTable();
                             // Limpiar la tabla antes de agregar nuevas filas
@@ -4738,3 +4873,127 @@
             }
         }
 </script>
+
+@if ($mostrarTratamientoUrgencia)
+<script>
+(function () {
+    const escaparUrgencia = function (valor) {
+        return $('<div>').text(valor == null ? '' : String(valor)).html();
+    };
+
+    window.actualizarTratamientoUrgenciaExpress = function (registros) {
+        const $tbody = $('#tabla_tratamiento_urgencia_express tbody');
+        if (!$tbody.length) return;
+
+        const piezas = (Array.isArray(registros) ? registros : []).filter(function (registro) {
+            return Number(registro.urgencia) === 1 && Number(registro.presupuesto) === 1;
+        });
+        if (!piezas.length) {
+            $tbody.html('<tr><td colspan="5" class="text-center text-muted py-4">Aún no hay piezas agregadas al presupuesto de urgencia.</td></tr>');
+            return;
+        }
+
+        const baseAdulto = @json(asset('images/dental/dientes'));
+        const baseTemporal = @json(asset('images/dental/odontopediatria/diente-sano'));
+        $tbody.html(piezas.map(function (registro) {
+            const pieza = String(registro.pieza || '');
+            const codigo = pieza.replace('.', '');
+            const temporal = /^[5-8]\.[1-5]$/.test(pieza);
+            const imagen = temporal ? baseTemporal + '/diente-sano' + codigo + '.png' : baseAdulto + '/d' + codigo + '.png';
+            const caras = String(registro.caras || '').split('|').filter(Boolean);
+            const progreso = registro.progreso !== null && registro.progreso !== undefined
+                ? Number(registro.progreso)
+                : (Number(registro.estado) === 1 ? 100 : 0);
+            const botonesCaras = ['V','D','O','M','P'].map(function (cara) {
+                return '<button type="button" class="urgencia-cara ' + (caras.includes(cara) ? 'is-active' : '') + '" data-cara="' + cara + '">' + cara + '</button>';
+            }).join('');
+            const opciones = [0,25,50,75,100].map(function (valor) {
+                return '<option value="' + valor + '" ' + (progreso === valor ? 'selected' : '') + '>' + valor + '%</option>';
+            }).join('');
+
+            return '<tr data-id-tratamiento-urgencia="' + Number(registro.id) + '">' +
+                '<td><div class="pieza-urgencia-visual"><img src="' + imagen + '" alt="Pieza ' + escaparUrgencia(pieza) + '"><strong>' + escaparUrgencia(pieza) + '</strong></div></td>' +
+                '<td>' + escaparUrgencia(registro.diagnostico) + '</td>' +
+                '<td>' + escaparUrgencia(registro.tratamiento || registro.descripcion) + '</td>' +
+                '<td><div class="urgencia-caras">' + botonesCaras + '<button type="button" class="btn btn-outline-info btn-sm guardar-caras-urgencia ml-1" title="Guardar caras"><i class="feather icon-save"></i></button></div></td>' +
+                '<td class="text-center"><div class="dental-progress-wheel mx-auto" style="--progress:' + progreso + '" title="Avance: ' + progreso + '%"><span class="dental-progress-wheel-value">' + progreso + '%</span><select class="dental-piece-progress progreso-tratamiento-urgencia" data-original-progress="' + progreso + '">' + opciones + '</select></div></td>' +
+            '</tr>';
+        }).join(''));
+    };
+
+    $(document).on('click', '#tratamiento_urgencia .urgencia-cara', function () {
+        $(this).toggleClass('is-active');
+    });
+
+    $(document).on('click', '#tratamiento_urgencia .guardar-caras-urgencia', function () {
+        const $boton = $(this);
+        const $fila = $boton.closest('tr');
+        const idTratamiento = Number($fila.data('id-tratamiento-urgencia'));
+        const caras = $fila.find('.urgencia-cara.is-active').map(function () {
+            return String($(this).data('cara'));
+        }).get();
+
+        $boton.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.guardar_caras_tratamiento_urgencia') }}",
+            data: {
+                id_tratamiento: idTratamiento,
+                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                id_ficha_atencion: $('#id_fc').val(),
+                caras: caras,
+                _token: "{{ csrf_token() }}"
+            }
+        }).done(function (respuesta) {
+            if (respuesta.mensaje === 'OK') {
+                swal('Caras guardadas', 'Las caras tratadas en la atención de urgencia fueron actualizadas.', 'success');
+            }
+        }).fail(function (xhr) {
+            const mensaje = xhr.responseJSON && (xhr.responseJSON.message || xhr.responseJSON.mensaje);
+            swal('Error', mensaje || 'No fue posible guardar las caras.', 'error');
+        }).always(function () {
+            $boton.prop('disabled', false);
+        });
+    });
+
+    $(document).on('change', '#tratamiento_urgencia .progreso-tratamiento-urgencia', function () {
+        const select = this;
+        const $select = $(select);
+        const $fila = $select.closest('tr');
+        const progresoAnterior = Number($select.data('original-progress')) || 0;
+        const progresoNuevo = Number($select.val());
+
+        $select.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.guardarCambiosTratamientoUrgencia') }}",
+            data: {
+                id_tratamiento: Number($fila.data('id-tratamiento-urgencia')),
+                progreso: progresoNuevo,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                id_profesional: $('#id_profesional_fc').val() || $('#id_profesional').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: "{{ csrf_token() }}"
+            }
+        }).done(function (respuesta) {
+            if (respuesta.mensaje !== 'OK') {
+                $select.val(progresoAnterior);
+                swal('No fue posible actualizar', 'El avance del tratamiento de urgencia no pudo guardarse.', 'error');
+                return;
+            }
+            $select.data('original-progress', progresoNuevo);
+            $select.closest('.dental-progress-wheel')
+                .css('--progress', progresoNuevo)
+                .attr('title', 'Avance: ' + progresoNuevo + '%')
+                .find('.dental-progress-wheel-value').text(progresoNuevo + '%');
+        }).fail(function () {
+            $select.val(progresoAnterior);
+            swal('Error', 'No fue posible actualizar el avance del tratamiento de urgencia.', 'error');
+        }).always(function () {
+            $select.prop('disabled', false);
+        });
+    });
+})();
+</script>
+@endif

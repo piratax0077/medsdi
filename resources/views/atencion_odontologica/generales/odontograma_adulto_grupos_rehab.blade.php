@@ -25,9 +25,8 @@
                 
                 // Prioridad para rehabilitación: implante con corona o prótesis
                 if (Str::contains(Str::lower($tratamiento), 'implante')) {
-                    if ($estado == '0') {
+                    if ($estado == '0' && $estadoFinal !== 'implante') {
                         $estadoFinal = 'ausente';
-                        break; // No importa lo demás, es ausente
                     } else {
                         $estadoFinal = 'implante';
                     }
@@ -101,9 +100,26 @@
         color: #fff;
         border-color: #601886;
     }
+
+    .odontograma-rehab-cuatro-filas {
+        overflow: visible;
+        width: 100%;
+    }
+
+    .odontograma-rehab-cuatro-filas .fila {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    @media (max-width: 767.98px) {
+        .odontograma-rehab-cuatro-filas .fila {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
 </style>
 
-<div class="odontograma" style="overflow: scroll;">
+<div class="odontograma odontograma-rehab-cuatro-filas">
     <!-- Fila superior (1.8 al 1.1 y 2.1 al 2.8) -->
     <div class="fila">
         @for($i = 18; $i >= 11; $i--)

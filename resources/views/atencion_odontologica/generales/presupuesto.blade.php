@@ -118,6 +118,18 @@
     .presupuesto-acciones { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; padding-top:14px; }
     .presupuesto-acciones .btn { min-height:40px; margin:0!important; border-radius:8px; font-weight:600; }
     .presupuesto-vacio { padding:32px 20px; border:1px dashed #b8c8da; border-radius:10px; background:var(--presup-surface); color:var(--presup-muted); text-align:center; }
+    #presup_estado_pago{width:100%!important;table-layout:fixed}
+    #presup_estado_pago th,#presup_estado_pago td{white-space:normal!important;word-break:normal;vertical-align:middle}
+    #presup_estado_pago th:nth-child(1){width:31%}#presup_estado_pago th:nth-child(2){width:12%}
+    #presup_estado_pago th:nth-child(3){width:12%}#presup_estado_pago th:nth-child(4){width:9%}
+    #presup_estado_pago th:nth-child(5){width:13%}#presup_estado_pago th:nth-child(6){width:11%}#presup_estado_pago th:nth-child(7){width:12%}
+    #presup_estado_pago td:first-child{font-size:.78rem;line-height:1.25}
+    .presupuesto-tabla-responsive{overflow-x:hidden}
+    #presup_estado_pago_wrapper .dataTables_scroll,#presup_estado_pago_wrapper .dataTables_scrollBody{overflow-x:visible!important}
+    .presupuesto-pieza-cell{display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+    .presupuesto-pieza-cell img{width:30px;height:42px;object-fit:contain;flex:0 0 auto}
+    .presupuesto-pieza-cell strong{color:#174ea6;font-size:.82rem}
+    @media(max-width:767.98px){#presup_estado_pago th:nth-child(4),#presup_estado_pago td:nth-child(4){display:none}#presup_estado_pago th:nth-child(1){width:29%}#presup_estado_pago th:nth-child(2){width:15%}#presup_estado_pago th:nth-child(3),#presup_estado_pago th:nth-child(5){width:14%}#presup_estado_pago th:nth-child(6),#presup_estado_pago th:nth-child(7){width:14%}.presupuesto-pieza-cell{gap:3px}.presupuesto-pieza-cell img{width:23px;height:34px}#presup_estado_pago th,#presup_estado_pago td{padding:.45rem .25rem;font-size:.7rem}}
     #modalReasignarPresupuesto .modal-content { border:0; border-radius:14px; overflow:hidden; box-shadow:0 18px 45px rgba(20,42,70,.25); }
     #modalReasignarPresupuesto .modal-header { align-items:center; padding:16px 22px; border:0; background:#2eb4bd; color:#fff; }
     #modalReasignarPresupuesto .modal-title { font-weight:700; }
@@ -150,6 +162,37 @@
         .presupuesto-acciones .btn { flex:1 1 220px; }
     }
 </style>
+
+<script>
+    function agruparInsumosPresupuesto(insumos) {
+        const grupos = new Map();
+        (insumos || []).forEach(function (insumo) {
+            const idProducto = Number(insumo.id_producto) || 0;
+            const clave = idProducto
+                ? 'producto:' + idProducto
+                : 'nombre:' + String(insumo.insumos || '').trim().toUpperCase();
+            if (!grupos.has(clave)) {
+                grupos.set(clave, Object.assign({}, insumo, {
+                    cantidad: 0,
+                    valor_descuento: 0,
+                    nuevo_valor: 0,
+                    nombre_marca: insumo.nombre_marca && String(insumo.nombre_marca).toLowerCase() !== 'null'
+                        ? insumo.nombre_marca
+                        : ''
+                }));
+            }
+            const grupo = grupos.get(clave);
+            grupo.cantidad += Number(insumo.cantidad) || 0;
+            grupo.valor_descuento += Number(insumo.valor_descuento) || 0;
+            grupo.nuevo_valor += Number(insumo.nuevo_valor) || 0;
+            const prioridad = { error: 3, incompleto: 2, ok: 1 };
+            if ((prioridad[insumo.estado_pago] || 3) > (prioridad[grupo.estado_pago] || 0)) {
+                grupo.estado_pago = insumo.estado_pago || 'error';
+            }
+        });
+        return Array.from(grupos.values());
+    }
+</script>
 
 <div id="form-presup_dent">
     <div class="row">
@@ -499,11 +542,29 @@
                 <div class="tab-pane fade show active" id="od_presup_clinico" role="tabpanel"
                     aria-labelledby="od_presup_clinico_tab">
                     @php
-                        $cantidadPiezasPresupuesto = collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->count();
-                        $cantidadGeneralesPresupuesto = collect($todos)->where('presupuesto', 1)->count();
-                        $cantidadInsumosPresupuesto = collect($insumos_tratamientos)->where('presupuesto', 1)->where('urgencia', 0)->count();
+                        $presupuestoActualClinico = $presupuesto ?? null;
+                        $filtrarPresupuestoClinico = function ($coleccion) use ($presupuestoActualClinico) {
+                            return collect($coleccion)->filter(function ($item) use ($presupuestoActualClinico) {
+                                return (int) data_get($item, 'presupuesto', 0) === 1
+                                    && (int) data_get($item, 'urgencia', 0) === 0
+                                    && (!$presupuestoActualClinico || !data_get($item, 'id_presupuesto') || (int) data_get($item, 'id_presupuesto') === (int) $presupuestoActualClinico->id);
+                            });
+                        };
+                        $piezasClinicasPresupuesto = $filtrarPresupuestoClinico($odontograma);
+                        $generalesClinicosPresupuesto = $filtrarPresupuestoClinico($todos);
+                        $insumosClinicosPresupuesto = $filtrarPresupuestoClinico($insumos_tratamientos);
+                        $cantidadPiezasPresupuesto = $piezasClinicasPresupuesto->count();
+                        $cantidadGeneralesPresupuesto = $generalesClinicosPresupuesto->count();
+                        $cantidadInsumosPresupuesto = $insumosClinicosPresupuesto->count();
                         $cantidadItemsPresupuesto = $cantidadPiezasPresupuesto + $cantidadGeneralesPresupuesto + $cantidadInsumosPresupuesto;
-                        $totalClinicoPresupuesto = $valores + $valores_piezas + $valores_insumos + $valores_laboratorio;
+                        $valores = $generalesClinicosPresupuesto->sum(fn ($item) => (float) data_get($item, 'valor', 0));
+                        $valores_piezas = $piezasClinicasPresupuesto->sum(fn ($item) => (float) data_get($item, 'valor', 0));
+                        $valores_insumos = $insumosClinicosPresupuesto->sum(fn ($item) => (float) data_get($item, 'valor', 0) * (float) data_get($item, 'cantidad', 1));
+                        $descuentosClinicoPresupuesto = $generalesClinicosPresupuesto->sum(fn ($item) => (float) data_get($item, 'valor_descuento', 0))
+                            + $piezasClinicasPresupuesto->sum(fn ($item) => (float) data_get($item, 'valor_descuento', 0))
+                            + $insumosClinicosPresupuesto->sum(fn ($item) => (float) data_get($item, 'valor_descuento', 0));
+                        $totalBrutoClinicoPresupuesto = $valores + $valores_piezas + $valores_insumos + $valores_laboratorio;
+                        $totalClinicoPresupuesto = max(0, $totalBrutoClinicoPresupuesto - $descuentosClinicoPresupuesto);
                         $saldoClinicoPresupuesto = max(0, $totalClinicoPresupuesto - $valor_abonado);
 
                         // Resumen por pieza para el visor gráfico del odontograma (piezas resaltadas + detalle al hacer clic)
@@ -563,6 +624,7 @@
                                                             'multiple' => false,
                                                             'piezasDisponibles' => $piezasPresupuestoDetalle,
                                                             'piezasPresupuesto' => $piezasPresupuestoDetalle,
+                                                            'historialPiezas' => $odontograma_historial ?? $odontograma ?? [],
                                                             'titulo' => 'Piezas pediátricas del presupuesto',
                                                             'ayuda' => 'Haga clic en una pieza resaltada para ver su detalle',
                                                         ])
@@ -679,11 +741,18 @@
                                         const $selector = $('#selector_presupuesto_piezas');
                                         if(!$selector.length){ return; }
 
+                                        const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
                                         const prestaciones = (listaOdontograma || []).filter(function(o){
-                                            return Number(o.presupuesto) === 1 && Number(o.urgencia) === 0;
+                                            return Number(o.presupuesto) === 1
+                                                && Number(o.urgencia) === 0
+                                                && (!idPresupuestoActual || Number(o.id_presupuesto) === idPresupuestoActual);
                                         });
                                         const piezas = new Set(prestaciones.map(function(o){ return String(o.pieza); }));
                                         const estadosVisuales = {};
+                                        $('#selector_presupuesto_piezas, #selector_pagos_piezas').find('[data-selector-pieza]').each(function () {
+                                            const pieza = String($(this).data('selector-pieza'));
+                                            estadosVisuales[pieza] = String($(this).find('img').attr('data-estado-clinico') || 'normal');
+                                        });
 
                                         // El estado verde se comparte entre los selectores pediátricos
                                         // de planificación, presupuesto clínico y pagos. Limpiamos el
@@ -736,18 +805,18 @@
 
                                         const base = @json(asset('images/dental/dientes'));
                                         const basePediatrico = @json(asset('images/dental/odontopediatria'));
+                                        const baseDientesPediatricos = @json(asset('images/dientes'));
                                         const esOdontogramaPediatrico = @json(!empty($odontogramaPediatrico));
-                                        $selector.find('[data-selector-pieza]').each(function(){
-                                            const $boton = $(this);
-                                            const pieza = String($boton.data('selector-pieza'));
-                                            const habilitada = piezas.has(pieza);
-                                            const codigo = pieza.replace('.', '');
+                                        $('#selector_presupuesto_piezas, #selector_pagos_piezas').each(function(){
+                                          $(this).find('[data-selector-pieza]').each(function(){
+                                            const $boton = $(this), pieza = String($boton.data('selector-pieza'));
+                                            const habilitada = piezas.has(pieza), codigo = pieza.replace('.', '');
                                             const estado = estadosVisuales[pieza] || 'normal';
                                             const rutas = esOdontogramaPediatrico ? {
                                                 carie: basePediatrico + '/carie/carie' + codigo + '.png',
                                                 ausente: basePediatrico + '/diente-ausente/dau' + codigo + '.png',
                                                 endodoncia: basePediatrico + '/pulpotomia/pulpotomia' + codigo + '.png',
-                                                normal: basePediatrico + '/diente-sano/diente-sano' + codigo + '.png'
+                                                normal: baseDientesPediatricos + '/d' + codigo + '.png'
                                             } : {
                                                 carie: base + '/carie/carie' + codigo + '.png',
                                                 ausente: base + '/diente-ausente/dau' + codigo + '.png',
@@ -762,6 +831,7 @@
                                                 .toggleClass('is-in-budget', habilitada);
                                             $boton.find('img').attr('src', rutas[estado] || rutas.normal).attr('data-estado-clinico', estado);
                                             if(!habilitada) $boton.removeClass('is-selected').attr('aria-pressed', 'false');
+                                          });
                                         });
 
                                         $visor.toggle(prestaciones.length > 0);
@@ -1093,14 +1163,14 @@
                                     <!-- Descuentos -->
                                     <div class="col-sm-6 col-md-4 col-lg resumen-metrica">
                                         <h5 class="text-c-blue mb-0">Descuentos</h5>
-                                        <p id="valores_descuentos_presupuesto">$0.00</p>
+                                        <p id="valores_descuentos_presupuesto">${{ number_format($descuentosClinicoPresupuesto, 0, ',', '.') }}</p>
                                     </div>
 
                                     <!-- Total Final -->
                                     <div class="col-sm-6 col-md-4 col-lg-2 bg-naranjo resumen-destacado d-flex flex-column justify-content-center">
                                         <h5 class="text-white mb-0">Total Final</h5>
                                         <p class="text-white" id="valores_total_final_presupuesto">$
-                                            {{ number_format($valores + $valores_piezas + $valores_insumos + $valores_laboratorio, 0, ',', '.') }}
+                                            {{ number_format($totalClinicoPresupuesto, 0, ',', '.') }}
                                         </p>
                                     </div>
 
@@ -1609,7 +1679,23 @@
                     aria-labelledby="od_abonos_pres-tab">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h6 class="tit-gen">Abonos y estados de pago</h6>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                <h6 class="tit-gen mb-0">Abonos y estados de pago</h6>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-print mr-1"></i> Presupuesto
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <button type="button" class="dropdown-item" onclick="generar_pdf()">
+                                            <i class="fas fa-print mr-2 text-primary"></i> Imprimir
+                                        </button>
+                                        <button type="button" class="dropdown-item" onclick="enviar_presupuesto_dental_por_mail()">
+                                            <i class="fas fa-envelope mr-2 text-info"></i> Enviar por mail
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row" id="banner_saldo_convenio_wrapper" style="display:none;">
@@ -1693,7 +1779,6 @@
                                                         @else
                                                             <button type="button" class="btn btn-outline-success btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})" title="Aplicar descuento"><i class="fas fa-check"></i></button>
                                                         @endif
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm btn-icon" onclick="generar_pdf()" title="Imprimir"><i class="fas fa-print"></i></button>
                                                     </div>
                                                 </div>
                                             @endif
@@ -1707,13 +1792,20 @@
                                     $piezasPagosDetalle = collect($odontograma)
                                         ->where('presupuesto', 1)
                                         ->where('urgencia', 0)
+                                        ->when(data_get($presupuesto ?? null, 'id'), function ($piezas) use ($presupuesto) {
+                                            return $piezas->where('id_presupuesto', (int) $presupuesto->id);
+                                        })
                                         ->groupBy(fn ($o) => (string) $o->pieza)
-                                        ->map(function ($tratamientos, $pieza) {
+                                        ->map(function ($tratamientos, $pieza) use ($valor_abonado) {
                                             $totalPagar = $tratamientos->sum(fn ($o) => $o->valor - ($o->valor_descuento ?? 0));
                                             $estadosPago = $tratamientos->pluck('estado_pago')->filter()->unique();
-                                            $colorPago = $estadosPago->isEmpty() || $estadosPago->contains('error')
+                                            // Sin abonos efectivos ninguna pieza puede aparecer pagada o con pago parcial,
+                                            // aunque una prestación conserve un estado_pago histórico/desactualizado.
+                                            $colorPago = (float) $valor_abonado <= 0
                                                 ? 'error'
-                                                : ($estadosPago->contains('incompleto') ? 'incompleto' : 'ok');
+                                                : ($estadosPago->isEmpty() || $estadosPago->contains('error')
+                                                    ? 'error'
+                                                    : ($estadosPago->contains('incompleto') ? 'incompleto' : 'ok'));
                                             $etiquetaPago = ['ok' => 'Al día', 'incompleto' => 'Pago incompleto', 'error' => 'Pendiente de pago'][$colorPago];
                                             $estadosClinicos = $tratamientos->map(function ($o) {
                                                 // match() es PHP 8+; producción corre PHP 7.3, se usa array-lookup en su lugar
@@ -1741,6 +1833,7 @@
                                                         'multiple' => false,
                                                         'piezasDisponibles' => $piezasPagosDetalle,
                                                         'piezasPresupuesto' => $piezasPagosDetalle,
+                                                        'historialPiezas' => $odontograma_historial ?? $odontograma ?? [],
                                                         'titulo' => 'Estado de pago y clínico por pieza',
                                                         'ayuda' => 'Haga clic en una pieza temporal para filtrar su detalle en la tabla',
                                                     ])
@@ -1753,6 +1846,8 @@
                                                         'compacto' => true,
                                                         'autoRefresh' => false,
                                                         'mostrarMensajeVacio' => false,
+                                                        'mostrarEstadoClinico' => true,
+                                                        'historialPiezas' => $odontograma ?? [],
                                                         'estadosBloqueados' => [],
                                                         'piezasDisponibles' => $piezasPagosDetalle,
                                                         'titulo' => 'Estado de pago y clínico por pieza',
@@ -1763,6 +1858,12 @@
                                                 <div class="d-flex flex-wrap align-items-center mt-2" id="filtro_pieza_pagos_wrapper" style="display:none;">
                                                     <span class="badge badge-primary px-2 py-1 mr-2" id="filtro_pieza_pagos_texto"></span>
                                                     <button type="button" class="btn btn-link btn-sm p-0" id="btn_quitar_filtro_pieza_pagos">Quitar filtro</button>
+                                                </div>
+                                                <div class="leyenda-estados-pago mt-3" aria-label="Leyenda de estados de pago">
+                                                    <span><i class="estado-pago-leyenda pendiente"></i>Pendiente</span>
+                                                    <span><i class="estado-pago-leyenda parcial"></i>Pago parcial</span>
+                                                    <span><i class="estado-pago-leyenda pagado"></i>Pagado</span>
+                                                    <small>El fondo azul indica que la pieza pertenece al presupuesto actual.</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -1787,17 +1888,35 @@
                                     #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-ok::after{background:#2bb673}
                                     #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-incompleto::after{background:#f4b942}
                                     #selector_pagos_piezas .selector-odontograma-pediatrico__pieza.estado-pago-error::after{background:#e6534d}
+                                    .leyenda-estados-pago{display:flex;flex-wrap:wrap;align-items:center;gap:12px;color:#53657a;font-size:.76rem}
+                                    .leyenda-estados-pago span{display:inline-flex;align-items:center;gap:5px}
+                                    .leyenda-estados-pago small{color:#78889a}
+                                    .estado-pago-leyenda{display:inline-block;width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3px #dce5ef}
+                                    .estado-pago-leyenda.pendiente{background:#e6534d}.estado-pago-leyenda.parcial{background:#f4b942}.estado-pago-leyenda.pagado{background:#2bb673}
                                 </style>
                                 <script>
                                     // Calcula, por pieza, el color agregado según estado_pago de sus prestaciones (rojo si alguna sin pagar, amarillo si alguna incompleta, verde si todas ok)
                                     function calcularColoresPagoPorPieza(listaOdontograma){
                                         const mapa = {};
+                                        const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
+                                        const textoAbonado = String($('#abonos_presup').val() || '0');
+                                        const totalAbonado = Number(textoAbonado.replace(/[^0-9-]/g, '')) || 0;
+                                        const sinAbonos = totalAbonado <= 0;
+                                        const saldoPendienteDato = $('#abonos_presup').attr('data-saldo-pendiente');
+                                        const presupuestoCubierto = totalAbonado > 0
+                                            && saldoPendienteDato !== undefined
+                                            && saldoPendienteDato !== ''
+                                            && Number(saldoPendienteDato) <= 0;
                                         (listaOdontograma || []).forEach(function(o){
                                             if(o.presupuesto != 1 || o.urgencia != 0){ return; }
+                                            const idPresupuestoPrestacion = Number(o.id_presupuesto || 0);
+                                            if(idPresupuestoActual && idPresupuestoPrestacion && idPresupuestoPrestacion !== idPresupuestoActual){ return; }
                                             const pieza = String(o.pieza);
                                             if(!mapa[pieza]){ mapa[pieza] = { estados: [], clinicos: [], totalPagar: 0 }; }
                                             const descuento = Number(o.valor_descuento) || 0;
-                                            mapa[pieza].estados.push(o.estado_pago || 'error');
+                                            mapa[pieza].estados.push(
+                                                presupuestoCubierto ? 'ok' : (sinAbonos ? 'error' : (o.estado_pago || 'error'))
+                                            );
                                             mapa[pieza].totalPagar += (Number(o.valor) || 0) - descuento;
                                             const clinico = Number(o.estado) === 1 ? 'Terminado' : (Number(o.estado) === 2 ? 'En proceso' : (Number(o.estado) === 3 ? 'Citado a control' : 'Pendiente'));
                                             if(mapa[pieza].clinicos.indexOf(clinico) === -1){ mapa[pieza].clinicos.push(clinico); }
@@ -1835,8 +1954,28 @@
 
                                     // Punto único de sincronización: se llama tras cada acción AJAX que recalcula estado_pago/descuento (pagos, convenio, reasignación)
                                     function sincronizarSelectorPagosPiezas(listaOdontograma){
+                                        window.odontogramaPagosActual = listaOdontograma || [];
+                                        const $selector = $('#selector_pagos_piezas');
+                                        if ($selector.length && typeof window.actualizarEstadosClinicosSelectorOdontograma === 'function') {
+                                            window.actualizarEstadosClinicosSelectorOdontograma($selector, listaOdontograma || []);
+                                        }
                                         pintarEstadosPagoPiezas(calcularColoresPagoPorPieza(listaOdontograma));
+                                        if (typeof window.decorarProgresosPresupuesto === 'function') {
+                                            window.decorarProgresosPresupuesto();
+                                        }
                                     }
+
+                                    // El visor también debe pintarse en la primera carga. Antes solo se
+                                    // sincronizaba después de una respuesta AJAX (abono, convenio, etc.).
+                                    window.odontogramaPagosActual = @json(collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->values());
+                                    $(function(){
+                                        window.requestAnimationFrame(function(){
+                                            sincronizarSelectorPagosPiezas(window.odontogramaPagosActual);
+                                        });
+                                    });
+                                    $(document).on('shown.bs.tab', '#od_abonos_pres-tab', function(){
+                                        sincronizarSelectorPagosPiezas(window.odontogramaPagosActual);
+                                    });
 
                                     $(document).on('odontograma:change', '#selector_pagos_piezas', function(e, piezasSeleccionadas){
                                         const pieza = (piezasSeleccionadas && piezasSeleccionadas[0]) ? piezasSeleccionadas[0] : null;
@@ -1952,15 +2091,28 @@
                                 <script>
                                     window.progresosPiezasPresupuesto = window.progresosPiezasPresupuesto || {};
                                     window.progresosPiezasPresupuestoPorPieza = window.progresosPiezasPresupuestoPorPieza || {};
+                                    window.progresosPiezasPresupuestoPorId = window.progresosPiezasPresupuestoPorId || {};
+                                    window.imagenBasePresupuestoDental = @json(asset(!empty($odontogramaPediatrico) ? 'images/dental/odontopediatria/diente-sano/diente-sano' : 'images/dental/dientes/d'));
                                     window.progresosGruposPresupuesto = window.progresosGruposPresupuesto || {};
                                     window.claveProgresoPresupuesto = function (a, b) {
                                         return String(a || '').trim().toUpperCase() + '|' + String(b || '').trim().toUpperCase();
                                     };
                                     window.actualizarDatosProgresoPresupuesto = function (piezas) {
                                         (piezas || []).forEach(function (pieza) {
-                                            const progreso = Number(pieza.progreso || 0) || (Number(pieza.estado) === 1 ? 100 : 25);
+                                            const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
+                                            const idPresupuestoPieza = Number(pieza.id_presupuesto || 0);
+                                            if (Number(pieza.presupuesto) !== 1 || Number(pieza.urgencia || 0) !== 0) return;
+                                            if (idPresupuestoActual && idPresupuestoPieza && idPresupuestoPieza !== idPresupuestoActual) return;
+                                            const progreso = pieza.progreso !== null && pieza.progreso !== undefined ? Number(pieza.progreso) : (Number(pieza.estado) === 1 ? 100 : 0);
+                                            window.progresosPiezasPresupuestoPorId[String(pieza.id)] = progreso;
                                             window.progresosPiezasPresupuesto[claveProgresoPresupuesto(pieza.descripcion || pieza.tratamiento, pieza.pieza)] = progreso;
                                             window.progresosPiezasPresupuestoPorPieza[String(pieza.pieza || '').trim()] = progreso;
+                                            $('#presup_estado_pago tbody tr').filter(function () {
+                                                const $celdas = $(this).children('td');
+                                                return !$(this).attr('data-odontograma-id')
+                                                    && $.trim($celdas.eq(1).text()) === String(pieza.pieza || '').trim()
+                                                    && $.trim($celdas.eq(0).text()).toUpperCase() === String(pieza.descripcion || pieza.tratamiento || '').trim().toUpperCase();
+                                            }).first().attr('data-odontograma-id', pieza.id);
                                         });
                                         window.decorarProgresosPresupuesto();
                                     };
@@ -1975,22 +2127,55 @@
                                         $('#presup_estado_pago tbody tr').each(function () {
                                             const $celdas = $(this).children('td');
                                             if ($celdas.length < 7) return;
-                                            if ($celdas.eq(6).find('.dental-progress-wheel').length) return;
-                                            let progreso = window.progresosPiezasPresupuesto[claveProgresoPresupuesto($celdas.eq(0).text(), $celdas.eq(1).text())];
-                                            if (!progreso) progreso = window.progresosPiezasPresupuestoPorPieza[String($celdas.eq(1).text() || '').trim()];
-                                            if (progreso) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
+                                            const pieza = $.trim($celdas.eq(1).text());
+                                            if (pieza) {
+                                                const piezaSelector = pieza.replace(/"/g, '\\"');
+                                                const $imagenClinica = $('#selector_pagos_piezas [data-selector-pieza="' + piezaSelector + '"] img, #selector_pagos_piezas [data-pieza-pediatrica="' + piezaSelector + '"] img, #selector_plan_tratamiento_general [data-selector-pieza="' + piezaSelector + '"] img').first();
+                                                const imagenClinica = $imagenClinica.attr('src');
+                                                const estadoClinico = $imagenClinica.attr('data-estado-clinico') || 'normal';
+                                                const tituloImagen = 'Pieza ' + pieza + ' · Estado: ' + estadoClinico.replace(/[-_]/g, ' ');
+                                                const src = imagenClinica || (window.imagenBasePresupuestoDental + pieza.replace('.', '') + '.png');
+                                                const $piezaVisual = $celdas.eq(1).find('.presupuesto-pieza-cell');
+                                                if ($piezaVisual.length) {
+                                                    $piezaVisual.find('img').attr({
+                                                        src: src,
+                                                        title: tituloImagen,
+                                                        'data-estado-clinico': estadoClinico
+                                                    });
+                                                } else {
+                                                    $celdas.eq(1).html('<div class="presupuesto-pieza-cell"><img src="' + src + '" alt="Pieza ' + pieza + '" title="' + tituloImagen + '" data-estado-clinico="' + estadoClinico + '"><strong>' + pieza + '</strong></div>');
+                                                }
+                                            }
+                                            const idOdontograma = String($(this).attr('data-odontograma-id') || '');
+                                            let progreso = idOdontograma ? window.progresosPiezasPresupuestoPorId[idOdontograma] : undefined;
+                                            if (progreso === undefined || progreso === null) progreso = window.progresosPiezasPresupuesto[claveProgresoPresupuesto($celdas.eq(0).text(), $celdas.eq(1).text())];
+                                            if (progreso === undefined || progreso === null) progreso = window.progresosPiezasPresupuestoPorPieza[String($celdas.eq(1).text() || '').trim()];
+                                            if (progreso !== undefined && progreso !== null) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
                                         });
                                         $('#presup_estado_pago_gral tbody tr').each(function () {
                                             const $celdas = $(this).children('td');
                                             if ($celdas.length < 7) return;
                                             let progreso = window.progresosGruposPresupuesto[claveProgresoPresupuesto($celdas.eq(0).text(), $celdas.eq(1).text())];
-                                            if (!progreso) progreso = window.progresosGruposPresupuesto[claveProgresoPresupuesto($celdas.eq(1).text(), $celdas.eq(0).text())];
-                                            if (progreso) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
+                                            if (progreso === undefined || progreso === null) progreso = window.progresosGruposPresupuesto[claveProgresoPresupuesto($celdas.eq(1).text(), $celdas.eq(0).text())];
+                                            if (progreso !== undefined && progreso !== null) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
                                         });
                                     };
                                     actualizarDatosProgresoPresupuesto(@json(collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->values()));
                                     actualizarDatosProgresoGruposPresupuesto(@json(collect($todos)->where('presupuesto', 1)->values()));
-                                    $(document).on('draw.dt', '#presup_estado_pago, #presup_estado_pago_gral', decorarProgresosPresupuesto);
+                                    $(document).on('draw.dt', function (evento) {
+                                        if (!$(evento.target).is('#presup_estado_pago, #presup_estado_pago_gral')) return;
+                                        window.requestAnimationFrame(decorarProgresosPresupuesto);
+                                    });
+                                    $(document).ajaxComplete(function () {
+                                        window.requestAnimationFrame(function () {
+                                            decorarProgresosPresupuesto();
+                                            window.setTimeout(decorarProgresosPresupuesto, 80);
+                                        });
+                                    });
+                                    $(document).on('shown.bs.tab', 'a[href="#od_abonos_pres"]', function () {
+                                        decorarProgresosPresupuesto();
+                                        window.setTimeout(decorarProgresosPresupuesto, 80);
+                                    });
                                     $(function () {
                                         decorarProgresosPresupuesto();
                                         const contenedor = document.getElementById('form-presup_dent');
@@ -2022,14 +2207,14 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="dt-responsive table-responsive pb-4">
+                                                        <div class="dt-responsive table-responsive presupuesto-tabla-responsive pb-4">
                                                             <table id="presup_estado_pago"
-                                                                class="display table table-striped dt-responsive nowrap table-sm"
+                                                                class="display table table-striped dt-responsive table-sm"
                                                                 style="width:100%">
                                                                 <thead>
                                                                     <tr>
                                                                         <th class="align-middle">Prestación</th>
-                                                                        <th class="align-middle">Pieza</th>
+                                                                        <th class="align-middle">Pieza / imagen</th>
                                                                         <th class="align-middle">Valor total</th>
                                                                         <th class="align-middle">Descuento</th>
                                                                         <th class="align-middle">Valor a pagar</th>
@@ -2040,7 +2225,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($odontograma as $o)
-                                                                        @if ($o->presupuesto == 1 && $o->urgencia == 0)
+                                                                        @if ($o->presupuesto == 1 && $o->urgencia == 0 && (!isset($presupuesto) || !$presupuesto || (int) $o->id_presupuesto === (int) $presupuesto->id))
                                                                             @php
                                                                                 if ($o->estado == 0) {
                                                                                     $estado = 'PENDIENTE';
@@ -2065,11 +2250,15 @@
                                                                                         break;
                                                                                 }
                                                                             @endphp
-                                                                            <tr>
+                                                                            <tr data-odontograma-id="{{ $o->id }}">
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $o->descripcion }}</td>
                                                                                 <td class="text-center align-middle">
-                                                                                    {{ $o->pieza }}</td>
+                                                                                    <div class="presupuesto-pieza-cell">
+                                                                                        <img src="{{ asset((!empty($odontogramaPediatrico) ? 'images/dental/odontopediatria/diente-sano/diente-sano' : 'images/dental/dientes/d').str_replace('.', '', (string) $o->pieza).'.png') }}" alt="Pieza {{ $o->pieza }}">
+                                                                                        <strong>{{ $o->pieza }}</strong>
+                                                                                    </div>
+                                                                                </td>
                                                                                 <td class="text-center align-middle">
                                                                                     {{ number_format($o->valor, 0, ',', '.') }}
                                                                                 </td>
@@ -2085,7 +2274,7 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    @php $progresoPresupuesto = (int) ($o->progreso ?? ((int) $o->estado === 1 ? 100 : 25)); @endphp
+                                                                                    @php $progresoPresupuesto = (int) ($o->progreso ?? ((int) $o->estado === 1 ? 100 : 0)); @endphp
                                                                                     <div class="dental-progress-wheel is-readonly" style="--progress:{{ $progresoPresupuesto }}" title="Progreso del tratamiento: {{ $progresoPresupuesto }}%" role="img" aria-label="Progreso del tratamiento: {{ $progresoPresupuesto }}%"><span class="dental-progress-wheel-value">{{ $progresoPresupuesto }}%</span></div>
                                                                                 </td>
 
@@ -2133,7 +2322,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($todos as $o)
-                                                                        @if ($o->presupuesto == 1)
+                                                                        @if ($o->presupuesto == 1 && (int) ($o->urgencia ?? 0) === 0)
                                                                             @php
                                                                                 if ($o->estado == 1) {
                                                                                     $estado = 'PENDIENTE';
@@ -2214,14 +2403,24 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($insumos_tratamientos as $t)
-                                                                    @if ($t->presupuesto == 1)
-                                                                        @php $total = $t->cantidad * $t->valor @endphp
+                                                                @php
+                                                                    $insumosPresupuestoAgrupados = collect($insumos_tratamientos)
+                                                                        ->where('presupuesto', 1)
+                                                                        ->groupBy(fn ($t) => $t->id_producto
+                                                                            ? 'producto:'.$t->id_producto
+                                                                            : 'nombre:'.mb_strtoupper(trim((string) $t->insumos)));
+                                                                @endphp
+                                                                @foreach ($insumosPresupuestoAgrupados as $grupoInsumo)
+                                                                        @php
+                                                                            $t = $grupoInsumo->first();
+                                                                            $cantidadAgrupada = $grupoInsumo->sum('cantidad');
+                                                                            $total = $cantidadAgrupada * $t->valor;
+                                                                        @endphp
                                                                         @php
                                                                             $color = 'bg-danger'; // por defecto: error
-                                                                            if ($t->estado_pago == 'ok') {
+                                                                            if ($grupoInsumo->every(fn ($item) => $item->estado_pago == 'ok')) {
                                                                                 $color = 'bg-success';
-                                                                            } elseif ($t->estado_pago == 'incompleto') {
+                                                                            } elseif ($grupoInsumo->contains(fn ($item) => $item->estado_pago == 'incompleto')) {
                                                                                 $color = 'bg-warning';
                                                                             }
                                                                         @endphp
@@ -2229,12 +2428,12 @@
                                                                         <tr>
                                                                             <td class="align-middle">
                                                                                 {{ $t->insumos }}
-                                                                                {{ $t->nombre_marca }}</td>
+                                                                                {{ strtolower((string) $t->nombre_marca) === 'null' ? '' : $t->nombre_marca }}</td>
                                                                             <td class="align-middle">
                                                                                 {{ $t->observaciones }}
                                                                             </td>
                                                                             <td class="align-middle">
-                                                                                {{ $t->cantidad }}</td>
+                                                                                {{ $cantidadAgrupada }}</td>
                                                                             <td class="align-middle">
                                                                                 {{ number_format($t->valor) }}</td>
                                                                             <td class="align-middle">0</td>
@@ -2247,7 +2446,6 @@
                                                                             </td>
 
                                                                         </tr>
-                                                                    @endif
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
@@ -2289,13 +2487,13 @@
                                     <!-- Descuentos -->
                                     <div class="col-sm-6 col-md-4 col-lg resumen-metrica">
                                         <h5 class="mb-0 text-c-blue">Descuentos</h5>
-                                        <p id="valores_descuentos_presupuesto_conf">$0.00</p>
+                                        <p id="valores_descuentos_presupuesto_conf">${{ number_format($descuentosClinicoPresupuesto, 0, ',', '.') }}</p>
                                     </div>
 
                                     <div class="col-sm-6 col-md-4 col-lg-2 bg-naranjo resumen-destacado d-flex flex-column justify-content-center">
                                         <h5 class="text-white">Total Final</h5>
                                         <p class="text-white" id="valores_total_final_presupuesto_conf">$
-                                            {{ number_format($valores + $valores_piezas + $valores_insumos + $valores_laboratorio, 0, ',', '.') }}
+                                            {{ number_format($totalClinicoPresupuesto, 0, ',', '.') }}
                                         </p>
                                     </div>
 
@@ -2867,7 +3065,7 @@
 						                        </thead>
 						                        <tbody>
 						                            @foreach ($todos as $o)
-						                                @if ($o->presupuesto == 1)
+                                                                        @if ($o->presupuesto == 1 && (int) ($o->urgencia ?? 0) === 0)
 						                                    @php $valorNetoGrupoReasig = $conDescuentoReasignacion($o->valor); @endphp
 						                                    <tr>
 						                                        <td><input type="checkbox" class="valor-checkbox"
@@ -3329,7 +3527,7 @@
                 table.clear();
 
                 // Recorrer el array de insumos y agregarlos a la tabla
-                insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                     table.row.add([
                         insumo.insumos + ' ' + insumo.nombre_marca, // Nombre del insumo
                         insumo.cantidad, // Cantidad utilizada
@@ -3410,7 +3608,7 @@
                         table.clear();
 
                         // Recorrer el array de insumos y agregarlos a la tabla
-                        insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                             table.row.add([
                                 insumo.insumos + ' ' + insumo
                                 .nombre_marca, // Nombre del insumo
@@ -3526,6 +3724,10 @@
         $('#total_abonado_presupuesto').val(abonado);
         $('#total_adeudado_presupuesto').val(saldo);
         $('#abonos_presup').val(formatoMoneda(abonado));
+        // El saldo agregado es la fuente de verdad para el color del visor.
+        // Evita que un estado_pago histórico mantenga una pieza roja cuando
+        // el presupuesto completo ya quedó cubierto.
+        $('#abonos_presup').attr('data-saldo-pendiente', saldo);
         $('#monto_abonado_presupuesto').text(formatoMoneda(abonado));
         $('#monto_pendiente_presupuesto, #saldo_pendiente_presupuesto, #saldo_pendiente_presupuesto_conf').text(formatoMoneda(saldo));
         $('#barra_progreso_presupuesto').css('width', porcentaje + '%');
@@ -3689,7 +3891,7 @@
                     table_insumos.clear();
 
                     //Recorrer el array de insumos y agregarlos a la tabla
-                    insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                         let total = insumo.cantidad * insumo.valor;
                         if (insumo.presupuesto == 0 || insumo.presupuesto == null) {
                             // Botones de acción
@@ -3726,9 +3928,9 @@
                     let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                     table_insumos_pagos.clear();
                     console.log(insumos);
-                    insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                         let total = insumo.cantidad * insumo.valor;
-                        if (insumo.presupuesto == 1) {
+                        if (insumo.presupuesto == 1 && Number(insumo.urgencia || 0) === 0) {
                             if (insumo.estado_pago == 'ok') {
                                 var clase = 'bg-success';
                             } else if (insumo.estado_pago == 'incompleto') {
@@ -3763,7 +3965,7 @@
                     // Recorrer el odontograma y agregar nuevas filas
                     todos.forEach(function(odonto) {
 
-                        if (odonto.presupuesto == 1) {
+                        if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                             if (odonto.estado_pago == 'ok') {
                                 var clase = 'bg-success';
                             } else if (odonto.estado_pago == 'incompleto') {
@@ -3991,7 +4193,7 @@
                     let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                     table_insumos_pagos.clear();
                     console.log(insumos);
-                    insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                         let total = insumo.cantidad * insumo.valor;
                         if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                             if (insumo.estado_pago == 'ok') {
@@ -4021,7 +4223,7 @@
 
                     $('#contenedor_piezas_dentales_presupuesto').empty();
                     odontograma.forEach(function(odonto) {
-                        if (odonto.presupuesto == 1) {
+                        if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                             $('#contenedor_piezas_dentales_presupuesto').append(`
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${odonto.pieza}">
                                         <div class="card-informacion">
@@ -4059,8 +4261,8 @@
                     });
 
                     $('#contenedor_insumos').empty();
-                    insumos.forEach(insumo => {
-                        if (insumo.presupuesto == 1) {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
+                        if (insumo.presupuesto == 1 && Number(insumo.urgencia || 0) === 0) {
                             let total = insumo.cantidad * insumo.valor;
                             $('#contenedor_insumos').append(`
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -4315,7 +4517,7 @@
         if (!$tbody.length || !Array.isArray(insumos)) return;
 
         $tbody.empty();
-        insumos.forEach(function(insumo) {
+        agruparInsumosPresupuesto(insumos).forEach(function(insumo) {
             if (Number(insumo.presupuesto) !== 1 || Number(insumo.urgencia || 0) === 1) return;
 
             const id = parseInt(insumo.id);
@@ -4526,7 +4728,7 @@
                     let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                     table_insumos_pagos.clear();
                     console.log(insumos);
-                    insumos.forEach(insumo => {
+                    agruparInsumosPresupuesto(insumos).forEach(insumo => {
                         let total = insumo.cantidad * insumo.valor;
                         if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                             if (insumo.estado_pago == 'ok') {
@@ -4561,7 +4763,7 @@
                     table_todos.clear().draw();
                     // Recorrer el odontograma y agregar nuevas filas
                     todos.forEach(function(odonto) {
-                        if (odonto.presupuesto == 1) {
+                        if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                             if (odonto.estado_pago == 'ok') {
                                 var clase = 'bg-success';
                             } else if (odonto.estado_pago == 'incompleto') {
@@ -4896,7 +5098,7 @@
                 // Recorrer el odontograma y agregar nuevas filas
                 odontograma.forEach(function(odonto) {
 
-                    if (odonto.presupuesto == 1) {
+                    if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                         if (odonto.estado_pago == 'ok') {
                             var clase = 'bg-success';
                         } else if (odonto.estado_pago == 'incompleto') {
@@ -4936,7 +5138,7 @@
                 let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                 table_insumos_pagos.clear();
                 console.log(insumos);
-                insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                     let total = insumo.cantidad * insumo.valor;
                     if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                         if (insumo.estado_pago == 'ok') {
@@ -4966,7 +5168,7 @@
 
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 odontograma.forEach(function(odonto) {
-                    if (odonto.presupuesto == 1) {
+                    if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                         $('#contenedor_piezas_dentales_presupuesto').append(`
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${odonto.pieza}">
                                 <div class="card-informacion">
@@ -5004,8 +5206,8 @@
                 });
 
                 $('#contenedor_insumos').empty();
-                insumos.forEach(insumo => {
-                    if (insumo.presupuesto == 1) {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
+                        if (insumo.presupuesto == 1 && Number(insumo.urgencia || 0) === 0) {
                         let total = insumo.cantidad * insumo.valor;
                         $('#contenedor_insumos').append(`
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -5233,7 +5435,7 @@
 
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 odontograma.forEach(function(odonto) {
-                    if (odonto.presupuesto == 1) {
+                    if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                         $('#contenedor_piezas_dentales_presupuesto').append(`
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${odonto.pieza}">
                                             <div class="card-informacion">
@@ -5275,7 +5477,7 @@
                 let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                 table_insumos_pagos.clear();
                 console.log(insumos);
-                insumos.forEach(insumo => {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
                     let total = insumo.cantidad * insumo.valor;
                     if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                         if (insumo.estado_pago == 'ok') {
@@ -5304,8 +5506,8 @@
                 table_insumos_pagos.draw();
 
                 $('#contenedor_insumos').empty();
-                insumos.forEach(insumo => {
-                    if (insumo.presupuesto == 1) {
+                agruparInsumosPresupuesto(insumos).forEach(insumo => {
+                    if (insumo.presupuesto == 1 && Number(insumo.urgencia || 0) === 0) {
                         let total = insumo.cantidad * insumo.valor;
                         let dcto = insumo.valor - insumo.valor_descuento;
                         $('#contenedor_insumos').append(`
@@ -5380,7 +5582,7 @@
                 // Recorrer el odontograma y agregar nuevas filas
                 todos.forEach(function(odonto) {
 
-                    if (odonto.presupuesto == 1) {
+                    if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
                         if (odonto.estado_pago == 'ok') {
                             var clase = 'bg-success';
                         } else if (odonto.estado_pago == 'incompleto') {
@@ -5830,6 +6032,68 @@
                     icon: 'error'
                 });
             }
+        });
+    }
+
+    function enviar_presupuesto_dental_por_mail(correoAnterior) {
+        const correoPaciente = correoAnterior || @json((string) data_get($paciente ?? null, 'email', ''));
+        swal({
+            title: 'Enviar presupuesto',
+            text: 'Confirme o modifique el correo de destino.',
+            icon: 'info',
+            content: {
+                element: 'input',
+                attributes: {
+                    type: 'email',
+                    value: correoPaciente,
+                    placeholder: 'correo@ejemplo.cl',
+                    autocomplete: 'email',
+                    spellcheck: 'false'
+                }
+            },
+            buttons: ['Cancelar', 'Enviar']
+        }).then(function (correoDestino) {
+            if (correoDestino === null) return;
+
+            correoDestino = String(correoDestino || '').trim();
+            const formatoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!formatoCorreo.test(correoDestino)) {
+                swal('Correo no válido', 'Ingrese una dirección de correo válida.', 'warning')
+                    .then(function () { enviar_presupuesto_dental_por_mail(correoDestino); });
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('profesional.enviar_presupuesto_dental_email') }}",
+                type: 'POST',
+                data: {
+                    id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    id_presupuesto: $('#id_presupuesto').val() || null,
+                    email: correoDestino,
+                    _token: "{{ csrf_token() }}"
+                },
+                beforeSend: function () {
+                    swal({
+                        title: 'Enviando...',
+                        text: 'Estamos generando y adjuntando el presupuesto.',
+                        icon: 'info',
+                        buttons: false,
+                        closeOnClickOutside: false
+                    });
+                },
+                success: function (respuesta) {
+                    swal('Presupuesto enviado', respuesta.mensaje, 'success');
+                },
+                error: function (xhr) {
+                    const respuesta = xhr.responseJSON || {};
+                    const errorEmail = respuesta.errors && respuesta.errors.email
+                        ? respuesta.errors.email[0]
+                        : null;
+                    swal('No fue posible enviar', respuesta.mensaje || errorEmail || respuesta.message || 'Ocurrió un error al enviar el presupuesto.', 'error');
+                }
+            });
         });
     }
 

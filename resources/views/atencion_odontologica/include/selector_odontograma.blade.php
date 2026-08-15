@@ -7,12 +7,17 @@
     $selectorAutoRefresh = $autoRefresh ?? true;
     $selectorMostrarMensajeVacio = $mostrarMensajeVacio ?? true;
     $selectorMostrarEstadoClinico = $mostrarEstadoClinico ?? false;
+    $selectorCuatroFilas = $cuatroFilas ?? false;
 
     // Replica la misma lectura visual usada por odontograma_adulto.blade.php.
     // La ultima condicion clinica relevante de cada pieza define su imagen.
     $selectorEstadosVisuales = [];
     if ($selectorMostrarEstadoClinico) {
         foreach (collect($historialPiezas ?? []) as $registro) {
+            if ((int) data_get($registro, 'urgencia', 0) === 1) {
+                continue;
+            }
+
             $numeroRegistro = (string) data_get($registro, 'pieza', '');
             if ($numeroRegistro === '') {
                 continue;
@@ -27,7 +32,7 @@
                 $estadoVisual = 'carie';
             }
             if (strpos($tratamientoRegistro, 'implante') !== false) {
-                $estadoVisual = $estadoRegistro === 0 ? 'ausente' : 'implante';
+                $estadoVisual = ($estadoRegistro !== 0 || $estadoVisual === 'implante') ? 'implante' : 'ausente';
             }
             if (strpos($tratamientoRegistro, 'endodoncia') !== false || strpos($tratamientoRegistro, 'pulpotomia') !== false || strpos($tratamientoRegistro, 'pulpectomia') !== false) {
                 $estadoVisual = 'endodoncia';
@@ -55,6 +60,13 @@
 
     $selectorMapa = collect($piezasDisponibles ?? [])
         ->filter(function ($item) use ($selectorEstadosBloqueados) {
+            $urgencia = is_object($item)
+                ? ($item->urgencia ?? 0)
+                : (is_array($item) ? ($item['urgencia'] ?? 0) : 0);
+            if ((int) $urgencia === 1) {
+                return false;
+            }
+
             $estado = is_object($item)
                 ? ($item->estado ?? null)
                 : (is_array($item) ? ($item['estado'] ?? null) : null);
@@ -75,7 +87,16 @@
             return $numero === null ? [] : [(string) $numero => $item];
         });
     $selectorIniciales = collect($piezasSeleccionadas ?? [])->map(fn ($pieza) => (string) $pieza)->all();
-    $selectorFilas = [
+    $selectorPresupuestadas = collect($piezasPresupuesto ?? [])
+        ->filter(fn ($item) => (int) data_get($item, 'urgencia', 0) === 0)
+        ->map(fn ($item) => (string) data_get($item, 'pieza', $item))
+        ->filter()->unique()->values()->all();
+    $selectorFilas = $selectorCuatroFilas ? [
+        ['1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1'],
+        ['2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8'],
+        ['4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1'],
+        ['3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8'],
+    ] : [
         ['1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1','2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8'],
         ['4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1','3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8'],
     ];
@@ -101,8 +122,11 @@
                     @php
                         $habilitada = $selectorMapa->has($numero);
                         $seleccionada = in_array($numero, $selectorIniciales, true);
+                        $presupuestada = in_array($numero, $selectorPresupuestadas, true);
                         $item = $selectorMapa->get($numero);
                         $tratamiento = is_object($item) ? ($item->tratamiento ?? null) : (is_array($item) ? ($item['tratamiento'] ?? null) : null);
+                        $estadoPago = is_object($item) ? ($item->color_pago ?? null) : (is_array($item) ? ($item['color_pago'] ?? null) : null);
+                        $claseEstadoPago = in_array($estadoPago, ['ok', 'incompleto', 'error'], true) ? 'estado-pago-'.$estadoPago : '';
                         $codigoImagen = str_replace('.', '', $numero);
                         $estadoVisual = $selectorEstadosVisuales[$numero] ?? 'normal';
                         $imagenesPorEstado = [
@@ -115,7 +139,7 @@
                             ?? "images/dental/dientes/d{$codigoImagen}.png";
                     @endphp
                     <button type="button"
-                        class="selector-odontograma-generico__pieza {{ $habilitada ? 'is-enabled' : '' }} {{ $seleccionada ? 'is-selected' : '' }}"
+                        class="selector-odontograma-generico__pieza {{ $habilitada ? 'is-enabled' : '' }} {{ $presupuestada ? 'is-in-budget' : '' }} {{ $seleccionada ? 'is-selected' : '' }} {{ $claseEstadoPago }}"
                         data-selector-pieza="{{ $numero }}" aria-pressed="{{ $seleccionada ? 'true' : 'false' }}"
                         title="{{ $habilitada ? ($tratamiento ?: 'Pieza disponible') : 'Pieza no disponible' }}"
                         {{ $habilitada ? '' : 'disabled' }}>
@@ -137,7 +161,12 @@
     @endif
 </div>
 <style>
-    #{{ $selectorId }} .selector-odontograma-generico__titulo{display:flex;justify-content:space-between;gap:.75rem;margin-bottom:.4rem;color:#174ea6}#{{ $selectorId }} .selector-odontograma-generico__titulo small{color:#748397}#{{ $selectorId }} .selector-odontograma-generico__resumen{min-height:36px;padding:.4rem .55rem;margin-bottom:.55rem;border:1px solid #d7e1ec;border-radius:.5rem}#{{ $selectorId }} .badge{margin-right:.3rem}#{{ $selectorId }} .selector-odontograma-generico__scroll{overflow-x:auto;padding:.45rem;border:1px solid #dce5ef;border-radius:.65rem;background:#f7f9fc}#{{ $selectorId }} .selector-odontograma-generico__fila{display:grid;grid-template-columns:repeat(16,minmax(42px,1fr));gap:.25rem;min-width:740px}#{{ $selectorId }} .selector-odontograma-generico__fila+ .selector-odontograma-generico__fila{margin-top:.65rem}#{{ $selectorId }} .selector-odontograma-generico__pieza{min-height:67px;padding:.2rem;border:1px solid #ccd7e3;border-radius:.5rem;background:#edf1f5;color:#8793a1;opacity:.45}#{{ $selectorId }} .selector-odontograma-generico__pieza img{display:block;width:27px;height:36px;object-fit:contain;margin:auto;filter:grayscale(1)}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-enabled{border-color:#73a5ff;background:#dbeafe;color:#174ea6;cursor:pointer;opacity:1}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-enabled img{filter:none}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-selected{border-color:#7434a4;background:#a460d1;color:#fff;box-shadow:0 0 0 2px rgba(116,52,164,.14)}#{{ $selectorId }}.is-compacto .selector-odontograma-generico__pieza{min-height:58px}#{{ $selectorId }}.is-compacto .selector-odontograma-generico__pieza img{height:29px}
+    #{{ $selectorId }} .selector-odontograma-generico__titulo{display:flex;justify-content:space-between;gap:.75rem;margin-bottom:.4rem;color:#174ea6}#{{ $selectorId }} .selector-odontograma-generico__titulo small{color:#748397}#{{ $selectorId }} .selector-odontograma-generico__resumen{min-height:36px;padding:.4rem .55rem;margin-bottom:.55rem;border:1px solid #d7e1ec;border-radius:.5rem}#{{ $selectorId }} .badge{margin-right:.3rem}#{{ $selectorId }} .selector-odontograma-generico__scroll{overflow-x:auto;padding:.45rem;border:1px solid #dce5ef;border-radius:.65rem;background:#f7f9fc}#{{ $selectorId }} .selector-odontograma-generico__fila{display:grid;grid-template-columns:repeat({{ $selectorCuatroFilas ? 8 : 16 }},minmax(42px,1fr));gap:.25rem;min-width:{{ $selectorCuatroFilas ? 360 : 740 }}px}#{{ $selectorId }} .selector-odontograma-generico__fila+ .selector-odontograma-generico__fila{margin-top:.65rem}#{{ $selectorId }} .selector-odontograma-generico__pieza{min-height:67px;padding:.2rem;border:1px solid #ccd7e3;border-radius:.5rem;background:#edf1f5;color:#8793a1;opacity:.45}#{{ $selectorId }} .selector-odontograma-generico__pieza img{display:block;width:27px;height:36px;object-fit:contain;margin:auto;filter:grayscale(1)}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-enabled{border-color:#73a5ff;background:#dbeafe;color:#174ea6;cursor:pointer;opacity:1}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-enabled img{filter:none}#{{ $selectorId }} .selector-odontograma-generico__pieza.is-selected{border-color:#7434a4;background:#a460d1;color:#fff;box-shadow:0 0 0 2px rgba(116,52,164,.14)}#{{ $selectorId }}.is-compacto .selector-odontograma-generico__pieza{min-height:58px}#{{ $selectorId }}.is-compacto .selector-odontograma-generico__pieza img{height:29px}
+</style>
+<style>
+    #{{ $selectorId }} .selector-odontograma-generico__pieza.is-in-budget{border-color:#22a06b;background:#dff5e8;color:#147a4b;box-shadow:inset 0 -5px 0 #22a06b,0 0 0 2px rgba(34,160,107,.16);opacity:1}
+    #{{ $selectorId }} .selector-odontograma-generico__pieza.is-in-budget img{filter:none}
+    #{{ $selectorId }} .selector-odontograma-generico__pieza.is-in-budget.is-selected{box-shadow:inset 0 -5px 0 #22a06b,0 0 0 2px rgba(116,52,164,.18)}
 </style>
 <script>
 if (typeof window.actualizarEstadosClinicosSelectorOdontograma !== 'function') {
@@ -167,11 +196,11 @@ if (typeof window.actualizarEstadosClinicosSelectorOdontograma !== 'function') {
 
             if (diagnostico.indexOf('carie') !== -1) estado = 'carie';
             if (tratamiento.indexOf('implante') !== -1) {
-                estado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
+                estado = (Number(registro.estado) !== 0 || estado === 'implante') ? 'implante' : 'ausente';
             }
-            if (tratamiento.indexOf('endodoncia') !== -1 ||
+            if (estado !== 'implante' && (tratamiento.indexOf('endodoncia') !== -1 ||
                 tratamiento.indexOf('pulpotomia') !== -1 ||
-                tratamiento.indexOf('pulpectomia') !== -1) {
+                tratamiento.indexOf('pulpectomia') !== -1)) {
                 estado = 'endodoncia';
             }
 

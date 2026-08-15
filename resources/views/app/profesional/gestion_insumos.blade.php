@@ -159,6 +159,15 @@
                 </div>
             </div>
             <!--Cierre: Header-->
+            @if(session('success'))
+                <div class="alert alert-success"><i class="feather icon-check-circle mr-2"></i>{{ session('success') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <strong>No fue posible guardar el insumo.</strong>
+                    <ul class="mb-0 mt-1">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+                </div>
+            @endif
             <div class="row mb-3">
                 <div class="col-sm-6 col-md-6 col-lg-3 col-xl mb-2">
                     <div class="card py-2 mb-0 card-acento acento-info">
@@ -166,8 +175,8 @@
                             <i class="feather icon-package f-24 text-info mr-3"></i>
                             <div>
                                 <h6 class="text-info mb-0 f-14">PRODUCTOS</h6>
-                                <h5 class="f-w-700 f-26 mb-0">1.245</h5>
-                                <p class="text-muted mb-0 f-12">Cantidad Total</p>
+                                <h5 class="f-w-700 f-26 mb-0">{{ number_format($resumen['stock_total'], 0, ',', '.') }}</h5>
+                                <p class="text-muted mb-0 f-12">{{ $resumen['productos'] }} productos activos</p>
                             </div>
                         </div>
                     </div>
@@ -178,7 +187,7 @@
                             <i class="feather icon-trending-down f-24 text-danger mr-3"></i>
                             <div>
                                 <h6 class="text-danger mb-0 f-14">BAJO STOCK</h6>
-                                <h5 class="f-w-700 f-26 mb-0">6</h5>
+                                <h5 class="f-w-700 f-26 mb-0">{{ $resumen['bajo_stock'] }}</h5>
                                 <p class="text-muted mb-0 f-12">Requieren compra</p>
                             </div>
                         </div>
@@ -190,7 +199,7 @@
                             <i class="feather icon-clock f-24 text-warning mr-3"></i>
                             <div>
                                 <h6 class="text-warning mb-0 f-14">POR VENCER</h6>
-                                <h5 class="f-w-700 f-26 mb-0">5</h5>
+                                <h5 class="f-w-700 f-26 mb-0">{{ $resumen['por_vencer'] }}</h5>
                                 <p class="text-muted mb-0 f-12">En stock</p>
                             </div>
                         </div>
@@ -202,7 +211,7 @@
                             <i class="feather icon-alert-triangle f-24 text-danger mr-3"></i>
                             <div>
                                 <h6 class="text-danger mb-0 f-14">VENCIDOS</h6>
-                                <h5 class="f-w-700 f-26 mb-0">1</h5>
+                                <h5 class="f-w-700 f-26 mb-0">{{ $resumen['vencidos'] }}</h5>
                                 <p class="text-muted mb-0 f-12">Dar de baja</p>
                             </div>
                         </div>
@@ -332,18 +341,17 @@
                                             <div class="col-sm-6 col-md mb-2 mb-md-0">
                                                 <select id="filtro_inv_categoria" class="form-control">
                                                     <option value="">Categoría: Todas</option>
-                                                    <option value="Material descartable">Material descartable</option>
-                                                    <option value="Anestésicos">Anestésicos</option>
-                                                    <option value="Restauración">Restauración</option>
-                                                    <option value="Instrumental">Instrumental</option>
+                                                    @foreach($categorias as $categoria)
+                                                        <option value="{{ $categoria->nombre }}">{{ $categoria->nombre }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-sm-6 col-md mb-2 mb-md-0">
                                                 <select id="filtro_inv_ubicacion" class="form-control">
                                                     <option value="">Ubicación: Todas</option>
-                                                    <option value="A1">A1</option>
-                                                    <option value="B2">B2</option>
-                                                    <option value="C3">C3</option>
+                                                    @foreach($ubicaciones as $ubicacion)
+                                                        <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-sm-6 col-md mb-2 mb-md-0">
@@ -540,6 +548,9 @@
                                                     </h5>
                                                 </div>
                                                 <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 text-md-right mt-2 mt-md-0 pr-0">
+                                                    <a href="{{ route('profesional.aranceles') }}" class="btn btn-outline-primary">
+                                                        <i class="feather icon-link"></i> Asociar a tratamientos
+                                                    </a>
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#nuevo_insumo">
                                                         <i class="feather icon-plus"></i> Agregar Insumo
                                                     </button>
@@ -559,18 +570,17 @@
                                             <div class="col-sm-6 col-md mb-2 mb-md-0">
                                                 <select id="filtro_prod_categoria" class="form-control">
                                                     <option value="">Categoría: Todas</option>
-                                                    <option value="Material descartable">Material descartable</option>
-                                                    <option value="Anestésicos">Anestésicos</option>
-                                                    <option value="Restauración">Restauración</option>
-                                                    <option value="Instrumental">Instrumental</option>
+                                                    @foreach($categorias as $categoria)
+                                                        <option value="{{ $categoria->nombre }}">{{ $categoria->nombre }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-sm-6 col-md mb-2 mb-md-0">
                                                 <select id="filtro_prod_ubicacion" class="form-control">
                                                     <option value="">Ubicación: Todas</option>
-                                                    <option value="A1">A1</option>
-                                                    <option value="B2">B2</option>
-                                                    <option value="C3">C3</option>
+                                                    @foreach($ubicaciones as $ubicacion)
+                                                        <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-sm-6 col-md-auto">
@@ -1548,7 +1558,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="form_insumo" method="POST" action="#">
+                <form id="form_insumo" method="POST" action="{{ route('profesional.gestion_insumos.guardar') }}">
                     @csrf
                     <input type="hidden" name="id" id="insumo_id">
                     <div class="modal-body">
@@ -1570,10 +1580,9 @@
                                     <label class="floating-label-activo-sm">Categoría <span class="text-danger">*</span></label>
                                     <select name="categoria" class="form-control form-control-sm" required>
                                         <option value="">Seleccionar</option>
-                                        <option value="descartable">Material descartable</option>
-                                        <option value="anestesicos">Anestésicos</option>
-                                        <option value="restauracion">Restauración</option>
-                                        <option value="instrumental">Instrumental</option>
+                                        @foreach($categorias as $categoria)
+                                            <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -1582,12 +1591,9 @@
                                     <label class="floating-label-activo-sm">Unidad de medida <span class="text-danger">*</span></label>
                                     <select name="unidad" class="form-control form-control-sm" required>
                                         <option value="">Seleccionar</option>
-                                        <option value="unidad">Unidad</option>
-                                        <option value="caja">Caja</option>
-                                        <option value="paquete">Paquete</option>
-                                        <option value="frasco">Frasco</option>
-                                        <option value="gramo">Gramo</option>
-                                        <option value="mililitro">Mililitro</option>
+                                        @foreach($unidades as $unidad)
+                                            <option value="{{ $unidad->id }}">{{ $unidad->nombre }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -1613,6 +1619,40 @@
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Stock mínimo</label>
                                     <input type="number" name="stock_minimo" class="form-control form-control-sm" min="0" placeholder="0">
+                                </div>
+                            </div>
+
+                            <div class="col-12"><hr class="mt-1 mb-3"></div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Disponible en Implantolog&iacute;a</label>
+                                    <select name="uso_implantologia" id="uso_implantologia" class="form-control form-control-sm">
+                                        <option value="0">No</option>
+                                        <option value="1">S&iacute;</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 campos-implantologia d-none">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Tipo de insumo implantol&oacute;gico</label>
+                                    <select name="tipo_insumo_implantologia" id="tipo_insumo_implantologia" class="form-control form-control-sm">
+                                        <option value="">Seleccionar</option>
+                                        <option value="1">Implante</option><option value="2">Instrumental quir&uacute;rgico/prot&eacute;sico</option>
+                                        <option value="3">Sutura y regeneraci&oacute;n</option><option value="4">Descartables y bioseguridad</option>
+                                        <option value="5">Injerto &oacute;seo</option><option value="6">Membrana</option>
+                                        <option value="7">Tornillo de fijaci&oacute;n</option><option value="8">Aditamento</option><option value="9">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 campos-implantologia campo-marca-implante d-none">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Marca del implante</label>
+                                    <select name="marca_implante" class="form-control form-control-sm">
+                                        <option value="">Seleccionar</option>
+                                        @foreach($marcasImplantesGestion as $marcaImplante)
+                                            <option value="{{ $marcaImplante->id }}">{{ $marcaImplante->descripcion }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
@@ -2223,6 +2263,63 @@ $(document).ready(function () {
         return '<span class="badge badge-' + (mapaColores[valor] || 'secondary') + '">' + (valor || '—') + '</span>';
     }
 
+    /* La vista se alimenta exclusivamente del catálogo persistido. Las filas que
+       pertenecían a la maqueta se eliminan antes de inicializar DataTables. */
+    var productosGestion = @json($insumos);
+    var productosPorId = {};
+    function escapar(valor) {
+        return $('<div>').text(valor === null || valor === undefined ? '' : valor).html();
+    }
+    function moneda(valor) {
+        return '$ ' + new Intl.NumberFormat('es-CL').format(Number(valor) || 0);
+    }
+    function atributosProducto(producto) {
+        var categoria = producto.tipo_producto ? producto.tipo_producto.nombre : '';
+        var unidad = producto.unidad_medida ? producto.unidad_medida.nombre : '';
+        var costo = Number(producto.precio_compra || producto.precio_unitario || 0);
+        var precio = Number(producto.precio_venta || 0);
+        var margen = costo > 0 ? (((precio - costo) / costo) * 100).toFixed(1).replace('.', ',') + '%' : '—';
+        return ' data-codigo="' + escapar(producto.codigo_interno) + '"' +
+            ' data-producto="' + escapar(producto.nombre) + '"' +
+            ' data-categoria="' + escapar(categoria) + '"' +
+            ' data-ubicacion="' + escapar(producto.ubicacion || '') + '"' +
+            ' data-unidad="' + escapar(unidad) + '"' +
+            ' data-stock="' + Number(producto.stock_actual || 0) + '"' +
+            ' data-stock-sistema="' + Number(producto.stock_actual || 0) + '"' +
+            ' data-stock-fisico="' + Number(producto.stock_actual || 0) + '"' +
+            ' data-diferencia="0" data-stock-seguridad="' + Number(producto.stock_seguridad || 0) + '"' +
+            ' data-stock-minimo="' + Number(producto.stock_minimo || 0) + '"' +
+            ' data-costo="' + moneda(costo) + '" data-valor-costo="' + moneda(costo * Number(producto.stock_actual || 0)) + '"' +
+            ' data-precio="' + moneda(precio) + '" data-valor-venta="' + moneda(precio * Number(producto.stock_actual || 0)) + '"' +
+            ' data-margen="' + margen + '" data-descripcion="' + escapar(producto.descripcion || '') + '"';
+    }
+
+    $('#tabla_inventario tbody, #tabla_insumos tbody, #tabla_movimientos tbody, #tabla_vencimientos tbody, #tabla_proveedores tbody').empty();
+    productosGestion.forEach(function (producto) {
+        productosPorId[producto.id] = producto;
+        var categoria = producto.tipo_producto ? producto.tipo_producto.nombre : 'Sin categoría';
+        var stock = Number(producto.stock_actual || 0);
+        var minimo = Number(producto.stock_minimo || 0);
+        var seguridad = Number(producto.stock_seguridad || 0);
+        var nivel = stock <= seguridad ? 'Crítico' : (stock <= minimo ? 'Bajo' : 'Óptimo');
+        var claseNivel = nivel === 'Crítico' ? 'danger' : (nivel === 'Bajo' ? 'warning' : 'success');
+        var attrs = atributosProducto(producto) + ' data-nivel="' + nivel + '"';
+        var accionesGestion = producto.id_profesional
+            ? '<button type="button" class="btn btn-icon btn-warning btn-editar-insumo" data-toggle="modal" data-target="#nuevo_insumo" data-mode="editar" data-id="' + producto.id + '"><i class="feather icon-edit"></i></button> ' +
+              '<button type="button" class="btn btn-icon btn-danger btn-eliminar-insumo" data-id="' + producto.id + '"><i class="feather icon-x"></i></button>'
+            : '<span class="badge badge-info">Catálogo base</span>';
+        $('#tabla_inventario tbody').append('<tr><td>' + escapar(producto.codigo_interno) + '</td><td>' + escapar(producto.nombre) +
+            '</td><td>' + escapar(categoria) + '</td><td>' + escapar(producto.ubicacion || '—') + '</td><td>' + stock +
+            '</td><td>' + stock + '</td><td>0</td><td>' + moneda(Number(producto.precio_compra || producto.precio_unitario || 0) * stock) +
+            '</td><td><span class="badge badge-' + claseNivel + '">' + nivel + '</span></td><td>' +
+            '<button type="button" class="btn btn-icon btn-primary" data-toggle="modal" data-target="#detalle_inventario"' + attrs + '><i class="feather icon-eye"></i></button></td></tr>');
+        $('#tabla_insumos tbody').append('<tr><td>' + escapar(producto.codigo_interno) + '</td><td>' + escapar(producto.nombre) +
+            '</td><td>' + escapar(categoria) + '</td><td>' + escapar(producto.ubicacion || '—') + '</td><td>' + stock +
+            '</td><td>' + moneda(producto.precio_venta) + '</td><td>' +
+            '<button type="button" class="btn btn-icon btn-primary" data-toggle="modal" data-target="#detalle_producto"' + attrs + '><i class="feather icon-eye"></i></button> ' +
+            accionesGestion + '</td></tr>');
+    });
+
     /* ── Inventario ── */
     var tablaInv = $('#tabla_inventario').DataTable({
         responsive: true, dom: 'lrtip', pageLength: 10,
@@ -2395,6 +2492,58 @@ $(document).ready(function () {
         $('#form_insumo')[0].reset();
         $('#insumo_margen').val('—');
         $('#insumo_titulo').text(esEdicion ? 'Editar Insumo' : 'Agregar Insumo');
+        $('#insumo_id').val('');
+        if (esEdicion) {
+            var producto = productosPorId[$(e.relatedTarget).data('id')];
+            if (!producto) return;
+            $('#insumo_id').val(producto.id);
+            $('#form_insumo [name="codigo"]').val(producto.codigo_interno);
+            $('#form_insumo [name="nombre"]').val(producto.nombre);
+            $('#form_insumo [name="categoria"]').val(producto.id_tipo_producto);
+            $('#form_insumo [name="unidad"]').val(producto.id_unidad_medida);
+            $('#form_insumo [name="ubicacion"]').val(producto.ubicacion);
+            $('#form_insumo [name="stock_inicial"]').val(producto.stock_actual);
+            $('#form_insumo [name="stock_seguridad"]').val(producto.stock_seguridad);
+            $('#form_insumo [name="stock_minimo"]').val(producto.stock_minimo);
+            $('#form_insumo [name="precio_venta"]').val(producto.precio_venta);
+            $('#form_insumo [name="descripcion"]').val(producto.descripcion);
+            $('#uso_implantologia').val(producto.es_implante ? '1' : '0');
+            $('#tipo_insumo_implantologia').val(producto.id_tipo_insumo_implantologia || '');
+            $('#form_insumo [name="marca_implante"]').val(producto.id_marca_implante || '');
+        }
+        actualizarCamposImplantologia();
+    });
+
+    function actualizarCamposImplantologia() {
+        var activo = $('#uso_implantologia').val() === '1';
+        var esImplante = activo && $('#tipo_insumo_implantologia').val() === '1';
+        $('.campos-implantologia').toggleClass('d-none', !activo);
+        $('.campo-marca-implante').toggleClass('d-none', !esImplante);
+        $('#tipo_insumo_implantologia').prop('required', activo);
+        $('#form_insumo [name="marca_implante"]').prop('required', esImplante);
+    }
+    $('#uso_implantologia, #tipo_insumo_implantologia').on('change', actualizarCamposImplantologia);
+
+    $(document).on('click', '.btn-eliminar-insumo', function () {
+        var id = $(this).data('id');
+        swal({
+            title: 'Eliminar insumo',
+            text: 'Solo se podrá eliminar si todavía no está asociado a un tratamiento.',
+            icon: 'warning', buttons: ['Cancelar', 'Eliminar'], dangerMode: true
+        }).then(function (confirmado) {
+            if (!confirmado) return;
+            $.ajax({
+                url: '{{ url('/profesional/gestion_insumos') }}/' + id,
+                type: 'DELETE',
+                data: { _token: '{{ csrf_token() }}' },
+                success: function (resp) {
+                    swal('Correcto', resp.mensaje, 'success').then(function () { window.location.reload(); });
+                },
+                error: function (xhr) {
+                    swal('No fue posible eliminar', (xhr.responseJSON && xhr.responseJSON.mensaje) || 'Revise la asociación del insumo.', 'error');
+                }
+            });
+        });
     });
 
     /* Margen = (precio venta - costo promedio) / costo promedio */

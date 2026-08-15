@@ -401,6 +401,13 @@
                                                         $('.estado-pago-presupuesto-hora').toggleClass('d-none', !pagoPresupuesto);
                                                         if (pagoPresupuesto) {
                                                             const formato = valor => '$' + Number(valor || 0).toLocaleString('es-CL');
+                                                            const descuento = pagoPresupuesto.descuento;
+                                                            let avisoDescuento = '';
+                                                            if (descuento) {
+                                                                avisoDescuento = descuento.aplicado
+                                                                    ? `<div class="mt-2"><strong>Descuento aplicado:</strong> ${descuento.nombre} (${descuento.porcentaje}%). El total y el saldo ya corresponden al valor con descuento.</div>`
+                                                                    : `<div class="mt-2"><strong>Descuento disponible:</strong> ${descuento.nombre} (${descuento.porcentaje}%). <button type="button" class="btn btn-sm btn-success ml-1" onclick="aplicarConvenioAgendaDental()">Aplicar al presupuesto</button></div>`;
+                                                            }
                                                             $('.estado-pago-presupuesto-hora')
                                                                 .toggleClass('alert-success', presupuestoPagado)
                                                                 .toggleClass('alert-warning', !presupuestoPagado)
@@ -409,7 +416,8 @@
                                                                 .attr('data-pagado-presupuesto', presupuestoPagado ? '1' : '0')
                                                                 .html(presupuestoPagado
                                                                     ? `<strong>Presupuesto N° ${pagoPresupuesto.id} pagado.</strong> Saldo $0. Esta atención se recepcionará sin realizar un nuevo cobro.`
-                                                                    : `<strong>Presupuesto N° ${pagoPresupuesto.id} pendiente de pago.</strong> Abonado ${formato(pagoPresupuesto.abonado)} de ${formato(pagoPresupuesto.total)}. Saldo ${formato(pagoPresupuesto.saldo)}. Ingrese un abono para recepcionar e iniciar el tratamiento.`);
+                                                                    : `<strong>Presupuesto N° ${pagoPresupuesto.id} pendiente de pago.</strong> Abonado ${formato(pagoPresupuesto.abonado)} de ${formato(pagoPresupuesto.total)}. Saldo ${formato(pagoPresupuesto.saldo)}. Ingrese un abono para recepcionar e iniciar el tratamiento.` + avisoDescuento)
+                                                                .data('pago-presupuesto', pagoPresupuesto);
                                                             $('#bono_valor_consulta').val(pagoPresupuesto.total);
                                                             $('#bono_valor_abono_consulta').val(presupuestoPagado ? 0 : '');
                                                             $('#bono_valor_saldo_consulta').val(pagoPresupuesto.saldo);
@@ -818,6 +826,52 @@
         // Función para actualizar el input de valor total
         let solicitudTratamientosAgendaDental = null;
 
+        function aplicarConvenioAgendaDental() {
+            const $aviso = $('.estado-pago-presupuesto-hora');
+            const pagoPresupuesto = $aviso.data('pago-presupuesto');
+            if (!pagoPresupuesto || !pagoPresupuesto.descuento || pagoPresupuesto.descuento.aplicado) return;
+
+            const $boton = $aviso.find('button').prop('disabled', true).text('Aplicando...');
+            $.ajax({
+                type: 'post',
+                url: "{{ ROUTE('profesional.aplicar_convenio_tratamiento') }}",
+                data: {
+                    id: pagoPresupuesto.descuento.id,
+                    id_presupuesto: pagoPresupuesto.id,
+                    id_paciente: pagoPresupuesto.id_paciente,
+                    id_ficha_atencion: pagoPresupuesto.id_ficha_atencion,
+                    id_lugar_atencion: pagoPresupuesto.id_lugar_atencion,
+                    _token: CSRF_TOKEN
+                },
+                success: function(resp) {
+                    const total = Number(resp.total_con_descuento || 0);
+                    const abonado = Number(resp.total_abonado || 0);
+                    const saldo = Number(resp.saldo_pendiente || 0);
+                    pagoPresupuesto.total = total;
+                    pagoPresupuesto.abonado = abonado;
+                    pagoPresupuesto.saldo = saldo;
+                    pagoPresupuesto.pagado = total > 0 && saldo <= 0;
+                    pagoPresupuesto.descuento.aplicado = true;
+                    $aviso.data('pago-presupuesto', pagoPresupuesto)
+                        .attr('data-saldo-presupuesto', saldo)
+                        .attr('data-pagado-presupuesto', pagoPresupuesto.pagado ? '1' : '0')
+                        .removeClass('alert-warning alert-danger').addClass(pagoPresupuesto.pagado ? 'alert-success' : 'alert-warning')
+                        .html(`<strong>Descuento aplicado:</strong> ${pagoPresupuesto.descuento.nombre} (${pagoPresupuesto.descuento.porcentaje}%). Total con descuento $${total.toLocaleString('es-CL')}; abonado $${abonado.toLocaleString('es-CL')}; saldo $${saldo.toLocaleString('es-CL')}.`);
+                    $('#bono_valor_consulta').val(total);
+                    $('#bono_valor_saldo_consulta').val(saldo);
+                    $('#bono_valor_abono_consulta').val(pagoPresupuesto.pagado ? 0 : '');
+                },
+                error: function(xhr) {
+                    $boton.prop('disabled', false).text('Aplicar al presupuesto');
+                    swal({
+                        icon: 'error',
+                        title: 'No fue posible aplicar el descuento',
+                        text: (xhr.responseJSON && xhr.responseJSON.message) || 'Revise el convenio e intente nuevamente.'
+                    });
+                }
+            });
+        }
+
         function updateTotalValue() {
             const selectedOption = $('#presupuesto_numero option:selected'); // Obtener la opción seleccionada
             let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
@@ -862,7 +916,7 @@
                     $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
+                        if(Number(t.presupuesto) === 1 && Number(t.urgencia || 0) === 0 && Number(t.progreso || 0) < 100){
                         const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
 
@@ -875,7 +929,7 @@
                     });
                     cargarOdontogramaAgenda(tratamientos);
                     todos.forEach(t => {
-                        if(t.presupuesto == 1){
+                        if(Number(t.presupuesto) === 1 && Number(t.urgencia || 0) === 0){
                         var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
 
@@ -922,11 +976,12 @@
             const $selector = $('#selector_odontograma_agenda');
             const disponibles = new Map();
             (tratamientos || []).forEach(function(tratamiento) {
-                if (Number(tratamiento.presupuesto) === 1 && Number(tratamiento.atendido) !== 1 && tratamiento.pieza) {
+                if (Number(tratamiento.presupuesto) === 1 && Number(tratamiento.urgencia || 0) === 0 && Number(tratamiento.progreso || 0) < 100 && Number(tratamiento.atendido) !== 1 && tratamiento.pieza) {
                     const pieza = String(tratamiento.pieza);
-                    const actual = disponibles.get(pieza) || { tratamiento: '', bloques: 0 };
+                    const actual = disponibles.get(pieza) || { tratamiento: '', bloques: 0, progreso: 0 };
                     actual.tratamiento = tratamiento.tratamiento || actual.tratamiento || 'Procedimiento dental';
                     actual.bloques += parseInt(tratamiento.cantidad_bloques) || 1;
+                    actual.progreso = Math.max(actual.progreso, Number(tratamiento.progreso || 0));
                     disponibles.set(pieza, actual);
                 }
             });
@@ -939,6 +994,7 @@
                     .prop('disabled', false)
                     .addClass('is-enabled')
                     .attr('data-bloques-agenda', datos.bloques)
+                    .attr('data-progreso-agenda', datos.progreso)
                     .attr('title', datos.tratamiento + ' · ' + datos.bloques + (datos.bloques === 1 ? ' bloque' : ' bloques'));
             });
             $('#selector_odontograma_agenda_wrapper').show();

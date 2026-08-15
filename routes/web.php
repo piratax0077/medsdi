@@ -245,6 +245,7 @@ Route::group([
     Route::post('/getDiagnosticoDental', [DentalController::class, 'getDiagnosticoDental'])->name('dental.getDiagnosticoDental');
     Route::post('/getDiagnosticoDentalUrg', [DentalController::class, 'getDiagnosticoDentalUrg'])->name('dental.getDiagnosticoDentalUrg');
     Route::post('/guardarCambiosTratamientoUrgencia', [DentalController::class, 'guardarCambiosTratamientoUrgencia'])->name('dental.guardarCambiosTratamientoUrgencia');
+    Route::post('/guardar-caras-tratamiento-urgencia', [DentalController::class, 'guardarCarasTratamientoUrgencia'])->name('dental.guardar_caras_tratamiento_urgencia');
     Route::post('/guardar-caras-pediatrico', [DentalController::class, 'guardarCarasPediatrico'])->name('dental.guardar_caras_pediatrico');
     Route::post('/obtener-plan-pediatrico', [DentalController::class, 'obtenerPlanPediatrico'])->name('dental.obtener_plan_pediatrico');
     Route::post('/getTratamientoImpl',[DentalController::class, 'getTratamientoImplantologia'])->name('dental.getTratamientoImplantologia');
@@ -667,7 +668,7 @@ Route::group([
     Route::get('Administracion/Laboratorios', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_laboratorio'])->name('profesional.adm_dental.lab');
     Route::get('Administracion/Personal', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_personal'])->name('profesional.adm_dental.personal');
     Route::get('Administracion/Proveedores', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_proveedores'])->name('profesional.adm_dental.proveedores');
-    Route::get('Administracion/Aranceles', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_misaranceles'])->name('profesional.adm_dental.misaranceles');
+    Route::get('Administracion/Aranceles', [App\Http\Controllers\EscritorioProfesional::class, 'aranceles'])->name('profesional.adm_dental.misaranceles');
 
     Route::get('/aranceles', [App\Http\Controllers\EscritorioProfesional::class, 'aranceles'])->name('profesional.aranceles');
 
@@ -731,6 +732,7 @@ Route::group([
     Route::post('/eliminar_tratamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tratamiento_dental'])->name('profesional.eliminar_tratamiento_dental');
     Route::post('/actualizar_tratamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'actualizar_tratamiento_dental'])->name('profesional.actualizar_tratamiento_dental');
     Route::post('/generar_pdf_presupuesto',[App\Http\Controllers\EscritorioProfesional::class, 'generar_pdf_presupuesto'])->name('profesional.generar_pdf_presupuesto_dental');
+    Route::post('/enviar_presupuesto_dental_email',[App\Http\Controllers\EscritorioProfesional::class, 'enviar_presupuesto_dental_email'])->name('profesional.enviar_presupuesto_dental_email');
     Route::post('/generar_pdf_presupuesto_hist',[App\Http\Controllers\EscritorioProfesional::class, 'generar_pdf_presupuesto_hist'])->name('profesional.generar_pdf_presupuesto_dental_hist');
     Route::post('/registrar_presupuesto_dental',[App\Http\Controllers\EscritorioProfesional::class, 'registrar_presupuesto_dental'])->name('profesional.registrar_presupuesto_dental');
 
@@ -3279,6 +3281,8 @@ Route::get('/profesional/tons',[App\Http\Controllers\EscritorioProfesional::clas
 Route::get('/profesional/mantencion_equipo',[App\Http\Controllers\EscritorioProfesional::class, 'mantencion_equipo'])->name('profesional.mantencion_equipo');
 Route::get('/profesional/equipamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'equipamiento_dental'])->name('profesional.equipamiento_dental');
 Route::get('/profesional/gestion_insumos',[App\Http\Controllers\EscritorioProfesional::class, 'gestion_insumos'])->name('profesional.gestion_insumos');
+Route::post('/profesional/gestion_insumos',[App\Http\Controllers\EscritorioProfesional::class, 'guardarInsumoGestion'])->name('profesional.gestion_insumos.guardar');
+Route::delete('/profesional/gestion_insumos/{producto}',[App\Http\Controllers\EscritorioProfesional::class, 'eliminarInsumoGestion'])->name('profesional.gestion_insumos.eliminar');
 Route::get('/profesional/aranceles/{arancel}/insumos',[App\Http\Controllers\EscritorioProfesional::class, 'insumosArancel'])->name('profesional.aranceles.insumos');
 Route::post('/profesional/aranceles/{arancel}/insumos',[App\Http\Controllers\EscritorioProfesional::class, 'guardarInsumosArancel'])->name('profesional.aranceles.insumos.guardar');
 Route::get('/profesional/aranceles/insumos/por-tratamiento',[App\Http\Controllers\EscritorioProfesional::class, 'insumosPorTratamiento'])->name('profesional.aranceles.insumos.tratamiento');

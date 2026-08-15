@@ -1025,6 +1025,12 @@
                                 text: resp.mensaje
                             });
                             let odontograma = resp.odontograma_paciente;
+                            const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
+                            odontograma = (odontograma || []).filter(function (pieza) {
+                                return Number(pieza.presupuesto) === 1
+                                    && Number(pieza.urgencia) === 0
+                                    && (!idPresupuestoActual || Number(pieza.id_presupuesto) === idPresupuestoActual);
+                            });
                             odontograma_global = odontograma;
                             let table_odonto = $('#table_odontograma').DataTable();
 

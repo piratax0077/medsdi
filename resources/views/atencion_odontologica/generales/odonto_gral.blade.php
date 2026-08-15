@@ -1273,16 +1273,35 @@
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>
-                                                                                        @foreach ($insumos_tratamientos as $t)
-                                                                                        @if($t->urgencia == 0)
-                                                                                            @php $total = $t->cantidad * $t->valor @endphp
+                                                                                        @php
+                                                                                            $insumosAgrupados = collect($insumos_tratamientos)
+                                                                                                ->where('urgencia', 0)
+                                                                                                ->groupBy(fn ($t) => implode('|', [
+                                                                                                    mb_strtoupper(trim((string) $t->insumos)),
+                                                                                                    mb_strtoupper(trim((string) $t->nombre_marca)),
+                                                                                                    trim((string) $t->observaciones),
+                                                                                                    (string) $t->valor,
+                                                                                                    (string) $t->presupuesto,
+                                                                                                    (string) $t->tipo,
+                                                                                                ]));
+                                                                                        @endphp
+                                                                                        @foreach ($insumosAgrupados as $grupoInsumo)
+                                                                                            @php
+                                                                                                $t = $grupoInsumo->first();
+                                                                                                $cantidadAgrupada = $grupoInsumo->sum('cantidad');
+                                                                                                $total = $cantidadAgrupada * $t->valor;
+                                                                                                $esPackAgrupado = $grupoInsumo->count() > 1 && $grupoInsumo->every(fn ($item) => $item->tipo === 'pack_automatico');
+                                                                                            @endphp
                                                                                             <tr>
                                                                                                 <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
                                                                                                 <td>{{ $t->observaciones }}</td>
-                                                                                                <td>{{ $t->cantidad }}</td>
+                                                                                                <td>{{ $cantidadAgrupada }}</td>
                                                                                                 <td>{{ number_format($t->valor)  }}</td>
                                                                                                 <td>{{ number_format($total)  }}</td>
                                                                                                 <td>
+                                                                                                    @if($esPackAgrupado)
+                                                                                                        <span class="badge badge-info">Automático · {{ $grupoInsumo->count() }} tratamientos</span>
+                                                                                                    @else
                                                                                                     @if($t->presupuesto == 0 || $t->presupuesto == null)
                                                                                                     <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-shopping-cart"></i></button>
                                                                                                     @else
@@ -1290,9 +1309,9 @@
                                                                                                     @endif
                                                                                                     <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo({{ $t->id }})"><i class="feather icon-edit"></i></button>
                                                                                                     <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
+                                                                                                    @endif
                                                                                                 </td>
                                                                                             </tr>
-                                                                                        @endif
                                                                                         @endforeach
                                                                                     </tbody>
                                                                                 </table>

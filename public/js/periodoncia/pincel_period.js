@@ -22,8 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const camadaPincel = document.querySelector('#camadaPincel')
+    // Esta biblioteca también se carga en variantes de la ficha que no
+    // renderizan el lienzo periodontal. En ese caso no debe inicializarse.
+    if (!camadaPincel) return
     const contexto = camadaPincel.getContext('2d')
     const saveBtn = document.getElementById("saveBtn");
+    if (!contexto || !saveBtn) return
 
     const desenhaLinha = (linha) => {
         contexto.lineWidth = pincel.espessura

@@ -1,21 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const camada1 = document.querySelector('#camada1Odontograma')
+    const camada2 = document.querySelector('#camada2Odontograma')
+    const camada3 = document.querySelector('#camada3Odontograma')
+    const camada4 = document.querySelector('#camada4Odontograma')
+    const camadaPincel = document.querySelector('#camadaPincel')
+    const modalElemento = document.getElementById('modal')
+
+    // Algunas vistas de Periodoncia usan el selector odontograma moderno y
+    // no incluyen estos canvas heredados. Evita detener el resto de la ficha.
+    if (!camada1 || !camada2 || !camada3 || !camada4 || !camadaPincel || !modalElemento) return
+
     const contexto1 = camada1.getContext('2d');
 
-    const camada2 = document.querySelector('#camada2Odontograma')
     const contexto2 = camada2.getContext('2d')
 
-    const camada3 = document.querySelector('#camada3Odontograma')
     const contexto3 = camada3.getContext('2d')
 
-    const camada4 = document.querySelector('#camada4Odontograma')
     const contexto4 = camada4.getContext('2d')
 
-    const camadaPincel = document.querySelector('#camadaPincel')
     const contextoPincel = camadaPincel.getContext('2d')
 
-    const modal = new bootstrap.Modal(document.getElementById('modal'))
+    const modal = new bootstrap.Modal(modalElemento)
 
     let posicoesPadrao = {
         posicaoYInicialDente: 180,

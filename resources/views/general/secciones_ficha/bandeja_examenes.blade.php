@@ -153,7 +153,6 @@
                                                 @foreach ($reg_exam_rayo as $result_rayo )
                                                     @if ($result_rayo->revisado == 0)
                                                         <tr>
-                                                            <td class="d-none">{{ $result_rayo->id }}</td>
                                                             <td>{{ date('d-m-Y',strtotime($result_rayo->created_at)) }}</td>
                                                             {{--  <td>{{ $result_rayo->id }}</td>  --}}
 

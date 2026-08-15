@@ -590,7 +590,7 @@
                                 </div>
                                 <!--PLANIFICACION TRATAMIENTO-->
                                 <div class="tab-pane fade show" id="plan_tto_impl" role="tabpanel" aria-labelledby="plan_tto_impl_tab">
-                                    <div class="form-row mt-3">
+                                    <div class="form-row mt-3 d-none" aria-hidden="true">
                                         <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                             <div class="card-informacion">
@@ -667,11 +667,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 col-xxl-9">
+                                                    <div class="row preimplante-plan-fila">
+                                                        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-8 col-xxl-8 preimplante-plan-odontograma">
                                                             @include('atencion_odontologica.generales.odontograma_adulto_grupos_implantologia')
                                                         </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3 col-xxl-3 mt-2">
+                                                        <div class="col-sm-12 col-md-12 col-lg-5 col-xl-4 col-xxl-4 mt-2 preimplante-plan-controles">
                                                             <div class="form-row">
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                     <div class="form-group">
@@ -795,7 +795,7 @@
                                         <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
 
                                          <!--TABLA INSUMOS-->
-                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 preimplante-plan-insumos">
                                             <div class="card-informacion">
                                                 <div class="card-top">
                                                     <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
@@ -853,6 +853,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                <style>
+                                    .preimplante-plan-controles .preimplante-plan-insumos {
+                                        width: 100%;
+                                        max-width: 100%;
+                                        padding: 0;
+                                        margin-top: .75rem;
+                                    }
+                                    .preimplante-plan-controles .preimplante-plan-insumos .card-informacion { margin-bottom: 0; }
+                                    .preimplante-plan-odontograma { min-width: 0; }
+                                    @media (max-width: 991.98px) {
+                                        .preimplante-plan-controles { margin-top: 1rem !important; }
+                                    }
+                                </style>
+                                <script>
+                                    $(function () {
+                                        var $destino = $('.preimplante-plan-controles');
+                                        var $insumos = $('.preimplante-plan-insumos');
+                                        if ($destino.length && $insumos.length && !$insumos.parent().is($destino)) {
+                                            $insumos.appendTo($destino);
+                                        }
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>

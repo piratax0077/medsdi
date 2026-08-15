@@ -242,6 +242,12 @@
         return (int) ($pieza->presupuesto ?? 0) === 1
             && (int) ($pieza->urgencia ?? 0) === 0;
     });
+    if (data_get($presupuesto ?? null, 'id')) {
+        $piezasPresupuestadasEstado = $piezasPresupuestadasEstado->where(
+            'id_presupuesto',
+            (int) data_get($presupuesto, 'id')
+        );
+    }
     $presupuestoPagadoEstado = (bool) data_get($presupuesto ?? null, 'pago_completado', false);
     $todasLasPiezasFinalizadas = $piezasPresupuestadasEstado->isNotEmpty()
         && $piezasPresupuestadasEstado->every(function ($pieza) {
@@ -407,7 +413,7 @@
                     <div class="dental-treatment-flow__heading">
                         <div>
                             <span class="dental-treatment-flow__eyebrow">Odontolog&iacute;a general</span>
-                            <h5>Plan de tratamiento</h5>
+                            <h5>Tratamiento</h5>
                             <p>Eval&uacute;e, seleccione las piezas y prepare el presupuesto del paciente.</p>
                         </div>
                         <span class="dental-treatment-flow__status" id="estado_cabecera_plan_dental"
@@ -441,7 +447,7 @@
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab"
                             onclick="refrescar_caras_grupos(); refrescar_resaltado_presupuesto_plan_general();"
                             href="#evaluacion_general" role="tab" aria-controls="evaluacion_general"
-                            aria-selected="false">Plan de tratamiento</a>
+                            aria-selected="false">Tratamiento</a>
                     </li>
 
 
@@ -517,7 +523,7 @@
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                             <!--ODONTOLOGIA URGENCIA-->
                             @if($mostrarUrgenciaOdonto)
-                                @include('atencion_odontologica.generales.control_urgencias')
+                                @include('atencion_odontologica.generales.control_urgencias', ['habilitarTratamientoUrgencia' => true])
                             @endif
                             @if($mostrarExamenOdontoGeneral)
                                 @include('atencion_odontologica.generales.odonto_gral', ['ocultarExamenPorPieza' => true])
@@ -1253,8 +1259,10 @@
                                     #evaluacion_general .dental-group-tabs .nav-item { min-width: 125px; }
                                 }
                             </style>
+                            @php $esPacienteAdultoPlanGeneral = (bool) ($es_paciente_adulto ?? ($paciente->es_adulto ?? true)); @endphp
                             <div class="row">
                                 <div class="col-md-12">
+                                    @if ($esPacienteAdultoPlanGeneral)
                                     <div class="dental-piece-planner">
                                         <div class="dental-piece-planner__header">
                                             <div>
@@ -1342,6 +1350,9 @@
                                             <input type="hidden" id="pieza_plan_tratamiento_general" value="0">
                                         </div>
                                     </div>
+                                    @else
+                                        <input type="hidden" id="pieza_plan_tratamiento_general" value="0">
+                                    @endif
                                     <div class="modal fade modal-plan-pieza" id="modal_pieza_plan_tratamiento" tabindex="-1" role="dialog"
                                         aria-labelledby="titulo_modal_pieza_plan_tratamiento" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1392,6 +1403,7 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <ul class="nav nav-tabs-aten nav-fill mb-10 dentition-selector"
                                                             id="gral_od_adulto" role="tablist">
+                                                            @if ($esPacienteAdultoPlanGeneral)
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset active"
                                                                     id="eval_adults_tab" data-toggle="tab"
@@ -1399,13 +1411,15 @@
                                                                     aria-controls="eval_adults"
                                                                     aria-selected="true">Adulto</a>
                                                             </li>
+                                                            @else
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset"
+                                                                <a class="nav-link-aten text-reset active"
                                                                     id="eval_infts_tab" data-toggle="tab"
                                                                     href="#eval_infts" role="tab"
                                                                     aria-controls="eval_infts"
-                                                                    aria-selected="false">Evaluación Infantil</a>
+                                                                    aria-selected="true">Evaluación Infantil</a>
                                                             </li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -1413,17 +1427,33 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <div class="tab-content" id="gral_od_adulto">
                                                             <!-ADULTO-->
+                                                                @if ($esPacienteAdultoPlanGeneral)
                                                                 <div class="tab-pane fade active show "
                                                                     id="eval_adults" role="tabpanel"
                                                                     aria-labelledby="eval_adults_tab">
                                                                     @include('atencion_odontologica.generales.evaluacion_adulto')
                                                                 </div>
+                                                                @else
                                                                 <!-NIÑOS-->
-                                                                    <div class="tab-pane fade" id="eval_infts"
+                                                                    <div class="tab-pane fade active show" id="eval_infts"
                                                                         role="tabpanel"
                                                                         aria-labelledby="eval_infts_tab">
+                                                                            <div class="mb-3">
+                                                                                @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                                                    'id' => 'selector_plan_tratamiento_general_infantil',
+                                                                                    'inputId' => 'pieza_plan_tratamiento_general',
+                                                                                    'modo' => 'planificacion',
+                                                                                    'multiple' => false,
+                                                                                    'compacto' => true,
+                                                                                    'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                                                    'piezasPresupuesto' => collect($odontograma ?? [])->where('presupuesto', 1),
+                                                                                    'titulo' => 'Seleccione una pieza para agregar al plan',
+                                                                                    'ayuda' => 'Presione una pieza temporal para ingresar su diagnóstico y tratamiento.',
+                                                                                ])
+                                                                            </div>
                                                                             @include('atencion_odontologica.generales.caras_cuadrantes')
                                                                     </div>
+                                                                @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1610,7 +1640,8 @@
                 return Number(item.id) === idTratamiento;
             });
             const estado = Number($fila.attr('data-clinical-state') || (tratamiento ? tratamiento.estado : 0));
-            const progreso = Number($fila.attr('data-progress') || (tratamiento ? tratamiento.progreso : 0) || (estado === 1 ? 100 : 25));
+            const progresoDato = $fila.attr('data-progress') !== undefined ? $fila.attr('data-progress') : (tratamiento ? tratamiento.progreso : null);
+            const progreso = progresoDato !== null && progresoDato !== undefined && progresoDato !== '' ? Number(progresoDato) : (estado === 1 ? 100 : 0);
             const archivoPieza = numeroPieza.replace('.', '');
 
             $celdas.eq(3).html(
@@ -1625,7 +1656,8 @@
                     '<span class="dental-progress-wheel-value">' + progreso + '%</span>' +
                     '<select class="dental-piece-progress" aria-label="Progreso del tratamiento" data-original-progress="' + progreso + '" ' +
                         'onchange="actualizarProgresoPiezaPlan(this,' + idTratamiento + ')">' +
-                        '<option value="25" ' + (progreso === 25 ? 'selected' : '') + '>25%</option>' +
+                    '<option value="0" ' + (progreso === 0 ? 'selected' : '') + '>0%</option>' +
+                    '<option value="25" ' + (progreso === 25 ? 'selected' : '') + '>25%</option>' +
                         '<option value="50" ' + (progreso === 50 ? 'selected' : '') + '>50%</option>' +
                         '<option value="75" ' + (progreso === 75 ? 'selected' : '') + '>75%</option>' +
                         '<option value="100" ' + (progreso === 100 ? 'selected' : '') + '>100%</option>' +
@@ -1685,6 +1717,18 @@
 
         $('#numero_pieza_plan_tratamiento').text(pieza);
         actualizarVisualModalPlanPieza('#modal_pieza_plan_tratamiento', pieza, false);
+        $('#diagnostico_pieza_plan_tratamiento').val('0');
+        $('#tratamiento_pieza_plan_tratamiento').val('');
+        $('#modal_pieza_plan_tratamiento').modal('show');
+    });
+
+    $(document).on('odontograma:change', '#selector_plan_tratamiento_general_infantil', function (event, piezas) {
+        const pieza = Array.isArray(piezas) ? piezas[0] : null;
+        if (!pieza) return;
+
+        $('#pieza_plan_tratamiento_general').val(pieza);
+        $('#numero_pieza_plan_tratamiento').text(pieza);
+        actualizarVisualModalPlanPieza('#modal_pieza_plan_tratamiento', pieza, true);
         $('#diagnostico_pieza_plan_tratamiento').val('0');
         $('#tratamiento_pieza_plan_tratamiento').val('');
         $('#modal_pieza_plan_tratamiento').modal('show');
@@ -6507,6 +6551,9 @@ setTimeout(function(){
                     console.log(resp);
                     if (resp.status == 1) {
                         const presupuestoActualizado = resp.presupuesto || {};
+                        if (presupuestoActualizado.id) {
+                            $('#id_presupuesto').val(presupuestoActualizado.id);
+                        }
                         const presupuestoCompletado = resp.presupuesto_completado !== undefined
                             ? Boolean(resp.presupuesto_completado)
                             : Boolean(presupuestoActualizado.pago_completado);
@@ -6533,9 +6580,65 @@ setTimeout(function(){
                         });
                         let odontograma = resp.odontograma_paciente;
                         odontograma_global = resp.odontograma_paciente;
+                        const tableInsumosOdontoGeneral = $('#table_insumos_odon_gral').DataTable();
+                        tableInsumosOdontoGeneral.clear();
+                        const insumosAgrupados = new Map();
+                        (resp.insumos || []).forEach(function (insumo) {
+                            if (Number(insumo.urgencia) !== 0) return;
+                            const clave = [
+                                String(insumo.insumos || '').trim().toUpperCase(),
+                                String(insumo.nombre_marca || '').trim().toUpperCase(),
+                                String(insumo.observaciones || '').trim(),
+                                Number(insumo.valor) || 0,
+                                Number(insumo.presupuesto) || 0,
+                                String(insumo.tipo || '')
+                            ].join('|');
+                            if (!insumosAgrupados.has(clave)) {
+                                insumosAgrupados.set(clave, Object.assign({}, insumo, {
+                                    cantidad_agrupada: 0,
+                                    registros_agrupados: 0,
+                                    todos_pack_automatico: true
+                                }));
+                            }
+                            const grupo = insumosAgrupados.get(clave);
+                            grupo.cantidad_agrupada += Number(insumo.cantidad) || 0;
+                            grupo.registros_agrupados += 1;
+                            grupo.todos_pack_automatico = grupo.todos_pack_automatico && insumo.tipo === 'pack_automatico';
+                        });
+                        insumosAgrupados.forEach(function (insumo) {
+                            const nombre = $('<div>').text(((insumo.insumos || '') + ' ' + (insumo.nombre_marca || '')).trim()).html();
+                            const observaciones = $('<div>').text(insumo.observaciones || '').html();
+                            const cantidad = Number(insumo.cantidad_agrupada) || 0;
+                            const valor = Number(insumo.valor) || 0;
+                            const accionPresupuesto = Number(insumo.presupuesto) === 1
+                                ? '<button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(' + insumo.id + ')"><i class="fas fa-minus"></i></button>'
+                                : '<button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(' + insumo.id + ')"><i class="feather icon-shopping-cart"></i></button>';
+                            const acciones = insumo.registros_agrupados > 1 && insumo.todos_pack_automatico
+                                ? '<span class="badge badge-info">Automático · ' + insumo.registros_agrupados + ' tratamientos</span>'
+                                : accionPresupuesto
+                                    + '<button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(' + insumo.id + ')"><i class="feather icon-edit"></i></button>'
+                                    + '<button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(' + insumo.id + ')"><i class="feather icon-x"></i></button>';
+                            tableInsumosOdontoGeneral.row.add([
+                                nombre,
+                                observaciones,
+                                cantidad,
+                                formatoMoneda(valor),
+                                formatoMoneda(cantidad * valor),
+                                acciones
+                            ]);
+                        });
+                        tableInsumosOdontoGeneral.draw(false);
+                        // La respuesta contiene el historial de la ficha. Desde
+                        // este punto, todos los componentes del plan y presupuesto
+                        // deben reconstruirse sólo con el presupuesto vigente.
+                        odontograma = (odontograma || []).filter(function (pieza) {
+                            return Number(pieza.id_presupuesto) === Number($('#id_presupuesto').val());
+                        });
                         const piezasDelPresupuesto = [...new Set(odontograma
                             .filter(function (pieza) {
-                                return Number(pieza.urgencia) === 0 && Number(pieza.presupuesto) === 1;
+                                return Number(pieza.urgencia) === 0
+                                    && Number(pieza.presupuesto) === 1
+                                    && Number(pieza.id_presupuesto) === Number($('#id_presupuesto').val());
                             })
                             .map(function (pieza) { return String(pieza.pieza); }))];
                         const $selectorPresupuesto = $('#selector_plan_tratamiento_general');
@@ -6727,7 +6830,7 @@ setTimeout(function(){
                         // Recorrer el odontograma y agregar nuevas filas
                         odontograma.forEach(function(odonto) {
 
-                            if (odonto.presupuesto == 1) {
+                            if (odonto.presupuesto == 1 && Number(odonto.id_presupuesto) === Number($('#id_presupuesto').val())) {
                                 if (odonto.estado_pago == 'ok') {
                                     var clase = 'bg-success';
                                 } else if (odonto.estado_pago == 'incompleto') {
@@ -7564,7 +7667,7 @@ setTimeout(function(){
                 type: 'post',
                 data: {
                     seccion: 'pfu',
-                    id_paciente: $('#id_paciente').val(),
+                    id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
                     id_ficha_atencion: $('#id_fc').val(),
                     id_lugar_atencion: $('#id_lugar_atencion').val(),
                     _token: '{{ csrf_token() }}'
@@ -12270,12 +12373,15 @@ setTimeout(function(){
                 data: {
                     _token: '{{ csrf_token() }}',
                     id_ficha_atencion: $('#id_fc').val(),
-                    id_paciente: $('#id_paciente').val(),
+                    id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
                     id_lugar_atencion: $('#id_lugar_atencion').val(),
                     id_presupuesto: $('#id_presupuesto').val()
                 },
                 success: function(response){
                     if (response.estado == 1) {
+                        if (response.id_presupuesto) {
+                            $('#id_presupuesto').val(response.id_presupuesto);
+                        }
                         $('#contenedor_examenes_grupos_dentales').closest('.dental-evaluation-panel').replaceWith(response.evaluacion_adulto_html);
                         $('#contenedor_examenes_grupos_dentales_odontop').closest('.dental-evaluation-panel').replaceWith(response.caras_cuadrantes_html);
                         if ($selectorAdulto.length) {
@@ -12786,3 +12892,4 @@ setTimeout(function(){
 
     </script>
 @endsection
+@include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')

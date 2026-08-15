@@ -2543,7 +2543,18 @@ class ficha_atencionController extends Controller
 
         $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
-        $id_presupuesto_plan = (int) ($hora->id_presupuesto ?? 0);
+        // Usar la misma fuente de verdad que los refrescos AJAX: el presupuesto
+        // activo de la ficha. Antes se privilegiaba una referencia histórica de
+        // la hora o simplemente el último ID, y la pantalla mezclaba presupuestos.
+        $id_presupuesto_plan = (int) PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)
+            ->where('id_paciente', $paciente->id)
+            ->where('id_profesional', $profesional->id)
+            ->where('estado', 1)
+            ->orderByDesc('id')
+            ->value('id');
+        if (!$id_presupuesto_plan) {
+            $id_presupuesto_plan = (int) ($hora->id_presupuesto ?? 0);
+        }
         if (!$id_presupuesto_plan) {
             $id_presupuesto_plan = (int) PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)
                 ->where('id_paciente', $paciente->id)
@@ -2551,6 +2562,13 @@ class ficha_atencionController extends Controller
                 ->orderByDesc('id')
                 ->value('id');
         }
+        $valores_tratamientos = $this->dameValores(
+            $paciente->id,
+            $id_ficha_atencion,
+            $request->lugar_atencion_id,
+            $profesional->id_tipo_especialidad,
+            $id_presupuesto_plan ?: null
+        );
 
         $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
         $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
@@ -2581,8 +2599,8 @@ class ficha_atencionController extends Controller
 
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
-        if($hora->id_presupuesto != 0){
-            $presupuesto_dental = PresupuestosDental::where('id', $hora->id_presupuesto)->first();
+        if($id_presupuesto_plan){
+            $presupuesto_dental = PresupuestosDental::where('id', $id_presupuesto_plan)->first();
             if($presupuesto_dental){
                 $id_ficha_atencion = $presupuesto_dental->id_ficha_atencion;
                 $id_ficha = $presupuesto_dental->id_ficha_atencion;
@@ -2606,13 +2624,24 @@ class ficha_atencionController extends Controller
         );
         $odontograma_historial = $this->dameOdontogramaPacienteHistorial($paciente->id);
 
-        $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
-
-        if($paciente->edad >= 18){
-            $paciente->es_adulto = true;
-        }else{
-            $paciente->es_adulto = false;
+        // La dentición que muestran las fichas odontológicas se determina una
+        // sola vez al cargar la atención. Si la fecha no está disponible o es
+        // inválida se conserva la vista adulta para no clasificar por error al
+        // paciente como pediátrico.
+        $paciente->edad = null;
+        $es_paciente_adulto = true;
+        if (!empty($paciente->fecha_nac)) {
+            try {
+                $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
+                $es_paciente_adulto = $paciente->edad >= 18;
+            } catch (\Throwable $exception) {
+                \Log::warning('Fecha de nacimiento inválida al cargar ficha odontológica.', [
+                    'id_paciente' => $paciente->id,
+                    'fecha_nac' => $paciente->fecha_nac,
+                ]);
+            }
         }
+        $paciente->es_adulto = $es_paciente_adulto;
 
         $diagnosticos_dentales = TratamientosDental::where('estado',1)->get();
 
@@ -2763,7 +2792,7 @@ class ficha_atencionController extends Controller
             : $odontograma;
 
         foreach($odontogramaParaDistribuir as $o){
-            if($o->presupuesto == 1){
+            if($o->presupuesto == 1 && (int) ($o->urgencia ?? 0) === 0){
                 if($resto > 0 && $resto >= intval($o->valor)){
                     $o->estado_pago = 'ok';
                     $o->clase = 'bg-success';
@@ -2781,7 +2810,7 @@ class ficha_atencionController extends Controller
 
                 }
                 $o->resto = $resto; // asignas el valor final del resto
-                if ($tieneReasignacionPersistida && $o->isDirty('estado_pago')) {
+                if ($o->isDirty('estado_pago')) {
                     OdontogramaPaciente::whereKey($o->id)->update([
                         'estado_pago' => $o->estado_pago,
                     ]);
@@ -3038,6 +3067,7 @@ class ficha_atencionController extends Controller
                 'placeholder_examen_fisico' => $placeholder_examen_fisico,
                 'url_tratamientos_autocomplete' => $url_tratamientos_autocomplete,
                 'paciente' => $paciente,
+                'es_paciente_adulto' => $es_paciente_adulto,
                 'plantillaFicha' => $plantillaFicha,
                 'permisos_profesional' => $permisos_profesional,
                 'proxima_fecha_atencion' => $proxima_fecha_atencion,
@@ -3450,11 +3480,14 @@ class ficha_atencionController extends Controller
         return $presupuestos;
     }
 
-    public function dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad){
+    public function dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad, $id_presupuesto = null){
         $total_general = 0;
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         // Obtener todos los tratamientos desde dameTratamientosBocaGeneral()
         $tratamientos = $this->dameTratamientosBocaGeneral($id_ficha_atencion);
+        if (!is_null($id_presupuesto)) {
+            $tratamientos = $tratamientos->where('id_presupuesto', $id_presupuesto);
+        }
 
         foreach ($tratamientos as $item) {
             // Sumar solo los que están en presupuesto y tienen valor definido
@@ -3465,7 +3498,7 @@ class ficha_atencionController extends Controller
 
         $total_odontograma = 0;
 
-        $odontograma = $this->dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad);
+        $odontograma = $this->dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad, $id_presupuesto);
 
         // Iterar y sumar valores
         foreach ($odontograma as $item) {
@@ -3480,6 +3513,9 @@ class ficha_atencionController extends Controller
         $total_insumos = 0;
 
         $insumos = $this->dame_insumos_tratamiento($id_paciente, $id_ficha_atencion, null);
+        if (!is_null($id_presupuesto)) {
+            $insumos = $insumos->where('id_presupuesto', $id_presupuesto);
+        }
 
         // Iterar y sumar valores
         foreach ($insumos as $item) {
@@ -3491,7 +3527,13 @@ class ficha_atencionController extends Controller
 
         }
 
-        $trabajos_laboratorio = $this->dame_trabajos_laboratorio($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id);
+        $trabajos_laboratorio = $this->dame_trabajos_laboratorio(
+            $id_paciente,
+            $id_ficha_atencion,
+            $id_lugar_atencion,
+            $id_presupuesto,
+            $profesional->id
+        );
 
         $total_lab = 0;
 
@@ -3641,10 +3683,9 @@ class ficha_atencionController extends Controller
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null, $id_profesional = null){
 
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        if(!is_null($id_profesional)){
-            $profesional = Profesional::find($id_profesional);
-        }
+        $profesional = !is_null($id_profesional)
+            ? Profesional::find($id_profesional)
+            : Profesional::where('id_usuario', Auth::id())->first();
 
         if($tipo_especialidad == 16){
             $query = OdontogramaPaciente::select(
@@ -4163,7 +4204,17 @@ class ficha_atencionController extends Controller
         $id_lugar_atencion = $request->id_lugar_atencion;
         $id_ficha_atencion = $request->id_ficha_atencion;
 
-        $id_presupuesto = $request->id_presupuesto;
+        // La ficha puede contener referencias antiguas en el campo oculto del
+        // navegador. El plan debe trabajar siempre contra el presupuesto activo
+        // más reciente de esta misma ficha y profesional.
+        $presupuestoActivo = PresupuestosDental::where('id_paciente', $paciente->id)
+            ->where('id_profesional', $profesional->id)
+            ->where('id_ficha_atencion', $id_ficha_atencion)
+            ->where('id_lugar_atencion', $id_lugar_atencion)
+            ->where('estado', 1)
+            ->orderByDesc('id')
+            ->first();
+        $id_presupuesto = optional($presupuestoActivo)->id ?: $request->id_presupuesto;
         $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
         $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
         $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
@@ -4210,6 +4261,7 @@ class ficha_atencionController extends Controller
 
         return response()->json([
             'estado' => 1,
+            'id_presupuesto' => $id_presupuesto,
             'evaluacion_adulto_html' => $evaluacion_adulto_html,
             'caras_cuadrantes_html' => $caras_cuadrantes_html,
         ]);
@@ -4472,6 +4524,7 @@ class ficha_atencionController extends Controller
             ->where('odontogramas_pacientes.id_profesional', $profesional->id)
             ->where('odontogramas_pacientes.tipo_especialidad', $tipoEspecialidad)
             ->where('odontogramas_pacientes.presupuesto', 1)
+            ->where('odontogramas_pacientes.urgencia', 0)
             ->where('presupuestos_dental.id_ficha_atencion', $idFichaAtencion)
             ->when($idPresupuesto, function ($query, $idPresupuesto) {
                 return $query->where('odontogramas_pacientes.id_presupuesto', $idPresupuesto);

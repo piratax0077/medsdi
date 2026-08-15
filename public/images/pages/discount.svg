@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="120" viewBox="0 0 160 120" role="img" aria-labelledby="title">
+  <title id="title">Información no disponible</title>
+  <rect width="160" height="120" rx="16" fill="#eef5ff"/>
+  <circle cx="80" cy="60" r="38" fill="#d7e7ff"/>
+  <path d="M58 43h44a7 7 0 0 1 7 7v27a7 7 0 0 1-7 7H58a7 7 0 0 1-7-7V50a7 7 0 0 1 7-7Z" fill="#fff" stroke="#2f69bf" stroke-width="4"/>
+  <path d="m61 72 13-13 10 9 15-17" fill="none" stroke="#35aeb6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/escritorios.css') }}">
 
-    <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+    {{-- Font Awesome ya está incluido localmente en style.css. El kit remoto
+         respondía 403 y no es necesario para renderizar los iconos. --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">

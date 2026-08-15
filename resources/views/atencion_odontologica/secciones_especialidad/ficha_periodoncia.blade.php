@@ -280,7 +280,7 @@
                         <a class="nav-secciones text-uppercase" data-step="3" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Periodontograma</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" data-step="4" id="evaluacion_general_tab" data-toggle="tab" onclick="refrescar_caras_grupos()" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Plan de tratamiento</a>
+                        <a class="nav-secciones text-uppercase" data-step="4" id="evaluacion_general_tab" data-toggle="tab" onclick="refrescar_caras_grupos()" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Tratamiento</a>
                     </li>
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
@@ -337,12 +337,11 @@
                             @endif
                            <!-- URGENCIAS -->
                             @if($mostrarUrgenciaPeriodoncia)
-                                @include('atencion_odontologica.generales.control_urgencias')
+                                @include('atencion_odontologica.generales.control_urgencias', ['habilitarTratamientoUrgencia' => true])
                             @endif
-                            <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                            {{-- @include('atencion_odontologica.generales.includes.odontologia_general') --}}
+                            <!-- Atención odontológica general compartida entre especialidades -->
                             @if($mostrarExamenGeneralPeriodoncia)
-                                @include('atencion_odontologica.generales.odonto_gral')
+                                @include('atencion_odontologica.generales.odonto_gral', ['ocultarExamenPorPieza' => true])
                             @endif
                             {{--  @include('atencion_odontologica.generales.includes.odontologia_preimplante')  --}}
                             <!--EVALUACION PERIODONCIA -->
@@ -374,7 +373,7 @@
                                                                 <a class="nav-link-aten text-reset" id="eval_dg_period_tab" data-toggle="tab" href="#eval_dg_period" role="tab" aria-controls="eval_dg_period" aria-selected="true" onclick="cargar_evaluaciones_periodonto()">Evaluación y Diagnóstico</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="plan_tto_period_tab" data-toggle="tab" href="#plan_tto_period" role="tab" aria-controls="plan_tto_period" aria-selected="true" onclick="$('#paciente_piezas_dentales_ex_period').select2();cargar_evaluaciones_periodonto(); ">Planificación Tratamiento | Presupuesto</a>
+                                                                <a class="nav-link-aten text-reset" id="plan_tto_period_tab" data-toggle="tab" href="#plan_tto_period" role="tab" aria-controls="plan_tto_period" aria-selected="true" onclick="$('#paciente_piezas_dentales_ex_period').select2();cargar_evaluaciones_periodonto();refrescar_piezas_diagnostico_plan_periodoncia();">Planificación Tratamiento | Presupuesto</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -1293,15 +1292,73 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <div class="row">
-                                                                                    <div class="col-sm-2">
-                                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                                                                            <a class="nav-link-aten text-reset active" id="eval_dg_p_pieza_tab" data-toggle="tab" href="#eval_dg_p_pieza" role="tab" aria-controls="eval_dg_p_pieza" aria-selected="true">Evaluación por piezas</a>
-                                                                                            <a class="nav-link-aten text-reset" id="eval_dg_p_grupo_tab" data-toggle="tab" href="#eval_dg_p_grupo" role="tab" aria-controls="eval_dg_p_grupo" aria-selected="false">Evaluación por grupos</a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-10 col-xl-10">
+                                                                                    <div class="col-sm-12">
                                                                                         <div class="tab-content" id="v-pills-tabContent">
                                                                                             <div class="tab-pane fade show active" id="eval_dg_p_pieza" role="tabpanel" aria-labelledby="eval_dg_p_pieza_tab">
+                                                                                                @php
+                                                                                                    $piezasDiagnosticoPeriodoncia = [
+                                                                                                        '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                                                                                        '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                                                                                        '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                                                                                        '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                                                                    ];
+                                                                                                @endphp
+                                                                                                <div class="card-informacion mb-3">
+                                                                                                    <div class="card-top"><h6 class="text-uppercase text-c-blue">Diagnóstico periodontal por piezas</h6></div>
+                                                                                                    <div class="card-body">
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-sm-12 col-xl-6">
+                                                                                                                @include('atencion_odontologica.include.selector_odontograma', [
+                                                                                                                    'id' => 'selector_diagnostico_periodoncia',
+                                                                                                                    'inputId' => 'period_piezas_diagnostico_selector',
+                                                                                                                    'counter' => 9690,
+                                                                                                                    'multiple' => true,
+                                                                                                                    'compacto' => true,
+                                                                                                                    'autoRefresh' => false,
+                                                                                                                    'mostrarMensajeVacio' => false,
+                                                                                                                    'estadosBloqueados' => [],
+                                                                                                                    'piezasDisponibles' => $piezasDiagnosticoPeriodoncia,
+                                                                                                                    'piezasSeleccionadas' => [],
+                                                                                                                    'titulo' => 'Seleccione una o varias piezas',
+                                                                                                                    'ayuda' => 'Indique el diagnóstico periodontal de las piezas seleccionadas',
+                                                                                                                ])
+                                                                                                                <select class="d-none" id="period_piezas_diagnostico_selector" multiple>
+                                                                                                                    @foreach ($piezasDiagnosticoPeriodoncia as $piezaDiagnosticoPeriodoncia)
+                                                                                                                        <option value="{{ $piezaDiagnosticoPeriodoncia }}">{{ $piezaDiagnosticoPeriodoncia }}</option>
+                                                                                                                    @endforeach
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="col-sm-12 col-xl-6 mt-3 mt-xl-0" id="columna_diagnostico_periodoncia">
+                                                                                                                <div class="form-group">
+                                                                                                                    <label class="floating-label-activo-sm">Diagnóstico</label>
+                                                                                                                    <select class="form-control form-control-sm" id="diagnostico_selector_periodoncia">
+                                                                                                                        <option value="0">Seleccione</option>
+                                                                                                                        @foreach ($diagnosticos as $d)
+                                                                                                                            @if($d->tipo_especialidad == 21)
+                                                                                                                                <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                                                                                                            @endif
+                                                                                                                        @endforeach
+                                                                                                                    </select>
+                                                                                                                </div>
+                                                                                                                <button type="button" class="btn btn-primary btn-sm btn-block" onclick="guardar_diagnostico_selector_periodoncia()"><i class="feather icon-save"></i> Guardar diagnóstico</button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <style>
+                                                                                                    #selector_diagnostico_periodoncia .selector-odontograma-generico__scroll,
+                                                                                                    #selector_plan_tratamiento_periodoncia .selector-odontograma-generico__scroll { overflow-x:hidden; }
+                                                                                                    #selector_diagnostico_periodoncia .selector-odontograma-generico__fila,
+                                                                                                    #selector_plan_tratamiento_periodoncia .selector-odontograma-generico__fila { grid-template-columns:repeat(8,minmax(42px,1fr));min-width:0; }
+                                                                                                    #evaluacion_clinica_periodontal_bloque .card,
+                                                                                                    #evaluacion_clinica_periodontal_bloque .card-body { margin-bottom:0;padding-left:0;padding-right:0;box-shadow:none; }
+                                                                                                    @media (min-width:1200px) {
+                                                                                                        #evaluacion_clinica_periodontal_bloque #dg_periodontal .form-row > [class*="col-"] { flex:0 0 50%;max-width:50%; }
+                                                                                                        #evaluacion_clinica_periodontal_bloque #dg_periodontal .form-row > [class*="col-"]:last-child { flex:0 0 100%;max-width:100%; }
+                                                                                                    }
+                                                                                                </style>
+                                                                                                <div id="evaluacion_clinica_periodontal_bloque" style="display:none;">
+                                                                                                <h6 class="text-c-blue mt-4 mb-2">Evaluación clínica periodontal</h6>
                                                                                                 <div class="row">
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="card">
@@ -1313,7 +1370,7 @@
                                                                                                                                 <div class="card-body">
                                                                                                                                     <div class="form-group">
                                                                                                                                         <div class="form-row">
-                                                                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                                            <div class="d-none" aria-hidden="true">
                                                                                                                                                 <div class="form-group fill">
                                                                                                                                                     <label class="floating-label-activo-sm">Pieza N°</label>
                                                                                                                                                     <select name="period_pza" id="period_pza" class="form-control form-control-sm">
@@ -1374,7 +1431,7 @@
                                                                                                                                                         <option value="0">Seleccione</option>
                                                                                                                                                         @foreach ($diagnosticos as $d)
                                                                                                                                                         @if($d->tipo_especialidad == 21 )
-                                                                                                                                                            <option value="{{ $d->descripcion }}">{{ $d->descripcion }}</option>
+                                                                                            <option value="{{ $d->descripcion }}" data-diagnostico-id="{{ $d->id }}">{{ $d->descripcion }}</option>
                                                                                                                                                         @endif
                                                                                                                                                         @endforeach
                                                                                                                                                         <option value="8">Otro</option>
@@ -1442,8 +1499,25 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
+                                                                                                </div>
+                                                                                                <script>
+                                                                                                    (function ubicarEvaluacionClinicaPeriodontal() {
+                                                                                                        function mover() {
+                                                                                                            const bloque = document.getElementById('evaluacion_clinica_periodontal_bloque');
+                                                                                                            const columna = document.getElementById('columna_diagnostico_periodoncia');
+                                                                                                            if (!bloque || !columna || bloque.parentElement === columna) return;
+                                                                                                            columna.appendChild(bloque);
+                                                                                                            bloque.style.display = '';
+                                                                                                        }
+                                                                                                        if (document.readyState === 'loading') {
+                                                                                                            document.addEventListener('DOMContentLoaded', mover);
+                                                                                                        } else {
+                                                                                                            mover();
+                                                                                                        }
+                                                                                                    })();
+                                                                                                </script>
                                                                                             </div>
-                                                                                            <div class="tab-pane fade show" id="eval_dg_p_grupo" role="tabpanel" aria-labelledby="eval_dg_p_grupo_tab">
+                                                                                            <div class="tab-pane fade show d-none" id="eval_dg_p_grupo" role="tabpanel" aria-labelledby="eval_dg_p_grupo_tab">
                                                                                                 <div class="row">
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="card">
@@ -1648,41 +1722,21 @@
                                                                             <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo de piezas</h6>
                                                                             </div>
                                                                             <div class="card-body">
-                                                                                    <div class="row my-2">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
-                                                                                        <div class="custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input" id="max_sup_period" onclick="seleccionar_maxilar_superior_period()">
-                                                                                            <label class="custom-control-label" for="max_sup_period">Seleccione maxilar superior</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
-                                                                                        <div class="custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input" id="max_inf_period" onclick="seleccionar_maxilar_inferior_period()">
-                                                                                            <label class="custom-control-label" for="max_inf_period">Seleccione maxilar inferior</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
-                                                                                        <div class="custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input" id="piezas_presup_period" onclick="seleccionar_piezas_presup_period()">
-                                                                                            <label class="custom-control-label" for="piezas_presup_period">Piezas presupuesto</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
-                                                                                        <div class="custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input" id="piezas_presup_period_eval" onclick="seleccionar_piezas_presup_period_eval();">
-                                                                                            <label class="custom-control-label" for="piezas_presup_period_eval">Piezas evaluadas</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
                                                                                 <div class="row">
-                                                                                    <div class="col-sm-12">
+                                                                                    <div class="col-sm-12 col-xl-6">
                                                                                         @php
-                                                                                            $piezasPlanPeriodoncia = [
+                                                                                        $piezasPlanPeriodoncia = [
                                                                                                 '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
                                                                                                 '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
                                                                                                 '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
-                                                                                                '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
-                                                                                            ];
+                                                                                            '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                                                        ];
+                                                                                        $piezasDiagnosticadasPeriodoncia = collect($odontograma ?? [])
+                                                                                            ->filter(fn ($pieza) => (int) ($pieza->urgencia ?? 0) === 0
+                                                                                                && (int) ($pieza->presupuesto ?? 0) === 1
+                                                                                                && trim((string) ($pieza->tratamiento ?? '')) === '')
+                                                                                            ->unique(fn ($pieza) => (string) $pieza->pieza)
+                                                                                            ->values();
                                                                                         @endphp
                                                                                         <div class="periodontal-plan-selector">
                                                                                             @include('atencion_odontologica.include.selector_odontograma', [
@@ -1696,15 +1750,16 @@
                                                                                                 'mostrarEstadoClinico' => true,
                                                                                                 'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
                                                                                                 'estadosBloqueados' => [],
-                                                                                                'piezasDisponibles' => $piezasPlanPeriodoncia,
-                                                                                                'titulo' => 'Odontograma del plan periodontal',
-                                                                                                'ayuda' => 'Seleccione una o varias piezas para indicar diagnóstico y tratamiento',
+                                                                                                'piezasDisponibles' => $piezasDiagnosticadasPeriodoncia,
+                                                                                                'piezasSeleccionadas' => [],
+                                                                                                'titulo' => 'Piezas con diagnóstico periodontal',
+                                                                                                'ayuda' => 'Seleccione las piezas diagnosticadas para indicar únicamente su tratamiento',
                                                                                             ])
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-12 mt-2">
+                                                                                    <div class="col-sm-12 col-xl-6 mt-2" id="columna_planificacion_periodoncia">
                                                                                         <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" aria-hidden="true">
                                                                                                 <div class="form-group d-none" aria-hidden="true">
                                                                                                     <label for="" class="floating-label-activo-sm">Grupos</label>
                                                                                                     <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex_period" id="paciente_piezas_dentales_ex_period" multiple="multiple">
@@ -1743,7 +1798,7 @@
                                                                                                     </select>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" aria-hidden="true">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm">Diagnostico</label>
                                                                                                     <select class="form-control form-control-sm" id="diagnostico_combo_g_period">
@@ -1763,7 +1818,7 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_period_g()"><i class="feather icon-save"></i> Guardar piezas</button>
+                                                                                                <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_period_g()"><i class="feather icon-save"></i> Guardar tratamiento</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -1826,7 +1881,7 @@
                                                                     <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
 
                                                                     <!--TABLA INSUMOS-->
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                    <div class="col-sm-12 mt-3 px-0" id="insumos_planificacion_periodoncia" style="display:none;">
                                                                         <div class="card-informacion">
                                                                             <div class="card-top">
                                                                                 <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
@@ -1882,6 +1937,22 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <script>
+                                                                        (function ubicarInsumosPlanificacionPeriodoncia() {
+                                                                            function mover() {
+                                                                                const insumos = document.getElementById('insumos_planificacion_periodoncia');
+                                                                                const columna = document.getElementById('columna_planificacion_periodoncia');
+                                                                                if (!insumos || !columna || insumos.parentElement === columna) return;
+                                                                                columna.appendChild(insumos);
+                                                                                insumos.style.display = '';
+                                                                            }
+                                                                            if (document.readyState === 'loading') {
+                                                                                document.addEventListener('DOMContentLoaded', mover);
+                                                                            } else {
+                                                                                mover();
+                                                                            }
+                                                                        })();
+                                                                    </script>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2866,6 +2937,7 @@
                                                                         'mostrarMensajeVacio' => false,
                                                                         'mostrarEstadoClinico' => true,
                                                                         'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                                        'piezasPresupuesto' => collect($odontograma ?? [])->filter(fn ($registro) => (int) data_get($registro, 'urgencia', 0) === 0 && (int) data_get($registro, 'presupuesto', 0) === 1),
                                                                         'estadosBloqueados' => [],
                                                                         'piezasDisponibles' => $piezasSelectorPlanPeriodoncia,
                                                                         'titulo' => 'Seleccione una pieza para agregar al plan periodontal',
@@ -2877,6 +2949,19 @@
                                                             </div>
                                                             <!--NIÑOS-->
                                                             <div class="tab-pane fade" id="eval_infts" role="tabpanel" aria-labelledby="eval_infts_tab">
+                                                                <div class="periodontal-plan-selector mt-3 mx-2 mb-3">
+                                                                    @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                                        'id' => 'selector_plan_principal_periodoncia_infantil',
+                                                                        'inputId' => 'pieza_plan_principal_periodoncia',
+                                                                        'modo' => 'planificacion',
+                                                                        'multiple' => false,
+                                                                        'compacto' => true,
+                                                                        'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                                        'piezasPresupuesto' => collect($odontograma ?? [])->filter(fn ($registro) => (int) data_get($registro, 'urgencia', 0) === 0 && (int) data_get($registro, 'presupuesto', 0) === 1),
+                                                                        'titulo' => 'Seleccione una pieza temporal para agregar al plan periodontal',
+                                                                        'ayuda' => 'Presione una pieza para ingresar su diagnÃ³stico y tratamiento',
+                                                                    ])
+                                                                </div>
                                                                 @include('atencion_odontologica.generales.caras_cuadrantes')
                                                             </div>
                                                         </div>
@@ -2956,6 +3041,8 @@
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_superior')
 @include('atencion_odontologica.modals.odontograma.tratamiento_laboratorio')
 @include('atencion_odontologica.modals.odontograma.modal_odontograma')
+@include('atencion_odontologica.modals.odontograma.modal_insumos')
+@include('atencion_odontologica.modals.odontograma.modal_insumos_editar')
 @include('atencion_odontologica.formularios.modal_atencion_especialidad.dental_period.recom_period_gral')
 @include('atencion_odontologica.formularios.modal_atencion_especialidad.dental_period.recom_peri_especificas')
 {{--  @section('page-script-ficha-atencion')  --}}
@@ -3309,6 +3396,13 @@
 </div>
 <script>
 
+    // La ficha contiene componentes Dropzone que se inicializan de forma
+    // explícita. Desactivar el autodiscover evita que la librería intente
+    // convertir contenedores auxiliares sin URL de carga.
+    if (typeof Dropzone !== 'undefined') {
+        Dropzone.autoDiscover = false;
+    }
+
     function refrescar_caras_grupos(){
         $.ajax({
             type: 'post',
@@ -3418,22 +3512,22 @@
                 }
 
             });
-        $('#paciente_piezas_dentales_ex').select2();
-        $('#pzas_grupo_peri').select2();
-        $('#paciente_piezas_dentales_ex_').select2();
-        $('#tpo_proc_imp').select2();
-        $('#prot_pieza_imp').select2();
-        $('#prot_pieza_imp_man').select2();
-        $('#prot_implante').select2();
-        $('#prot_implante_man').select2();
-        $('#prot_pieza_period').select2();
+        function inicializarSelect2Periodoncia(selector) {
+            $(selector).filter('select').each(function () {
+                const $select = $(this);
+                if (!$select.hasClass('select2-hidden-accessible')) {
+                    $select.select2({ width: '100%' });
+                }
+            });
+        }
+        inicializarSelect2Periodoncia('#paciente_piezas_dentales_ex, #pzas_grupo_peri, #paciente_piezas_dentales_ex_, #tpo_proc_imp, #prot_pieza_imp, #prot_pieza_imp_man, #prot_implante, #prot_implante_man, #prot_pieza_period');
         // generar numero random entre el 10 y el 20
         var random = Math.floor(Math.random() * (20 - 10 + 1) + 10);
         $('#random_preimpl').val(random);
         $('#random_postimpl').val(random);
 
         // Inicializar select2 en todos los select cuyo id comience con "pzas_grupo_peri"
-        $('[id^="pzas_grupo_peri"]').select2();
+        inicializarSelect2Periodoncia('select[id^="pzas_grupo_peri"]');
 
         // mostrar_nueva_pieza_dental_tto_impl(1000);
         // mostrar_nueva_pieza_post_impl(1000);
@@ -3648,6 +3742,21 @@
 
     });
 
+    function abrir_modal_insumos() {
+        const $modal = $('[id="modal_insumos"]').last();
+        if (!$modal.length) {
+            swal('Insumos no disponibles', 'No fue posible cargar el formulario de insumos.', 'warning');
+            return;
+        }
+
+        // Los paneles de la ficha crean contextos de apilamiento propios. Al
+        // dejar el modal directamente en body queda siempre sobre el backdrop.
+        if (!$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+        $modal.modal('show');
+    }
+
     function dame_marcas_implantes(value) {
             let id_tipo_insumo = value.value;
             let tipo_insumo_text = value.options[value.selectedIndex].text;
@@ -3743,38 +3852,45 @@
         }
 
         function guardar_insumo() {
-            let nombreInsumo = $('#nombreInsumo option:selected').text();
-            let tipoInsumo = $('#tipoInsumo').val();
+            let $modalInsumos = $('[id="modal_insumos"].show').last();
+            if (!$modalInsumos.length) {
+                $modalInsumos = $('[id="modal_insumos"]').last();
+            }
+
+            let $nombreInsumo = $modalInsumos.find('[id="nombreInsumo"]').last();
+            let $tipoInsumo = $modalInsumos.find('[id="tipoInsumo"]').last();
+            let nombreInsumo = $.trim($nombreInsumo.find('option:selected').text());
+            let tipoInsumo = String($tipoInsumo.val() || '0');
             if (tipoInsumo == 1) {
-                var marcaInsumo = $('#marcasImplantes option:selected').text();
+                var marcaInsumo = $.trim($modalInsumos.find('[id="marcasImplantes"] option:selected').last().text());
             } else {
                 var marcaInsumo = '';
             }
-            var idMarcaInsumo = $('#marcasImplantes').val();
+            var idMarcaInsumo = $modalInsumos.find('[id="marcasImplantes"]').last().val() || 0;
             console.log(idMarcaInsumo);
-            let tipoInsumo_text = $('#tipoInsumo option:selected').text();
-            let cantidad = $('#cantidad').val();
-            let precio = $('#precio').val();
-            let total = $('#total').val();
+            let tipoInsumo_text = $.trim($tipoInsumo.find('option:selected').text());
+            let cantidad = parseFloat($modalInsumos.find('[id="cantidad"]').last().val()) || 0;
+            let precio = parseFloat($modalInsumos.find('[id="precio"]').last().val()) || 0;
+            let total = cantidad * precio;
 
             console.log(tipoInsumo);
 
             let mensaje = '';
             let valido = 1;
 
-            if (nombreInsumo == '') {
+            if (!$nombreInsumo.val() || nombreInsumo == '') {
                 valido = 0;
                 mensaje += '<li>Nombre insumo </li>';
             }
-            if (tipoInsumo == 0) {
+            if (tipoInsumo === '0') {
                 valido = 0;
                 mensaje += '<li>Tipo de Insumo </li>';
             }
-            if (cantidad == '' || cantidad <= 0) {
+            if (cantidad <= 0) {
                 valido = 0;
                 mensaje += '<li>Cantidad </li>';
             }
-            if (precio == '' || cantidad <= 0) {
+            if (precio <= 0) {
                 valido = 0;
                 mensaje += '<li>Precio </li>';
             }
@@ -3789,9 +3905,10 @@
                     cantidad: cantidad,
                     valor: precio,
                     total: total,
-                    id_paciente: $('#id_paciente_fc').val(),
+                    id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
                     id_ficha_atencion: $('#id_fc').val(),
-                    observaciones: $('#insumos_obs_tto').val(),
+                    id_presupuesto: $('#id_presupuesto').val() || null,
+                    observaciones: $modalInsumos.find('[id="insumos_obs_tto"]').last().val() || '',
                     _token: CSRF_TOKEN
                 }
 
@@ -3811,7 +3928,7 @@
                             });
                             let nuevo_insumo = resp.insumo;
                             cargar_a_presupuesto_insumo(nuevo_insumo.id);
-                            $('#modal_insumos').modal('hide');
+                            $modalInsumos.modal('hide');
                             //limpiar_formulario_insumo();
                             let insumos = resp.insumos;
                             console.log(insumos);
@@ -5233,6 +5350,9 @@
                 data: {
                     counter: counter,
                     tipo: 'periodoncica',
+                    id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
                     _token: '{{ csrf_token() }}'
                 },
                 beforeSend: function(){
@@ -7718,16 +7838,21 @@ function ocultar_pieza_impl(counter){
                 });
         }
 
-        function cargar_a_presupuesto_impl_g_confirmar() {
+        function cargar_a_presupuesto_impl_g_confirmar(etapa) {
+            etapa = etapa || 'planificacion';
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val();
-            let diagnosticoPiezas = $('#diagnostico_combo_g_od_gral').val();
-            var ttoPiezas = $('#diag_presupuesto_pieza_g').val();
+            var piezasSeleccionadas = etapa === 'diagnostico'
+                ? ($('#paciente_piezas_diagnostico_od_gral').val() || [])
+                : ($('#paciente_piezas_dentales_ex').val() || []);
+            let diagnosticoPiezas = etapa === 'diagnostico'
+                ? $('#diagnostico_examen_oral_od_gral').val()
+                : (etapa === 'completa' ? $('#diagnostico_combo_g_od_gral').val() : null);
+            var ttoPiezas = etapa === 'diagnostico' ? '' : $('#diag_presupuesto_pieza_g').val();
 
             let valido = 1;
             let mensaje = '';
 
-            if(diagnosticoPiezas == 0) {
+            if((etapa === 'diagnostico' || etapa === 'completa') && diagnosticoPiezas == 0) {
                 valido = 0;
                 mensaje += '<li>Diagnóstico </li>';
             }
@@ -7735,7 +7860,7 @@ function ocultar_pieza_impl(counter){
                 valido = 0;
                 mensaje += '<li>Piezas seleccionadas </li>'
             }
-            if (ttoPiezas == '') {
+            if (etapa === 'planificacion' && ttoPiezas == '') {
                 valido = 0;
                 mensaje += '<li>Tratamiento </li>';
             }
@@ -7759,9 +7884,11 @@ function ocultar_pieza_impl(counter){
                 piezas: piezasSeleccionadas,
                 diagnostico: diagnosticoPiezas,
                 tto: ttoPiezas,
+                etapa: etapa,
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_paciente: $('#id_paciente_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val() || null,
                 _token: "{{ csrf_token() }}"
             }
             console.log(data);
@@ -7772,6 +7899,23 @@ function ocultar_pieza_impl(counter){
                 success: function(resp) {
                     console.log(resp);
                     if (resp.status == 1) {
+                        if (etapa === 'diagnostico') {
+                            if (resp.presupuesto && resp.presupuesto.id) {
+                                $('#id_presupuesto').val(resp.presupuesto.id);
+                            }
+                            if (typeof aplicar_piezas_diagnostico_plan_od_gral === 'function') {
+                                aplicar_piezas_diagnostico_plan_od_gral(resp.odontograma_paciente || []);
+                            }
+                            $('#diagnostico_examen_oral_od_gral').val('0').trigger('change');
+                            $('#odontograma_plan_od_general .pieza.seleccionada').removeClass('seleccionada');
+                            $('#paciente_piezas_diagnostico_od_gral').val([]).trigger('change');
+                            swal({
+                                icon: 'success',
+                                title: 'Diagnóstico guardado',
+                                text: resp.mensaje
+                            });
+                            return;
+                        }
                         swal({
                             icon: 'success',
                             title: 'Info',
@@ -8085,7 +8229,7 @@ function ocultar_pieza_impl(counter){
                         return Number(item.id) === idTratamiento;
                     });
                     const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
-                    const progreso = Number(registro ? registro.progreso : 0) || (estado === 1 ? 100 : 25);
+                    const progreso = registro && registro.progreso !== null && registro.progreso !== undefined ? Number(registro.progreso) : (estado === 1 ? 100 : 0);
                     const opciones = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlan(this,' + idTratamiento + ')');
                     const $seleccion = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
                     $celdas.eq(7).html('<div class="dental-table-state-control">' + opciones + '</div>');
@@ -8139,9 +8283,50 @@ function ocultar_pieza_impl(counter){
         $(document).on('draw.dt', '#table_odontograma', decorarTablaPlanPeriodoncia);
         $(decorarTablaPlanPeriodoncia);
 
+        // El control de urgencias es un include compartido, pero la selección
+        // individual de sus odontogramas antes dependía de eventos definidos
+        // solamente en Odontología General y Endodoncia.
+        $(document)
+            .off('click.periodonciaUrgenciaIndividual keydown.periodonciaUrgenciaIndividual', '.pieza_urg, .pieza_odped_urg')
+            .on('click.periodonciaUrgenciaIndividual keydown.periodonciaUrgenciaIndividual', '.pieza_urg, .pieza_odped_urg', function (event) {
+                if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
+                if (event.type === 'keydown') event.preventDefault();
+
+                const $pieza = $(this);
+                const esPediatrica = $pieza.hasClass('pieza_odped_urg');
+                const piezaNumero = String(esPediatrica
+                    ? $pieza.attr('data-pieza_odpediat_urg')
+                    : $pieza.attr('data-pieza_urg'));
+                const $select = $(esPediatrica
+                    ? '#paciente_piezas_dentales_ex_odped_urg'
+                    : '#paciente_piezas_dentales_urg');
+
+                if (!piezaNumero || !$select.length) return;
+
+                let seleccionadas = $select.val() || [];
+                if (!Array.isArray(seleccionadas)) seleccionadas = [String(seleccionadas)];
+                seleccionadas = seleccionadas.map(String);
+
+                const estabaSeleccionada = seleccionadas.includes(piezaNumero);
+                seleccionadas = estabaSeleccionada
+                    ? seleccionadas.filter(function (pieza) { return pieza !== piezaNumero; })
+                    : seleccionadas.concat([piezaNumero]);
+
+                $pieza.toggleClass('seleccionada', !estabaSeleccionada)
+                    .attr('aria-pressed', estabaSeleccionada ? 'false' : 'true');
+                $select.val(seleccionadas).trigger('change');
+
+                // Una selección manual deja sin efecto los selectores masivos.
+                const idsSwitches = esPediatrica
+                    ? ['#max_sup_odped_urg', '#max_inf_odped_urg', '#piezas_presup_odped_urg']
+                    : ['#max_sup_urg', '#max_inf_urg', '#piezas_presup_urg'];
+                idsSwitches.forEach(function (id) { $(id).prop('checked', false); });
+            });
+
         document.addEventListener('click', function (event) {
-            const boton = event.target.closest('#selector_plan_principal_periodoncia [data-selector-pieza]');
-            if (!boton || boton.disabled || !boton.classList.contains('is-enabled')) return;
+            const boton = event.target.closest('#selector_plan_principal_periodoncia [data-selector-pieza], #selector_plan_principal_periodoncia_infantil [data-selector-pieza]');
+            if (!boton || boton.disabled || boton.classList.contains('is-locked')) return;
+            if (boton.closest('#selector_plan_principal_periodoncia') && !boton.classList.contains('is-enabled')) return;
 
             const pieza = String(boton.getAttribute('data-selector-pieza') || '');
             window.setTimeout(function () {
@@ -8179,7 +8364,7 @@ function ocultar_pieza_impl(counter){
         $('#modal_pieza_plan_periodoncia').on('hidden.bs.modal', function () {
             const pieza = String($('#pieza_plan_principal_periodoncia').val() || '');
             if (pieza && pieza !== '0') {
-                $('#selector_plan_principal_periodoncia [data-selector-pieza="' + pieza + '"]')
+                $('#selector_plan_principal_periodoncia [data-selector-pieza="' + pieza + '"], #selector_plan_principal_periodoncia_infantil [data-selector-pieza="' + pieza + '"]')
                     .removeClass('is-selected').attr('aria-pressed', 'false');
             }
             $('#pieza_plan_principal_periodoncia').val('0');
@@ -8201,6 +8386,42 @@ function ocultar_pieza_impl(counter){
             $selectorPrincipal.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
             $selectorPrincipal.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
             $('#pieza_plan_principal_periodoncia').val('0');
+        }
+
+        function aplicar_piezas_diagnostico_plan_periodoncia(registros) {
+            const piezas = [...new Set((registros || []).filter(function (registro) {
+                return registro && Number(registro.urgencia || 0) === 0
+                    && (typeof registro.presupuesto === 'undefined' || Number(registro.presupuesto) === 1)
+                    && String(registro.tratamiento || '').trim() === '';
+            }).map(function (registro) { return String(registro.pieza); }))];
+            const $selector = $('#selector_plan_tratamiento_periodoncia');
+            $selector.find('[data-selector-pieza]').each(function () {
+                const disponible = piezas.includes(String($(this).data('selector-pieza')));
+                $(this).prop('disabled', !disponible)
+                    .toggleClass('is-enabled', disponible)
+                    .removeClass('is-selected')
+                    .attr('aria-pressed', 'false');
+            });
+            $('#paciente_piezas_dentales_ex_period').val([]).trigger('change');
+            $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+            $selector.find('.selector-odontograma-generico__mensaje-vacio').toggle(piezas.length === 0);
+        }
+
+        function refrescar_piezas_diagnostico_plan_periodoncia() {
+            $.ajax({
+                url: "{{ route('profesional.selector_odontograma.piezas') }}",
+                type: 'POST',
+                data: {
+                    id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_presupuesto: $('#id_presupuesto').val() || null,
+                    solo_sin_tratamiento: 1,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (respuesta) {
+                    aplicar_piezas_diagnostico_plan_periodoncia(respuesta.piezas || []);
+                }
+            });
         }
 
         function cargar_a_presupuesto_period_g() {
@@ -8225,16 +8446,11 @@ function ocultar_pieza_impl(counter){
             if (!Array.isArray(piezasSeleccionadas)) {
                 piezasSeleccionadas = [piezasSeleccionadas].filter(Boolean);
             }
-            let diagnosticoPiezas = $('#diagnostico_combo_g_period').val();
             var ttoPiezas = $('#diag_presupuesto_pieza_g_period').val();
 
             let valido = 1;
             let mensaje = '';
 
-            if(diagnosticoPiezas == 0) {
-                valido = 0;
-                mensaje += '<li>Diagnóstico </li>';
-            }
             if (piezasSeleccionadas.length === 0) {
                 valido = 0;
                 mensaje += '<li>Piezas seleccionadas </li>'
@@ -8261,8 +8477,8 @@ function ocultar_pieza_impl(counter){
             let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
             let data = {
                 piezas: piezasSeleccionadas,
-                diagnostico: diagnosticoPiezas,
                 tto: ttoPiezas,
+                etapa: 'planificacion',
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_paciente: $('#id_paciente_fc').val(),
@@ -8285,6 +8501,7 @@ function ocultar_pieza_impl(counter){
                         let odontograma = resp.odontograma_paciente;
                         odontograma_global = resp.odontograma_paciente;
                         sincronizarSelectorPlanPeriodoncia(odontograma);
+                        aplicar_piezas_diagnostico_plan_periodoncia(odontograma);
                         let table_odontograma = $('#table_odontograma').DataTable();
 
                         // Vacía la tabla
@@ -11402,9 +11619,70 @@ function ocultar_pieza_impl(counter){
 
     var evaluaciones_periodoncia = [];
 
+    function guardar_diagnostico_plan_periodoncia(pieza, diagnosticoId) {
+        return $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.cargar_tratamiento_presupuesto_period') }}",
+            data: {
+                piezas: [String(pieza)],
+                diagnostico: diagnosticoId,
+                etapa: 'diagnostico',
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val() || null,
+                _token: "{{ csrf_token() }}"
+            }
+        });
+    }
+
+    function guardar_diagnostico_selector_periodoncia() {
+        let piezas = $('#period_piezas_diagnostico_selector').val() || [];
+        const diagnosticoId = Number($('#diagnostico_selector_periodoncia').val() || 0);
+        if (!Array.isArray(piezas)) piezas = [piezas].filter(Boolean);
+
+        if (piezas.length === 0 || diagnosticoId === 0) {
+            swal('Campos requeridos', 'Seleccione al menos una pieza y un diagnóstico periodontal.', 'warning');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('dental.cargar_tratamiento_presupuesto_period') }}",
+            data: {
+                piezas: piezas,
+                diagnostico: diagnosticoId,
+                etapa: 'diagnostico',
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val() || null,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (resp) {
+                if (!resp || Number(resp.status) !== 1) {
+                    swal('Error', (resp && resp.mensaje) || 'No fue posible guardar el diagnóstico.', 'error');
+                    return;
+                }
+                if (resp.presupuesto && resp.presupuesto.id) $('#id_presupuesto').val(resp.presupuesto.id);
+                aplicar_piezas_diagnostico_plan_periodoncia(resp.odontograma_paciente || []);
+                $('#diagnostico_selector_periodoncia').val('0').trigger('change');
+                const $selector = $('#selector_diagnostico_periodoncia');
+                $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+                $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+                $('#period_piezas_diagnostico_selector').val([]).trigger('change');
+                swal('¡Excelente!', 'Diagnóstico periodontal guardado. Las piezas ya están disponibles en Planificación.', 'success');
+            },
+            error: function (xhr) {
+                swal('Error', xhr.responseJSON && xhr.responseJSON.mensaje ? xhr.responseJSON.mensaje : 'No fue posible guardar el diagnóstico.', 'error');
+            }
+        });
+    }
+
     function agregar_dg_periodonto_pieza(){
         console.log('Iniciando proceso de agregar diagnóstico periodontal');
-        let pieza = $('#period_pza').val();
+        let piezas = $('#period_piezas_diagnostico_selector').val() || [];
+        if (!Array.isArray(piezas)) piezas = [piezas].filter(Boolean);
         let antecedentes_molestias = $('#perio_antsang').val();
         let evaluacion_clinica = $('#perio_evcsup').val();
         let estudio_rx = $('#period_erx').val();
@@ -11418,9 +11696,9 @@ function ocultar_pieza_impl(counter){
         let valido = 1;
         let mensaje = "";
 
-        if(pieza == 0 || pieza == ''){
+        if(piezas.length === 0){
             valido = 0;
-            mensaje += 'Debe seleccionar una pieza dental.\n';
+            mensaje += 'Debe seleccionar una o varias piezas en el odontograma.\n';
         }
 
         if(antecedentes_molestias == 3){
@@ -11445,6 +11723,11 @@ function ocultar_pieza_impl(counter){
                 valido = 0;
                 mensaje += 'Debe especificar el estudio radiográfico.\n';
             }
+        }
+
+        if(diagnostico == 0 || diagnostico == ''){
+            valido = 0;
+            mensaje += 'Debe seleccionar un diagnóstico periodontal.\n';
         }
 
         if(diagnostico == 8){
@@ -11479,7 +11762,7 @@ function ocultar_pieza_impl(counter){
         }
 
         let data = {
-            pieza: pieza,
+            piezas: piezas,
             antecedentes_molestias: antecedentes_molestias,
             evaluacion_clinica: evaluacion_clinica,
             estudio_rx: estudio_rx,
@@ -11525,8 +11808,7 @@ function ocultar_pieza_impl(counter){
                 if(typeof resp === 'object' && resp !== null){
 
                     if(resp.mensaje === 'OK'){
-                        // Éxito: Limpiar formulario y actualizar vista
-                        limpiarFormularioPeriodoncia();
+                        // La evaluación clínica queda guardada de forma independiente.
                         evaluaciones_periodoncia = resp.evaluaciones || [];
                         console.log('Evaluaciones periodoncia actualizadas:', evaluaciones_periodoncia);
 
@@ -11541,10 +11823,10 @@ function ocultar_pieza_impl(counter){
                             $('#total_evaluaciones_periodonto').text(resp.total_evaluaciones);
                         }
 
-                        // Mostrar mensaje de éxito
+                        limpiarFormularioPeriodoncia();
                         swal({
                             title: "¡Excelente!",
-                            text: "Evaluación periodontal agregada correctamente para la pieza " + pieza,
+                            text: "Evaluación clínica periodontal guardada para " + piezas.length + (piezas.length === 1 ? " pieza." : " piezas."),
                             icon: "success",
                             timer: 3000
                         });
@@ -11652,6 +11934,10 @@ function ocultar_pieza_impl(counter){
     function limpiarFormularioPeriodoncia(){
         // Limpiar campos principales
         $('#period_pza').val('0').trigger('change');
+        $('#period_piezas_diagnostico_selector').val([]).trigger('change');
+        const $selectorPeriodontal = $('#selector_diagnostico_periodoncia');
+        $selectorPeriodontal.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+        $selectorPeriodontal.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
         $('#perio_antsang').val('1');
         $('#perio_evcsup').val('1');
         $('#period_erx').val('1');
@@ -11836,3 +12122,4 @@ function ocultar_pieza_impl(counter){
     });
 
 </script>
+@include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')

@@ -24,7 +24,7 @@
                 }
                 // Prioridad: si hay algún implante con estado 0, es ausente
                 if (Str::contains(Str::lower($tratamiento), 'implante')) {
-                    if ($estado == '0') {
+                    if ($estado == '0' && $estadoFinal !== 'implante') {
                         $estadoFinal = 'ausente';
                         // Continuar para respetar el estado clinico mas reciente.
                     } else {
@@ -90,9 +90,29 @@
         color: #fff;
         border-color: #601886;
     }
+
+    .odontograma-implante-cuatro-filas {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        overflow: visible;
+        width: 100%;
+    }
+
+    .odontograma-implante-cuatro-filas .fila {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    @media (max-width: 767.98px) {
+        .odontograma-implante-cuatro-filas .fila {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
 </style>
 
-<div class="odontograma">
+<div class="odontograma odontograma-implante-cuatro-filas">
     <!-- Fila superior (1.8 al 1.1 y 2.1 al 2.8) -->
     <div class="fila">
         @for($i = 18; $i >= 11; $i--)

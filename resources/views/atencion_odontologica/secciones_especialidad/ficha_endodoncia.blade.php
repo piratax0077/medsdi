@@ -401,7 +401,7 @@
                     <div class="dental-treatment-flow__heading">
                         <div>
                             <span class="dental-treatment-flow__eyebrow">Endodoncia</span>
-                            <h5>Plan de tratamiento endodóntico</h5>
+                            <h5>Tratamiento</h5>
                             <p>Evalúe la pieza, registre el tratamiento y prepare el presupuesto del paciente.</p>
                         </div>
                         <span class="dental-treatment-flow__status" id="estado_cabecera_plan_endodoncia"
@@ -424,7 +424,7 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" data-step="4" id="tratamiento_tab"
                             onclick="refrescar_caras_grupos_endodoncia()" data-toggle="tab" href="#tratamiento"
-                            role="tab" aria-controls="tratamiento" aria-selected="false">Plan de tratamiento</a>
+                            role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" data-step="5" id="presupuesto_tab" onclick="actualizar_presupuesto()" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
@@ -480,7 +480,7 @@
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                             {{-- @include('atencion_odontologica.generales.odonto_gral') --}}
 @if($mostrarUrgenciaDental)
-                                @include('atencion_odontologica.generales.control_urgencias')
+                                @include('atencion_odontologica.generales.control_urgencias', ['habilitarTratamientoUrgencia' => true])
                             @endif
                             @if($mostrarEndodonciaDental)
                                 @include('atencion_odontologica.generales.includes.endodoncia')
@@ -935,68 +935,88 @@
                         <!--CIERRE: EVALUACION--->
                         <!-- TRATAMIENTO-->
                         <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
+                            @php $esPacienteAdultoPlanEndodoncia = (bool) ($es_paciente_adulto ?? ($paciente->es_adulto ?? true)); @endphp
                             <div class="endo-plan-panel mt-3" id="plan_tratamiento_endodoncia">
                                 <div class="endo-plan-panel__header">
                                     <div>
-                                        <h5>Plan de tratamiento endodóntico</h5>
+                                        <h5>Tratamiento</h5>
                                         <p>Seleccione una pieza, indique el diagnóstico y agregue la prestación.</p>
                                     </div>
-                                    <span class="badge badge-light-primary">Dentición adulta</span>
+                                    <span class="badge badge-light-primary">{{ $esPacienteAdultoPlanEndodoncia ? 'Dentición adulta' : 'Dentición temporal' }}</span>
                                 </div>
                                 <div class="card-body">
-                                    @php
-                                        $piezasPlanEndodoncia = [
-                                            '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
-                                            '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
-                                            '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
-                                            '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
-                                        ];
-                                    @endphp
-                                    <div class="endo-piece-planner">
-                                        <div class="endo-piece-planner__title">
-                                            <div>
-                                                <h6>Seleccione una pieza para agregar al tratamiento</h6>
-                                                <p>Presione una pieza para ingresar su diagnóstico y prestación.</p>
-                                            </div>
-                                        </div>
-                                        @include('atencion_odontologica.include.selector_odontograma', [
-                                            'id' => 'selector_plan_tratamiento_endodoncia',
-                                            'inputId' => 'pieza_plan_tratamiento_endodoncia',
-                                            'counter' => 9800,
-                                            'multiple' => false,
-                                            'compacto' => true,
-                                            'autoRefresh' => false,
-                                            'mostrarMensajeVacio' => false,
-                                            'mostrarEstadoClinico' => true,
-                                            'historialPiezas' => $odontograma_historial ?? [],
-                                            'estadosBloqueados' => [],
-                                            'piezasDisponibles' => $piezasPlanEndodoncia,
-                                            'titulo' => 'Odontograma del plan endodóntico',
-                                            'ayuda' => 'Presione una pieza para agregarla al tratamiento',
-                                        ])
-                                        <input type="hidden" id="pieza_plan_tratamiento_endodoncia" value="0">
-                                    </div>
-                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="denticion_plan_endodoncia" role="tablist">
+                                    <ul class="nav nav-tabs-aten nav-fill mb-3 dentition-selector" id="denticion_plan_endodoncia" role="tablist">
+                                        @if ($esPacienteAdultoPlanEndodoncia)
                                         <li class="nav-item">
                                             <a class="nav-link-aten text-reset active" id="plan_endo_adulto_tab"
                                                 data-toggle="tab" href="#plan_endo_adulto" role="tab"
                                                 aria-controls="plan_endo_adulto" aria-selected="true">Adulto</a>
                                         </li>
+                                        @else
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="plan_endo_infantil_tab"
+                                            <a class="nav-link-aten text-reset active" id="plan_endo_infantil_tab"
                                                 data-toggle="tab" href="#plan_endo_infantil" role="tab"
-                                                aria-controls="plan_endo_infantil" aria-selected="false">Infantil</a>
+                                                aria-controls="plan_endo_infantil" aria-selected="true">Evaluación Infantil</a>
                                         </li>
+                                        @endif
                                     </ul>
                                     <div class="tab-content" id="contenido_plan_endodoncia">
+                                        @if ($esPacienteAdultoPlanEndodoncia)
                                         <div class="tab-pane fade show active" id="plan_endo_adulto" role="tabpanel"
                                             aria-labelledby="plan_endo_adulto_tab">
+                                            @php
+                                                $piezasPlanEndodoncia = [
+                                                    '1.8','1.7','1.6','1.5','1.4','1.3','1.2','1.1',
+                                                    '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8',
+                                                    '4.8','4.7','4.6','4.5','4.4','4.3','4.2','4.1',
+                                                    '3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8',
+                                                ];
+                                            @endphp
+                                            <div class="endo-piece-planner">
+                                                <div class="endo-piece-planner__title">
+                                                    <div>
+                                                        <h6>Seleccione una pieza para agregar al tratamiento</h6>
+                                                        <p>Presione una pieza para ingresar su diagnóstico y prestación.</p>
+                                                    </div>
+                                                </div>
+                                                @include('atencion_odontologica.include.selector_odontograma', [
+                                                    'id' => 'selector_plan_tratamiento_endodoncia',
+                                                    'inputId' => 'pieza_plan_tratamiento_endodoncia',
+                                                    'counter' => 9800,
+                                                    'multiple' => false,
+                                                    'compacto' => true,
+                                                    'autoRefresh' => false,
+                                                    'mostrarMensajeVacio' => false,
+                                                    'mostrarEstadoClinico' => true,
+                                                    'historialPiezas' => $odontograma_historial ?? [],
+                                                    'estadosBloqueados' => [],
+                                                    'piezasDisponibles' => $piezasPlanEndodoncia,
+                                                    'titulo' => 'Odontograma del plan endodóntico',
+                                                    'ayuda' => 'Presione una pieza para agregarla al tratamiento',
+                                                ])
+                                                <input type="hidden" id="pieza_plan_tratamiento_endodoncia" value="0">
+                                            </div>
                                             @include('atencion_odontologica.generales.evaluacion_adulto')
                                         </div>
-                                        <div class="tab-pane fade" id="plan_endo_infantil" role="tabpanel"
+                                        @else
+                                        <div class="tab-pane fade show active" id="plan_endo_infantil" role="tabpanel"
                                             aria-labelledby="plan_endo_infantil_tab">
+                                            <div class="mb-3">
+                                                @include('atencion_odontologica.include.selector_odontograma_pediatrico', [
+                                                    'id' => 'selector_plan_tratamiento_endodoncia_infantil',
+                                                    'inputId' => 'pieza_plan_tratamiento_endodoncia',
+                                                    'modo' => 'planificacion',
+                                                    'multiple' => false,
+                                                    'compacto' => true,
+                                                    'historialPiezas' => $odontograma_historial ?? ($odontograma ?? []),
+                                                    'piezasPresupuesto' => collect($odontograma ?? [])->where('presupuesto', 1),
+                                                    'titulo' => 'Seleccione una pieza para agregar al tratamiento',
+                                                    'ayuda' => 'Presione una pieza temporal para ingresar su diagnóstico y prestación endodóntica.',
+                                                ])
+                                            </div>
                                             @include('atencion_odontologica.generales.caras_cuadrantes')
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -1078,10 +1098,10 @@
     let actualizandoPlanEndodoncia = false;
     let diagnosticoPlanEndodonciaSeleccionado = null;
 
-    function abrirModalPiezaPlanEndodoncia(pieza) {
+    function abrirModalPiezaPlanEndodoncia(pieza, pediatrica) {
         if (!pieza) return;
         $('#numero_pieza_plan_endodoncia').text(pieza);
-        actualizarVisualModalPlanPieza('#modal_pieza_plan_endodoncia', pieza, false);
+        actualizarVisualModalPlanPieza('#modal_pieza_plan_endodoncia', pieza, !!pediatrica);
         $('#diagnostico_pieza_plan_endodoncia').val('0');
         $('#tratamiento_pieza_plan_endodoncia').val('');
         $('#modal_pieza_plan_endodoncia').modal('show');
@@ -1094,11 +1114,13 @@
         const estadosVisuales = {};
         const piezasPresupuesto = new Set();
         (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
-            if (!registro || Number(registro.presupuesto) !== 1 || Number(registro.urgencia) === 1) return;
+            if (!registro || Number(registro.urgencia) === 1) return;
 
             const pieza = String(registro.pieza || '');
             if (!pieza || estadosVisuales[pieza] === 'ausente') return;
-            piezasPresupuesto.add(pieza);
+            if (Number(registro.presupuesto) === 1) {
+                piezasPresupuesto.add(pieza);
+            }
 
             const diagnostico = String(registro.diagnostico || '').toLowerCase();
             const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
@@ -1189,7 +1211,7 @@
                     return Number(item.id) === idTratamiento;
                 });
                 const estado = Number($fila.attr('data-clinical-state') || (registro ? registro.estado : 0));
-                const progreso = Number(registro ? registro.progreso : 0) || (estado === 1 ? 100 : 25);
+                const progreso = registro && registro.progreso !== null && registro.progreso !== undefined ? Number(registro.progreso) : (estado === 1 ? 100 : 0);
                 const selector = crearProgresoCircularDental(progreso, 'actualizarEstadoPiezaPlan(this,' + idTratamiento + ')');
                 const $control = $celdas.eq(7).find('.custom-control, .form-check').first().detach();
                 $celdas.eq(7).html('<div class="dental-table-state-control">' + selector + '</div>');
@@ -1279,11 +1301,19 @@
     // del selector haya sido emitido por otra instancia.
     document.addEventListener('click', function (event) {
         const botonPieza = event.target.closest(
-            '#selector_plan_tratamiento_endodoncia [data-selector-pieza]'
+            '#selector_plan_tratamiento_endodoncia [data-selector-pieza], ' +
+            '#selector_plan_tratamiento_endodoncia_infantil [data-pieza-pediatrica]'
         );
-        if (!botonPieza || botonPieza.disabled || !botonPieza.classList.contains('is-enabled')) return;
+        if (!botonPieza || botonPieza.disabled || botonPieza.classList.contains('is-locked')) return;
 
-        const pieza = String(botonPieza.getAttribute('data-selector-pieza') || '');
+        const esPediatrica = !!botonPieza.closest('#selector_plan_tratamiento_endodoncia_infantil');
+        if (!esPediatrica && !botonPieza.classList.contains('is-enabled')) return;
+
+        const pieza = String(
+            botonPieza.getAttribute('data-pieza-pediatrica') ||
+            botonPieza.getAttribute('data-selector-pieza') ||
+            ''
+        );
         window.setTimeout(function () {
             // El selector alterna is-selected antes de que el clic llegue al
             // document. Si el usuario está desmarcando, no se abre el modal.
@@ -1292,7 +1322,7 @@
                 return;
             }
             $('#pieza_plan_tratamiento_endodoncia').val(pieza);
-            abrirModalPiezaPlanEndodoncia(pieza);
+            abrirModalPiezaPlanEndodoncia(pieza, esPediatrica);
         }, 0);
     });
 
@@ -6635,6 +6665,7 @@ function cargar_a_presupuesto_end_g_confirmar(etapa){
                 });
                 let odontograma = resp.odontograma_paciente;
                 odontograma_global = odontograma;
+                sincronizarSelectorPlanEndodoncia(odontograma);
                 let html = '';
                 odontograma.forEach(function(odonto){
                     html += '<tr>';
@@ -7275,3 +7306,4 @@ function cargar_a_presupuesto_impl_g_confirmar(){
 
 
 @endsection
+@include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')
