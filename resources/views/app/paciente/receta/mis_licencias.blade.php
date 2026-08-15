@@ -9,7 +9,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Mis licencias</h5>
+                            <h5 class="m-b-10 font-weight-bold"></h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}"
@@ -28,16 +28,9 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12">
-                            <h4 class="text-c-blue f-20 d-inline">Mis licencias</h4>
-                            <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1" data-toggle="modal" data-target="#agregar_licencia_profesional_ro">
-                                    <i class="feather icon-plus"></i> Agregar licencia
-                                </button>-->
-                            </div>
+                    <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-plus icono-primary"></i> Mis licencias</h5>
                         </div>
-                    </div>
                     <div class="card-body">
                         <table id="tabla_licencia_paciente_ro"
                             class="display table table-striped dt-responsive nowrap table-xs"

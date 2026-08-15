@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis recetas</h5>
+                                <h5 class="m-b-10 font-weight-bold"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
@@ -24,8 +24,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis recetas</h4>
+                        <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-text icono-primary"></i> Mis recetas</h5>
                         </div>
                         <div class="card-body">
                             <table id="tabla_recetas_paciente_ro" class="display table table-striped  dt-responsive nowrap table-xs" style="width:100%">
@@ -57,7 +57,7 @@
                                                         <span class="text-muted">Profesional no disponible</span>
                                                     @endif
                                                 </td>
-                                                <td class="text-center align-middle">
+                                                <td class="align-middle">
                                                     <div onclick="ver_pdf_receta_retenido({{ $receta['id_ficha_atencion'] }}, {{ $receta['id'] }})" class="btn btn-warning-light-c btn-xxs"><i class="feather icon-activity"></i> Ver Receta</div>
                                                 </td>
                                             </tr>

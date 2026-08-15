@@ -10,7 +10,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis exámenes</h5>
+                                <h5 class="m-b-10 font-weight-bold"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
@@ -25,11 +25,11 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header-principal bg-white">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4 class="text-c-blue f-20 d-inline">Exámenes cargados por mí</h4>
-                                    <button type="button" class="btn btn-info btn-sm float-right d-inline" onclick="subir_ex_pcte();"><i class="feather icon-plus"></i> Subir examen</button>
+                                     <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-plus icono-primary"></i>Exámenes cargados por mí</h5>
+                                    <button type="button" class="btn btn-info float-right d-inline" onclick="subir_ex_pcte();"><i class="feather icon-plus"></i> Subir examen</button>
                                 </div>
                             </div>
                         </div>

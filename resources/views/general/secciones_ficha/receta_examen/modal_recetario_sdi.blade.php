@@ -282,7 +282,7 @@
                                         <select name="manual_cantidad_tipo_unidad" id="manual_cantidad_tipo_unidad" class="form-control form-control-sm" onchange="cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar')">
                                             <option value="Ampolla(s)">Ampolla(s)</option>
                                             <option value="Caja(s)">Caja(s)</option>
-                                            <option value="Franco(s)">Franco(s)</option>
+                                            <option value="Franco(s)">Frasco(s)</option>
                                             <option value="Unidad(es)">Unidad(es)</option>
                                         </select>
                                     </div>

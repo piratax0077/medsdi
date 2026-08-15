@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis documentos e indicaciones</h5>
+                                <h5 class="m-b-10 font-weight-bold"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip"
@@ -28,8 +28,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                         <div class="card-header">
-                            <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis documentos e indicaciones</h4>
+                        <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-text icono-primary"></i> Mis documentos e indicaciones</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
