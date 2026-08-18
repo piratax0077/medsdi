@@ -24,15 +24,17 @@
                     <div class="row">
                          <div class="col-sm-6 col-md-6" id="seccion_examenes">
                         </div>
-
                         <div class="col-sm-12 d-none" id="detalle_agenda_dental">
-                            <div class="border rounded p-3 mb-3 bg-light">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <strong class="text-primary"><i class="feather icon-clipboard mr-1"></i> Detalle de la atención dental</strong>
-                                    <span id="detalle_dental_estado_pago" class="badge"></span>
+                            <div class="alert alert-primary">
+                                <div class="media">
+                                  <img src="{{ asset('images/iconos/diente.svg') }}" class="mr-2 wid-40 img-fluid" alt="...">
+                                  <div class="media-body">
+                                       <strong class="text-c-blue f-14">Detalle de la atención dental</strong>
+                                        <span id="detalle_dental_estado_pago" class="badge"></span>
+                                        <div class="text-dark" id="detalle_dental_resumen" class="mb-2"></div>
+                                        <div class="text-dark" id="detalle_dental_prestaciones"></div>
+                                  </div>
                                 </div>
-                                <div id="detalle_dental_resumen" class="mb-2"></div>
-                                <div id="detalle_dental_prestaciones"></div>
                             </div>
                         </div>
 
@@ -130,7 +132,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <strong>Telefono</strong>
+                                            <strong>Teléfono</strong>
                                         <td>
 
                                             <div class="paciente_view_asistente">
@@ -302,13 +304,6 @@
 
             </div>
             <div class="modal-footer">
-
-               
-                 <!--<div>
-                    <select class="form-control form-control-sm">
-                        <option>Seleccione vía de confirmación</option>
-                    </select>
-                </div>-->
                 <div id="contenedor_via_confirmacion">
                     <select class="form-control form-control-sm" name="confirmar_hora_comentario"
                         id="confirmar_hora_comentario">
