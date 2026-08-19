@@ -32,10 +32,33 @@ class UsersDevicesController extends Controller
             ]);
         }
 
+        /*
+        * Si el dispositivo ya está autorizado pero pertenece a una
+        * instalación anterior a emergency_token, generamos la credencial
+        * automáticamente.
+        */
+        if ((int) $registro->estado === 1 && empty($registro->emergency_token)) {
+
+            $emergencyToken = bin2hex(random_bytes(32));
+
+            // Aplicarlo también a posibles registros legacy duplicados
+            // del mismo usuario + dispositivo.
+            UsersDevices::where('id_user', $registro->id_user)
+                ->where('uuid', $registro->uuid)
+                ->update([
+                    'emergency_token' => $emergencyToken,
+                    'updated_at' => now(),
+                ]);
+
+            // Actualizamos la instancia que enviaremos a Cordova
+            $registro->emergency_token = $emergencyToken;
+        }
+
         return response()->json([
             'estado' => 1,
             'registros' => [$registro],
             'password' => $registro->password,
+            'emergency_token' => $registro->emergency_token,
         ]);
     }
 
@@ -596,11 +619,18 @@ class UsersDevicesController extends Controller
                     // Versiones antiguas podían crear más de un registro para el
                     // mismo usuario y UUID. El enlace debe activar el equipo
                     // completo para que la app no vuelva a encontrar uno pendiente.
+                    $emergencyToken = $registro->emergency_token;
+
+                    if (empty($emergencyToken)) {
+                        $emergencyToken = bin2hex(random_bytes(32));
+                    }
+
                     $registrosActualizados = UsersDevices::where('id_user', $registro->id_user)
                         ->where('uuid', $registro->uuid)
                         ->update([
                             'estado' => 1,
                             'code' => date('YmdHis'),
+                            'emergency_token' => $emergencyToken,
                             'updated_at' => now(),
                         ]);
 

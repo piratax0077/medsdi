@@ -6,6 +6,7 @@ use App\Models\EmergencyAlert;
 use App\Models\EmergencyDoctorLink;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\UsersDevices;
 use App\Services\FirebaseCloudMessaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -161,5 +162,47 @@ class EmergencyDoctorController extends Controller
                 'specialty' => optional($professional->Especialidad)->nombre ?: 'Profesional de salud',
             ] : null,
         ];
+    }
+
+    public function deviceAccess(Request $request)
+    {
+        $data = $request->validate([
+            'uuid' => ['required', 'string', 'max:255'],
+            'emergency_token' => ['required', 'string'],
+        ]);
+
+        $device = UsersDevices::where('uuid', $data['uuid'])
+            ->where('emergency_token', $data['emergency_token'])
+            ->where('estado', 1)
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$device) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'Dispositivo no autorizado.'
+            ], 401);
+        }
+
+        $link = EmergencyDoctorLink::where(
+                'patient_user_id',
+                $device->id_user
+            )
+            ->where('status', 'active')
+            ->latest()
+            ->first();
+
+        if (!$link) {
+            return response()->json([
+                'estado' => 1,
+                'link' => null,
+                'mensaje' => 'No existe profesional de emergencia asociado.'
+            ]);
+        }
+
+        return response()->json([
+            'estado' => 1,
+            'link' => $this->patientLinkPayload($link)
+        ]);
     }
 }

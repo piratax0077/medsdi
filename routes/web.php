@@ -408,6 +408,7 @@ Route::group([
     Route::get('Receta_Online/Mis_Certificados', [App\Http\Controllers\EscritorioPaciente::class, 'receta_miscertificados'])->name('paciente.receta.certificado');
     Route::get('Receta_Online/Mis_Licencias', [App\Http\Controllers\EscritorioPaciente::class, 'receta_mislicencias'])->name('paciente.receta.licencia');
     Route::get('Receta_Online/licencia/pdf', [App\Http\Controllers\LicenciaAprobacionController::class, 'pdfLicenciaPaciente'])->name('paciente.licencia.pdf');
+    Route::post('Receta_Online/presupuesto/firmar',[App\Http\Controllers\EscritorioPaciente::class, 'firmarPresupuestoPaciente'])->name('paciente.presupuesto.firmar');
 
     /* 3.- Perfil */
     Route::post('Perfil/editinfo', [App\Http\Controllers\EscritorioPaciente::class, 'editInfor'])->name('paciente.perfil.editinfo');
@@ -3399,3 +3400,7 @@ Route::get('/test/config-mensajeria', function () {
 });
 
 Route::post('/whatsapp/webhook', [\App\Http\Controllers\WhatsappController::class, 'webhook'])->name('whatsapp.webhook');
+Route::get(
+    '/validar/firma/presupuesto/{token}',
+    [\App\Http\Controllers\EscritorioPaciente::class, 'validarFirmaPresupuesto']
+)->name('presupuesto.validar.firma');

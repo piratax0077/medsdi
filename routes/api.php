@@ -177,6 +177,8 @@ Route::get('/profesionales/sub_tipo_especialidades', [App\Http\Controllers\AppPa
 Route::post('/profesionales/buscar_profesionales', [App\Http\Controllers\AppPacienteController::class, 'buscarProfesionales']);
 Route::get('/profesionales/perfil_profesional', [App\Http\Controllers\AppPacienteController::class, 'getPerfilProfesional']);
 
+Route::post('/emergency-doctor/device-access',[EmergencyDoctorController::class, 'deviceAccess']);
+
 //RECETAS ONLINE
 Route::middleware('auth:api')->get(
     '/paciente/mis_examenes',

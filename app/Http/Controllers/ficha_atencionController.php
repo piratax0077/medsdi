@@ -192,6 +192,28 @@ use App\Http\Controllers\ExamenMedicoController;
 class ficha_atencionController extends Controller
 {
 
+    /**
+     * Resuelve el profesional para consultas odontológicas reutilizables.
+     *
+     * Si se entrega $id_profesional se usa directamente. Esto permite que
+     * procesos ejecutados desde el paciente (por ejemplo, regenerar un PDF
+     * firmado) no dependan de que Auth::user() sea un profesional.
+     */
+    private function resolverProfesionalOdontologia($id_profesional = null)
+    {
+        if (!empty($id_profesional)) {
+            return Profesional::find((int) $id_profesional);
+        }
+
+        if (Auth::check()) {
+            return Profesional::where('id_usuario', Auth::id())->first();
+        }
+
+        return null;
+    }
+
+
+
     public function atencion_profesional_no_inscrito(Request $request)
     {
 
@@ -3775,8 +3797,12 @@ class ficha_atencionController extends Controller
 
     }
 
-    public function dameCompletaEndoTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameCompletaEndoTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
@@ -3793,8 +3819,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameCompletaEndoDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameCompletaEndoDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
@@ -3811,8 +3841,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralTratamientoEndodoncia($id_paciente,$tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarSuperiorGeneralTratamientoEndodoncia($id_paciente,$tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('examenes_boca_general.localizacion','Maxilar superior')
@@ -3829,8 +3863,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($id_paciente,$tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($id_paciente,$tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar superior')
@@ -3847,8 +3885,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralTratamientoEndodoncia($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarInferiorGeneralTratamientoEndodoncia($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
@@ -3865,8 +3907,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralDiagnosticoEndodoncia($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarInferiorGeneralDiagnosticoEndodoncia($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
         ->where('examenes_boca_general.id_profesional', $profesional->id)
@@ -3883,8 +3929,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         if($profesional->id_tipo_especialidad == 16){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
 
@@ -3915,8 +3965,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameBocaCompletaGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameBocaCompletaGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         if($profesional->id_tipo_especialidad == 16){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
 
@@ -3947,8 +4001,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarInferiorGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         if($profesional->id_tipo_especialidad == 16){
             $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
             ->join('tratamientos_implantologia','examenes_boca_general.diagnostico_tratamiento','=','tratamientos_implantologia.descripcion')
@@ -3977,8 +4035,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         if($profesional->id_tipo_especialidad == 16){
             $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
 
@@ -4009,9 +4071,13 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
+    public function dameMaxilarSuperiorGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
 
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         if($profesional->id_tipo_especialidad == 16){
             $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
             ->join('tratamientos_implantologia','examenes_boca_general.diagnostico_tratamiento','=','tratamientos_implantologia.descripcion')
@@ -4043,8 +4109,12 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+    public function dameMaxilarSuperiorGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null, $id_profesional = null){
+        $profesional = $this->resolverProfesionalOdontologia($id_profesional);
+
+        if (!$profesional) {
+            return collect();
+        }
         if($profesional->id_tipo_especialidad == 16){
             $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
 

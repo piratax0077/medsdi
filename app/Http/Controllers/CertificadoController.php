@@ -17,6 +17,7 @@ use App\Models\OftalmoRecetaLente;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\ProfesionalFirma;
+use App\Models\PresupuestosDental;
 use App\Models\RecetaAudifono;
 use App\Models\RecetaControl;
 use App\Models\SubTipoEspecialidad;
@@ -430,6 +431,24 @@ class CertificadoController extends Controller
                             // 25. USOS PERSONALES
                             case '25':
                                 break;
+                            // 27. PRESUPUESTO ODONTOLÓGICO
+                            case '27':
+                                $presupuesto = PresupuestosDental::find($id_documento);
+
+                                if (
+                                    $presupuesto &&
+                                    isset($presupuesto->cod_auto) &&
+                                    (string) $presupuesto->cod_auto !== '' &&
+                                    hash_equals((string) $presupuesto->cod_auto, (string) $auto)
+                                ) {
+                                    $datos['inf_documento']['estado'] = 1;
+                                    $datos['inf_documento']['url'] = '';
+                                    $datos['inf_documento']['registros'] = $presupuesto;
+                                } else {
+                                    $datos['inf_documento']['estado'] = 0;
+                                    $datos['inf_documento']['msj'] = 'Presupuesto odontológico no encontrado o firma no corresponde al documento';
+                                }
+                                break;
 
                             default:
                                 # code...
@@ -705,6 +724,28 @@ class CertificadoController extends Controller
                     // 25. USOS PERSONALES
                     case '25':
                         break;
+                    // 27. PRESUPUESTO ODONTOLÓGICO
+                    case '27':
+                        $profesional = (object) $validar->profesional;
+                        $inf_documento = (object) $validar->inf_documento;
+
+                        $html = '';
+                        $html .= '<div class="row">';
+                        $html .= '    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                        $html .= '        <div class="card" style="color: #000;">';
+                        $html .= '            <div class="card-body">';
+                        $html .= '                <h4 class="card-subtitle mb-2 text-success text-center"><i class="fas fa-check-circle"></i> Firma V&aacute;lida</h4>';
+                        $html .= '                <ul style="list-style: none;">';
+                        $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">Tipo</span><br>PRESUPUESTO ODONTOL&Oacute;GICO</li>';
+                        $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">Profesional</span><br>'.mb_strtoupper($profesional->registro->nombre).' '.mb_strtoupper($profesional->registro->apellido_uno).' '.mb_strtoupper($profesional->registro->apellido_dos).'</li>';
+                        $html .= '                </ul>';
+                        $html .= '            </div>';
+                        $html .= '        </div>';
+                        $html .= '    </div>';
+                        $html .= '</div>';
+
+                        $card_informacion = $html;
+                        break;
                     default:
                         # code...
                         break;
@@ -872,6 +913,20 @@ class CertificadoController extends Controller
                             break;
                         // 25. USOS PERSONALES
                         case '25':
+                            break;
+                        // 27. PRESUPUESTO ODONTOLÓGICO
+                        case '27':
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                            $html .= '        <div class="card" style="color: #000;">';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center"><i class="fa fa-times-circle"></i> Firma NO V&aacute;lida para el Presupuesto</h4>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+                            $card_informacion = $html;
                             break;
                         default:
                             $html = '';
@@ -1336,6 +1391,24 @@ class CertificadoController extends Controller
                                                     : FichaGinecoObstetrica::select('id', 'id_paciente', 'id_profesional', 'hipotesis_diagnostico', 'created_at')->find($id_ficha);
                                                 if ($detalle_eco && $detalle_eco->id_profesional == $id_profesional && $detalle_eco->id_paciente == $id_paciente) {
                                                     $datos['registros']['detalle'] = $detalle_eco;
+                                                } else {
+                                                    $valido = 0;
+                                                    $retorno_valido = 0;
+                                                }
+                                                break;
+                                            // 27. PRESUPUESTO ODONTOLÓGICO
+                                            case '27':
+                                                $valido = 1;
+                                                $retorno_valido = 1;
+
+                                                // En los tokens de presupuesto, id_receta representa id_presupuesto.
+                                                $presupuesto = PresupuestosDental::find($id_receta);
+
+                                                if (
+                                                    $presupuesto &&
+                                                    (int) $presupuesto->id_paciente === (int) $id_paciente
+                                                ) {
+                                                    $datos['registros']['detalle'] = $presupuesto;
                                                 } else {
                                                     $valido = 0;
                                                     $retorno_valido = 0;
@@ -1819,6 +1892,36 @@ class CertificadoController extends Controller
                             $card_informacion = $html;
                         }
                         break;
+                    // 27. PRESUPUESTO ODONTOLÓGICO
+                    case '27':
+                        if (isset($validar->registros['detalle'])) {
+                            $presupuesto = $validar->registros['detalle'];
+                            $paciente_presupuesto = $validar->registros['paciente'];
+                            $profesional_presupuesto = $validar->registros['profesional'];
+                            $fecha_doc = isset($presupuesto->created_at)
+                                ? date('d-m-Y', strtotime($presupuesto->created_at))
+                                : date('d-m-Y');
+
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto mb-2">';
+                            $html .= '        <div class="card">';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-success text-center"><i class="fas fa-check-circle"></i> Documento V&aacute;lido</h4>';
+                            $html .= '                <ul style="list-style: none;">';
+                            $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">TIPO</span><br>PRESUPUESTO ODONTOL&Oacute;GICO</li>';
+                            $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">N&deg; PRESUPUESTO</span><br>'.$presupuesto->id.'</li>';
+                            $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">FECHA</span><br>'.$fecha_doc.'</li>';
+                            $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">PACIENTE</span><br>'.mb_strtoupper($paciente_presupuesto->nombres).' '.mb_strtoupper($paciente_presupuesto->apellido_uno).' '.mb_strtoupper($paciente_presupuesto->apellido_dos).'</li>';
+                            $html .= '                    <li style="margin-bottom: 5px;"><span class="font-weight-bold">PROFESIONAL</span><br>'.mb_strtoupper($profesional_presupuesto->nombre).' '.mb_strtoupper($profesional_presupuesto->apellido_uno).' '.mb_strtoupper($profesional_presupuesto->apellido_dos).'</li>';
+                            $html .= '                </ul>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+                            $card_informacion = $html;
+                        }
+                        break;
                     default:
                         # code...
                         break;
@@ -1949,6 +2052,20 @@ class CertificadoController extends Controller
                             break;
                         // 25. USOS PERSONALES
                         case '25':
+                            break;
+                        // 27. PRESUPUESTO ODONTOLÓGICO
+                        case '27':
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                            $html .= '        <div class="card" style="color: #000;">';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center"><i class="fa fa-times-circle"></i> Presupuesto NO V&aacute;lido</h4>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+                            $card_informacion = $html;
                             break;
                         default:
                             $html = '';

@@ -13,10 +13,12 @@
     <div class="col-9">
         <div class="card-informacion">
             <div class="card-body">
-                <div class="row align-items-stretch">
-                    <div class="form-group col-sm-12 col-lg-5 mb-3">
-                        <div class="form-group">
+                {{-- Fila 1: selector odontograma --}}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-3">
                             <label class="floating-label-activo-sm">Piezas</label>
+
                             @include('atencion_odontologica.include.selector_odontograma', [
                                 'id' => 'selector_evolucion_od_gral_'.$counter,
                                 'inputId' => 'n_pieza_evol_g'.$counter,
@@ -27,37 +29,63 @@
                                 'titulo' => 'Piezas disponibles',
                                 'ayuda' => 'Seleccione una o varias piezas',
                             ])
-                            <select class="d-none" name="n_pieza_evol_g{{ $counter }}" id="n_pieza_evol_g{{ $counter }}" multiple="multiple" tabindex="-1" aria-hidden="true">
+
+                            <select
+                                class="d-none"
+                                name="n_pieza_evol_g{{ $counter }}"
+                                id="n_pieza_evol_g{{ $counter }}"
+                                multiple="multiple"
+                                tabindex="-1"
+                                aria-hidden="true">
                                 @foreach($piezasDisponiblesEvolucion as $odont)
                                     <option value="{{ $odont->pieza }}">{{ $odont->pieza }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-lg-7">
-                        <div class="form-row align-items-center">
-                            <div class="form-group col-sm-12 col-md-5">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select name="proc_od_gral_grupo{{ $counter }}" id="proc_od_gral_grupo{{ $counter }}" onchange="dame_estado_prestacion(this.value, {{ $counter }})" class="form-control form-control-sm">
-                                        <option value="">Seleccione</option>
-                                    </select>
-                                </div>
+                </div>
+
+                {{-- Fila 2: formulario de evolución --}}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-row align-items-end">
+                            <div class="form-group col-sm-12 col-md-5 mb-3">
+                                <label class="floating-label-activo-sm">Procedimiento</label>
+                                <select
+                                    name="proc_od_gral_grupo{{ $counter }}"
+                                    id="proc_od_gral_grupo{{ $counter }}"
+                                    onchange="dame_estado_prestacion(this.value, {{ $counter }})"
+                                    class="form-control form-control-sm">
+                                    <option value="">Seleccione</option>
+                                </select>
                             </div>
-                            <div class="form-group col-sm-12 col-md-7">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Observaciones</label>
-                                    <input type="text" name="obs_od_gral_grupo{{ $counter }}" id="obs_od_gral_grupo{{ $counter }}" class="form-control form-control-sm" />
-                                </div>
+
+                            <div class="form-group col-sm-12 col-md-7 mb-3">
+                                <label class="floating-label-activo-sm">Observaciones</label>
+                                <input
+                                    type="text"
+                                    name="obs_od_gral_grupo{{ $counter }}"
+                                    id="obs_od_gral_grupo{{ $counter }}"
+                                    class="form-control form-control-sm" />
                             </div>
-                            <div class="form-group col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Evolución</label>
-                                    <textarea class="form-control form-control-sm" name="evoluciones_od_gral_grupo{{ $counter }}" id="evoluciones_od_gral_grupo{{ $counter }}" rows="1" onfocus="this.rows=6" onblur="this.rows=1;"></textarea>
-                                </div>
+
+                            <div class="form-group col-sm-12 mb-2">
+                                <label class="floating-label-activo-sm">Evolución</label>
+                                <textarea
+                                    class="form-control form-control-sm"
+                                    name="evoluciones_od_gral_grupo{{ $counter }}"
+                                    id="evoluciones_od_gral_grupo{{ $counter }}"
+                                    rows="3"
+                                    onfocus="this.rows=6"
+                                    onblur="this.rows=3;"></textarea>
                             </div>
-                            <div class="form-group col-sm-12">
-                                <div class="badge badge-warning" style="font-size: 15px;" id="estado_prestacion{{ $counter }}"></div>
+
+                            <div class="form-group col-sm-12 mb-0">
+                                <div
+                                    class="badge badge-warning"
+                                    style="font-size: 15px;"
+                                    id="estado_prestacion{{ $counter }}">
+                                </div>
                             </div>
                         </div>
                     </div>

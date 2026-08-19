@@ -145,7 +145,7 @@
                                                     data-toggle="tab" onclick="proxima_atencion_paciente()" href="#ind_urgencia"
                                                     role="tab"
                                                     aria-controls="ind_urgencia"
-                                                    aria-selected="false">Indicaciones</a>
+                                                    aria-selected="false">Indicaciones/Controles</a>
                                                 @if ($mostrarTratamientoUrgencia)
                                                 <a class="nav-link-aten text-reset {{ $subseccionUrgenciaActiva === 'tratamiento_urgencia' ? 'active' : '' }}"
                                                     id="tratamiento_urgencia_tab" data-toggle="tab" href="#tratamiento_urgencia"

@@ -24,6 +24,7 @@ use App\Models\LugarAtencion;
 use App\Models\Orden;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
+use App\Models\PresupuestosDental;
 use App\Models\ContactosEmergencia;
 
 use Illuminate\Support\Facades\Schema;
@@ -85,6 +86,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\DB;
 // log
 use Illuminate\Support\Facades\Log;
+use App\Services\PresupuestoDentalPdfService;
 
 use DateTime;
 
@@ -1813,6 +1815,296 @@ class EscritorioPaciente extends Controller
 
     }
 
+    public function firmarPresupuestoPaciente(Request $request)
+{
+    try {
+        $request->validate([
+            'id_presupuesto' => 'required|integer',
+            'password'       => 'required|string',
+            'acepta'         => 'required|in:1',
+        ], [
+            'id_presupuesto.required' => 'Debe indicar el presupuesto.',
+            'password.required'       => 'Debe ingresar su contraseña.',
+            'acepta.required'         => 'Debe aceptar el presupuesto antes de firmarlo.',
+            'acepta.in'               => 'Debe aceptar el presupuesto antes de firmarlo.',
+        ]);
+
+        $usuario = Auth::user();
+
+        if (!$usuario) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Sesión no válida.',
+            ], 401);
+        }
+
+        $paciente = Paciente::where('id_usuario', $usuario->id)->first();
+
+        if (!$paciente) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'No se encontró el paciente asociado a su cuenta.',
+            ], 404);
+        }
+
+        if (!Hash::check($request->password, $usuario->password)) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'La contraseña ingresada no es correcta.',
+            ], 422);
+        }
+
+        $presupuesto = PresupuestosDental::where('id', $request->id_presupuesto)
+            ->where('id_paciente', $paciente->id)
+            ->first();
+
+        if (!$presupuesto) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El presupuesto no existe o no pertenece al paciente autenticado.',
+            ], 404);
+        }
+
+        if ((int) $presupuesto->firma_paciente_estado === 1) {
+            return response()->json([
+                'estado' => 1,
+                'msj' => 'Este presupuesto ya fue firmado anteriormente.',
+                'firmado' => true,
+                'fecha_firma' => $presupuesto->firma_paciente_fecha,
+                'registro' => [
+                    'id_presupuesto' => $presupuesto->id,
+                    'firmado' => true,
+                    'fecha_firma' => $presupuesto->firma_paciente_fecha
+                        ? \Carbon\Carbon::parse($presupuesto->firma_paciente_fecha)->format('d/m/Y H:i')
+                        : null,
+                    'token' => $presupuesto->firma_paciente_token,
+                    'pdf_url' => $presupuesto->pdf_url,
+                ],
+            ]);
+        }
+
+        if (empty($presupuesto->pdf_url)) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El presupuesto todavía no tiene un documento PDF disponible para firmar.',
+            ], 422);
+        }
+
+        $tokenFirma = hash(
+            'sha256',
+            implode('|', [
+                'PRESUPUESTO',
+                $presupuesto->id,
+                $paciente->id,
+                $usuario->id,
+                $presupuesto->cod_auto ?? '',
+                microtime(true),
+                bin2hex(random_bytes(32)),
+            ])
+        );
+
+        /*
+         * Este hash conserva la referencia al PDF que el paciente vio y aceptó
+         * antes de incorporar visualmente el sello de firma.
+         */
+        $hashFirma = hash(
+            'sha256',
+            implode('|', [
+                $presupuesto->id,
+                $presupuesto->pdf_url,
+                $presupuesto->cod_auto ?? '',
+                $paciente->id,
+                $usuario->id,
+                $tokenFirma,
+            ])
+        );
+
+        DB::beginTransaction();
+
+        try {
+            $presupuesto->firma_paciente_estado = 1;
+            $presupuesto->firma_paciente_fecha = now();
+            $presupuesto->firma_paciente_token = $tokenFirma;
+            $presupuesto->firma_paciente_hash = $hashFirma;
+            $presupuesto->firma_paciente_ip = $request->ip();
+            $presupuesto->firma_paciente_user_agent = substr(
+                (string) $request->userAgent(),
+                0,
+                1000
+            );
+            $presupuesto->id_usuario_firma_paciente = $usuario->id;
+            $presupuesto->save();
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | REGENERAR PDF FIRMADO MEDIANTE SERVICIO
+        |--------------------------------------------------------------------------
+        |
+        | La firma ya fue confirmada en BD. El servicio genera el mismo PDF
+        | tanto desde el escritorio profesional como desde el paciente y no
+        | depende del usuario autenticado para identificar al profesional.
+        |--------------------------------------------------------------------------
+        */
+        $pdfRegenerado = false;
+        $advertenciaPdf = null;
+
+        try {
+            $servicioPdf = app(PresupuestoDentalPdfService::class);
+
+            $resultadoPdf = $servicioPdf->generar(
+                $presupuesto,
+                function (
+                    $idPaciente,
+                    $idFicha,
+                    $idLugar,
+                    $idTipoEspecialidad,
+                    $idPresupuesto
+                ) {
+                    return $this->dameOdontogramaPaciente(
+                        $idPaciente,
+                        $idFicha,
+                        $idLugar,
+                        $idPresupuesto
+                    );
+                }
+            );
+
+            $presupuesto->refresh();
+            $pdfRegenerado = (int) ($resultadoPdf['estado'] ?? 0) === 1;
+
+            if (!$pdfRegenerado) {
+                throw new \RuntimeException(
+                    $resultadoPdf['error']
+                    ?? 'No fue posible regenerar el PDF firmado.'
+                );
+            }
+
+        } catch (\Throwable $pdfException) {
+            $advertenciaPdf = $pdfException->getMessage();
+
+            \Log::error(
+                'La firma se guardó, pero falló la regeneración del PDF firmado.',
+                [
+                    'id_presupuesto' => $presupuesto->id,
+                    'id_paciente' => $paciente->id,
+                    'id_usuario' => $usuario->id,
+                    'error' => $pdfException->getMessage(),
+                    'linea' => $pdfException->getLine(),
+                    'archivo' => $pdfException->getFile(),
+                ]
+            );
+        }
+
+        \Log::info('Presupuesto firmado por paciente.', [
+            'id_presupuesto' => $presupuesto->id,
+            'id_paciente' => $paciente->id,
+            'id_usuario' => $usuario->id,
+            'fecha' => $presupuesto->firma_paciente_fecha,
+            'ip' => $request->ip(),
+            'pdf_regenerado' => $pdfRegenerado,
+        ]);
+
+        return response()->json([
+            'estado' => 1,
+            'msj' => $pdfRegenerado
+                ? 'El presupuesto fue firmado correctamente.'
+                : 'El presupuesto fue firmado correctamente, pero no fue posible actualizar visualmente el PDF.',
+            'advertencia_pdf' => $advertenciaPdf,
+            'registro' => [
+                'id_presupuesto' => $presupuesto->id,
+                'firmado' => true,
+                'fecha_firma' => $presupuesto->firma_paciente_fecha
+                    ? \Carbon\Carbon::parse($presupuesto->firma_paciente_fecha)->format('d/m/Y H:i')
+                    : null,
+                'token' => $tokenFirma,
+                'hash' => $hashFirma,
+                'url_validacion' => \Illuminate\Support\Facades\Route::has('presupuesto.validar.firma')
+                    ? route('presupuesto.validar.firma', ['token' => $tokenFirma])
+                    : null,
+                'pdf_url' => $presupuesto->pdf_url,
+                'pdf_regenerado' => $pdfRegenerado,
+            ],
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        throw $e;
+
+    } catch (\Throwable $e) {
+        if (DB::transactionLevel() > 0) {
+            DB::rollBack();
+        }
+
+        \Log::error('Error al firmar presupuesto por paciente.', [
+            'id_presupuesto' => $request->id_presupuesto ?? null,
+            'id_usuario' => Auth::id(),
+            'error' => $e->getMessage(),
+            'linea' => $e->getLine(),
+            'archivo' => $e->getFile(),
+        ]);
+
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'No fue posible firmar el presupuesto.',
+            'detalle' => config('app.debug')
+                ? $e->getMessage()
+                : null,
+        ], 500);
+    }
+}
+
+    public function validarFirmaPresupuesto($token)
+    {
+        $token = trim((string) $token);
+
+        if ($token === '') {
+            abort(404);
+        }
+
+        $presupuesto = PresupuestosDental::where('firma_paciente_token', $token)
+            ->where('firma_paciente_estado', 1)
+            ->first();
+
+        if (!$presupuesto) {
+            return response()
+                ->view('app.validaciones.validar_firma_presupuesto', [
+                    'valido' => false,
+                    'presupuesto' => null,
+                    'paciente' => null,
+                    'profesional' => null,
+                ], 404);
+        }
+
+        $paciente = Paciente::find($presupuesto->id_paciente);
+
+        $idProfesional = $presupuesto->id_profesional;
+
+        if (!$idProfesional) {
+            $idProfesional = OdontogramaPaciente::where(
+                    'id_presupuesto',
+                    $presupuesto->id
+                )
+                ->where('presupuesto', 1)
+                ->value('id_profesional');
+        }
+
+        $profesional = $idProfesional
+            ? Profesional::find($idProfesional)
+            : null;
+
+        return view('app.validaciones.validar_firma_presupuesto', [
+            'valido' => true,
+            'presupuesto' => $presupuesto,
+            'paciente' => $paciente,
+            'profesional' => $profesional,
+        ]);
+    }
+
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion = null, $id_lugar_atencion = null,$id_presupuesto = null){
         $query = OdontogramaPaciente::select(
             'odontogramas_pacientes.*',
@@ -2439,14 +2731,90 @@ class EscritorioPaciente extends Controller
     }
 
     public function receta_misdocumentos()
-    {
-        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
+{
+    $paciente = Paciente::where('id_usuario', Auth::id())->first();
 
-
-
-        return view('app.paciente.receta.mis_documentos', ['fichas' => $fichas, 'paciente' => $paciente]);
+    if (!$paciente) {
+        return redirect()
+            ->route('paciente.home')
+            ->with('error', 'No se encontró el paciente asociado al usuario.');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RECETAS / DOCUMENTOS ACTUALES
+    |--------------------------------------------------------------------------
+    */
+
+    $fichas = FichaAtencion::where('id_paciente', $paciente->id)
+        ->with([
+            'Profesional',
+        ])
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRESUPUESTOS ODONTOLÓGICOS
+    |--------------------------------------------------------------------------
+    */
+
+    $presupuestos = PresupuestosDental::where('id_paciente', $paciente->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMPLETAR DATOS DEL PRESUPUESTO
+    |--------------------------------------------------------------------------
+    |
+    | Como actualmente sabemos con certeza que presupuestos_dental tiene
+    | id_paciente, obtenemos ficha/profesional/lugar desde las prestaciones
+    | asociadas mediante id_presupuesto.
+    |
+    */
+
+    foreach ($presupuestos as $presupuesto) {
+
+        $prestacion = OdontogramaPaciente::where(
+                'id_presupuesto',
+                $presupuesto->id
+            )
+            ->where('presupuesto', 1)
+            ->first();
+
+        $presupuesto->id_ficha_atencion = optional($prestacion)->id_ficha_atencion;
+        $presupuesto->id_profesional = optional($prestacion)->id_profesional;
+        $presupuesto->id_lugar_atencion = optional($prestacion)->id_lugar_atencion;
+
+        $presupuesto->profesional_documento = null;
+
+        if (!empty($presupuesto->id_profesional)) {
+            $presupuesto->profesional_documento =
+                Profesional::with([
+                    'TipoEspecialidad',
+                    'SubTipoEspecialidad'
+                ])->find($presupuesto->id_profesional);
+        }
+
+        /*
+         * Estado de firma del paciente.
+         *
+         * Estos campos los agregaremos a presupuestos_dental.
+         */
+        $presupuesto->firmado_paciente =
+            (int) ($presupuesto->firma_paciente_estado ?? 0) === 1;
+    }
+
+
+    return view('app.paciente.receta.mis_documentos', [
+        'fichas' => $fichas,
+        'presupuestos' => $presupuestos,
+        'paciente' => $paciente,
+    ]);
+}
 
     /* Perfil */
     public function editInfor(Request $request)

@@ -12,6 +12,22 @@
 
     $nombrePlantillaPredeterminado = 'Ficha ' . $nombreEspecialidadFicha . ' personalizada';
     $seccionesBaseFicha = $seccionesBase ?? [];
+
+    /*
+     * Configuración económica/operativa odontológica.
+     * El controlador puede enviarla como $configuracionPresupuesto.
+     * Como fallback se intenta obtener desde la plantilla persistida.
+     */
+    $configuracionPresupuestoFicha = $configuracionPresupuesto
+        ?? data_get($plantilla ?? null, 'configuracion_presupuesto', []);
+
+    if (is_string($configuracionPresupuestoFicha)) {
+        $configuracionPresupuestoFicha = json_decode($configuracionPresupuestoFicha, true) ?: [];
+    }
+
+    if (!is_array($configuracionPresupuestoFicha)) {
+        $configuracionPresupuestoFicha = [];
+    }
 @endphp
 
 @section('content')
@@ -197,6 +213,71 @@
             padding: 0;
         }
 
+        .config-presupuesto-card {
+            border: 1px solid #dce5ef;
+            border-radius: 10px;
+            background: #f9fbfd;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .config-presupuesto-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .config-presupuesto-card__titulo {
+            color: #244a78;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .config-presupuesto-card__descripcion {
+            color: #718096;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .config-presupuesto-opciones {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .config-presupuesto-opcion {
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: #fff;
+            padding: 12px;
+        }
+
+        .config-presupuesto-opcion .custom-control-label {
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .config-presupuesto-help {
+            display: block;
+            color: #7b8794;
+            font-size: 11px;
+            line-height: 1.35;
+            margin-top: 4px;
+        }
+
+        .config-presupuesto-campo-condicional {
+            margin-top: 12px;
+        }
+
+        .config-presupuesto-campo-condicional.is-disabled {
+            opacity: .5;
+            pointer-events: none;
+        }
+
+        @media (max-width: 767.98px) {
+            .config-presupuesto-opciones {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 991.98px) {
             .preview-ficha {
                 position: static;
@@ -229,7 +310,7 @@
                 </div>
             </div>
 
-            
+
 
             <form id="form_personalizacion_ficha"
                   method="POST"
@@ -292,6 +373,209 @@
                                 <span class="badge badge-success" id="contador_secciones">0 activas</span>
                             </div>
                             <div class="card-body" id="contenedor_secciones"></div>
+                        </div>
+
+                        <div class="card personalizador-card mb-3">
+                            <div class="card-header-principal d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1 f-18 titulo-bloque">
+                                        <i class="feather icon-dollar-sign mr-1"></i>
+                                        Presupuesto, honorarios y control de pagos
+                                    </h6>
+                                    <p class="mb-0 ayuda-texto">
+                                        Configure reglas económicas para los presupuestos odontológicos de esta especialidad.
+                                    </p>
+                                </div>
+                                <span class="badge badge-light-primary">Odontología</span>
+                            </div>
+
+                            <div class="card-body">
+                                {{-- Monto mínimo --}}
+                                <div class="config-presupuesto-card">
+                                    <div class="config-presupuesto-card__titulo">
+                                        Monto mínimo del presupuesto
+                                    </div>
+                                    <div class="config-presupuesto-card__descripcion">
+                                        Permite advertir o impedir la generación de presupuestos bajo un monto definido por el profesional.
+                                    </div>
+
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox"
+                                               class="custom-control-input"
+                                               id="cfg_monto_minimo_activo">
+                                        <label class="custom-control-label" for="cfg_monto_minimo_activo">
+                                            Aplicar monto mínimo
+                                        </label>
+                                    </div>
+
+                                    <div id="bloque_cfg_monto_minimo" class="config-presupuesto-campo-condicional is-disabled">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="font-weight-bold text-dark" for="cfg_monto_minimo">
+                                                    Monto mínimo ($)
+                                                </label>
+                                                <input type="number"
+                                                       class="form-control form-control-sm"
+                                                       id="cfg_monto_minimo"
+                                                       min="0"
+                                                       step="1"
+                                                       placeholder="Ej.: 20000">
+                                            </div>
+
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="font-weight-bold text-dark" for="cfg_monto_minimo_accion">
+                                                    Si el presupuesto es menor
+                                                </label>
+                                                <select class="form-control form-control-sm" id="cfg_monto_minimo_accion">
+                                                    <option value="advertir">Mostrar advertencia y permitir continuar</option>
+                                                    <option value="bloquear">No permitir generar el presupuesto</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Trabajo odontológico / honorarios --}}
+                                <div class="config-presupuesto-card">
+                                    <div class="config-presupuesto-card__titulo">
+                                        Trabajo odontológico / honorarios profesionales
+                                    </div>
+                                    <div class="config-presupuesto-card__descripcion">
+                                        Permite agregar un valor profesional al presupuesto de manera independiente o asociarlo a una prestación del arancel.
+                                    </div>
+
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox"
+                                               class="custom-control-input"
+                                               id="cfg_trabajo_odontologico_activo">
+                                        <label class="custom-control-label" for="cfg_trabajo_odontologico_activo">
+                                            Incorporar valor del trabajo odontológico
+                                        </label>
+                                    </div>
+
+                                    <div id="bloque_cfg_trabajo_odontologico" class="config-presupuesto-campo-condicional is-disabled">
+                                        <div class="form-row mt-3">
+                                            <div class="form-group col-md-6">
+                                                <label class="font-weight-bold text-dark" for="cfg_trabajo_odontologico_modo">
+                                                    Forma de incorporación
+                                                </label>
+                                                <select class="form-control form-control-sm" id="cfg_trabajo_odontologico_modo">
+                                                    <option value="independiente">Valor independiente en el presupuesto</option>
+                                                    <option value="arancel">Usar una prestación de la lista de aranceles</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-6" id="grupo_cfg_trabajo_valor">
+                                                <label class="font-weight-bold text-dark" for="cfg_trabajo_odontologico_valor">
+                                                    Valor del trabajo ($)
+                                                </label>
+                                                <input type="number"
+                                                       class="form-control form-control-sm"
+                                                       id="cfg_trabajo_odontologico_valor"
+                                                       min="0"
+                                                       step="1"
+                                                       placeholder="Ej.: 15000">
+                                            </div>
+
+                                            <div class="form-group col-md-6 d-none" id="grupo_cfg_trabajo_arancel">
+                                                <label class="font-weight-bold text-dark" for="cfg_trabajo_odontologico_id_arancel">
+                                                    Prestación del arancel
+                                                </label>
+                                                <select class="form-control form-control-sm" id="cfg_trabajo_odontologico_id_arancel">
+                                                    <option value="">Seleccione una prestación</option>
+                                                    @if(isset($aranceles) && count($aranceles))
+                                                        @foreach($aranceles as $arancel)
+                                                            <option value="{{ data_get($arancel, 'id') }}">
+                                                                {{ data_get($arancel, 'descripcion', data_get($arancel, 'nombre', 'Prestación #' . data_get($arancel, 'id'))) }}
+                                                            </option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                                @if(!isset($aranceles) || !count($aranceles))
+                                                    <small class="config-presupuesto-help">
+                                                        El controlador aún no está enviando la lista de aranceles. Puede dejar esta opción configurada y cargar los aranceles posteriormente.
+                                                    </small>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Alertas de deuda --}}
+                                <div class="config-presupuesto-card">
+                                    <div class="config-presupuesto-card__titulo">
+                                        Alertas de deuda y avance del tratamiento
+                                    </div>
+                                    <div class="config-presupuesto-card__descripcion">
+                                        Defina cuándo MedSDI debe advertir al profesional si existen saldos pendientes o prestaciones aún no pagadas.
+                                    </div>
+
+                                    <div class="config-presupuesto-opciones">
+                                        <div class="config-presupuesto-opcion">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       class="custom-control-input"
+                                                       id="cfg_alerta_deuda">
+                                                <label class="custom-control-label" for="cfg_alerta_deuda">
+                                                    Alertar si el paciente mantiene deuda
+                                                </label>
+                                            </div>
+                                            <span class="config-presupuesto-help">
+                                                Muestra una advertencia cuando exista saldo pendiente en presupuestos odontológicos.
+                                            </span>
+                                        </div>
+
+                                        <div class="config-presupuesto-opcion">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       class="custom-control-input"
+                                                       id="cfg_alerta_prestacion_no_pagada">
+                                                <label class="custom-control-label" for="cfg_alerta_prestacion_no_pagada">
+                                                    Alertar por prestación no pagada
+                                                </label>
+                                            </div>
+                                            <span class="config-presupuesto-help">
+                                                Advierte antes de trabajar sobre una prestación que todavía no se encuentre pagada.
+                                            </span>
+                                        </div>
+
+                                        <div class="config-presupuesto-opcion">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       class="custom-control-input"
+                                                       id="cfg_alerta_avance_con_deuda">
+                                                <label class="custom-control-label" for="cfg_alerta_avance_con_deuda">
+                                                    Alertar al avanzar tratamiento con deuda
+                                                </label>
+                                            </div>
+                                            <span class="config-presupuesto-help">
+                                                Revisa el saldo cuando una prestación cambia de pendiente a en proceso o finalizada.
+                                            </span>
+                                        </div>
+
+                                        <div class="config-presupuesto-opcion">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       class="custom-control-input"
+                                                       id="cfg_bloquear_avance_con_deuda">
+                                                <label class="custom-control-label" for="cfg_bloquear_avance_con_deuda">
+                                                    Bloquear avance si existe deuda
+                                                </label>
+                                            </div>
+                                            <span class="config-presupuesto-help">
+                                                Si está activo, no permitirá avanzar el tratamiento hasta regularizar el pago.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert alert-info py-2 px-3 mt-3 mb-0">
+                                        <small>
+                                            <i class="feather icon-info mr-1"></i>
+                                            Se recomienda utilizar las alertas como advertencia y reservar el bloqueo para los casos en que el profesional realmente lo requiera.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card personalizador-card mb-3">
@@ -416,6 +700,35 @@
              * Si no existe, se usan las secciones predeterminadas.
              */
             const plantillaGuardada = @json($plantilla);
+            const configuracionPresupuestoPersistida = @json($configuracionPresupuestoFicha);
+
+            function normalizarConfiguracionPresupuesto(valor) {
+                if (!valor || typeof valor !== 'object' || Array.isArray(valor)) {
+                    valor = {};
+                }
+
+                return {
+                    monto_minimo_activo: normalizarBooleano(valor.monto_minimo_activo, false),
+                    monto_minimo: Number(valor.monto_minimo || 0),
+                    monto_minimo_accion: valor.monto_minimo_accion === 'bloquear' ? 'bloquear' : 'advertir',
+
+                    trabajo_odontologico_activo: normalizarBooleano(valor.trabajo_odontologico_activo, false),
+                    trabajo_odontologico_modo: valor.trabajo_odontologico_modo === 'arancel' ? 'arancel' : 'independiente',
+                    trabajo_odontologico_valor: Number(valor.trabajo_odontologico_valor || 0),
+                    trabajo_odontologico_id_arancel: valor.trabajo_odontologico_id_arancel
+                        ? String(valor.trabajo_odontologico_id_arancel)
+                        : '',
+
+                    alerta_deuda: normalizarBooleano(valor.alerta_deuda, false),
+                    alerta_prestacion_no_pagada: normalizarBooleano(valor.alerta_prestacion_no_pagada, false),
+                    alerta_avance_con_deuda: normalizarBooleano(valor.alerta_avance_con_deuda, false),
+                    bloquear_avance_con_deuda: normalizarBooleano(valor.bloquear_avance_con_deuda, false)
+                };
+            }
+
+            let configuracionPresupuesto = normalizarConfiguracionPresupuesto(
+                configuracionPresupuestoPersistida
+            );
 
             function clonar(valor) {
                 return JSON.parse(JSON.stringify(valor));
@@ -527,15 +840,81 @@
                 );
 
                 seccionesBaseNormalizadas.forEach(function (seccionBase) {
-                    const existeEnPlantilla = secciones.some(function (seccion) {
+                    const indiceExistente = secciones.findIndex(function (seccion) {
                         return seccion.codigo === seccionBase.codigo;
                     });
 
-                    if (!existeEnPlantilla) {
+                    if (indiceExistente === -1) {
                         const nuevaSeccionBase = clonar(seccionBase);
                         nuevaSeccionBase.orden = secciones.length + 1;
                         secciones.push(nuevaSeccionBase);
+                        return;
                     }
+
+                    /*
+                     * Mantener la configuración guardada, pero completar con
+                     * subsecciones nuevas incorporadas posteriormente en la
+                     * plantilla base del servidor.
+                     *
+                     * Esto evita que una plantilla antigua de Periodoncia o
+                     * Endodoncia siga mostrando "0 subsecciones" después de
+                     * agregar Odontología General a su estructura base.
+                     */
+                    const seccionGuardada = secciones[indiceExistente];
+                    const subseccionesBase = Array.isArray(seccionBase.subsecciones)
+                        ? seccionBase.subsecciones
+                        : [];
+                    const subseccionesGuardadas = Array.isArray(seccionGuardada.subsecciones)
+                        ? seccionGuardada.subsecciones
+                        : [];
+
+                    subseccionesBase.forEach(function (subseccionBase) {
+                        const indiceSubGuardada = subseccionesGuardadas.findIndex(function (subseccion) {
+                            return subseccion.codigo === subseccionBase.codigo;
+                        });
+
+                        if (indiceSubGuardada === -1) {
+                            const nuevaSubseccion = clonar(subseccionBase);
+                            nuevaSubseccion.orden = subseccionesGuardadas.length + 1;
+                            subseccionesGuardadas.push(nuevaSubseccion);
+                        } else {
+                            /*
+                             * Conservamos visible/orden guardados, pero recuperamos
+                             * nombre, tipo y demás metadatos técnicos de la base.
+                             */
+                            subseccionesGuardadas[indiceSubGuardada] = Object.assign(
+                                {},
+                                clonar(subseccionBase),
+                                subseccionesGuardadas[indiceSubGuardada],
+                                {
+                                    codigo: subseccionBase.codigo,
+                                    nombre: subseccionBase.nombre,
+                                    tipo: subseccionBase.tipo,
+                                    personalizada: false
+                                }
+                            );
+                        }
+                    });
+
+                    seccionGuardada.subsecciones = subseccionesGuardadas;
+
+                    /*
+                     * También actualizamos los metadatos técnicos de la sección,
+                     * sin perder visibilidad ni orden elegidos por el profesional.
+                     */
+                    secciones[indiceExistente] = Object.assign(
+                        {},
+                        clonar(seccionBase),
+                        seccionGuardada,
+                        {
+                            codigo: seccionBase.codigo,
+                            nombre: seccionBase.nombre,
+                            tipo: seccionBase.tipo,
+                            obligatoria: !!seccionBase.obligatoria,
+                            personalizada: false,
+                            subsecciones: subseccionesGuardadas
+                        }
+                    );
                 });
             }
 
@@ -783,7 +1162,142 @@
                 document.getElementById('contador_secciones').textContent = total + ' activa' + (total === 1 ? '' : 's');
             }
 
+            function aplicarConfiguracionPresupuestoFormulario() {
+                const setChecked = function (id, valor) {
+                    const elemento = document.getElementById(id);
+                    if (elemento) elemento.checked = Boolean(valor);
+                };
+
+                const setValue = function (id, valor) {
+                    const elemento = document.getElementById(id);
+                    if (elemento) elemento.value = valor ?? '';
+                };
+
+                setChecked('cfg_monto_minimo_activo', configuracionPresupuesto.monto_minimo_activo);
+                setValue('cfg_monto_minimo', configuracionPresupuesto.monto_minimo || '');
+                setValue('cfg_monto_minimo_accion', configuracionPresupuesto.monto_minimo_accion || 'advertir');
+
+                setChecked('cfg_trabajo_odontologico_activo', configuracionPresupuesto.trabajo_odontologico_activo);
+                setValue('cfg_trabajo_odontologico_modo', configuracionPresupuesto.trabajo_odontologico_modo || 'independiente');
+                setValue('cfg_trabajo_odontologico_valor', configuracionPresupuesto.trabajo_odontologico_valor || '');
+                setValue('cfg_trabajo_odontologico_id_arancel', configuracionPresupuesto.trabajo_odontologico_id_arancel || '');
+
+                setChecked('cfg_alerta_deuda', configuracionPresupuesto.alerta_deuda);
+                setChecked('cfg_alerta_prestacion_no_pagada', configuracionPresupuesto.alerta_prestacion_no_pagada);
+                setChecked('cfg_alerta_avance_con_deuda', configuracionPresupuesto.alerta_avance_con_deuda);
+                setChecked('cfg_bloquear_avance_con_deuda', configuracionPresupuesto.bloquear_avance_con_deuda);
+
+                actualizarEstadoControlesPresupuesto();
+            }
+
+            function obtenerConfiguracionPresupuestoDesdeFormulario() {
+                const checked = function (id) {
+                    const elemento = document.getElementById(id);
+                    return elemento ? elemento.checked : false;
+                };
+
+                const value = function (id) {
+                    const elemento = document.getElementById(id);
+                    return elemento ? elemento.value : '';
+                };
+
+                return normalizarConfiguracionPresupuesto({
+                    monto_minimo_activo: checked('cfg_monto_minimo_activo'),
+                    monto_minimo: Number(value('cfg_monto_minimo') || 0),
+                    monto_minimo_accion: value('cfg_monto_minimo_accion') || 'advertir',
+
+                    trabajo_odontologico_activo: checked('cfg_trabajo_odontologico_activo'),
+                    trabajo_odontologico_modo: value('cfg_trabajo_odontologico_modo') || 'independiente',
+                    trabajo_odontologico_valor: Number(value('cfg_trabajo_odontologico_valor') || 0),
+                    trabajo_odontologico_id_arancel: value('cfg_trabajo_odontologico_id_arancel') || '',
+
+                    alerta_deuda: checked('cfg_alerta_deuda'),
+                    alerta_prestacion_no_pagada: checked('cfg_alerta_prestacion_no_pagada'),
+                    alerta_avance_con_deuda: checked('cfg_alerta_avance_con_deuda'),
+                    bloquear_avance_con_deuda: checked('cfg_bloquear_avance_con_deuda')
+                });
+            }
+
+            function actualizarEstadoControlesPresupuesto() {
+                const montoActivo = document.getElementById('cfg_monto_minimo_activo')?.checked;
+                const trabajoActivo = document.getElementById('cfg_trabajo_odontologico_activo')?.checked;
+                const modoTrabajo = document.getElementById('cfg_trabajo_odontologico_modo')?.value || 'independiente';
+
+                const bloqueMonto = document.getElementById('bloque_cfg_monto_minimo');
+                const bloqueTrabajo = document.getElementById('bloque_cfg_trabajo_odontologico');
+                const grupoValor = document.getElementById('grupo_cfg_trabajo_valor');
+                const grupoArancel = document.getElementById('grupo_cfg_trabajo_arancel');
+
+                if (bloqueMonto) {
+                    bloqueMonto.classList.toggle('is-disabled', !montoActivo);
+                }
+
+                if (bloqueTrabajo) {
+                    bloqueTrabajo.classList.toggle('is-disabled', !trabajoActivo);
+                }
+
+                if (grupoValor) {
+                    grupoValor.classList.toggle('d-none', modoTrabajo !== 'independiente');
+                }
+
+                if (grupoArancel) {
+                    grupoArancel.classList.toggle('d-none', modoTrabajo !== 'arancel');
+                }
+            }
+
+            function validarConfiguracionPresupuesto() {
+                configuracionPresupuesto = obtenerConfiguracionPresupuestoDesdeFormulario();
+
+                if (
+                    configuracionPresupuesto.monto_minimo_activo &&
+                    configuracionPresupuesto.monto_minimo <= 0
+                ) {
+                    swal({
+                        title: 'Monto mínimo',
+                        text: 'Ingrese un monto mínimo mayor a $0 o desactive esta opción.',
+                        icon: 'warning'
+                    });
+
+                    document.getElementById('cfg_monto_minimo')?.focus();
+                    return false;
+                }
+
+                if (
+                    configuracionPresupuesto.trabajo_odontologico_activo &&
+                    configuracionPresupuesto.trabajo_odontologico_modo === 'independiente' &&
+                    configuracionPresupuesto.trabajo_odontologico_valor <= 0
+                ) {
+                    swal({
+                        title: 'Trabajo odontológico',
+                        text: 'Ingrese el valor del trabajo odontológico o seleccione la modalidad de arancel.',
+                        icon: 'warning'
+                    });
+
+                    document.getElementById('cfg_trabajo_odontologico_valor')?.focus();
+                    return false;
+                }
+
+                if (
+                    configuracionPresupuesto.trabajo_odontologico_activo &&
+                    configuracionPresupuesto.trabajo_odontologico_modo === 'arancel' &&
+                    !configuracionPresupuesto.trabajo_odontologico_id_arancel
+                ) {
+                    swal({
+                        title: 'Prestación del arancel',
+                        text: 'Seleccione la prestación que representará el trabajo odontológico.',
+                        icon: 'warning'
+                    });
+
+                    document.getElementById('cfg_trabajo_odontologico_id_arancel')?.focus();
+                    return false;
+                }
+
+                return true;
+            }
+
             function sincronizarConfiguracion() {
+                configuracionPresupuesto = obtenerConfiguracionPresupuestoDesdeFormulario();
+
                 secciones.forEach(function (seccion) {
                     if (!seccion.obligatoria) {
                         return;
@@ -801,7 +1315,8 @@
                     id_tipo_especialidad: idTipoEspecialidadFicha,
                     id_sub_tipo_especialidad: idSubTipoEspecialidadFicha,
                     nombre_plantilla: document.getElementById('nombre_plantilla').value,
-                    secciones: secciones
+                    secciones: secciones,
+                    configuracion_presupuesto: configuracionPresupuesto
                 };
 
                 document.getElementById('configuracion_ficha').value = JSON.stringify(configuracion);
@@ -1040,6 +1555,10 @@
         return;
     }
 
+    if (!validarConfiguracionPresupuesto()) {
+        return;
+    }
+
     if (!Array.isArray(secciones) || secciones.length === 0) {
         swal({
             title: 'Plantilla vacía',
@@ -1107,8 +1626,11 @@
 
     const payload = {
         id_especialidad: parseInt(idEspecialidad, 10),
+        id_tipo_especialidad: idTipoEspecialidadFicha,
+        id_sub_tipo_especialidad: idSubTipoEspecialidadFicha,
         nombre: nombrePlantilla,
-        secciones: seccionesPreparadas
+        secciones: seccionesPreparadas,
+        configuracion_presupuesto: configuracionPresupuesto
     };
 
     const textoOriginal = boton.innerHTML;
@@ -1206,6 +1728,13 @@
             renderizarConfiguracion();
         }
 
+        if (data.configuracion_presupuesto) {
+            configuracionPresupuesto = normalizarConfiguracionPresupuesto(
+                data.configuracion_presupuesto
+            );
+            aplicarConfiguracionPresupuestoFormulario();
+        }
+
         swal({
             title: 'Plantilla guardada',
             text: data.mensaje ||
@@ -1235,6 +1764,38 @@
     });
 }
 
+            [
+                'cfg_monto_minimo_activo',
+                'cfg_monto_minimo',
+                'cfg_monto_minimo_accion',
+                'cfg_trabajo_odontologico_activo',
+                'cfg_trabajo_odontologico_modo',
+                'cfg_trabajo_odontologico_valor',
+                'cfg_trabajo_odontologico_id_arancel',
+                'cfg_alerta_deuda',
+                'cfg_alerta_prestacion_no_pagada',
+                'cfg_alerta_avance_con_deuda',
+                'cfg_bloquear_avance_con_deuda'
+            ].forEach(function (id) {
+                const elemento = document.getElementById(id);
+
+                if (!elemento) {
+                    return;
+                }
+
+                elemento.addEventListener('change', function () {
+                    actualizarEstadoControlesPresupuesto();
+                    sincronizarConfiguracion();
+                });
+
+                if (elemento.tagName === 'INPUT') {
+                    elemento.addEventListener('input', function () {
+                        sincronizarConfiguracion();
+                    });
+                }
+            });
+
+            aplicarConfiguracionPresupuestoFormulario();
             renderizarConfiguracion();
         })();
     </script>

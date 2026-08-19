@@ -6035,6 +6035,138 @@
         });
     }
 
+
+    /**
+     * Genera el PDF del presupuesto dental.
+     *
+     * El backend ahora usa PdfController en modo "G" y responde JSON:
+     * {
+     *     estado: 1,
+     *     ruta: "http://.../storage/pdf/archivo.pdf"
+     * }
+     */
+    function generar_pdf() {
+        const idPaciente = $('#id_paciente_fc').val()
+            || $('#id_paciente').val()
+            || (typeof dame_id_paciente === 'function' ? dame_id_paciente() : null);
+
+        const idFichaAtencion = $('#id_fc').val();
+        const idLugarAtencion = $('#id_lugar_atencion').val();
+        const idPresupuesto = $('#id_presupuesto').val();
+
+        if (!idPaciente || !idFichaAtencion || !idLugarAtencion || !idPresupuesto) {
+            swal({
+                title: 'Datos incompletos',
+                text: 'No fue posible identificar el paciente, la ficha, el lugar de atención o el presupuesto.',
+                icon: 'warning',
+                button: 'Aceptar'
+            });
+            return;
+        }
+
+        // Abrimos la pestaña antes de la petición para evitar que el navegador
+        // bloquee window.open() por ejecutarse después de una llamada AJAX.
+        const ventanaPdf = window.open('', '_blank');
+
+        if (ventanaPdf) {
+            ventanaPdf.document.write(
+                '<!doctype html><html><head><title>Generando presupuesto...</title></head>' +
+                '<body style="font-family:Arial,sans-serif;text-align:center;padding-top:50px;">' +
+                '<p>Generando presupuesto, por favor espere...</p>' +
+                '</body></html>'
+            );
+        }
+
+        $.ajax({
+            url: "{{ route('profesional.generar_pdf_presupuesto_dental') }}",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id_paciente: idPaciente,
+                id_ficha_atencion: idFichaAtencion,
+                id_lugar_atencion: idLugarAtencion,
+                id_presupuesto: idPresupuesto,
+                urgencia: 0,
+                _token: "{{ csrf_token() }}"
+            },
+            beforeSend: function () {
+                swal({
+                    title: 'Generando presupuesto...',
+                    text: 'Estamos preparando el PDF y sus códigos QR.',
+                    icon: 'info',
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                });
+            },
+            success: function (response) {
+                swal.close();
+
+                const estadoCorrecto =
+                    response &&
+                    (
+                        response.estado === 1 ||
+                        response.estado === '1' ||
+                        response.estado === true ||
+                        response.estado === 'ok'
+                    );
+
+                if (estadoCorrecto && response.ruta) {
+                    if (ventanaPdf && !ventanaPdf.closed) {
+                        ventanaPdf.location.href = response.ruta;
+                    } else {
+                        window.open(response.ruta, '_blank');
+                    }
+                    return;
+                }
+
+                if (ventanaPdf && !ventanaPdf.closed) {
+                    ventanaPdf.close();
+                }
+
+                swal({
+                    title: 'No fue posible generar el presupuesto',
+                    text: (response && (response.error || response.mensaje || response.message))
+                        ? (response.error || response.mensaje || response.message)
+                        : 'El servidor no devolvió una ruta válida para el PDF.',
+                    icon: 'error',
+                    button: 'Aceptar'
+                });
+            },
+            error: function (xhr) {
+                swal.close();
+
+                if (ventanaPdf && !ventanaPdf.closed) {
+                    ventanaPdf.close();
+                }
+
+                let respuesta = xhr.responseJSON || {};
+                let mensaje =
+                    respuesta.error ||
+                    respuesta.mensaje ||
+                    respuesta.message ||
+                    'Ha ocurrido un error al generar el reporte.';
+
+                if (respuesta.detalle) {
+                    mensaje += '\n\nDetalle: ' + respuesta.detalle;
+                }
+
+                console.error('Error al generar presupuesto dental:', {
+                    status: xhr.status,
+                    responseJSON: xhr.responseJSON,
+                    responseText: xhr.responseText
+                });
+
+                swal({
+                    title: 'Error',
+                    text: mensaje,
+                    icon: 'error',
+                    button: 'Aceptar'
+                });
+            }
+        });
+    }
+
     function enviar_presupuesto_dental_por_mail(correoAnterior) {
         const correoPaciente = correoAnterior || @json((string) data_get($paciente ?? null, 'email', ''));
         swal({

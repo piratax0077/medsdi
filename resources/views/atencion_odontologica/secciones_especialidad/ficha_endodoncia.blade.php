@@ -227,6 +227,12 @@
         'urgencia odontologica',
     ]);
 
+    $mostrarExamenGeneralDental = $seccionVisibleFichaDental([
+        'examen_odontologico_general',
+        'examen odontologico general',
+        'examen_odontologico',
+    ]);
+
     $mostrarEndodonciaDental = $seccionVisibleFichaDental([
         'endodoncia',
         'evaluacion_endodoncia',
@@ -478,9 +484,12 @@
                           @endif
 
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
-                            {{-- @include('atencion_odontologica.generales.odonto_gral') --}}
-@if($mostrarUrgenciaDental)
+                            @if($mostrarUrgenciaDental)
                                 @include('atencion_odontologica.generales.control_urgencias', ['habilitarTratamientoUrgencia' => true])
+                            @endif
+
+                            @if($mostrarExamenGeneralDental)
+                                @include('atencion_odontologica.generales.odonto_gral', ['ocultarExamenPorPieza' => true])
                             @endif
                             @if($mostrarEndodonciaDental)
                                 @include('atencion_odontologica.generales.includes.endodoncia')

@@ -29,6 +29,7 @@ use App\Models\PacienteOdontograma;
 use App\Models\PacientesDependientes;
 use App\Models\Profesional;
 use App\Models\ProfesionalHorario;
+use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use App\Models\Region;
 use App\Models\Recomendacion;
@@ -951,7 +952,7 @@ class AppPacienteController extends Controller
 
         // VER lista de profesionales
         //capturamos el id_usuario receptor
-        $id_usuario = $request->id_paciente;
+        $id_usuario = $user->id;
         $paciente = Paciente::where('id_usuario', $id_usuario)->first();
         $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get()->unique('id_profesional');
 
@@ -1938,29 +1939,94 @@ class AppPacienteController extends Controller
     }
 
     public function getAgendaProfesionalApp(Request $request)
-    {
-        $request->validate([
-            'id_lugar_atencion' => ['nullable', 'integer'],
-            'fecha' => ['nullable', 'date_format:Y-m-d'],
-        ]);
+{
+    $request->validate([
+        'id_lugar_atencion' => ['nullable', 'integer'],
+        'fecha' => ['nullable', 'date_format:Y-m-d'],
+    ]);
 
-        $profesional = Profesional::where('id_usuario', $request->user('api')->id)->first();
-        abort_unless($profesional, 404);
+    $profesional = Profesional::where(
+        'id_usuario',
+        $request->user('api')->id
+    )->first();
 
-        $base = HoraMedica::query()->where('horas_medicas.id_profesional', $profesional->id);
-        $lugares = (clone $base)->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
-            ->select('lugares_atencion.id', 'lugares_atencion.nombre')->distinct()->orderBy('lugares_atencion.nombre')->get();
+    abort_unless($profesional, 404);
 
-        if ($request->filled('id_lugar_atencion')) {
-            $base->where('horas_medicas.id_lugar_atencion', (int) $request->input('id_lugar_atencion'));
+    /*
+     * Solo lugares actualmente activos para el profesional.
+     * ProfesionalesLugaresAtencion es la relación vigente.
+     */
+    $idsLugaresActivos = ProfesionalesLugaresAtencion::where(
+            'id_profesional',
+            $profesional->id
+        )
+        ->where('estado', 1)
+        ->pluck('id_lugar_atencion');
+
+    /*
+     * La agenda también queda restringida a lugares activos.
+     * Así no mostramos horas médicas asociadas a lugares
+     * que actualmente están deshabilitados.
+     */
+    $base = HoraMedica::query()
+        ->where('horas_medicas.id_profesional', $profesional->id)
+        ->whereIn(
+            'horas_medicas.id_lugar_atencion',
+            $idsLugaresActivos
+        );
+
+    /*
+     * Selector de lugares:
+     * solo lugares activos que además tengan horas médicas.
+     */
+    $lugares = (clone $base)
+        ->join(
+            'lugares_atencion',
+            'lugares_atencion.id',
+            '=',
+            'horas_medicas.id_lugar_atencion'
+        )
+        ->select(
+            'lugares_atencion.id',
+            'lugares_atencion.nombre'
+        )
+        ->distinct()
+        ->orderBy('lugares_atencion.nombre')
+        ->get();
+
+    /*
+     * Si el usuario selecciona un lugar específico,
+     * debe estar dentro de los lugares activos.
+     */
+    if ($request->filled('id_lugar_atencion')) {
+
+        $idLugar = (int) $request->input('id_lugar_atencion');
+
+        if (!$idsLugaresActivos->contains($idLugar)) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'El lugar de atención seleccionado no está activo.',
+                'lugares' => $lugares,
+                'registros' => [],
+            ], 422);
         }
 
-        return response()->json([
-            'estado' => 1,
-            'lugares' => $lugares,
-            'registros' => $this->agendaApp($base, $request, 'profesional'),
-        ]);
+        $base->where(
+            'horas_medicas.id_lugar_atencion',
+            $idLugar
+        );
     }
+
+    return response()->json([
+        'estado' => 1,
+        'lugares' => $lugares,
+        'registros' => $this->agendaApp(
+            $base,
+            $request,
+            'profesional'
+        ),
+    ]);
+}
 
     public function getMisPacientesProfesionalApp(Request $request)
     {
