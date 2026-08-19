@@ -27,10 +27,10 @@
         <div class="row bg-gris">
             <div class="col-sm-12">
                 <div class="card mt-n4">
-                    <div class="card-header bg-info">
-                        <h6 class="text-white font-weight-bolder f-20 d-inline">Mis Procedimientos (Exámenes)</h6>
-                        <button class="btn btn-light btn-sm d-inline float-md-right" data-toggle="modal" data-target="#nuevoProcedimientoProfesional"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo procedimiento</button>
-                        <button class="btn btn-outline-light btn-sm d-inline float-md-right mr-2" data-toggle="modal" data-target="#misSolicitudesPrestaciones"><i class="feather icon-clock"></i> Solicitudes ({{ $solicitudes->where('estado', 'PENDIENTE')->count() }})</button>
+                    <div class="card-header-principal bg-white">
+                        <h6 class="text-dark font-weight-bolder f-20 d-inline"><i class="feather icon-activity icono-primary"></i>Mis Procedimientos (Exámenes)</h6>
+                        <button class="btn btn-info d-inline float-md-right" data-toggle="modal" data-target="#nuevoProcedimientoProfesional"><i class="feather icon-plus" aria-hidden="true"></i> Registrar nuevo procedimiento</button>
+                        <button class="btn btn-outline-dark  d-inline float-md-right mr-2" data-toggle="modal" data-target="#misSolicitudesPrestaciones"><i class="feather icon-clock"></i> Solicitudes ({{ $solicitudes->where('estado', 'PENDIENTE')->count() }})</button>
                     </div>
                     <div class="card-body" id="card_body_procedimientos_profesional">
                         <table id="tabla_procedimientos_profesional" class="display table table-striped dt-responsive nowrap table-sm" style="width:100%">

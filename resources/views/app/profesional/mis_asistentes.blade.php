@@ -45,7 +45,7 @@
                                         </h5>
                                     </div>
                                     <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 text-md-right mt-2 mt-md-0 pr-0">
-                                        <button type="button" class="btn btn-info btn-sm" onclick="abrir_modal_asociar_asistente();">
+                                        <button type="button" class="btn btn-info" onclick="abrir_modal_asociar_asistente();">
                                             <i class="feather icon-user-plus"></i> Asociar asistente
                                         </button>
                                     </div>
