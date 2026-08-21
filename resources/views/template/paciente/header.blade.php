@@ -90,7 +90,7 @@
                                 @endphp
 
                                 <li>
-                                    <a href="{{ route('paciente.mensaje', ['id' => $mensaje->id]) }}"
+                                    <a href="{{ \Illuminate\Support\Facades\Route::has('paciente.mensaje') ? route('paciente.mensaje', ['id' => $mensaje->id]) : '#' }}"
                                        class="dropdown-item {{ $esNuevo ? 'font-weight-bold' : '' }}">
                                         <div class="media">
                                             <img class="img-radius img-40"
@@ -132,6 +132,7 @@
                                 </li>
                             @endforelse
 
+                            @if(\Illuminate\Support\Facades\Route::has('paciente.mensaje'))
                             <li>
                                 <a href="{{ route('paciente.mensaje') }}"
                                    class="dropdown-item text-center font-weight-bold">
@@ -139,6 +140,7 @@
                                     Ver todos los mensajes
                                 </a>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -164,7 +166,7 @@
                             <ul class="pro-body">
                                 @if(Auth::user()->hasRole('Paciente') || Auth::user()->hasRole('Admin'))
                                     <li>
-                                        <a href="{{ route('paciente.home') }}" class="dropdown-item">
+                                        <a href="{{ route('rol.seleccionar', 'Paciente') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>
                                             Escritorio paciente
                                         </a>
@@ -173,7 +175,7 @@
 
                                 @if(Auth::user()->hasRole('Profesional') || Auth::user()->hasRole('Admin'))
                                     <li>
-                                        <a href="{{ route('profesional.home') }}" class="dropdown-item">
+                                        <a href="{{ route('rol.seleccionar', 'Profesional') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>
                                             Escritorio profesional
                                         </a>
@@ -215,7 +217,11 @@
                                     @endif
                                 @endforeach
 
-                                @if(Auth::user()->hasRole('Admin') && $rolesAsistente->isEmpty())
+                                @if(
+                                    Auth::user()->hasRole('Admin')
+                                    && $rolesAsistente->isEmpty()
+                                    && \Illuminate\Support\Facades\Route::has('asistente.home')
+                                )
                                     <li>
                                         <a href="{{ route('asistente.home') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>
@@ -224,7 +230,10 @@
                                     </li>
                                 @endif
 
-                                @if(Auth::user()->hasRole('AdministradorMedico'))
+                                @if(
+                                    Auth::user()->hasRole('AdministradorMedico')
+                                    && \Illuminate\Support\Facades\Route::has('institucion.home')
+                                )
                                     <li>
                                         <a href="{{ route('institucion.home') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>
@@ -233,7 +242,10 @@
                                     </li>
                                 @endif
 
-                                @if(Auth::user()->hasRole('Institucion') || Auth::user()->hasRole('Admin'))
+                                @if(
+                                    (Auth::user()->hasRole('Institucion') || Auth::user()->hasRole('Admin'))
+                                    && \Illuminate\Support\Facades\Route::has('institucion.home')
+                                )
                                     <li>
                                         <a href="{{ route('institucion.home') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>
@@ -242,7 +254,10 @@
                                     </li>
                                 @endif
 
-                                @if(Auth::user()->hasRole('AdministradorLaboratorio') || Auth::user()->hasRole('Admin'))
+                                @if(
+                                    (Auth::user()->hasRole('AdministradorLaboratorio') || Auth::user()->hasRole('Admin'))
+                                    && \Illuminate\Support\Facades\Route::has('laboratorio.adm_general.home')
+                                )
                                     <li>
                                         <a href="{{ route('laboratorio.adm_general.home') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>
