@@ -356,6 +356,46 @@
     .ficha-endodoncia #selector_plan_tratamiento_endodoncia .selector-odontograma-generico__pieza.is-in-budget img {
         filter: none !important;
     }
+
+    .ficha-endodoncia .endo-progress-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .45rem;
+        min-width: 118px;
+    }
+    .ficha-endodoncia .endo-progress-circle {
+        --endo-progress: 0;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: conic-gradient(#20a9c0 calc(var(--endo-progress) * 1%), #e6edf4 0);
+        flex: 0 0 48px;
+    }
+    .ficha-endodoncia .endo-progress-circle::before {
+        content: '';
+        position: absolute;
+        inset: 5px;
+        border-radius: 50%;
+        background: #fff;
+    }
+    .ficha-endodoncia .endo-progress-circle span {
+        position: relative;
+        z-index: 1;
+        color: #1755b5;
+        font-size: .72rem;
+        font-weight: 700;
+    }
+    .ficha-endodoncia .endo-progress-label {
+        color: #63758d;
+        font-size: .68rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
     .ficha-endodoncia #table_odontograma {
         width: 100% !important; min-width: 1160px; table-layout: fixed;
     }
@@ -489,7 +529,10 @@
                             @endif
 
                             @if($mostrarExamenGeneralDental)
-                                @include('atencion_odontologica.generales.odonto_gral', ['ocultarExamenPorPieza' => true])
+                                @include('atencion_odontologica.generales.odonto_gral', [
+                                    'ocultarExamenPorPieza' => true,
+                                    'modalInsumosAdministradoPorFicha' => true,
+                                ])
                             @endif
                             @if($mostrarEndodonciaDental)
                                 @include('atencion_odontologica.generales.includes.endodoncia')
@@ -1107,6 +1150,12 @@
     let actualizandoPlanEndodoncia = false;
     let diagnosticoPlanEndodonciaSeleccionado = null;
 
+    // Fuente única de verdad visual para la atención actual.
+    // Permite que Tratamiento y Presupuesto interpreten el mismo progreso.
+    window.odontograma_global = Array.isArray(@json($odontograma ?? []))
+        ? @json($odontograma ?? [])
+        : [];
+
     function abrirModalPiezaPlanEndodoncia(pieza, pediatrica) {
         if (!pieza) return;
         $('#numero_pieza_plan_endodoncia').text(pieza);
@@ -1114,6 +1163,54 @@
         $('#diagnostico_pieza_plan_endodoncia').val('0');
         $('#tratamiento_pieza_plan_endodoncia').val('');
         $('#modal_pieza_plan_endodoncia').modal('show');
+    }
+
+    function normalizarProgresoEndodoncia(registro) {
+        let progreso = Number(registro && registro.progreso != null ? registro.progreso : 0);
+        if (!Number.isFinite(progreso)) progreso = 0;
+        progreso = Math.max(0, Math.min(100, progreso));
+
+        // Compatibilidad con registros antiguos sin progreso explícito.
+        if (progreso === 0 && registro) {
+            const estado = Number(registro.estado);
+            if (estado === 1) progreso = 100;
+            else if (estado === 2) progreso = 25;
+        }
+
+        return progreso;
+    }
+
+    function estadoClinicoDesdeProgresoEndodoncia(registro) {
+        const progreso = normalizarProgresoEndodoncia(registro);
+        if (progreso >= 100) return { codigo: 1, texto: 'TERMINADO' };
+        if (progreso > 0) return { codigo: 2, texto: 'EN PROCESO' };
+        return { codigo: 0, texto: 'PENDIENTE' };
+    }
+
+    function htmlProgresoCircularEndodoncia(registro) {
+        const progreso = normalizarProgresoEndodoncia(registro);
+        const estado = estadoClinicoDesdeProgresoEndodoncia(registro);
+
+        return '<div class="endo-progress-wrap" title="' + estado.texto + ' - ' + progreso + '%">' +
+            '<div class="endo-progress-circle" style="--endo-progress:' + progreso + '">' +
+                '<span>' + progreso + '%</span>' +
+            '</div>' +
+            '<small class="endo-progress-label">' + estado.texto + '</small>' +
+        '</div>';
+    }
+
+    function marcarPiezaPresupuestadaEndodoncia(pieza, registro) {
+        if (!pieza) return;
+        const $boton = $('#selector_plan_tratamiento_endodoncia [data-selector-pieza="' + pieza + '"]');
+        if (!$boton.length) return;
+
+        $boton.addClass('is-in-budget is-enabled')
+            .prop('disabled', false);
+
+        if (registro) {
+            const progreso = normalizarProgresoEndodoncia(registro);
+            $boton.attr('data-progreso', progreso);
+        }
     }
 
     function sincronizarSelectorPlanEndodoncia(listaOdontograma) {
@@ -1127,7 +1224,10 @@
 
             const pieza = String(registro.pieza || '');
             if (!pieza || estadosVisuales[pieza] === 'ausente') return;
-            if (Number(registro.presupuesto) === 1) {
+            if (
+                Number(registro.presupuesto) === 1 ||
+                Number(registro.id_presupuesto || 0) > 0
+            ) {
                 piezasPresupuesto.add(pieza);
             }
 
@@ -1269,7 +1369,12 @@
                 $select.closest('tr').attr('data-clinical-state', Number(estadoNuevo) === 100 ? 1 : 2);
                 if (Array.isArray(respuesta.odontograma)) {
                     window.odontograma_global = respuesta.odontograma;
-                    if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
+                    if (window.MedSDIPresupuestoDental &&
+                        typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function') {
+                        window.MedSDIPresupuestoDental.recibirOdontograma(respuesta.odontograma);
+                    } else if (typeof window.actualizarDatosProgresoPresupuesto === 'function') {
+                        window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
+                    }
                     sincronizarSelectorPlanEndodoncia(respuesta.odontograma);
                 } else {
                     const registro = (window.odontograma_global || []).find(function (item) {
@@ -1355,12 +1460,7 @@
         }
 
         diagnosticoPlanEndodonciaSeleccionado = diagnostico;
-        $('#max_sup, #max_inf').prop('checked', false);
-        $('#piezas_presup').prop('checked', true);
-        $('#paciente_piezas_dentales_ex').val([pieza]).trigger('change');
-        $('#diag_presupuesto_pieza_g').val(tratamiento);
-        $('#modal_pieza_plan_endodoncia').modal('hide');
-        cargar_a_presupuesto_impl_g_confirmar();
+        guardar_plan_tratamiento_endodoncia(pieza, diagnostico, tratamiento);
     });
 
     function refrescar_caras_grupos_endodoncia() {
@@ -1399,7 +1499,46 @@
     }
 
     function abrir_modal_insumos(){
-        $('#modal_insumos').modal('show');
+        const $modales = $('#modal_insumos');
+
+        if (!$modales.length) {
+            console.error('Endodoncia: no existe #modal_insumos en el DOM.');
+            swal({
+                icon: 'error',
+                title: 'No se pudo abrir Insumos',
+                text: 'El modal de insumos no está disponible en esta atención.'
+            });
+            return false;
+        }
+
+        if ($modales.length > 1) {
+            console.error('Endodoncia: existen IDs duplicados #modal_insumos:', $modales.length);
+            swal({
+                icon: 'error',
+                title: 'Configuración duplicada',
+                text: 'Se encontraron varios modales de insumos en la misma ficha.'
+            });
+            return false;
+        }
+
+        const $modal = $modales.first();
+
+        // Bootstrap 4 puede ocultar visualmente un modal si quedó dentro de
+        // un contenedor con transform/overflow. Se mueve al body antes de abrirlo.
+        if (!$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open').css('padding-right', '');
+
+        $modal.modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        return true;
     }
     function dame_marcas_implantes(value){
         let id_tipo_insumo = value.value;
@@ -6937,7 +7076,57 @@ function cargar_a_presupuesto_end_g_confirmar(etapa){
     });
 }
 
+/**
+ * Adaptador entre odonto_gral y Endodoncia.
+ * odonto_gral emite un evento neutro; Endodoncia decide qué refrescar.
+ */
+document.addEventListener('odontoGeneral:actualizado', function (event) {
+    const detalle = event && event.detail ? event.detail : {};
+    const respuesta = detalle.respuesta || {};
+    const lista = Array.isArray(respuesta.odontograma_paciente)
+        ? respuesta.odontograma_paciente
+        : (Array.isArray(respuesta.odontograma) ? respuesta.odontograma : []);
+    const piezaPreferida = detalle.piezas && detalle.piezas.length
+        ? String(detalle.piezas[0])
+        : null;
+
+    if (respuesta.presupuesto && respuesta.presupuesto.id) {
+        $('#id_presupuesto').val(respuesta.presupuesto.id);
+    }
+
+    // Si el backend devolvió el odontograma actualizado, úsalo inmediatamente.
+    // Esto pinta la pieza presupuestada sin esperar un cambio posterior de progreso.
+    if (lista.length) {
+        window.odontograma_global = lista;
+        sincronizarSelectorPlanEndodoncia(lista);
+
+        if (window.MedSDIPresupuestoDental &&
+            typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function') {
+            window.MedSDIPresupuestoDental.recibirOdontograma(
+                lista,
+                piezaPreferida,
+                respuesta.presupuesto || null
+            );
+        }
+    }
+
+    if (typeof refrescar_piezas_diagnostico_plan_endodoncia === 'function') {
+        refrescar_piezas_diagnostico_plan_endodoncia();
+    }
+    if (typeof refrescar_caras_grupos_endodoncia === 'function') {
+        refrescar_caras_grupos_endodoncia();
+    }
+});
+
 $(function () {
+    const cantidadModalInsumos = $('#modal_insumos').length;
+    if (cantidadModalInsumos !== 1) {
+        console.error(
+            'Endodoncia: se esperaba exactamente un #modal_insumos y se encontraron',
+            cantidadModalInsumos
+        );
+    }
+
     const $opcionesClinicas = $('#contenido_opciones_clinicas_endodoncia');
     if ($opcionesClinicas.length) {
         $('#hosp_endodoncia').children().appendTo($opcionesClinicas);
@@ -6946,73 +7135,70 @@ $(function () {
     }
     refrescar_piezas_diagnostico_plan_endodoncia();
 });
-function cargar_a_presupuesto_impl_g() {
-    // preguntar si desea eliminar
-    swal({
-        title: "Cargar Piezas",
-        text: "¿Está seguro que desea cargar el grupo de piezas?",
-        icon: "warning",
-        buttons: ["Cancelar", "Aceptar"],
-        DangerMode: true,
-    })
-    .then((willLoad) => {
-        if (willLoad) {
-            cargar_a_presupuesto_impl_g_confirmar();
-        }
-    });
-}
+/**
+ * Guarda una prestación propia del plan de Endodoncia.
+ *
+ * No usa IDs internos de odonto_gral. Así ambos componentes pueden
+ * convivir en la misma ficha sin compartir estado accidentalmente.
+ */
+function guardar_plan_tratamiento_endodoncia(pieza, diagnostico, tratamiento){
+    const piezaEndodoncia = String(
+        pieza || $('#pieza_plan_tratamiento_endodoncia').val() || ''
+    );
+    const diagnosticoEndodoncia = String(
+        diagnostico || $('#diagnostico_pieza_plan_endodoncia').val() || ''
+    );
+    const tratamientoEndodoncia = $.trim(
+        tratamiento || $('#tratamiento_pieza_plan_endodoncia').val() || ''
+    );
 
-function cargar_a_presupuesto_impl_g_confirmar(){
-    // Obtener los valores seleccionados en el select
-    var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val() || [];
-    if (!Array.isArray(piezasSeleccionadas)) {
-        piezasSeleccionadas = [piezasSeleccionadas].filter(Boolean);
-    }
-    if (piezasSeleccionadas.length === 0) {
-        const piezaSelector = String($('#pieza_plan_tratamiento_endodoncia').val() || '');
-        if (piezaSelector && piezaSelector !== '0') piezasSeleccionadas = [piezaSelector];
-    }
-
-    var ttoPiezas = $('#diag_presupuesto_pieza_g').val()
-        || $.trim($('#tratamiento_pieza_plan_endodoncia').val() || '');
+    const piezasSeleccionadas = piezaEndodoncia && piezaEndodoncia !== '0'
+        ? [piezaEndodoncia]
+        : [];
 
     let valido = 1;
     let mensaje = '';
 
-    if(piezasSeleccionadas.length == 0){
+    if (piezasSeleccionadas.length === 0) {
         valido = 0;
-        mensaje += '<li>Piezas seleccionadas </li>'
+        mensaje += '<li>Pieza dental</li>';
     }
-    if(ttoPiezas == ''){
+    if (!diagnosticoEndodoncia || diagnosticoEndodoncia === '0') {
         valido = 0;
-        mensaje += '<li>Tratamiento </li>';
+        mensaje += '<li>Diagnóstico</li>';
+    }
+    if (!tratamientoEndodoncia) {
+        valido = 0;
+        mensaje += '<li>Tratamiento</li>';
     }
 
-    if(valido == 0){
+    if (valido === 0) {
         swal({
-                title: "Campos requeridos",
-                content:{
-                    element: "ul",
-                    attributes: {
-                        innerHTML: mensaje
-                    }
-                },
-                icon: "error",
-            });
-            return false;
+            title: "Campos requeridos",
+            content: {
+                element: "ul",
+                attributes: {
+                    innerHTML: mensaje
+                }
+            },
+            icon: "error",
+        });
+        return false;
     }
 
-    let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
-    let data = {
+    const url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
+    const data = {
         piezas: piezasSeleccionadas,
-        diagnostico: diagnosticoPlanEndodonciaSeleccionado,
-        tto: ttoPiezas,
+        diagnostico: diagnosticoEndodoncia,
+        tto: tratamientoEndodoncia,
+        tipo: 'endo',
+        etapa: 'completa',
         id_ficha_atencion: $('#id_fc').val(),
         id_lugar_atencion: $('#id_lugar_atencion').val(),
-        id_paciente: $('#id_paciente').val(),
-        id_presupuesto: $('#id_presupuesto').val(),
+        id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+        id_presupuesto: $('#id_presupuesto').val() || null,
         _token: "{{ csrf_token() }}"
-    }
+    };
     console.log(data);
     $.ajax({
         type:'post',
@@ -7022,6 +7208,12 @@ function cargar_a_presupuesto_impl_g_confirmar(){
             console.log(resp);
             if(resp.status == 1){
                 diagnosticoPlanEndodonciaSeleccionado = null;
+
+                if (resp.presupuesto && resp.presupuesto.id) {
+                    $('#id_presupuesto').val(resp.presupuesto.id);
+                }
+
+                $('#modal_pieza_plan_endodoncia').modal('hide');
                 swal({
                     icon:'success',
                     title:'Info',
@@ -7030,14 +7222,45 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 let odontograma = Array.isArray(resp.odontograma_paciente)
                     ? resp.odontograma_paciente
                     : [];
-                window.odontograma_global = odontograma;
-                sincronizarSelectorPlanEndodoncia(odontograma);
-                if (typeof sincronizarOdontogramaPresupuesto === 'function') {
-                    sincronizarOdontogramaPresupuesto(odontograma, piezasSeleccionadas[0]);
+
+                // El backend ya guardó la pieza: reflejarlo inmediatamente en el
+                // selector, sin esperar un cambio posterior de progreso.
+                const registroGuardado = odontograma.find(function (item) {
+                    return String(item.pieza || '') === String(piezasSeleccionadas[0] || '');
+                }) || {
+                    pieza: piezasSeleccionadas[0],
+                    presupuesto: 1,
+                    id_presupuesto: resp.presupuesto ? resp.presupuesto.id : null,
+                    progreso: 0,
+                    estado: 0
+                };
+
+                window.odontograma_global = odontograma.length
+                    ? odontograma
+                    : (window.odontograma_global || []).concat([registroGuardado]);
+
+                marcarPiezaPresupuestadaEndodoncia(String(piezasSeleccionadas[0] || ''), registroGuardado);
+                sincronizarSelectorPlanEndodoncia(window.odontograma_global);
+                if (window.MedSDIPresupuestoDental &&
+                    typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function') {
+                    window.MedSDIPresupuestoDental.recibirOdontograma(
+                        window.odontograma_global,
+                        piezasSeleccionadas[0],
+                        resp.presupuesto || null
+                    );
+                } else if (typeof sincronizarOdontogramaPresupuesto === 'function') {
+                    sincronizarOdontogramaPresupuesto(window.odontograma_global, piezasSeleccionadas[0]);
                 }
                 refrescar_caras_grupos_endodoncia();
                 $('#diagnostico_pieza_plan_endodoncia').val('0');
                 $('#tratamiento_pieza_plan_endodoncia').val('');
+
+                // El flujo nuevo termina aquí. Los componentes aislados ya
+                // sincronizaron selector de Tratamiento y Presupuesto.
+                // El bloque histórico inferior no debe ejecutarse porque
+                // reconstruye DataTables con columnas antiguas.
+                return;
+
                 let html = '';
                 odontograma.forEach(function(odonto){
                     html += '<tr>';

@@ -13,7 +13,16 @@
     <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}?t={{ time() }}">
     <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    {{-- jQuery local: debe existir ANTES de @yield('Content') porque las fichas
+         e includes ejecutan scripts inline que usan $ durante el render. --}}
+    <script src="{{ asset('js/jquery-3.6.0.min.js') }}?v={{ filemtime(public_path('js/jquery-3.6.0.min.js')) }}"></script>
+    <script>
+        if (typeof window.jQuery === 'undefined') {
+            console.error('MedSDI: jQuery local no pudo cargarse desde public/js/jquery-3.6.0.min.js');
+        } else {
+            window.$ = window.jQuery;
+        }
+    </script>
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
@@ -363,7 +372,21 @@
     </script>
     <script>
         var formatoMoneda = (valor) => {
-            return valor.toLocaleString('es-CL', {
+            if (valor === null || valor === undefined || valor === '') {
+                valor = 0;
+            }
+
+            // Evita volver a formatear valores que ya vienen como moneda.
+            if (typeof valor === 'string' && valor.indexOf('$') !== -1) {
+                return valor;
+            }
+
+            let numero = (typeof valor === 'number') ? valor : Number(valor);
+            if (!Number.isFinite(numero)) {
+                numero = 0;
+            }
+
+            return numero.toLocaleString('es-CL', {
                 style: 'currency',
                 currency: 'CLP',
                 minimumFractionDigits: 0,

@@ -1,4 +1,12 @@
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"
+     id="odonto_gral_component"
+     data-id-paciente="{{ $paciente->id ?? '' }}"
+     data-id-ficha-atencion="{{ $id_ficha_atencion ?? '' }}"
+     data-id-lugar-atencion="{{ $id_lugar_atencion ?? '' }}"
+     data-id-presupuesto="{{ isset($presupuesto) && $presupuesto ? $presupuesto->id : '' }}"
+     data-url-guardar="{{ route('dental.cargar_tratamiento_presupuesto_period') }}"
+     data-url-selector="{{ route('profesional.selector_odontograma.piezas') }}"
+     data-csrf="{{ csrf_token() }}">
     <div class="card-a">
         <div class="card-header-a" id="exam_esp">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
@@ -1251,7 +1259,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar tratamiento</button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="guardar_tratamiento_plan_od_gral()"><i class="feather icon-save"></i> Guardar tratamiento</button>
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
                                                                     <div class="card-informacion mb-0">
@@ -1347,8 +1355,16 @@
         </div>
     </div>
 </div>
-@include('atencion_odontologica.modals.odontograma.modal_insumos')
-@include('atencion_odontologica.modals.odontograma.modal_insumos_editar')
+{{--
+    Por defecto odonto_gral es autónomo y carga sus propios modales.
+    Una ficha contenedora puede pasar:
+        'modalInsumosAdministradoPorFicha' => true
+    para evitar IDs duplicados (#modal_insumos, campos internos, etc.).
+--}}
+@if(!($modalInsumosAdministradoPorFicha ?? false))
+    @include('atencion_odontologica.modals.odontograma.modal_insumos')
+    @include('atencion_odontologica.modals.odontograma.modal_insumos_editar')
+@endif
 <!-- DATOS DE VITAL IMPORTANCIA -->
 <input type="hidden" name="id_insumo_editar" id="id_insumo_editar" value="">
 
@@ -1445,9 +1461,250 @@
             .html(piezas.length ? piezas.join(', ') : 'Ninguna pieza seleccionada');
     });
 
+    /**
+     * API privada del include odonto_gral.
+     *
+     * Esta sección NO debe depender de funciones JavaScript declaradas por
+     * Endodoncia, Periodoncia, Implantología u otra ficha contenedora.
+     */
+    function obtener_config_odonto_gral() {
+        const $componente = $('#odonto_gral_component');
+
+        return {
+            idPaciente: Number($componente.data('id-paciente') || 0),
+            idFichaAtencion: Number($componente.data('id-ficha-atencion') || 0),
+            idLugarAtencion: Number($componente.data('id-lugar-atencion') || 0),
+            idPresupuesto: Number($componente.attr('data-id-presupuesto') || 0) || null,
+            urlGuardar: String($componente.data('url-guardar') || ''),
+            urlSelector: String($componente.data('url-selector') || ''),
+            csrf: String($componente.data('csrf') || '')
+        };
+    }
+
+    function validar_contexto_odonto_gral(config) {
+        const faltantes = [];
+
+        if (!config.idPaciente) faltantes.push('Paciente');
+        if (!config.idFichaAtencion) faltantes.push('Ficha de atención');
+        if (!config.idLugarAtencion) faltantes.push('Lugar de atención');
+
+        if (faltantes.length) {
+            swal({
+                title: 'No es posible continuar',
+                content: {
+                    element: 'ul',
+                    attributes: {
+                        innerHTML: faltantes.map(function (item) {
+                            return '<li>' + item + '</li>';
+                        }).join('')
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+    function notificar_actualizacion_odonto_gral(resp, etapa, piezas) {
+        const $componente = $('#odonto_gral_component');
+
+        if (resp && resp.presupuesto && resp.presupuesto.id) {
+            $componente.attr('data-id-presupuesto', resp.presupuesto.id);
+        }
+
+        // El include informa el cambio sin conocer la ficha que lo contiene.
+        // Cada especialidad puede escuchar este evento si necesita sincronizar
+        // presupuesto, odontograma u otros paneles propios.
+        document.dispatchEvent(new CustomEvent('odontoGeneral:actualizado', {
+            detail: {
+                etapa: etapa,
+                piezas: Array.isArray(piezas) ? piezas.map(String) : [],
+                respuesta: resp || {}
+            }
+        }));
+    }
+
+    function enviar_odontograma_od_gral(payload) {
+        const config = obtener_config_odonto_gral();
+
+        if (!validar_contexto_odonto_gral(config)) {
+            return $.Deferred().reject().promise();
+        }
+
+        const data = $.extend({
+            id_paciente: config.idPaciente,
+            id_ficha_atencion: config.idFichaAtencion,
+            id_lugar_atencion: config.idLugarAtencion,
+            id_presupuesto: config.idPresupuesto,
+            tipo: 'adulto',
+            urgencia: 0,
+            _token: config.csrf
+        }, payload || {});
+
+        return $.ajax({
+            type: 'POST',
+            url: config.urlGuardar,
+            data: data
+        });
+    }
+
     function guardar_diagnostico_examen_oral_od_gral() {
-        sincronizar_piezas_diagnostico_od_gral();
-        cargar_a_presupuesto_impl_g_confirmar('diagnostico');
+        const piezas = sincronizar_piezas_diagnostico_od_gral();
+        const diagnostico = Number($('#diagnostico_examen_oral_od_gral').val() || 0);
+
+        let mensaje = '';
+        if (!piezas.length) {
+            mensaje += '<li>Piezas seleccionadas</li>';
+        }
+        if (!diagnostico) {
+            mensaje += '<li>Diagnóstico</li>';
+        }
+
+        if (mensaje) {
+            swal({
+                title: 'Campos requeridos',
+                content: {
+                    element: 'ul',
+                    attributes: { innerHTML: mensaje }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        enviar_odontograma_od_gral({
+            etapa: 'diagnostico',
+            piezas: piezas,
+            diagnostico: diagnostico,
+            tto: ''
+        })
+        .done(function (resp) {
+            if (!resp || Number(resp.status) !== 1) {
+                swal({
+                    title: 'No fue posible guardar',
+                    text: (resp && resp.mensaje) ? resp.mensaje : 'No se pudo registrar el diagnóstico.',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            notificar_actualizacion_odonto_gral(resp, 'diagnostico', piezas);
+
+            $('#odontograma_plan_od_general .pieza').removeClass('seleccionada');
+            $('#paciente_piezas_diagnostico_od_gral').val([]);
+            $('#diagnostico_examen_oral_od_gral').val('0').trigger('change');
+            sincronizar_piezas_diagnostico_od_gral();
+            refrescar_piezas_diagnostico_plan_od_gral();
+
+            swal({
+                title: 'Diagnóstico guardado',
+                text: resp.mensaje || 'El diagnóstico fue registrado correctamente.',
+                icon: 'success'
+            });
+        })
+        .fail(function (xhr) {
+            if (!xhr || xhr.status === 0) return;
+
+            let mensajeError = 'No fue posible guardar el diagnóstico.';
+            if (xhr.responseJSON) {
+                if (xhr.responseJSON.mensaje) {
+                    mensajeError = xhr.responseJSON.mensaje;
+                } else if (xhr.responseJSON.message) {
+                    mensajeError = xhr.responseJSON.message;
+                }
+            }
+
+            swal({
+                title: 'Error',
+                text: mensajeError,
+                icon: 'error'
+            });
+            console.error('Error guardar diagnóstico Odontología General:', xhr);
+        });
+
+        return true;
+    }
+
+    function guardar_tratamiento_plan_od_gral() {
+        let piezas = $('#paciente_piezas_dentales_ex').val() || [];
+        if (!Array.isArray(piezas)) {
+            piezas = [piezas].filter(Boolean);
+        }
+        piezas = piezas.map(String);
+
+        const tratamiento = $.trim($('#diag_presupuesto_pieza_g').val() || '');
+
+        let mensaje = '';
+        if (!piezas.length) {
+            mensaje += '<li>Piezas seleccionadas</li>';
+        }
+        if (!tratamiento) {
+            mensaje += '<li>Tratamiento</li>';
+        }
+
+        if (mensaje) {
+            swal({
+                title: 'Campos requeridos',
+                content: {
+                    element: 'ul',
+                    attributes: { innerHTML: mensaje }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        enviar_odontograma_od_gral({
+            etapa: 'planificacion',
+            piezas: piezas,
+            tto: tratamiento,
+            diagnostico: null
+        })
+        .done(function (resp) {
+            if (!resp || Number(resp.status) !== 1) {
+                swal({
+                    title: 'No fue posible guardar',
+                    text: (resp && resp.mensaje) ? resp.mensaje : 'No se pudo registrar el tratamiento.',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            notificar_actualizacion_odonto_gral(resp, 'planificacion', piezas);
+
+            $('#diag_presupuesto_pieza_g').val('');
+            $('#paciente_piezas_dentales_ex').val([]).trigger('change');
+            refrescar_piezas_diagnostico_plan_od_gral();
+
+            swal({
+                title: 'Tratamiento guardado',
+                text: resp.mensaje || 'El tratamiento fue registrado correctamente.',
+                icon: 'success'
+            });
+        })
+        .fail(function (xhr) {
+            if (!xhr || xhr.status === 0) return;
+
+            let mensajeError = 'No fue posible guardar el tratamiento.';
+            if (xhr.responseJSON) {
+                if (xhr.responseJSON.mensaje) {
+                    mensajeError = xhr.responseJSON.mensaje;
+                } else if (xhr.responseJSON.message) {
+                    mensajeError = xhr.responseJSON.message;
+                }
+            }
+
+            swal({
+                title: 'Error',
+                text: mensajeError,
+                icon: 'error'
+            });
+            console.error('Error guardar tratamiento Odontología General:', xhr);
+        });
+
+        return true;
     }
 
     function aplicar_piezas_diagnostico_plan_od_gral(registros) {
@@ -1481,21 +1738,24 @@
     }
 
     function refrescar_piezas_diagnostico_plan_od_gral() {
+        const config = obtener_config_odonto_gral();
+        if (!validar_contexto_odonto_gral(config)) return;
+
         $.ajax({
-            url: "{{ route('profesional.selector_odontograma.piezas') }}",
+            url: config.urlSelector,
             type: 'POST',
             data: {
-                id_paciente: $('#id_paciente_fc').val(),
-                id_ficha_atencion: $('#id_fc').val(),
-                id_presupuesto: $('#id_presupuesto').val() || null,
+                id_paciente: config.idPaciente,
+                id_ficha_atencion: config.idFichaAtencion,
+                id_presupuesto: config.idPresupuesto,
                 solo_sin_tratamiento: 1,
-                _token: "{{ csrf_token() }}"
+                _token: config.csrf
             },
             success: function (respuesta) {
                 aplicar_piezas_diagnostico_plan_od_gral(respuesta.piezas || []);
             },
             error: function (xhr) {
-                console.error('No fue posible cargar las piezas diagnosticadas.', xhr);
+                console.error('No fue posible cargar las piezas diagnosticadas de Odontología General.', xhr);
             }
         });
     }
@@ -2372,6 +2632,18 @@
         });
     }
     function abrir_modal_insumos() {
-            $('#modal_insumos').modal('show');
+        const $modal = $('#modal_insumos');
+        if (!$modal.length) {
+            console.error('Odontología General: no existe #modal_insumos en el DOM.');
+            return false;
         }
+
+        if ($modal.length > 1) {
+            console.error('Odontología General: existen IDs duplicados #modal_insumos:', $modal.length);
+            return false;
+        }
+
+        $modal.modal('show');
+        return true;
+    }
 </script>

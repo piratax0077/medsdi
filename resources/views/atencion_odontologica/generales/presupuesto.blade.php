@@ -194,7 +194,9 @@
     }
 </script>
 
-<div id="form-presup_dent">
+<div id="form-presup_dent"
+     data-id-presupuesto="{{ data_get($presupuesto ?? null, 'id', '') }}"
+     data-paciente-id="{{ data_get($paciente ?? null, 'id', '') }}">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="card">
@@ -743,9 +745,10 @@
 
                                         const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
                                         const prestaciones = (listaOdontograma || []).filter(function(o){
+                                            const idItem = Number(o.id_presupuesto || 0);
                                             return Number(o.presupuesto) === 1
                                                 && Number(o.urgencia) === 0
-                                                && (!idPresupuestoActual || Number(o.id_presupuesto) === idPresupuestoActual);
+                                                && (!idPresupuestoActual || !idItem || idItem === idPresupuestoActual);
                                         });
                                         const piezas = new Set(prestaciones.map(function(o){ return String(o.pieza); }));
                                         const estadosVisuales = {};
@@ -2097,7 +2100,7 @@
                                     window.claveProgresoPresupuesto = function (a, b) {
                                         return String(a || '').trim().toUpperCase() + '|' + String(b || '').trim().toUpperCase();
                                     };
-                                    window.actualizarDatosProgresoPresupuesto = function (piezas) {
+                                    window.actualizarDatosProgresoPresupuestoInterno = function (piezas) {
                                         (piezas || []).forEach(function (pieza) {
                                             const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
                                             const idPresupuestoPieza = Number(pieza.id_presupuesto || 0);
@@ -2116,6 +2119,13 @@
                                         });
                                         window.decorarProgresosPresupuesto();
                                     };
+                                    if (typeof window.actualizarDatosProgresoPresupuesto !== 'function') {
+                                        window.actualizarDatosProgresoPresupuesto = function (piezas) {
+                                            if (window.MedSDIPresupuestoDental) {
+                                                window.MedSDIPresupuestoDental.recibirOdontograma(piezas);
+                                            }
+                                        };
+                                    }
                                     window.actualizarDatosProgresoGruposPresupuesto = function (grupos) {
                                         (grupos || []).forEach(function (grupo) {
                                             const progreso = Number(grupo.progreso || 0) || (Number(grupo.estado) === 0 ? 100 : 25);
@@ -2160,7 +2170,7 @@
                                             if (progreso !== undefined && progreso !== null) $celdas.eq(6).html(crearProgresoCircularDentalLectura(progreso));
                                         });
                                     };
-                                    actualizarDatosProgresoPresupuesto(@json(collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->values()));
+                                    actualizarDatosProgresoPresupuestoInterno(@json(collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->values()));
                                     actualizarDatosProgresoGruposPresupuesto(@json(collect($todos)->where('presupuesto', 1)->values()));
                                     $(document).on('draw.dt', function (evento) {
                                         if (!$(evento.target).is('#presup_estado_pago, #presup_estado_pago_gral')) return;
@@ -2195,6 +2205,208 @@
                                         });
                                         window.observadorProgresosPresupuesto.observe(contenedor, { childList: true, subtree: true });
                                     });
+                                </script>
+
+
+                                <script>
+                                    /**
+                                     * Presupuesto Dental aislado.
+                                     *
+                                     * Entrada única:
+                                     *   MedSDIPresupuestoDental.recibirOdontograma(lista, piezaPreferida, presupuesto)
+                                     *
+                                     * No necesita conocer Endodoncia, Periodoncia u otra especialidad.
+                                     * Las fichas sólo deben emitir `odontoGeneral:actualizado` o llamar a esta API.
+                                     */
+                                    (function () {
+                                        const API = window.MedSDIPresupuestoDental = window.MedSDIPresupuestoDental || {};
+                                        API.odontograma = API.odontograma || [];
+                                        API.renderizando = false;
+
+                                        API.idPresupuesto = function () {
+                                            const $root = $('#form-presup_dent');
+                                            return Number($root.attr('data-id-presupuesto') || $('#id_presupuesto').val() || 0);
+                                        };
+
+                                        API.normalizarLista = function (entrada) {
+                                            if (Array.isArray(entrada)) return entrada;
+                                            if (entrada && Array.isArray(entrada.odontograma_paciente)) return entrada.odontograma_paciente;
+                                            if (entrada && Array.isArray(entrada.odontograma)) return entrada.odontograma;
+                                            if (entrada && Array.isArray(entrada.piezas)) return entrada.piezas;
+                                            return [];
+                                        };
+
+                                        API.filtrarPrestaciones = function (lista) {
+                                            const idPresupuesto = API.idPresupuesto();
+                                            return API.normalizarLista(lista).filter(function (item) {
+                                                const idItem = Number(item && item.id_presupuesto || 0);
+                                                return item
+                                                    && Number(item.presupuesto) === 1
+                                                    && Number(item.urgencia || 0) === 0
+                                                    && (!idPresupuesto || !idItem || idItem === idPresupuesto);
+                                            });
+                                        };
+
+                                        API.progreso = function (item) {
+                                            if (!item) return 0;
+                                            let progreso = item.progreso !== null && item.progreso !== undefined
+                                                ? Number(item.progreso)
+                                                : (Number(item.estado) === 1 ? 100 : (Number(item.estado) === 2 ? 25 : 0));
+                                            if (!Number.isFinite(progreso)) progreso = 0;
+                                            return Math.max(0, Math.min(100, progreso));
+                                        };
+
+                                        API.htmlProgreso = function (item) {
+                                            const progreso = API.progreso(item);
+                                            if (typeof window.crearProgresoCircularDentalLectura === 'function') {
+                                                return window.crearProgresoCircularDentalLectura(progreso);
+                                            }
+                                            return '<div class="dental-progress-wheel is-readonly" style="--progress:' + progreso +
+                                                '" title="Progreso del tratamiento: ' + progreso + '%"><span class="dental-progress-wheel-value">' +
+                                                progreso + '%</span></div>';
+                                        };
+
+                                        API.clasePago = function (estadoPago) {
+                                            if (estadoPago === 'ok') return 'bg-success';
+                                            if (estadoPago === 'incompleto') return 'bg-warning';
+                                            return 'bg-danger';
+                                        };
+
+                                        API.renderTablaPagos = function (lista) {
+                                            if (!$('#presup_estado_pago').length || !$.fn.DataTable) return;
+                                            const estadoRenderAnterior = API.renderizando;
+                                            API.renderizando = true;
+                                            const prestaciones = API.filtrarPrestaciones(lista);
+                                            const table = $('#presup_estado_pago').DataTable();
+                                            table.clear();
+
+                                            prestaciones.forEach(function (item) {
+                                                const valor = Number(item.valor || 0);
+                                                const descuento = Number(item.valor_descuento || 0);
+                                                const pagar = Math.max(0, valor - descuento);
+                                                const row = table.row.add([
+                                                    item.descripcion || item.tratamiento || '',
+                                                    String(item.pieza || ''),
+                                                    formatoMoneda(valor),
+                                                    descuento ? formatoMoneda(descuento) : 0,
+                                                    formatoMoneda(pagar),
+                                                    '<div class="circle ' + API.clasePago(item.estado_pago) + '"></div>',
+                                                    API.htmlProgreso(item)
+                                                ]).node();
+
+                                                $(row)
+                                                    .attr('data-odontograma-id', item.id || '')
+                                                    .attr('data-pieza', item.pieza || '')
+                                                    .addClass('text-center align-middle status-circle');
+                                            });
+
+                                            table.draw(false);
+
+                                            // Decoración de imagen de pieza después del draw de DataTables.
+                                            window.requestAnimationFrame(function () {
+                                                if (typeof window.decorarProgresosPresupuesto === 'function') {
+                                                    window.decorarProgresosPresupuesto();
+                                                }
+                                            });
+                                            API.renderizando = estadoRenderAnterior;
+                                        };
+
+                                        API.actualizarResumen = function (lista) {
+                                            const prestaciones = API.filtrarPrestaciones(lista);
+                                            const cantidad = prestaciones.length;
+                                            const total = prestaciones.reduce(function (suma, item) {
+                                                return suma + Math.max(0, Number(item.valor || 0) - Number(item.valor_descuento || 0));
+                                            }, 0);
+
+                                            $('#cantidad_items_presupuesto').text(
+                                                cantidad + (cantidad === 1 ? ' prestación' : ' prestaciones')
+                                            );
+                                            $('#presupuesto_clinico_vacio').toggle(cantidad === 0);
+                                            $('#presupuesto_piezas_visor').toggle(cantidad > 0);
+
+                                            // Sólo actualiza las métricas de piezas; el resto del presupuesto
+                                            // (insumos, laboratorio, grupos) conserva sus fuentes propias.
+                                            $('#valores_piezas_presupuesto, #valores_piezas_presupuesto_conf')
+                                                .text(formatoMoneda(total));
+                                        };
+
+                                        API.recibirOdontograma = function (entrada, piezaPreferida, presupuesto) {
+                                            if (API.renderizando) return;
+                                            API.renderizando = true;
+                                            try {
+                                                const lista = API.normalizarLista(entrada);
+
+                                                if (presupuesto && presupuesto.id) {
+                                                    $('#form-presup_dent').attr('data-id-presupuesto', presupuesto.id);
+                                                    if ($('#id_presupuesto').length) $('#id_presupuesto').val(presupuesto.id);
+                                                }
+
+                                                API.odontograma = lista.slice();
+
+                                                if (typeof window.sincronizarOdontogramaPresupuesto === 'function') {
+                                                    window.sincronizarOdontogramaPresupuesto(API.odontograma, piezaPreferida || null);
+                                                } else {
+                                                    if (typeof window.renderizarTarjetasPresupuestoClinico === 'function') {
+                                                        window.renderizarTarjetasPresupuestoClinico(API.odontograma);
+                                                    }
+                                                }
+
+                                                API.actualizarResumen(API.odontograma);
+                                                API.renderTablaPagos(API.odontograma);
+
+                                                if (typeof window.actualizarDatosProgresoPresupuestoInterno === 'function') {
+                                                    window.actualizarDatosProgresoPresupuestoInterno(API.odontograma);
+                                                }
+                                            } finally {
+                                                API.renderizando = false;
+                                            }
+                                        };
+
+                                        // Eventos neutros: el presupuesto no conoce la ficha que los origina.
+                                        document.addEventListener('odontoGeneral:actualizado', function (event) {
+                                            const detalle = event && event.detail ? event.detail : {};
+                                            const respuesta = detalle.respuesta || {};
+                                            const lista = API.normalizarLista(respuesta);
+                                            const preferida = detalle.piezas && detalle.piezas.length
+                                                ? String(detalle.piezas[0])
+                                                : null;
+
+                                            if (lista.length) {
+                                                API.recibirOdontograma(lista, preferida, respuesta.presupuesto || null);
+                                            }
+                                        });
+
+                                        document.addEventListener('dental:presupuesto-actualizado', function (event) {
+                                            const detalle = event && event.detail ? event.detail : {};
+                                            API.recibirOdontograma(
+                                                detalle.odontograma || detalle.respuesta || [],
+                                                detalle.pieza || null,
+                                                detalle.presupuesto || null
+                                            );
+                                        });
+
+                                        // Cada vez que se entra en estas pestañas, reponemos el estado canónico
+                                        // del componente. Así código histórico externo no deja texto PENDIENTE/
+                                        // TERMINADO en lugar del gráfico.
+                                        $(document).on('shown.bs.tab', 'a[href="#od_presup_clinico"], a[href="#od_abonos_pres"]', function () {
+                                            if (API.odontograma.length) {
+                                                API.recibirOdontograma(API.odontograma);
+                                            }
+                                        });
+
+                                        // Si otro bloque histórico redibuja DataTables, el componente
+                                        // repone su representación canónica con gráfico de progreso.
+                                        $(document).on('draw.dt', '#presup_estado_pago', function () {
+                                            if (API.renderizando || !API.odontograma.length) return;
+                                            window.requestAnimationFrame(function () {
+                                                API.renderTablaPagos(API.odontograma);
+                                            });
+                                        });
+
+                                        $(function () {
+                                            API.recibirOdontograma(@json(collect($odontograma)->values()));
+                                        });
+                                    })();
                                 </script>
 
                                 <!--P. POR PIEZAS-->
@@ -3697,12 +3909,41 @@
                 montoDisponibleReasignar = parseInt(resp.monto_disponible_reasignar) || 0;
                 if (resp.odontograma) {
                     actualizarOpcionesDestinoPago(resp.odontograma, resp.todos || []);
-                    actualizarPendientesModalReasignacion(resp);
-                }
-                $('#bono_prevision').val(resp.id_prevision || 0).trigger('change');
-                $('#montoAbonado').val(formatoMoneda(resp.valor_atencion));
 
-                // Cargar información del presupuesto en el resumen
+                    try {
+                        actualizarPendientesModalReasignacion(resp);
+                    } catch (error) {
+                        // El resumen principal y el pago no deben quedar bloqueados
+                        // por un problema puramente visual del modal de reasignación.
+                        console.error(
+                            'Presupuesto: no fue posible refrescar la reasignación, pero el flujo de pago continúa.',
+                            error
+                        );
+                    }
+                }
+
+                $('#bono_prevision').val(resp.id_prevision || 0).trigger('change');
+                $('#montoAbonado').val(formatoMoneda(resp.valor_atencion || 0));
+
+                // La respuesta de dame_bono_pago contiene la deuda vigente tras
+                // agregar piezas/insumos. Refrescar siempre las métricas del modal.
+                const totalActual = Number($('#total_presupuesto_dental').val()) || 0;
+                const abonadoActual = Number(resp.valor_atencion || 0);
+                const saldoActual = Math.max(0, totalActual - abonadoActual);
+
+                sincronizarResumenPagoPresupuesto(
+                    abonadoActual,
+                    saldoActual,
+                    resp.pagos || []
+                );
+
+                // Sugerir por defecto el saldo completo a pagar. El usuario puede
+                // reemplazarlo por un abono menor.
+                if (!$('#montoPago').val()) {
+                    $('#montoPago').val(saldoActual);
+                }
+
+                // Cargar información histórica del presupuesto.
                 cargarInformacionPresupuesto(resp.pagos || []);
             },
             error: function(error) {
@@ -3757,6 +3998,31 @@
             });
         }
         if (selector.find('option[value="' + seleccionActual + '"]').length) selector.val(seleccionActual);
+    }
+
+    function normalizarEstadoPagoPostPago(odontograma, response) {
+        const lista = Array.isArray(odontograma) ? odontograma : [];
+        const saldo = Number(response && response.suma_adeudado != null ? response.suma_adeudado : 0);
+        const completado = !!(response && response.presupuesto_completado) || saldo <= 0;
+
+        return lista.map(function (item) {
+            if (!item) return item;
+
+            const copia = Object.assign({}, item);
+
+            // Si el presupuesto quedó totalmente cubierto, el estado de pago
+            // visual y funcional debe ser autoritativamente "ok" en todas las
+            // prestaciones activas del presupuesto.
+            if (
+                completado &&
+                Number(copia.presupuesto) === 1 &&
+                Number(copia.urgencia || 0) === 0
+            ) {
+                copia.estado_pago = 'ok';
+            }
+
+            return copia;
+        });
     }
 
     function confirmar_pago() {
@@ -3843,7 +4109,16 @@
                     // Limpiar la tabla antes de agregar nuevas filas
                     table_piezas_odontograma.clear().draw();
 
-                    let odontograma = response.odontograma;
+                    let odontograma = normalizarEstadoPagoPostPago(
+                        response.odontograma,
+                        response
+                    );
+                    response.odontograma = odontograma;
+
+                    // Mantener una sola fuente visual de verdad inmediatamente
+                    // después del pago, sin esperar que el usuario cambie de tab.
+                    window.odontogramaPagosActual = odontograma;
+
                     actualizarOpcionesDestinoPago(odontograma, response.todos || []);
 
                     // Recorrer el odontograma y agregar nuevas filas
@@ -3882,6 +4157,31 @@
 
                     sincronizarSelectorPagosPiezas(odontograma);
                     sincronizarDetallePresupuestoClinico(odontograma);
+
+                    if (
+                        window.MedSDIPresupuestoDental &&
+                        typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                    ) {
+                        window.MedSDIPresupuestoDental.recibirOdontograma(
+                            odontograma,
+                            null,
+                            response.presupuesto || null
+                        );
+                    }
+
+                    // Algunos componentes/DataTables redibujan en el mismo tick.
+                    // Repintamos una vez más al terminar el frame para evitar que
+                    // vuelvan a aparecer indicadores rojos obsoletos.
+                    window.requestAnimationFrame(function () {
+                        sincronizarSelectorPagosPiezas(odontograma);
+
+                        if (
+                            window.MedSDIPresupuestoDental &&
+                            typeof window.MedSDIPresupuestoDental.renderTablaPagos === 'function'
+                        ) {
+                            window.MedSDIPresupuestoDental.renderTablaPagos(odontograma);
+                        }
+                    });
 
                     let insumos = response.insumos;
                     console.log(insumos);
@@ -4002,7 +4302,10 @@
                      // La respuesta de confirmar_pago ya contiene el estado definitivo.
                      // Evita que una segunda peticion asincrona vuelva a pintar una pieza
                      // como incompleta justo despues de completar el presupuesto.
-                     if (!response.presupuesto_completado) {
+                     if (
+                         !response.presupuesto_completado &&
+                         (!Array.isArray(response.odontograma) || response.odontograma.length === 0)
+                     ) {
                          actualizar_presupuesto();
                      }
                      // La respuesta ya contiene los saldos y estados recalculados.
@@ -4010,6 +4313,26 @@
                      if (response.presupuesto_completado) {
                          marcarPresupuestoComoPagado();
                          $('#saldo_pendiente_presupuesto_conf').text(formatoMoneda(0));
+
+                         // Consolidar el estado visual completo antes de cerrar.
+                         sincronizarResumenPagoPresupuesto(
+                             response.suma_pagado,
+                             0,
+                             response.pagos || []
+                         );
+                         sincronizarSelectorPagosPiezas(odontograma);
+
+                         if (
+                             window.MedSDIPresupuestoDental &&
+                             typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                         ) {
+                             window.MedSDIPresupuestoDental.recibirOdontograma(
+                                 odontograma,
+                                 null,
+                                 response.presupuesto || null
+                             );
+                         }
+
                          $('#modalPagoPresupuesto').modal('hide');
                          swal({
                              title: 'Presupuesto pagado completamente',
@@ -4394,17 +4717,33 @@
             });
         }
 
-        const filas = Array.from(document.querySelectorAll('#modalReasignarPresupuesto .valor-checkbox')).map(function(checkbox) {
+        const filas = Array.from(
+            document.querySelectorAll('#modalReasignarPresupuesto .valor-checkbox')
+        ).map(function(checkbox) {
+            const fila = checkbox.closest('tr');
+
+            // DataTables Responsive y algunos redibujos pueden dejar clones o
+            // checkboxes temporales que no pertenecen a una fila completa.
+            // Esos nodos no deben romper todo el flujo de pago.
+            if (!fila) {
+                console.warn('Presupuesto: checkbox de reasignación sin fila asociada.', checkbox);
+                return null;
+            }
+
             const clave = checkbox.getAttribute('data-info') + '-' + checkbox.getAttribute('data-id');
             const estado = estados[clave] || checkbox.getAttribute('data-estado') || 'error';
             checkbox.setAttribute('data-estado', estado);
+
             return {
                 checkbox: checkbox,
-                fila: checkbox.closest('tr'),
+                fila: fila,
                 estado: estado,
-                valor: Number(checkbox.getAttribute('data-total') || checkbox.getAttribute('data-valor')) || 0
+                valor: Number(
+                    checkbox.getAttribute('data-total') ||
+                    checkbox.getAttribute('data-valor')
+                ) || 0
             };
-        });
+        }).filter(Boolean);
         const prioridadEstadoPago = { insumo: 0, odonto: 1, gral: 2 };
         filas.sort(function(a, b) {
             const comparacionCategoria = (prioridadEstadoPago[a.checkbox.getAttribute('data-info')] ?? 99)
@@ -4438,15 +4777,46 @@
             const pendiente = Math.max(0, item.valor - cubierto);
             item.checkbox.setAttribute('data-total', item.valor);
             item.checkbox.setAttribute('data-valor', pendiente);
-            item.fila.querySelector('.estado-pago-reasignacion').innerHTML = '<span class="estado-reasignacion ' + clase + '">' + etiqueta + '</span>';
-            item.fila.querySelector('.monto-cubierto').textContent = formatoMoneda(cubierto);
-            item.fila.querySelector('.monto-pendiente').textContent = formatoMoneda(pendiente);
+
+            const celdaEstado = item.fila.querySelector('.estado-pago-reasignacion');
+            const celdaCubierto = item.fila.querySelector('.monto-cubierto');
+            const celdaPendiente = item.fila.querySelector('.monto-pendiente');
+
+            // No asumir que todos los TR del modal tienen exactamente la misma
+            // estructura. Si una fila fue generada por código histórico o por
+            // DataTables, la ignoramos visualmente sin interrumpir el pago.
+            if (!celdaEstado || !celdaCubierto || !celdaPendiente) {
+                console.warn(
+                    'Presupuesto: fila de reasignación incompleta; se omite del refresco visual.',
+                    item.fila
+                );
+                return;
+            }
+
+            celdaEstado.innerHTML =
+                '<span class="estado-reasignacion ' + clase + '">' + etiqueta + '</span>';
+            celdaCubierto.textContent = formatoMoneda(cubierto);
+            celdaPendiente.textContent = formatoMoneda(pendiente);
         });
 
-        $('#monto_adeudado').text(formatoMoneda(Math.max(0, filas.reduce(function(total, item) {
-            const pendienteTexto = item.fila.querySelector('.monto-pendiente').textContent.replace(/[^0-9]/g, '');
+        const totalPendienteModal = filas.reduce(function(total, item) {
+            const celdaPendiente = item.fila
+                ? item.fila.querySelector('.monto-pendiente')
+                : null;
+
+            if (!celdaPendiente) {
+                return total + (Number(item.checkbox.getAttribute('data-valor')) || 0);
+            }
+
+            const pendienteTexto = String(celdaPendiente.textContent || '')
+                .replace(/[^0-9]/g, '');
+
             return total + (Number(pendienteTexto) || 0);
-        }, 0))));
+        }, 0);
+
+        $('#monto_adeudado').text(
+            formatoMoneda(Math.max(0, totalPendienteModal))
+        );
     }
 
     function renderizarGruposModalReasignacion(grupos) {

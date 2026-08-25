@@ -10,7 +10,7 @@
             z-index: 9999999 !important;
             position: absolute;
         }
-        
+
     </style>
 @endsection
 
@@ -166,7 +166,7 @@
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan')
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
 
-        
+
         @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
 
         @include('general.hospitalizacion.modals.in_solic_pabellon')
@@ -174,8 +174,85 @@
     </div>
     <!--Fin Container Completo-->
     <script>
+        /**
+         * Refresco canónico de "Pagos y estados" para Endodoncia.
+         * Evita que distintas respuestas AJAX reemplacen el gráfico de progreso
+         * por textos como PENDIENTE / TERMINADO.
+         */
+        let refrescandoPagosEstadosEndodoncia = false;
+
+        window.refrescarPagosEstadosEndodoncia = function(listaOdontograma) {
+            if (refrescandoPagosEstadosEndodoncia) return;
+            refrescandoPagosEstadosEndodoncia = true;
+
+            const odontograma = Array.isArray(listaOdontograma)
+                ? listaOdontograma
+                : (Array.isArray(window.odontograma_global) ? window.odontograma_global : []);
+
+            window.odontograma_global = odontograma;
+
+            if (!$('#presup_estado_pago').length || !$.fn.DataTable) {
+                refrescandoPagosEstadosEndodoncia = false;
+                return;
+            }
+
+            try {
+            let table;
+            if ($.fn.DataTable.isDataTable('#presup_estado_pago')) {
+                table = $('#presup_estado_pago').DataTable();
+            } else {
+                table = $('#presup_estado_pago').DataTable();
+            }
+
+            table.clear();
+
+            odontograma.forEach(function(odonto) {
+                if (Number(odonto.presupuesto) !== 1 || Number(odonto.urgencia) === 1) return;
+
+                const clasePago = odonto.estado_pago === 'ok'
+                    ? 'bg-success'
+                    : (odonto.estado_pago === 'incompleto' ? 'bg-warning' : 'bg-danger');
+
+                const progresoHtml = typeof htmlProgresoCircularEndodoncia === 'function'
+                    ? htmlProgresoCircularEndodoncia(odonto)
+                    : (Number(odonto.progreso || 0) + '%');
+
+                table.row.add([
+                    odonto.descripcion || odonto.tratamiento || '',
+                    odonto.pieza || '',
+                    formatoMoneda(odonto.valor),
+                    Number(odonto.descuento || 0),
+                    formatoMoneda(Number(odonto.valor || 0) - Number(odonto.descuento || 0)),
+                    '<div class="circle ' + clasePago + '"></div>',
+                    progresoHtml
+                ]);
+            });
+
+            table.draw(false);
+
+            $('#presup_estado_pago tbody tr').addClass('text-center align-middle status-circle');
+            } catch (error) {
+                console.error('Error refrescando Pagos y estados de Endodoncia:', error);
+            } finally {
+                refrescandoPagosEstadosEndodoncia = false;
+            }
+        };
+
+        // Compatibilidad con el nombre que ya usa ficha_endodoncia al cambiar progreso.
+        window.actualizarDatosProgresoPresupuesto = function(listaOdontograma) {
+            window.refrescarPagosEstadosEndodoncia(listaOdontograma);
+        };
+
         $(document).ready(function() {
             $('#table_tto_boca_gral').DataTable();
+            window.setTimeout(function () {
+                if (typeof window.refrescarPagosEstadosEndodoncia === 'function') {
+                    window.refrescarPagosEstadosEndodoncia(window.odontograma_global || []);
+                }
+                if (typeof sincronizarSelectorPlanEndodoncia === 'function') {
+                    sincronizarSelectorPlanEndodoncia(window.odontograma_global || []);
+                }
+            }, 0);
         });
         function cargar_a_presupuesto(id, tipo = null, elemento = null) {
             let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
@@ -353,11 +430,11 @@
                             odontograma.forEach(function(pieza){
                                         // Agregar una nueva fila a la tabla
                                         let rowNode = table_odon_gral.row.add([
-                                            pieza.pieza,
-                                            pieza.descripcion,
-                                            formatoMoneda(formatoMoneda(pieza.valor)),
+                                            pieza.pieza || '',
+                                            pieza.diagnostico || '',
+                                            pieza.descripcion || pieza.tratamiento || '',
+                                            formatoMoneda(pieza.valor),
                                             '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
-
                                         ]).draw(false).node(); // Obtener el nodo de la fila
 
 
@@ -531,7 +608,21 @@
         }
 
         var formatoMoneda = (valor) => {
-            return valor.toLocaleString('es-CL', {
+            if (valor === null || valor === undefined || valor === '') {
+                valor = 0;
+            }
+
+            // Evita volver a formatear valores que ya vienen como moneda.
+            if (typeof valor === 'string' && valor.indexOf('$') !== -1) {
+                return valor;
+            }
+
+            let numero = (typeof valor === 'number') ? valor : Number(valor);
+            if (!Number.isFinite(numero)) {
+                numero = 0;
+            }
+
+            return numero.toLocaleString('es-CL', {
                 style: 'currency',
                 currency: 'CLP',
                 minimumFractionDigits: 0,
@@ -712,11 +803,11 @@
                                 if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
                                         // Agregar una nueva fila a la tabla
                                         let rowNode = table_odon_gral.row.add([
-                                            pieza.pieza,
-                                            pieza.descripcion,
-                                            formatoMoneda(formatoMoneda(pieza.valor)),
+                                            pieza.pieza || '',
+                                            pieza.diagnostico || '',
+                                            pieza.descripcion || pieza.tratamiento || '',
+                                            formatoMoneda(pieza.valor),
                                             '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
-
                                         ]).draw(false).node(); // Obtener el nodo de la fila
 
                                 }
@@ -918,6 +1009,7 @@
 
                             let odontograma = response.odontograma_paciente;
                             odontograma_global = odontograma;
+                            if (typeof window.refrescarPagosEstadosEndodoncia === 'function') window.refrescarPagosEstadosEndodoncia(odontograma);
                             let html = '';
                             odontograma.forEach(function(odonto) {
                                 html += '<tr>';
@@ -1128,7 +1220,7 @@
                                     $('#table_pagos_reasignar_odontograma tbody').append(fila);
                                 }
                             });
-                            
+
                         }
                     },
                     error: function(error) {
@@ -1164,6 +1256,32 @@
         });
       }
     </script>
+    <script>
+        (function protegerVisualProgresoEndodoncia() {
+            let programado = false;
+
+            function refrescar() {
+                if (programado) return;
+                programado = true;
+                window.setTimeout(function () {
+                    programado = false;
+                    if (typeof window.refrescarPagosEstadosEndodoncia === 'function') {
+                        window.refrescarPagosEstadosEndodoncia(window.odontograma_global || []);
+                    }
+                }, 40);
+            }
+
+            document.addEventListener('shown.bs.tab', function (event) {
+                const target = event.target && event.target.getAttribute
+                    ? event.target.getAttribute('href')
+                    : '';
+                if (target === '#presupuesto') refrescar();
+            });
+
+            document.addEventListener('odontoGeneral:actualizado', refrescar);
+        })();
+    </script>
+
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
     <input type="hidden" name="id_examen_oral_rx" id="id_examen_oral_rx" value="">
@@ -1211,6 +1329,7 @@
 
                         let odontograma = response.odontograma_paciente;
                         odontograma_global = odontograma;
+                            if (typeof window.refrescarPagosEstadosEndodoncia === 'function') window.refrescarPagosEstadosEndodoncia(odontograma);
                         let html = '';
                         odontograma.forEach(function(odonto) {
                             html += '<tr>';
@@ -1396,7 +1515,7 @@
 
                                 ]).draw(false).node(); // Obtener el nodo de la fila
                             }
-                            
+
                         });
 
                         table_.draw();
