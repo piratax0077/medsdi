@@ -17,9 +17,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    // public const HOME = '/Acceso-Redirect';    
-	
-	
+    // public const HOME = '/Acceso-Redirect';
+
+
 	public const HOME = 'Ingreso';
 
 
@@ -62,7 +62,15 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            // ConvertXAuthTokenToAuthorization se ejecuta antes del throttle.
+            // Usamos el token como clave para que usuarios detrás de la misma IP/NAT
+            // no compartan el mismo contador de 180 solicitudes.
+            $token = $request->bearerToken();
+            $key = $token
+                ? 'token:' . hash('sha256', $token)
+                : 'ip:' . $request->ip();
+
+            return Limit::perMinute(180)->by($key);
         });
     }
 }

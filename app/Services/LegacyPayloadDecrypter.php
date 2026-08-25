@@ -5,10 +5,15 @@ namespace App\Services;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\Crypt;
+use RuntimeException;
 
 class LegacyPayloadDecrypter
 {
-    public function decrypt($payload, $unserialize = true)
+    /**
+     * Intenta descifrar primero con la APP_KEY actual.
+     * Si falla, utiliza LEGACY_APP_KEY cuando esté configurada.
+     */
+    public function decrypt(mixed $payload, bool $unserialize = true): mixed
     {
         try {
             return Crypt::decrypt($payload, $unserialize);
@@ -24,20 +29,33 @@ class LegacyPayloadDecrypter
         }
     }
 
-    private function legacyKey()
+    /**
+     * Obtiene y valida la clave histórica definida en config/app.php.
+     */
+    private function legacyKey(): ?string
     {
         $key = config('app.legacy_key');
 
-        if (empty($key)) {
+        if (empty($key) || !is_string($key)) {
             return null;
         }
 
-        if (strpos($key, 'base64:') === 0) {
-            $key = base64_decode(substr($key, 7), true);
+        if (str_starts_with($key, 'base64:')) {
+            $decoded = base64_decode(substr($key, 7), true);
+
+            if ($decoded === false) {
+                throw new RuntimeException(
+                    'LEGACY_APP_KEY no contiene un valor base64 válido.'
+                );
+            }
+
+            $key = $decoded;
         }
 
-        if ($key === false || !Encrypter::supported($key, config('app.cipher'))) {
-            throw new \RuntimeException('LEGACY_APP_KEY no es válida para el cifrado configurado.');
+        if (! Encrypter::supported($key, config('app.cipher'))) {
+            throw new RuntimeException(
+                'LEGACY_APP_KEY no es válida para el cifrado configurado.'
+            );
         }
 
         return $key;

@@ -167,6 +167,36 @@
         let hora_inicio = $('#bloqueo_hora_inicio').val();
         let hora_termino = $('#bloqueo_hora_termino').val();
 
+        if (!fecha_inicio || !fecha_termino) {
+            swal({
+                title: "Bloqueo de horario",
+                text: "Debe seleccionar la fecha de inicio y la fecha de finalización.",
+                icon: "warning",
+                buttons: "Aceptar"
+            });
+            return;
+        }
+
+        if (fecha_inicio > fecha_termino) {
+            swal({
+                title: "Rango de fechas inválido",
+                text: "La fecha de inicio no puede ser mayor que la fecha de finalización.",
+                icon: "warning",
+                buttons: "Aceptar"
+            });
+            return;
+        }
+
+        if (fecha_inicio === fecha_termino && hora_inicio && hora_termino && hora_inicio >= hora_termino) {
+            swal({
+                title: "Rango de horas inválido",
+                text: "La hora de inicio debe ser menor que la hora de término.",
+                icon: "warning",
+                buttons: "Aceptar"
+            });
+            return;
+        }
+
         var todo_dia = '0';
         if( $('#bloqueo_todo_dia').prop('checked') )    todo_dia = '1';
         else                                            todo_dia = '0';

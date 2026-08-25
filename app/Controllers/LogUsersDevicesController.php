@@ -13,14 +13,49 @@ class LogUsersDevicesController extends Controller
     public function mobileRequests(Request $request)
     {
         /*
-         * La app móvil no necesita descargar todo el historial de autorizaciones
-         * cada vez que se abre la pantalla. Conservamos verRegistros() para los
-         * módulos legacy, pero indicamos un modo móvil optimizado.
+         * API móvil optimizada:
+         * - no ejecuta COUNT;
+         * - evita ORDER BY CASE (que dificulta usar índices);
+         * - obtiene pendientes primero y completa con los últimos resueltos;
+         * - reutiliza el formateo legacy solo sobre un máximo de 20 filas.
          */
+        $userId = (int) $request->user()->id;
+        $limit = 20;
+
+        $pendingIds = LogUsersDevices::where('id_user_recept', $userId)
+            ->where('estado', 0)
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->pluck('id');
+
+        $remaining = max(0, $limit - $pendingIds->count());
+        $resolvedIds = collect();
+
+        if ($remaining > 0) {
+            $resolvedIds = LogUsersDevices::where('id_user_recept', $userId)
+                ->where('estado', '<>', 0)
+                ->orderByDesc('id')
+                ->limit($remaining)
+                ->pluck('id');
+        }
+
+        $ids = $pendingIds->concat($resolvedIds)->values();
+
+        if ($ids->isEmpty()) {
+            return response()->json([
+                'estado' => 0,
+                'msg' => 'Sin registros',
+                'registros' => [],
+            ]);
+        }
+
+        // verRegistros conserva toda la compatibilidad de mensajes/tipos existente,
+        // pero procesará exclusivamente estas filas.
         $request->merge([
-            'id_user_recept' => $request->user()->id,
+            'id_user_recept' => $userId,
             '_mobile_request' => 1,
-            '_mobile_limit' => 50,
+            '_mobile_ids' => $ids->all(),
+            '_mobile_limit' => $limit,
         ]);
 
         return $this->verRegistros($request);
@@ -97,6 +132,7 @@ class LogUsersDevicesController extends Controller
         if(!empty($request->fecha_termino))
             $filtros[] = array('fecha_termino',$request->fecha_termino);
 
+        $mobileIds = $request->input('_mobile_ids', []);
 
         /*
          * Consulta base reutilizable.
@@ -106,29 +142,34 @@ class LogUsersDevicesController extends Controller
         $queryBase = LogUsersDevices::where($filtros);
 
         $esMobile = (int) $request->input('_mobile_request', 0) === 1;
+        if ($esMobile && is_array($mobileIds) && !empty($mobileIds)) {
+            $queryBase->whereIn('id', $mobileIds);
+        }
         $limiteMobile = max(10, min((int) $request->input('_mobile_limit', 50), 100));
 
-        /* CANTIDAD TOTAL DE REGISTROS DEL USUARIO */
-        $cant_reg = (clone $queryBase)->count();
+        if ($esMobile) {
+            // Las IDs ya fueron seleccionadas en mobileRequests con consultas indexables.
+            $registros = (clone $queryBase)->get()->sortBy(function ($registro) use ($mobileIds) {
+                $pos = array_search($registro->id, $mobileIds, true);
+                return $pos === false ? PHP_INT_MAX : $pos;
+            })->values();
+
+            $cant_reg = $registros->count();
+        } else {
+            $cant_reg = (clone $queryBase)->count();
+            $registros = $cant_reg > 0
+                ? (clone $queryBase)->orderBy('id', 'DESC')->get()
+                : collect();
+        }
 
         if($cant_reg >0){
             $datos['estado'] = 1;
             $datos['cantidad_registros'] = $cant_reg;
-            $datos['request'] = $request->except(['_mobile_request', '_mobile_limit']);
+            $datos['request'] = $request->except(['_mobile_request', '_mobile_limit', '_mobile_ids']);
 
             if ($esMobile) {
-                $registros = (clone $queryBase)
-                    ->orderByRaw('CASE WHEN estado = 0 THEN 0 ELSE 1 END ASC')
-                    ->orderByDesc('id')
-                    ->limit($limiteMobile)
-                    ->get();
-
                 $datos['cantidad_devuelta'] = $registros->count();
                 $datos['limite'] = $limiteMobile;
-            } else {
-                $registros = (clone $queryBase)
-                    ->orderBy('id', 'DESC')
-                    ->get();
             }
 
              foreach($registros as $key => $value)

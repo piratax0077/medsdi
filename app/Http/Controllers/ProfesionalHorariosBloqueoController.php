@@ -19,16 +19,55 @@ class ProfesionalHorariosBloqueoController extends Controller
         // Aceptar tanto id_profesional como id_box
         $id_profesional = $request->id_profesional ?? $request->id_box;
 
-        return  $this->registrar(
-                    $id_profesional,
-                    $request->id_lugar_atencion,
-                    $request->motivo,
-                    $request->fecha_inicio,
-                    $request->hora_inicio,
-                    $request->fecha_termino,
-                    $request->hora_termino,
-                    $request->todo_dia,
-                    $request->id_box ?? null);
+        // Validar fechas requeridas
+        if (empty($request->fecha_inicio) || empty($request->fecha_termino)) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Fechas requeridas',
+                'error' => [
+                    'fecha' => 'Debe ingresar la fecha de inicio y la fecha de finalización.'
+                ]
+            ]);
+        }
+
+        // Validar que la fecha inicial no sea mayor a la fecha final
+        if ($request->fecha_inicio > $request->fecha_termino) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Rango de fechas inválido',
+                'error' => [
+                    'fecha' => 'La fecha de inicio no puede ser mayor que la fecha de finalización.'
+                ]
+            ]);
+        }
+
+        // Si ambas fechas son iguales, validar también las horas
+        if (
+            $request->fecha_inicio === $request->fecha_termino &&
+            !empty($request->hora_inicio) &&
+            !empty($request->hora_termino) &&
+            $request->hora_inicio >= $request->hora_termino
+        ) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Rango de horas inválido',
+                'error' => [
+                    'hora' => 'La hora de inicio debe ser menor que la hora de término.'
+                ]
+            ]);
+        }
+
+        return $this->registrar(
+            $id_profesional,
+            $request->id_lugar_atencion,
+            $request->motivo,
+            $request->fecha_inicio,
+            $request->hora_inicio,
+            $request->fecha_termino,
+            $request->hora_termino,
+            $request->todo_dia,
+            $request->id_box ?? null
+        );
     }
 
     public function registrar($id_profesional, $id_lugar_atencion, $motivo, $fecha_inicio, $hora_inicio, $fecha_termino, $hora_termino, $todo_dia, $id_box = null)
