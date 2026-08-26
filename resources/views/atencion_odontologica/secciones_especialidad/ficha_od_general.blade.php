@@ -3102,7 +3102,7 @@
             console.log(id);
             let data = {
                 id: id,
-                id_paciente: $('#id_paciente').val(),
+                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 _token: CSRF_TOKEN
@@ -12534,50 +12534,224 @@ setTimeout(function(){
                                 }
                             });
 
-                            let insumos = response.insumos;
-                            console.log(insumos);
-                            let table_insumos = $('#table_insumos_preimplante').DataTable();
+                            const insumos = Array.isArray(response.insumos) ? response.insumos : [];
+                            console.log('actualizar_presupuesto - insumos:', insumos);
 
-                            //Limpiar la tabla sin perder la configuración de DataTables
+                            // La tabla visible en Odontología General es table_insumos_odon_gral.
+                            // Antes se refrescaba table_insumos_preimplante, por eso los packs
+                            // automáticos sólo aparecían en "Pagos y estados".
+                            let table_insumos = $('#table_insumos_odon_gral').DataTable();
                             table_insumos.clear();
 
-                            //Recorrer el array de insumos y agregarlos a la tabla
-                            insumos.forEach(insumo => {
-                                let total = insumo.cantidad * insumo.valor;
-                                if(insumo.presupuesto == 0 || insumo.presupuesto == null){
-                                            // Botones de acción
-                                    var botones = `
-                                        <td>
-                                            <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
-                                                <i class="feather icon-shopping-cart"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-icon btn-warning" onclick="editar_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
-                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>`;
-                                }else{
-                                    var botones = `
-                                        <td>
-                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-icon btn-warning" onclick="editar_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
-                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>`;
+                            const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
+                            const insumosAgrupadosPlan = new Map();
+
+                            insumos.forEach(function(insumo) {
+                                // Esta tabla corresponde a la atención normal, no a urgencias.
+                                if (Number(insumo.urgencia || 0) !== 0) return;
+
+                                // Si el insumo ya pertenece a un presupuesto, mostrar sólo el vigente.
+                                if (idPresupuestoActual > 0
+                                    && Number(insumo.presupuesto || 0) === 1
+                                    && Number(insumo.id_presupuesto || 0) !== idPresupuestoActual) {
+                                    return;
+                                }
+
+                                const idProducto = Number(insumo.id_producto || 0);
+                                const clave = idProducto > 0
+                                    ? 'producto:' + idProducto + '|presupuesto:' + Number(insumo.presupuesto || 0)
+                                    : [
+                                        String(insumo.insumos || '').trim().toUpperCase(),
+                                        String(insumo.nombre_marca || '').trim().toUpperCase(),
+                                        String(insumo.observaciones || '').trim(),
+                                        Number(insumo.valor || 0),
+                                        Number(insumo.presupuesto || 0),
+                                        String(insumo.tipo || '')
+                                    ].join('|');
+
+                                if (!insumosAgrupadosPlan.has(clave)) {
+                                    insumosAgrupadosPlan.set(clave, Object.assign({}, insumo, {
+                                        cantidad_agrupada: 0,
+                                        registros_agrupados: 0,
+                                        todos_pack_automatico: true
+                                    }));
+                                }
+
+                                const grupo = insumosAgrupadosPlan.get(clave);
+                                grupo.cantidad_agrupada += Number(insumo.cantidad || 0);
+                                grupo.registros_agrupados += 1;
+                                grupo.todos_pack_automatico = grupo.todos_pack_automatico
+                                    && String(insumo.tipo || '') === 'pack_automatico';
+                            });
+
+                            insumosAgrupadosPlan.forEach(function(insumo) {
+                                const cantidad = Number(insumo.cantidad_agrupada || 0);
+                                const valor = Number(insumo.valor || 0);
+                                const total = cantidad * valor;
+                                const nombre = ((insumo.insumos || '') + ' ' + (insumo.nombre_marca || ''))
+                                    .trim();
+
+                                let botones = '';
+
+                                if (insumo.todos_pack_automatico) {
+                                    botones = '<span class="badge badge-info">Automático</span>';
+                                } else if (Number(insumo.presupuesto || 0) === 1) {
+                                    botones = `
+                                        <button type="button" class="btn btn-icon btn-danger"
+                                            onclick="sacar_de_presupuesto_insumo(${insumo.id})"
+                                            title="Quitar del presupuesto">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning"
+                                            onclick="dame_insumo(${insumo.id})">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-danger"
+                                            onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>`;
+                                } else {
+                                    botones = `
+                                        <button type="button" class="btn btn-icon btn-primary"
+                                            onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="feather icon-shopping-cart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning"
+                                            onclick="dame_insumo(${insumo.id})">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-danger"
+                                            onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>`;
                                 }
 
                                 table_insumos.row.add([
-                                    insumo.insumos + ' ' + insumo.nombre_marca, // Nombre del insumo
-                                    insumo.observaciones,
-                                    insumo.cantidad, // Cantidad utilizada
-                                    insumo.valor, // Unidad de medida
-                                    total,
+                                    $('<div>').text(nombre).html(),
+                                    $('<div>').text(insumo.observaciones || '').html(),
+                                    cantidad,
+                                    formatoMoneda(valor),
+                                    formatoMoneda(total),
                                     botones
                                 ]);
                             });
+
+                            table_insumos.draw(false);
+
+                            // Sincronizar también el Presupuesto Clínico con la misma colección
+                            // que acabamos de usar en Planificación. Así los packs automáticos
+                            // aparecen inmediatamente sin cambiar de pestaña ni recargar.
+                            if (typeof window.renderizarInsumosPresupuestoClinico === 'function') {
+                                window.renderizarInsumosPresupuestoClinico(insumos);
+                            } else {
+                                // Fallback: actualizar_presupuesto() debe poder refrescar la vista
+                                // aunque presupuesto.blade todavía no exponga el helper global.
+                                const $contenedorInsumosClinicos = $('#contenedor_insumos');
+                                if ($contenedorInsumosClinicos.length) {
+                                    $contenedorInsumosClinicos.empty();
+                                    insumosAgrupadosPlan.forEach(function(insumo) {
+                                        if (Number(insumo.presupuesto || 0) !== 1) return;
+                                        if (Number(insumo.urgencia || 0) !== 0) return;
+                                        if (idPresupuestoActual > 0
+                                            && Number(insumo.id_presupuesto || 0) !== idPresupuestoActual) return;
+
+                                        const cantidad = Number(insumo.cantidad_agrupada || insumo.cantidad || 0);
+                                        const valor = Number(insumo.valor || 0);
+                                        const total = cantidad * valor;
+                                        const nombreSeguro = $('<div>').text(
+                                            ((insumo.insumos || '') + ' ' + (insumo.nombre_marca || '')).trim()
+                                        ).html();
+                                        $contenedorInsumosClinicos.append(`
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <div class="card-informacion">
+                                                    <div class="card-body pb-0">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12 col-lg-4">
+                                                                <label class="floating-label-activo-sm">Insumo</label>
+                                                                <input type="text" class="form-control form-control-sm" readonly value="${nombreSeguro}">
+                                                            </div>
+                                                            <div class="form-group col-md-3 col-lg-1">
+                                                                <label class="floating-label-activo-sm">Cantidad</label>
+                                                                <input type="text" class="form-control form-control-sm" readonly value="${cantidad}">
+                                                            </div>
+                                                            <div class="form-group col-md-3 col-lg-2">
+                                                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                <input type="text" class="form-control form-control-sm" readonly value="${formatoMoneda(total)}">
+                                                            </div>
+                                                            <div class="form-group col-md-3 col-lg-2">
+                                                                <label class="floating-label-activo-sm">Total</label>
+                                                                <input type="text" class="form-control form-control-sm" readonly value="${formatoMoneda(total)}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`);
+                                    });
+                                }
+                            }
+
+                            // El backend devuelve valores ya reconciliados con el presupuesto
+                            // vigente. Usarlos como única fuente de verdad para todos los totales.
+                            const valoresActualizados = Array.isArray(response.valores)
+                                ? response.valores
+                                : [0, 0, Number(response.valor_insumos || 0), Number(response.total_lab || 0)];
+                            const valorGruposActual = Number(valoresActualizados[0] || 0);
+                            const valorPiezasActual = Number(valoresActualizados[1] || 0);
+                            const valorInsumosActual = Number(
+                                response.valor_insumos !== undefined
+                                    ? response.valor_insumos
+                                    : (valoresActualizados[2] || 0)
+                            );
+                            const valorLaboratorioActual = Number(
+                                response.total_lab !== undefined
+                                    ? response.total_lab
+                                    : (valoresActualizados[3] || 0)
+                            );
+                            const totalPresupuestoActual = Number(
+                                response.suma_adeudado !== undefined
+                                    ? response.suma_adeudado
+                                    : (valorGruposActual + valorPiezasActual + valorInsumosActual + valorLaboratorioActual)
+                            );
+
+                            $('#valores_examenes_presupuesto, #valores_examenes_presupuesto_conf')
+                                .html(formatoMoneda(valorGruposActual));
+                            $('#valores_piezas_presupuesto, #valores_piezas_presupuesto_conf')
+                                .html(formatoMoneda(valorPiezasActual));
+                            $('#valores_insumos_presupuesto, #valores_insumos_presupuesto_conf')
+                                .html(formatoMoneda(valorInsumosActual));
+                            $('#valores_laboratorio, #valores_laboratorio_conf')
+                                .html(formatoMoneda(valorLaboratorioActual));
+                            $('#valores_total_final_presupuesto, #valores_total_final_presupuesto_conf')
+                                .html(formatoMoneda(totalPresupuestoActual));
+                            $('#subtotal_insumos, #total_insumos').val(formatoMoneda(valorInsumosActual));
+                            $('#total_presupuesto_dental').val(totalPresupuestoActual);
+                            $('#total_presupuesto').val(formatoMoneda(totalPresupuestoActual));
+                            $('#subtotal_presup').val(formatoMoneda(totalPresupuestoActual));
+                            $('#monto_total').html(formatoMoneda(totalPresupuestoActual));
+
+                            // La cantidad de prestaciones del presupuesto debe considerar
+                            // piezas + grupos + insumos vigentes.
+                            const cantidadInsumosClinicos = insumos.filter(function (insumo) {
+                                return Number(insumo.presupuesto) === 1
+                                    && Number(insumo.urgencia || 0) === 0
+                                    && (!idPresupuestoActual
+                                        || Number(insumo.id_presupuesto || 0) === idPresupuestoActual);
+                            }).length;
+                            const cantidadGruposClinicos = Array.isArray(response.todos)
+                                ? response.todos.filter(function (item) {
+                                    return Number(item.presupuesto) === 1
+                                        && Number(item.urgencia || 0) === 0;
+                                }).length
+                                : 0;
+                            const cantidadTotalClinica = piezasPresupuestoClinico.length
+                                + cantidadGruposClinicos
+                                + cantidadInsumosClinicos;
+                            $('#cantidad_items_presupuesto').text(
+                                cantidadTotalClinica + ' ' +
+                                (cantidadTotalClinica === 1 ? 'prestación' : 'prestaciones')
+                            );
+                            $('#presupuesto_clinico_vacio').toggle(cantidadTotalClinica === 0);
+
                             let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                             table_insumos_pagos.clear();
                             console.log(insumos);
@@ -12616,15 +12790,14 @@ setTimeout(function(){
                             $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
                             $('#valores_laboratorio').html(formatoMoneda(parseInt(response.total_lab)));
                             $('#valores_laboratorio_conf').html(formatoMoneda(parseInt(response.total_lab)));
-                            $('#valores_total_final_presupuesto').html(formatoMoneda(parseInt(response.suma_adeudado)));
-                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_adeudado)));
-                            $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
-                            $('#subtotal_presup').val(formatoMoneda(response.suma_adeudado));
-                            $('#subtotal_lab').val(formatoMoneda(response.total_lab));
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(totalPresupuestoActual));
+                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(totalPresupuestoActual));
+                            $('#abonos_presup').val(formatoMoneda(response.suma_pagado || 0));
+                            $('#subtotal_presup').val(formatoMoneda(totalPresupuestoActual));
+                            $('#subtotal_lab').val(formatoMoneda(valorLaboratorioActual));
                             $('#descuento_lab').val(0);
-                            let total = parseInt(response.suma_presupuesto) +  parseInt(response.total_lab);
-                            $('#total_presupuesto').val(formatoMoneda(total));
-                            $('#total_presupuesto_dental').val(total);
+                            $('#total_presupuesto').val(formatoMoneda(totalPresupuestoActual));
+                            $('#total_presupuesto_dental').val(totalPresupuestoActual);
                             let todos = response.todos;
 
                             let table_ = $('#presup_estado_pago_gral').DataTable();

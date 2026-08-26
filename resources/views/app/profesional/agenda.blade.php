@@ -656,11 +656,14 @@
                                 </div>
                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Email de Contacto </label>
+                                        <label class="floating-label-activo-sm">Email de Contacto <span class="text-danger requerido-contacto-agenda">*</span></label>
 
                                         <input type="text" class="form-control form-control-sm"
-                                            onblur="validar_email_agenda();validar_campo_telefono();" onchange="validar_email_agenda();validar_campo_telefono();"name="reserva_hora_correo"
-                                            id="reserva_hora_correo"><small>Campo opcional</small>
+                                            oninput="validar_campos_minimos();"
+                                            onblur="validar_email_agenda(); validar_campo_telefono(); validar_campos_minimos();"
+                                            onchange="validar_email_agenda(); validar_campo_telefono(); validar_campos_minimos();"
+                                            name="reserva_hora_correo" id="reserva_hora_correo">
+                                        <small>Ingrese email o teléfono (al menos uno)</small>
                                         <span id="mensaje_email_reserva" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold; display:none"></span>
                                         {{-- <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label> --}}
                                     </div>
@@ -669,7 +672,7 @@
 
                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto <span class="text-danger requerido-telefono-agenda">*</span></label>
+                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto <span class="text-danger requerido-contacto-agenda">*</span></label>
                                         <input type="tel" class="form-control form-control-sm"
                                             name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno"
                                             oninput="validar_campos_minimos();"
@@ -1483,52 +1486,60 @@
         }
 
         function evaluar_edad() {
-            let fechaNacimiento = new Date($('#reserva_hora_fecha_nac').val());
-            // console.log(fechaNacimiento);
-            let hoy = new Date();
+            const fechaTexto = ($('#reserva_hora_fecha_nac').val() || '').trim();
+
+            // Mientras la fecha está incompleta, no cambiar el estado dependiente.
+            if (fechaTexto === '' || fechaTexto.length !== 10) {
+                validar_campos_minimos();
+                return;
+            }
+
+            const partes = fechaTexto.split('/');
+            if (partes.length !== 3) {
+                validar_campos_minimos();
+                return;
+            }
+
+            const dia = parseInt(partes[0], 10);
+            const mes = parseInt(partes[1], 10) - 1;
+            const anio = parseInt(partes[2], 10);
+            const fechaNacimiento = new Date(anio, mes, dia);
+
+            // Evita que JS transforme silenciosamente fechas inválidas (ej. 31/02).
+            if (
+                fechaNacimiento.getFullYear() !== anio ||
+                fechaNacimiento.getMonth() !== mes ||
+                fechaNacimiento.getDate() !== dia
+            ) {
+                validar_campos_minimos();
+                return;
+            }
+
+            const hoy = new Date();
             let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
-            // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+            if (
+                hoy.getMonth() < fechaNacimiento.getMonth() ||
+                (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())
+            ) {
                 edad--;
             }
 
-            // Edad a partir de la cual se considera adulto mayor (se activa paciente dependiente)
-            let edad_adulto_mayor = 75;
+            const edad_adulto_mayor = 75;
+            const debeSerDependiente = edad < 18 || edad >= edad_adulto_mayor;
 
-            if (edad < 18 || edad >= edad_adulto_mayor) {
-                $('#paciente_dependiente').prop('checked', 'checked');
-                // $('.seccion_reserva_paciente_nuevo_representante').show();
-                activar_paciente_dependientes();
-                $('#reserva_hora_correo').attr('onblur', "");
-                $('#reserva_hora_telefono_uno').attr('onchange', "");
-                $('#btn_reserva_hora_telefono_uno_validar').hide();
+            $('#paciente_dependiente').prop('checked', debeSerDependiente);
+            activar_paciente_dependientes();
 
-                $('#reserva_hora_telefono_uno_codigo_validador').val('');
-                $('#div_codigo_validador_mensaje').html('');
-                $('#result_codigo_validacion').val('0');
+            // Al cambiar la condición de dependencia se reinician validaciones anteriores.
+            $('#reserva_hora_telefono_uno_codigo_validador').val('');
+            $('#div_codigo_validador_mensaje').html('');
+            $('#result_codigo_validacion').val('0');
 
-                $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-                $('#div_representante_codigo_validador_mensaje').html('');
-                $('#result_representante_codigo_validacion').val('0');
-            } else {
-                $('#paciente_dependiente').prop('checked', '')
-                // $('.seccion_reserva_paciente_nuevo_representante').hide();
-                activar_paciente_dependientes();
-                $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
-                $('#reserva_hora_telefono_uno').attr('onchange', "validar_campo_telefono();");
-                $('#btn_reserva_hora_telefono_uno_validar').show();
+            $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
+            $('#div_representante_codigo_validador_mensaje').html('');
+            $('#result_representante_codigo_validacion').val('0');
 
-                $('#reserva_hora_telefono_uno_codigo_validador').val('');
-                $('#div_codigo_validador_mensaje').html('');
-                $('#result_codigo_validacion').val('0');
-
-                $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-                $('#div_representante_codigo_validador_mensaje').html('');
-                $('#result_representante_codigo_validacion').val('0');
-            }
-
-            // Re-evaluar campos mínimos después de evaluar edad
             validar_campos_minimos();
         }
 
@@ -1624,22 +1635,27 @@
 
         function activar_paciente_dependientes()
         {
-            if ($('#paciente_dependiente').prop('checked'))
+            const esDependiente = $('#paciente_dependiente').prop('checked') === true;
+
+            if (esDependiente)
             {
                 $('.seccion_reserva_paciente_nuevo_representante').show();
-                $('#reserva_hora_correo').attr('onblur', "");
-                $('#reserva_hora_telefono_uno').attr('onchange', "");
+                $('#reserva_hora_correo').attr('onblur', '');
+                $('#reserva_hora_telefono_uno').attr('onchange', '');
                 $('#btn_reserva_hora_telefono_uno_validar').hide();
             }
             else
             {
                 $('.seccion_reserva_paciente_nuevo_representante').hide();
-                $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
-                $('#reserva_hora_telefono_uno').attr('onchange', "validar_campo_telefono();");
+                $('#reserva_hora_correo').attr('onblur', 'validar_email_agenda(); validar_campos_minimos();');
+                $('#reserva_hora_telefono_uno').attr('onchange', 'validar_campo_telefono(); validar_campos_minimos();');
                 $('#btn_reserva_hora_telefono_uno_validar').show();
-                if($('#reserva_hora_fecha_nac').val() !=='')
-                    evaluar_edad();
+
+                // IMPORTANTE: no llamar evaluar_edad() desde aquí.
+                // evaluar_edad() ya llama a activar_paciente_dependientes() y produciría recursión.
             }
+
+            validar_campos_minimos();
         }
 
         function validar_campo_telefono()
@@ -1781,31 +1797,38 @@
          * La fecha de nacimiento es OPCIONAL, pero si se ingresa debe ser válida
          */
         function validar_campos_minimos() {
-            let nombres = $('#reserva_hora_nombres_paciente').val().trim();
-            let apellido_uno = $('#reserva_hora_apellido_uno').val().trim();
-            let telefono = $('#reserva_hora_telefono_uno').val().trim();
-            let fecha_nac = $('#reserva_hora_fecha_nac').val().trim();
-            let es_agenda_dental = $('#id_tipo_agenda').val() === '2';
+            const nombres = ($('#reserva_hora_nombres_paciente').val() || '').trim();
+            const apellido_uno = ($('#reserva_hora_apellido_uno').val() || '').trim();
+            const telefono = ($('#reserva_hora_telefono_uno').val() || '').trim();
+            const email = ($('#reserva_hora_correo').val() || '').trim();
+            const fecha_nac = ($('#reserva_hora_fecha_nac').val() || '').trim();
+            const es_agenda_dental = $('#id_tipo_agenda').val() === '2';
+            const es_dependiente = $('#paciente_dependiente').prop('checked') === true;
 
-            // Validar campos mínimos
-            let tipo_consulta_ok = !es_agenda_dental || ($('#presupuesto_numero').val() || '') !== '';
-            let telefono_ok = es_agenda_dental || telefono !== '';
-            let campos_minimos_ok = (nombres !== '' && apellido_uno !== '' && telefono_ok && tipo_consulta_ok);
+            const tipo_consulta_ok = !es_agenda_dental || ($('#presupuesto_numero').val() || '') !== '';
 
-            $('.requerido-telefono-agenda').toggle(!es_agenda_dental);
+            // Adulto independiente: basta con email O teléfono.
+            // Dependiente: el contacto puede quedar en los datos del representante.
+            const contacto_ok = es_dependiente || telefono !== '' || email !== '';
 
-            // Si hay fecha ingresada, validar que sea válida
+            const campos_minimos_ok =
+                nombres !== '' &&
+                apellido_uno !== '' &&
+                contacto_ok &&
+                tipo_consulta_ok;
+
+            // El asterisco representa que se necesita al menos un medio de contacto.
+            $('.requerido-contacto-agenda').toggle(!es_dependiente);
+
             let fecha_valida = true;
-            if (fecha_nac !== '' && fecha_nac.length === 10) {
-                fecha_valida = validarEdad(fecha_nac);
+            if (fecha_nac !== '') {
+                fecha_valida = fecha_nac.length === 10 && validarEdad(fecha_nac);
             }
 
-            // Habilitar botón solo si campos mínimos OK y (no hay fecha O fecha es válida)
-            if (campos_minimos_ok && fecha_valida) {
-                $('#guardar_reserva_paciente').prop('disabled', false);
-            } else {
-                $('#guardar_reserva_paciente').prop('disabled', true);
-            }
+            $('#guardar_reserva_paciente').prop(
+                'disabled',
+                !(campos_minimos_ok && fecha_valida)
+            );
         }
 
     function editar_info_paciente_asistente()

@@ -107,6 +107,43 @@ class DentalController extends Controller
 
 {
 
+    /**
+     * Obtiene el valor vigente del tratamiento para el profesional.
+     *
+     * El valor se persiste en odontogramas_pacientes.valor al incorporar la
+     * prestación al presupuesto, para que el presupuesto histórico no cambie
+     * si posteriormente se modifica el arancel profesional.
+     */
+    private function resolverValorHistoricoTratamientoDental($descripcionTratamiento, $profesional)
+    {
+        $descripcionTratamiento = trim((string) $descripcionTratamiento);
+
+        if ($descripcionTratamiento === '' || !$profesional) {
+            return null;
+        }
+
+        if ((int) $profesional->id_tipo_especialidad === 16) {
+            $catalogo = TratamientosImplantologia::where('descripcion', $descripcionTratamiento)->first();
+        } else {
+            $catalogo = DiagnosticosDental::where('descripcion', $descripcionTratamiento)->first();
+        }
+
+        if (!$catalogo) {
+            return null;
+        }
+
+        $valorProfesional = DiagnosticosDentalProfesional::where('id_diagnostico', $catalogo->id)
+            ->where('id_profesional', $profesional->id)
+            ->value('valor');
+
+        if (!is_null($valorProfesional)) {
+            return (int) $valorProfesional;
+        }
+
+        return isset($catalogo->valor) ? (int) $catalogo->valor : null;
+    }
+
+
 
 
     //INICIO Cirugia Dental
@@ -1467,14 +1504,21 @@ class DentalController extends Controller
             }
             $presupuestoSeleccionado = null;
             if ($request->id_presupuesto) {
+                /*
+                 * En una continuación de tratamiento la cita actual puede tener
+                 * otra ficha. El presupuesto se valida por su identidad clínica,
+                 * no por la ficha de la nueva cita.
+                 */
                 $presupuestoSeleccionado = PresupuestosDental::where('id', $request->id_presupuesto)
                     ->where('id_paciente', $request->id_paciente)
                     ->where('id_profesional', $profesional->id)
-                    ->where('id_ficha_atencion', $request->id_ficha_atencion)
-                    ->where('id_lugar_atencion', $request->id_lugar_atencion)
                     ->first();
+
                 if (!$presupuestoSeleccionado) {
-                    return ['status' => 0, 'mensaje' => 'El presupuesto no pertenece a esta ficha.'];
+                    return [
+                        'status' => 0,
+                        'mensaje' => 'El presupuesto no pertenece a este paciente o profesional.'
+                    ];
                 }
             }
 
@@ -1486,7 +1530,10 @@ class DentalController extends Controller
                     ->where('id_presupuesto', $request->id_presupuesto)
                     ->where('id_paciente', $request->id_paciente)
                     ->where('id_profesional', $profesional->id)
-                    ->where('id_ficha_atencion', $request->id_ficha_atencion)
+                    /*
+                     * No filtrar por la ficha de la cita actual. La pieza conserva
+                     * la ficha histórica donde nació el presupuesto.
+                     */
                     ->where('pieza', $request->pieza)
                     ->where('presupuesto', 1)
                     ->where('urgencia', 0)
@@ -1528,13 +1575,34 @@ class DentalController extends Controller
 
             $odontograma->diagnostico = $request->diagnostico;
             $odontograma->tratamiento = $request->tratamiento;
+
+            if ($esNuevoRegistro || $odontograma->isDirty('tratamiento') || is_null($odontograma->valor)) {
+                $valorHistorico = $this->resolverValorHistoricoTratamientoDental(
+                    $odontograma->tratamiento,
+                    $profesional
+                );
+
+                if (!is_null($valorHistorico)) {
+                    $odontograma->valor = $valorHistorico;
+                }
+            }
+
             $odontograma->caras = $caras;
 
             $odontograma->pieza = $request->pieza;
             $odontograma->id_paciente = $request->id_paciente;
             $odontograma->id_profesional = $profesional->id;
-            $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
-            $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
+
+            /*
+             * Solo una pieza nueva toma la ficha/lugar de la atención actual.
+             * Si estamos editando una pieza de un presupuesto anterior, se
+             * conserva su ficha histórica.
+             */
+            if ($esNuevoRegistro) {
+                $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
+                $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
+            }
+
             $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
             if ($request->id_presupuesto) {
                 $odontograma->id_presupuesto = $request->id_presupuesto;
@@ -2297,6 +2365,15 @@ class DentalController extends Controller
 
             $odontograma->diagnostico = 3; // Fractura
             $odontograma->tratamiento = $request->tto;
+
+            $valorHistorico = $this->resolverValorHistoricoTratamientoDental(
+                $odontograma->tratamiento,
+                $profesional
+            );
+            if (!is_null($valorHistorico)) {
+                $odontograma->valor = $valorHistorico;
+            }
+
             $odontograma->caras = $caras;
             $odontograma->pieza = $request->pieza;
             $odontograma->id_paciente = $request->id_paciente;
@@ -2505,6 +2582,17 @@ class DentalController extends Controller
                     $odontograma->tratamiento = '';
                 } else {
                     $odontograma->tratamiento = $request->tto;
+
+                    if ($esNuevaPieza || $odontograma->isDirty('tratamiento') || is_null($odontograma->valor)) {
+                        $valorHistorico = $this->resolverValorHistoricoTratamientoDental(
+                            $odontograma->tratamiento,
+                            $profesional
+                        );
+
+                        if (!is_null($valorHistorico)) {
+                            $odontograma->valor = $valorHistorico;
+                        }
+                    }
                 }
                 $odontograma->caras = $caras;
                 $odontograma->pieza = $pieza;
@@ -3824,10 +3912,19 @@ class DentalController extends Controller
                     $i->estado_pago = "error";
                 }
 
+                // Estos atributos son auxiliares para la respuesta/cálculo y no son
+                // columnas reales de insumos_tratamientos_dental. No usar ->save()
+                // aquí, porque Eloquent intentaría persistir resto, valor_insumo y pagado.
                 $i->resto = $resto_insumos;
                 $i->valor_insumo = $valor_insumo_bruto;
                 $i->pagado = $total_abonado;
-                $i->save();
+
+                // Persistir únicamente la columna real que cambió.
+                if ($i->isDirty('estado_pago')) {
+                    InsumosTratamientosDental::whereKey($i->id)->update([
+                        'estado_pago' => $i->estado_pago,
+                    ]);
+                }
             }
 
             $total_abonado_sin_insumos = max(0, $total_abonado - $valor_insumos);
@@ -4014,6 +4111,13 @@ class DentalController extends Controller
                 'total_verificado' => $total_con_descuento,
                 'pagos' => $pagos_presupuesto,
                 'insumos' => $insumos_tratamientos,
+                'valores' => [
+                    intval($valores[0] ?? 0),
+                    intval($valores[1] ?? 0),
+                    intval($valor_insumos),
+                    intval($valores[3] ?? 0),
+                ],
+                'valor_insumos' => intval($valor_insumos),
                 'suma_pagado' => $total_abonado,
                 'odontograma' => $odontograma_paciente,
                 'suma_presupuesto' => $suma_presupuesto,
@@ -4204,6 +4308,39 @@ class DentalController extends Controller
                 $total_abonado += intval($p->total);
             }
 
+            /*
+             * Fotografiar el estado financiero antes de recalcular la vista.
+             * Un presupuesto ya pagado no puede transformarse en saldo a favor
+             * solo porque una consulta clínica devuelva temporalmente menos ítems.
+             */
+            $valorTotalPersistido = (int) $presupuesto->valor_total;
+            $presupuestoYaPagado = (bool) $presupuesto->pago_completado
+                && $valorTotalPersistido > 0
+                && $total_abonado >= $valorTotalPersistido;
+
+            /*
+             * Reparar presupuestos antiguos creados antes de persistir
+             * odontogramas_pacientes.valor.
+             */
+            $odontogramasSinValor = OdontogramaPaciente::where('id_presupuesto', $presupuesto->id)
+                ->where('id_paciente', $req->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->whereNull('valor')
+                ->get();
+
+            foreach ($odontogramasSinValor as $filaOdontograma) {
+                $valorHistorico = $this->resolverValorHistoricoTratamientoDental(
+                    $filaOdontograma->tratamiento,
+                    $profesional
+                );
+
+                if (!is_null($valorHistorico)) {
+                    OdontogramaPaciente::whereKey($filaOdontograma->id)->update([
+                        'valor' => $valorHistorico,
+                    ]);
+                }
+            }
+
             // Una reasignación confirmada ya dejó la distribución persistida en
             // insumos, piezas y grupos. Esos estados son la fuente de verdad.
             $tiene_reasignacion_persistida = $pagos_tratamientos_dentales->contains(function ($pago) {
@@ -4216,17 +4353,34 @@ class DentalController extends Controller
 
             $valor_insumos = $valores[2];
             $fichaController = new ficha_atencionController;
-            $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $id_ficha_atencion)
-                ->filter(function ($insumo) use ($presupuesto) {
-                    return (int) $insumo->id_presupuesto === (int) $presupuesto->id;
-                })
+            $insumos_tratamientos = $fichaController
+                ->dame_insumos_tratamiento(
+                    $req->id_paciente,
+                    $id_ficha_atencion,
+                    null,
+                    $presupuesto->id
+                )
                 ->sortBy(function ($insumo) {
                     return intval($insumo->valor) * max(1, intval($insumo->cantidad));
                 })
                 ->values();
-            $valor_insumos = (int) $insumos_tratamientos->sum(function ($insumo) {
-                return intval($insumo->valor) * max(1, intval($insumo->cantidad));
-            });
+            $valor_insumos = (int) $insumos_tratamientos
+                ->filter(function ($insumo) {
+                    return (int) $insumo->presupuesto === 1
+                        && (int) ($insumo->urgencia ?? 0) === 0;
+                })
+                ->sum(function ($insumo) {
+                    return intval($insumo->valor) * max(1, intval($insumo->cantidad));
+                });
+
+            // IMPORTANTE: dameValores() puede devolver el valor de insumos desactualizado
+            // justo después de crear un pack automático. Desde este punto la colección
+            // filtrada por id_presupuesto es la fuente de verdad del presupuesto vigente.
+            $valores[2] = $valor_insumos;
+            $suma_presupuesto = intval($valores[0])
+                + intval($valores[1])
+                + intval($valores[2])
+                + intval($valores[3] ?? 0);
 
             $monto_piezas_ya_cubiertas = $tiene_reasignacion_persistida
                 ? (int) $odontograma_paciente->where('estado_pago', 'ok')->sum('valor')
@@ -4404,7 +4558,8 @@ class DentalController extends Controller
                     $e->save();
                 }
             }
-             $suma_adeudado = $total_general;
+             // Guardar el total neto después de descuentos, no el total bruto.
+             $suma_adeudado = max(0, (int) round($total_con_descuento));
 
              $total_lab = 0;
 
@@ -4426,27 +4581,56 @@ class DentalController extends Controller
 
             $suma_adeudado += $total_lab;
 
-            // Mantener el encabezado del presupuesto sincronizado con las
-            // prestaciones que acabamos de consultar. Antes solo se devolv&iacute;a
-            // el total al navegador y el registro quedaba con valor_total = 0.
-            $presupuesto->valor_total = $suma_adeudado;
-            $presupuesto->valor_abonado = $total_abonado;
-            $presupuesto->pago_completado = $suma_adeudado > 0
-                && $total_abonado >= $suma_adeudado;
-            $presupuesto->fecha_pago_completo = $presupuesto->pago_completado
-                ? ($presupuesto->fecha_pago_completo ?: Carbon::now())
-                : null;
-            $presupuesto->save();
+            /*
+             * Separar estado financiero de estado clínico.
+             * Si ya estaba pagado, refrescar la ficha no puede reducir valor_total
+             * ni producir un saldo a favor falso.
+             */
+            if ($presupuestoYaPagado) {
+                $suma_adeudado = $valorTotalPersistido;
+                $suma_presupuesto = $valorTotalPersistido;
+
+                $presupuesto->valor_total = $valorTotalPersistido;
+                $presupuesto->valor_abonado = $total_abonado;
+                $presupuesto->pago_completado = true;
+                $presupuesto->fecha_pago_completo = $presupuesto->fecha_pago_completo ?: Carbon::now();
+                $presupuesto->save();
+            } else {
+                $presupuesto->valor_total = $suma_adeudado;
+                $presupuesto->valor_abonado = $total_abonado;
+                $presupuesto->pago_completado = $suma_adeudado > 0
+                    && $total_abonado >= $suma_adeudado;
+                $presupuesto->fecha_pago_completo = $presupuesto->pago_completado
+                    ? ($presupuesto->fecha_pago_completo ?: Carbon::now())
+                    : null;
+                $presupuesto->save();
+            }
 
             return [
                 'estado' => 1,
                 'mensaje' => 'Se ha registrado el pago correctamente',
                 'pagos' => $pagos_presupuesto,
                 'insumos' => $insumos_tratamientos,
+                // Fuente única de verdad para el frontend: incluye el valor de
+                // los insumos automáticos ya filtrados por el presupuesto vigente.
+                'valores' => [
+                    intval($valores[0] ?? 0),
+                    intval($valores[1] ?? 0),
+                    intval($valor_insumos),
+                    intval($valores[3] ?? 0),
+                ],
+                'valor_insumos' => intval($valor_insumos),
                 'suma_pagado' => $total_abonado,
                 'odontograma' => $odontograma_paciente,
                 'suma_presupuesto' => $suma_presupuesto,
                 'suma_adeudado' => $suma_adeudado,
+                'saldo_pendiente' => $presupuestoYaPagado
+                    ? 0
+                    : max(0, $suma_adeudado - $total_abonado),
+                'saldo_a_favor' => $presupuestoYaPagado
+                    ? 0
+                    : max(0, $total_abonado - $suma_adeudado),
+                'presupuesto_completado' => (bool) $presupuesto->pago_completado,
                 'pago_actual' => 0,
                 'trabajos_lab' => $ordenes_trabajo_menor,
                 'total_lab' => $total_lab,

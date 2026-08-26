@@ -2563,39 +2563,69 @@ class ficha_atencionController extends Controller
         $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($paciente->id, $profesional->id_tipo_especialidad);
         $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
 
-        $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
+        /*
+         * Resolver el presupuesto dental que debe continuar en esta atención.
+         *
+         * Una nueva hora puede crear una ficha de atención distinta, pero un
+         * presupuesto odontológico puede abarcar varias citas. Por eso no debemos
+         * limitar la búsqueda a la ficha nueva.
+         *
+         * Prioridad:
+         * 1) presupuesto asociado explícitamente a la hora;
+         * 2) presupuesto activo de la ficha actual;
+         * 3) último presupuesto activo/no pagado del mismo paciente y profesional.
+         */
+        $presupuesto_dental = null;
 
-        // Usar la misma fuente de verdad que los refrescos AJAX: el presupuesto
-        // activo de la ficha. Antes se privilegiaba una referencia histórica de
-        // la hora o simplemente el último ID, y la pantalla mezclaba presupuestos.
-        $id_presupuesto_plan = (int) PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)
-            ->where('id_paciente', $paciente->id)
-            ->where('id_profesional', $profesional->id)
-            ->where('estado', 1)
-            ->orderByDesc('id')
-            ->value('id');
-        if (!$id_presupuesto_plan) {
-            $id_presupuesto_plan = (int) ($hora->id_presupuesto ?? 0);
-        }
-        if (!$id_presupuesto_plan) {
-            $id_presupuesto_plan = (int) PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)
+        if (!empty($hora->id_presupuesto)) {
+            $presupuesto_dental = PresupuestosDental::whereKey((int) $hora->id_presupuesto)
                 ->where('id_paciente', $paciente->id)
                 ->where('id_profesional', $profesional->id)
-                ->orderByDesc('id')
-                ->value('id');
+                ->where('estado', 1)
+                ->first();
         }
+
+        if (!$presupuesto_dental) {
+            $presupuesto_dental = PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)
+                ->where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado', 1)
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        if (!$presupuesto_dental) {
+            /*
+             * Un presupuesto completamente pagado puede seguir clínicamente
+             * pendiente. El pago no debe ocultarlo al abrir una nueva atención.
+             */
+            $presupuesto_dental = PresupuestosDental::where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado', 1)
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        $id_presupuesto_plan = $presupuesto_dental ? (int) $presupuesto_dental->id : 0;
+
+        // Para recuperar piezas, insumos y totales del plan anterior usamos la
+        // ficha donde nació el presupuesto, sin modificar la ficha clínica nueva.
+        $id_ficha_plan = $presupuesto_dental && $presupuesto_dental->id_ficha_atencion
+            ? (int) $presupuesto_dental->id_ficha_atencion
+            : (int) $id_ficha_atencion;
+
         $valores_tratamientos = $this->dameValores(
             $paciente->id,
-            $id_ficha_atencion,
+            $id_ficha_plan,
             $request->lugar_atencion_id,
             $profesional->id_tipo_especialidad,
             $id_presupuesto_plan ?: null
         );
 
-        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
-        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
-        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
-        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto_plan);
+        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_plan, $id_presupuesto_plan);
+        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_plan, $id_presupuesto_plan);
+        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_plan, $id_presupuesto_plan);
+        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad, $id_ficha_plan, $id_presupuesto_plan);
         $quinto_cuadrante = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
         $sexto_cuadrante = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
 
@@ -2616,26 +2646,15 @@ class ficha_atencionController extends Controller
         $octavo_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaOctavoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad, $id_ficha_atencion);
 
         $todos = $this->dameTratamientosBocaGeneral(
-            $id_ficha_atencion
+            $id_ficha_plan
         );
 
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
-        if($id_presupuesto_plan){
-            $presupuesto_dental = PresupuestosDental::where('id', $id_presupuesto_plan)->first();
-            if($presupuesto_dental){
-                $id_ficha_atencion = $presupuesto_dental->id_ficha_atencion;
-                $id_ficha = $presupuesto_dental->id_ficha_atencion;
-            }else{
-                $id_ficha = $id_ficha_atencion;
-            }
-
-        }else{
-            $presupuesto_dental = $id_presupuesto_plan
-                ? PresupuestosDental::find($id_presupuesto_plan)
-                : PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)->orderByDesc('id')->first();
-            $id_ficha = $id_ficha_atencion;
-        }
+        // $presupuesto_dental ya fue resuelto arriba. Se conserva
+        // $id_ficha_atencion como la ficha clínica de la cita actual y se usa
+        // $id_ficha_plan únicamente para consultar el plan/presupuesto anterior.
+        $id_ficha = $id_ficha_plan;
 
         $odontograma = $this->dameOdontogramaPaciente(
             $paciente->id,
@@ -2684,7 +2703,7 @@ class ficha_atencionController extends Controller
 
         $odontograma_especialidad = $this->dameOdontogramaPaciente($paciente->id, $id_ficha, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
-        $insumos_tratamientos = $this->dame_insumos_tratamiento($paciente->id, $id_ficha);
+        $insumos_tratamientos = $this->dame_insumos_tratamiento($paciente->id, $id_ficha, null, $id_presupuesto_plan ?: null);
 
         $insumos_bodega = $this->dame_insumos_bodega($id_ficha);
 
@@ -3445,19 +3464,32 @@ class ficha_atencionController extends Controller
         return $procedimientos;
     }
 
-    public function dame_insumos_tratamiento($id_paciente,$id_ficha_atencion,$tipo = null){
+    public function dame_insumos_tratamiento($id_paciente, $id_ficha_atencion, $tipo = null, $id_presupuesto = null)
+    {
         try {
+            /*
+             * En una continuación de tratamiento, la ficha de la cita actual puede
+             * ser distinta de la ficha donde nació el presupuesto. Si conocemos el
+             * presupuesto, éste es la fuente de verdad para recuperar sus insumos.
+             */
+            $consulta = InsumosTratamientosDental::where('id_paciente', $id_paciente);
 
-            $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->get();
-            foreach($insumos as $i){
-                $i->insumos = mb_strtoupper($i->insumos, 'UTF-8');
+            if (!empty($id_presupuesto)) {
+                $consulta->where('id_presupuesto', (int) $id_presupuesto);
+            } else {
+                $consulta->where('id_ficha_atencion', $id_ficha_atencion);
             }
+
+            $insumos = $consulta->get();
+
+            foreach ($insumos as $i) {
+                $i->insumos = mb_strtoupper((string) $i->insumos, 'UTF-8');
+            }
+
             return $insumos;
         } catch (\Exception $e) {
-            //throw $th;
-            return $e->getMessage();
+            return collect();
         }
-
     }
 
     public function dame_insumos_bodega($id_ficha_atencion){
@@ -3534,10 +3566,7 @@ class ficha_atencionController extends Controller
 
         $total_insumos = 0;
 
-        $insumos = $this->dame_insumos_tratamiento($id_paciente, $id_ficha_atencion, null);
-        if (!is_null($id_presupuesto)) {
-            $insumos = $insumos->where('id_presupuesto', $id_presupuesto);
-        }
+        $insumos = $this->dame_insumos_tratamiento($id_paciente, $id_ficha_atencion, null, $id_presupuesto);
 
         // Iterar y sumar valores
         foreach ($insumos as $item) {
@@ -4272,19 +4301,66 @@ class ficha_atencionController extends Controller
         }
 
         $id_lugar_atencion = $request->id_lugar_atencion;
-        $id_ficha_atencion = $request->id_ficha_atencion;
+        $id_ficha_atencion_actual = $request->id_ficha_atencion;
 
-        // La ficha puede contener referencias antiguas en el campo oculto del
-        // navegador. El plan debe trabajar siempre contra el presupuesto activo
-        // más reciente de esta misma ficha y profesional.
-        $presupuestoActivo = PresupuestosDental::where('id_paciente', $paciente->id)
-            ->where('id_profesional', $profesional->id)
-            ->where('id_ficha_atencion', $id_ficha_atencion)
-            ->where('id_lugar_atencion', $id_lugar_atencion)
-            ->where('estado', 1)
-            ->orderByDesc('id')
-            ->first();
+        /*
+         * La atención actual puede ser una continuación de un presupuesto creado
+         * en una ficha anterior. El estado financiero (pagado/no pagado) NO define
+         * si una pieza está terminada clínicamente.
+         *
+         * Si el frontend ya conoce id_presupuesto, éste es la fuente de verdad:
+         * recuperamos su ficha de origen y trabajamos contra ella para reconstruir
+         * los cuadrantes, caras y piezas pendientes.
+         */
+        $presupuestoActivo = null;
+
+        if ($request->filled('id_presupuesto')) {
+            $presupuestoActivo = PresupuestosDental::whereKey($request->id_presupuesto)
+                ->where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado', 1)
+                ->first();
+        }
+
+        /*
+         * Fallback para atenciones que todavía no traen id_presupuesto:
+         * primero buscamos uno de la ficha actual.
+         */
+        if (!$presupuestoActivo) {
+            $presupuestoActivo = PresupuestosDental::where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('id_ficha_atencion', $id_ficha_atencion_actual)
+                ->where('id_lugar_atencion', $id_lugar_atencion)
+                ->where('estado', 1)
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        /*
+         * Último respaldo: presupuesto clínicamente activo más reciente del mismo
+         * paciente/profesional. Puede estar pagado; mientras estado = 1 sigue
+         * abierto para tratamiento.
+         */
+        if (!$presupuestoActivo) {
+            $presupuestoActivo = PresupuestosDental::where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado', 1)
+                ->orderByDesc('id')
+                ->first();
+        }
+
         $id_presupuesto = optional($presupuestoActivo)->id ?: $request->id_presupuesto;
+
+        // Para caras/grupos usamos siempre la ficha donde nació el presupuesto.
+        $id_ficha_atencion = $presupuestoActivo
+            ? (int) $presupuestoActivo->id_ficha_atencion
+            : (int) $id_ficha_atencion_actual;
+
+        // El lugar de atención histórico también debe provenir del presupuesto
+        // cuando está disponible, evitando perder piezas por un cambio de lugar.
+        if ($presupuestoActivo && !empty($presupuestoActivo->id_lugar_atencion)) {
+            $id_lugar_atencion = (int) $presupuestoActivo->id_lugar_atencion;
+        }
         $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
         $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
         $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id, 'adulto', $profesional->id_tipo_especialidad, $id_ficha_atencion, $id_presupuesto);
@@ -4332,6 +4408,8 @@ class ficha_atencionController extends Controller
         return response()->json([
             'estado' => 1,
             'id_presupuesto' => $id_presupuesto,
+            'id_ficha_atencion_origen' => $id_ficha_atencion,
+            'id_ficha_atencion_actual' => $id_ficha_atencion_actual,
             'evaluacion_adulto_html' => $evaluacion_adulto_html,
             'caras_cuadrantes_html' => $caras_cuadrantes_html,
         ]);

@@ -2396,19 +2396,36 @@ class EscritorioProfesional extends Controller
             ->where('id_profesional', $profesional->id)
             ->first()
             : PresupuestosDental::where('id_paciente', $request->id_paciente)
-            ->where('id_ficha_atencion', $request->id_ficha_atencion)
+            ->where('id_ficha_atencion', $idFichaPresupuesto)
             ->where('id_profesional', $profesional->id)
             ->where('estado', 1)
             ->first();
         if (!$presupuesto) {
             return response()->json(['message' => 'El presupuesto clínico no es válido.'], 422);
         }
+
+        /*
+         * La ficha recibida pertenece a la cita actual. Para reconstruir un
+         * presupuesto que nació en una atención anterior debemos usar siempre
+         * su ficha clínica de origen.
+         */
+        $idFichaPresupuesto = (int) $presupuesto->id_ficha_atencion;
+
+        $totalAbonadoPersistido = (int) PagosPresupuestoDental::where(
+            'id_presupuesto',
+            $presupuesto->id
+        )->sum('total');
+
+        $valorTotalAntesDeRecalcular = (int) $presupuesto->valor_total;
+        $presupuestoYaPagado = (bool) $presupuesto->pago_completado
+            && $totalAbonadoPersistido > 0;
+
         $presupuesto->id_convenio_aplicado = $convenio->id;
         $presupuesto->save();
 
         $odontograma = $this->dameOdontogramaPaciente(
             $request->id_paciente,
-            $request->id_ficha_atencion,
+            $idFichaPresupuesto,
             $request->id_lugar_atencion,
             $profesional->id_tipo_especialidad,
             $request->id_presupuesto
@@ -2419,23 +2436,24 @@ class EscritorioProfesional extends Controller
 
         $valores = $this->dameValoresOdontograma(
             $request->id_paciente,
-            $request->id_ficha_atencion,
+            $idFichaPresupuesto,
             $request->id_lugar_atencion,
             $profesional->id_tipo_especialidad,
             $request->id_presupuesto
         );
 
-        $insumos = $this->dame_insumos_tratamiento(
-            $request->id_paciente,
-            $request->id_ficha_atencion
-        )->filter(function ($insumo) use ($request) {
-            return (int) $insumo->id_presupuesto === (int) $request->id_presupuesto
-                && (int) $insumo->presupuesto === 1
-                && (int) ($insumo->urgencia ?? 0) === 0;
-        })->values();
+        $insumos = InsumosTratamientosDental::where('id_paciente', $request->id_paciente)
+            ->where('id_presupuesto', $presupuesto->id)
+            ->where('presupuesto', 1)
+            ->where('urgencia', 0)
+            ->get();
+
+        foreach ($insumos as $insumo) {
+            $insumo->insumos = mb_strtoupper((string) $insumo->insumos, 'UTF-8');
+        }
 
         $todos = $this->dameTratamientosBocaGeneral(
-            $request->id_ficha_atencion
+            $idFichaPresupuesto
         )->filter(function ($tratamiento) use ($request) {
             return (int) $tratamiento->id_presupuesto === (int) $request->id_presupuesto
                 && (int) $tratamiento->presupuesto === 1
@@ -2449,13 +2467,13 @@ class EscritorioProfesional extends Controller
             $request->id_paciente,
             $profesional->id,
             $request->id_presupuesto,
-            $request->id_ficha_atencion
+            $idFichaPresupuesto
         );
         $ordenes_trabajo_mayor = $fc->dameOrdenesTrabajoMayor(
             $request->id_paciente,
             $profesional->id,
             $request->id_presupuesto,
-            $request->id_ficha_atencion
+            $idFichaPresupuesto
         );
 
         foreach ($ordenes_trabajo_menor as $ot) {
@@ -2601,14 +2619,43 @@ class EscritorioProfesional extends Controller
             }
         }
 
-        // El profesional necesita saber si, tras aplicar el descuento, lo ya abonado
-        // supera el nuevo total (saldo a favor del paciente) o si aún queda un saldo pendiente.
-        $saldoDisponible = (int) round($total_abonado - $total_con_descuento);
-        $saldoAFavor = max(0, $saldoDisponible);
-        $saldoPendiente = max(0, -$saldoDisponible);
+        /*
+         * Estado financiero y estado clínico son independientes.
+         *
+         * Si el presupuesto ya fue pagado, volver a abrir la ficha o recalcular
+         * el convenio no debe generar una devolución ficticia. Usamos el total
+         * reconstruido completo (ficha de origen + id_presupuesto) y, si coincide
+         * con lo abonado, dejamos saldo cero.
+         */
+        $total_con_descuento = max(0, (int) round($total_con_descuento));
 
-        if ($presupuesto) {
-            $presupuesto->valor_total = (int) round($total_con_descuento);
+        if ($presupuestoYaPagado && $totalAbonadoPersistido >= $total_con_descuento) {
+            /*
+             * Para presupuestos antiguos cuyo encabezado pudo quedar dañado por
+             * un recálculo parcial, restauramos el total al monto neto completo
+             * reconstruido desde sus prestaciones.
+             */
+            if ($total_con_descuento > 0) {
+                $presupuesto->valor_total = $total_con_descuento;
+            } elseif ($valorTotalAntesDeRecalcular > 0) {
+                $presupuesto->valor_total = $valorTotalAntesDeRecalcular;
+            }
+
+            $presupuesto->valor_abonado = $totalAbonadoPersistido;
+            $presupuesto->pago_completado = true;
+            $presupuesto->fecha_pago_completo =
+                $presupuesto->fecha_pago_completo ?: Carbon::now();
+            $presupuesto->save();
+
+            $total_abonado = $totalAbonadoPersistido;
+            $saldoAFavor = 0;
+            $saldoPendiente = 0;
+        } else {
+            $saldoDisponible = (int) round($total_abonado - $total_con_descuento);
+            $saldoAFavor = max(0, $saldoDisponible);
+            $saldoPendiente = max(0, -$saldoDisponible);
+
+            $presupuesto->valor_total = $total_con_descuento;
             $presupuesto->valor_abonado = (int) $total_abonado;
             $presupuesto->pago_completado = $total_con_descuento > 0
                 && $total_abonado >= $total_con_descuento;
@@ -2630,6 +2677,7 @@ class EscritorioProfesional extends Controller
             'total_abonado' => $total_abonado,
             'saldo_a_favor' => $saldoAFavor,
             'saldo_pendiente' => $saldoPendiente,
+            'presupuesto_completado' => (bool) $presupuesto->pago_completado,
             'total_lab' => $total_lab,
             'todos' => $todos
         ];
@@ -13634,17 +13682,28 @@ class EscritorioProfesional extends Controller
             $paciente['acompanante'] = $registro_temp;
         }
 
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        // Resolver primero el profesional cuya agenda se está utilizando.
+        // En agenda puede existir un usuario autenticado distinto (por ejemplo,
+        // un asistente), por lo que no debemos depender únicamente de Auth::user().
+        $profesionalAuth = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $profesionalAgenda = null;
 
-        if (!$profesional) {
-            $profesional = Profesional::where('id', $request->id_profesional)->first();
+        if (!empty($request->id_profesional)) {
+            $profesionalAgenda = Profesional::where('id', (int) $request->id_profesional)->first();
         }
 
-        if ($paciente['tipo_paciente'] == 'SI') {
-            if ($profesional && $profesional->id_especialidad == 2) {
-                $presupuestos_dentales = PresupuestosDental::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->where('estado', 1)->get();
+        $profesional = $profesionalAgenda ?: $profesionalAuth;
 
-                if ($presupuestos_dentales) $paciente['presupuestos'] = $presupuestos_dentales;
+        if ($paciente['tipo_paciente'] == 'SI') {
+            if ($profesional && (int) $profesional->id_especialidad === 2) {
+                $presupuestos_dentales = PresupuestosDental::where('id_paciente', $paciente->id)
+                    ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->orderByDesc('id')
+                    ->get();
+
+                // Siempre exponer la colección, incluso si viene vacía.
+                $paciente['presupuestos'] = $presupuestos_dentales;
             } else {
                 $paciente['presupuestos'] = [];
             }
@@ -15355,13 +15414,24 @@ class EscritorioProfesional extends Controller
                     // código específico para dentistas
                     // verificamos si tiene algun presupuesto dental
                     $presupuestos_dentales = $presupuestoHoraPendiente
-                        ?: PresupuestosDental::where('id_paciente', $bono->id_paciente)->where('estado', 1)->first();
+                        ?: ($horaPresupuesto && !empty($horaPresupuesto->id_presupuesto)
+                            ? PresupuestosDental::whereKey($horaPresupuesto->id_presupuesto)
+                                ->where('id_paciente', $bono->id_paciente)
+                                ->where('id_profesional', $profesional->id)
+                                ->where('estado', 1)
+                                ->first()
+                            : PresupuestosDental::where('id_paciente', $bono->id_paciente)
+                                ->where('id_profesional', $profesional->id)
+                                ->where('estado', 1)
+                                ->orderByDesc('id')
+                                ->first());
                     if ($presupuestos_dentales) {
                         $pago = new PagosPresupuestoDental();
                         $pago->id_presupuesto = $presupuestos_dentales->id;
                         $pago->id_profesional = $profesional->id;
                         $pago->id_paciente = $bono->id_paciente;
-                        $pago->id_ficha_atencion = $request->id_referencia;
+                        $pago->id_ficha_atencion = $presupuestos_dentales->id_ficha_atencion
+                            ?: optional($horaPresupuesto)->id_ficha_atencion;
                         $pago->id_lugar_atencion = $request->id_lugar_atencion;
                         $pago->fecha_pago = date('Y-m-d');
                         $pago->metodo_pago = 'Bono';

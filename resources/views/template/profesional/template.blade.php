@@ -2524,7 +2524,10 @@
                         type: "get",
                         data: {
                             rut: rut,
-                            id_lugar_atencion: $('#id_lugar_atencion').val()
+                            id_lugar_atencion: $('#id_lugar_atencion').val(),
+                            // En agenda dental debemos resolver los presupuestos contra
+                            // el profesional cuya agenda se está utilizando.
+                            id_profesional: '{{ $profesional->id ?? '' }}'
                         },
                     })
                     .done(function(data) {
@@ -2616,17 +2619,47 @@
                                 $('#reserva_hora_telefono').text(data.telefono_uno);
                                 $('#input_reserva_hora_telefono').val(data.telefono_uno);
 
-                                $('#reserva_convenio').text(data.prevision.nombre);
-                                $('#input_reserva_convenio').val(data.prevision.id);
+                                $('#reserva_convenio').text(data.prevision?.nombre || 'Sin previsión registrada');
+                                $('#input_reserva_convenio').val(data.prevision?.id || 0);
 
-                                $('#reserva_direccion').text(data.direccion.direccion + ' ' + (data.direccion.numero_dir ?? '') + ', ' + data.direccion.ciudad.nombre);
-                                $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-                                $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+                                // La dirección es opcional. Si no existe, el flujo debe
+                                // continuar para poder cargar presupuestos y demás datos.
+                                const direccionPaciente = data.direccion || {};
+                                const ciudadPaciente = direccionPaciente.ciudad || {};
 
-                                $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
-                                // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-                                buscar_ciudad_general('input_reserva_direccion_region',
-                                    'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
+                                const direccionTexto = [
+                                    direccionPaciente.direccion || '',
+                                    direccionPaciente.numero_dir || ''
+                                ].filter(Boolean).join(' ');
+
+                                const ciudadTexto = ciudadPaciente.nombre || '';
+
+                                $('#reserva_direccion').text(
+                                    [direccionTexto, ciudadTexto].filter(Boolean).join(', ') ||
+                                    'Sin dirección registrada'
+                                );
+
+                                $('#input_reserva_direccion_direccion')
+                                    .val(direccionPaciente.direccion || '');
+
+                                $('#input_reserva_direccion_numero_dir')
+                                    .val(direccionPaciente.numero_dir || '');
+
+                                $('#input_reserva_direccion_region')
+                                    .val(ciudadPaciente.id_region || '');
+
+                                if (ciudadPaciente.id_region) {
+                                    buscar_ciudad_general(
+                                        'input_reserva_direccion_region',
+                                        'input_reserva_direccion_ciudad',
+                                        ciudadPaciente.id || direccionPaciente.id_ciudad || 0
+                                    );
+                                } else {
+                                    $('#input_reserva_direccion_ciudad')
+                                        .empty()
+                                        .append('<option value="0">Seleccione</option>')
+                                        .val('0');
+                                }
 
                                 $('#rut_paciente_reserva').val('');
                                 $('.div_rut_buscar').hide();
@@ -2639,15 +2672,24 @@
                                 $('#presupuesto_numero').append('<option value="" selected disabled>Seleccione el tipo de consulta</option>');
                                 $('#presupuesto_numero').append('<option value="primera">Primera consulta</option>');
                                 $('#presupuesto_numero').append('<option value="urgencia">Urgencia</option>');
-                                console.log(data.presupuestos);
-                                if (data.presupuestos?.length > 0) {
-                                    data.presupuestos.forEach(p => {
-                                        const estadoPago = p.pago_completado ? ' · PAGADO, PENDIENTE DE ATENCIÓN' : '';
-                                        $('#presupuesto_numero').append(
-                                            `<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}${estadoPago}</option>`
-                                            );
-                                    });
-                                }
+                                console.log('Presupuestos dentales del paciente:', data.presupuestos);
+                                const presupuestosActivos = Array.isArray(data.presupuestos)
+                                    ? data.presupuestos
+                                    : [];
+
+                                presupuestosActivos.forEach(p => {
+                                    const total = parseInt(p.valor_total || 0, 10);
+                                    const estadoPago = p.pago_completado
+                                        ? ' · PAGADO, PENDIENTE DE ATENCIÓN'
+                                        : ' · TRATAMIENTO PENDIENTE';
+                                    const fecha = p.fecha ? ` · ${p.fecha}` : '';
+
+                                    $('#presupuesto_numero').append(
+                                        `<option value="${p.id}" data-total="${total}">` +
+                                        `Presupuesto #${p.id}${fecha}${estadoPago}` +
+                                        `</option>`
+                                    );
+                                });
 
                                 if (data.edad < 18) {
                                     $('#acompanante_representante').prop("checked", true);
@@ -3223,6 +3265,182 @@
 
         };
 
+        /**
+         * Carga las prestaciones pendientes del presupuesto seleccionado en agenda.
+         * Esta función era invocada por agenda.blade.php pero no existía en el template.
+         */
+        function updateTotalValue() {
+            const seleccion = $('#presupuesto_numero').val() || '';
+            const esPresupuesto = /^\d+$/.test(String(seleccion));
+
+            $('#id_presupuesto').val(esPresupuesto ? seleccion : '');
+            $('#piezas_odontograma_agenda').val('');
+            $('#selector_odontograma_agenda_wrapper').hide();
+
+            // Primera consulta / urgencia no necesitan seleccionar prestaciones previas.
+            if (!esPresupuesto) {
+                $('#contenedor_tratamientos_presupuesto').html(`
+                    <div class="alert alert-info py-2 px-3 mb-3" role="status">
+                        <i class="feather icon-clock mr-1"></i>
+                        <strong>Duración estimada:</strong>
+                        <span id="cantidad_bloques_atencion">1</span>
+                        <span id="texto_bloques_atencion">bloque</span>
+                        de atención
+                        (<span id="minutos_bloques_atencion">15</span> minutos).
+                    </div>
+                `);
+                return;
+            }
+
+            const url = "{{ route('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: seleccion,
+                    id_profesional: '{{ $profesional->id ?? '' }}'
+                },
+                beforeSend: function() {
+                    $('#contenedor_tratamientos_presupuesto').html(`
+                        <div class="alert alert-light border py-2 px-3 mb-3">
+                            <i class="feather icon-loader mr-1"></i>
+                            Cargando tratamientos pendientes...
+                        </div>
+                    `);
+                }
+            })
+            .done(function(resp) {
+                const piezas = Array.isArray(resp.tratamientos) ? resp.tratamientos : [];
+                const grupos = Array.isArray(resp.todos) ? resp.todos : [];
+
+                let html = `
+                    <div class="alert alert-info py-2 px-3 mb-3" role="status">
+                        <i class="feather icon-clock mr-1"></i>
+                        <strong>Duración estimada:</strong>
+                        <span id="cantidad_bloques_atencion">1</span>
+                        <span id="texto_bloques_atencion">bloque</span>
+                        de atención
+                        (<span id="minutos_bloques_atencion">15</span> minutos).
+                    </div>
+                `;
+
+                if (piezas.length === 0 && grupos.length === 0) {
+                    html += `
+                        <div class="alert alert-warning py-2 px-3 mb-0">
+                            Este presupuesto no tiene prestaciones pendientes para agendar.
+                        </div>
+                    `;
+                    $('#contenedor_tratamientos_presupuesto').html(html);
+                    return;
+                }
+
+                html += `
+                    <div class="card border mb-2">
+                        <div class="card-header py-2 bg-light">
+                            <strong>Tratamientos pendientes del presupuesto #${seleccion}</strong>
+                        </div>
+                        <div class="card-body py-2">
+                `;
+
+                piezas.forEach(function(item) {
+                    const bloques = Math.max(1, parseInt(item.cantidad_bloques || 1, 10));
+                    const pieza = item.pieza ? `Pieza ${item.pieza}` : 'Pieza dental';
+                    const tratamiento = item.descripcion || item.tratamiento || 'Tratamiento dental';
+                    const diagnostico = item.diagnostico ? ` · ${item.diagnostico}` : '';
+
+                    html += `
+                        <div class="custom-control custom-checkbox mb-2">
+                            <input type="checkbox"
+                                class="custom-control-input tratamiento-agenda-dental"
+                                id="tratamiento_agenda_pieza_${item.id}"
+                                data-id="${item.id}"
+                                data-tipo="pieza"
+                                data-bloques="${bloques}">
+                            <label class="custom-control-label" for="tratamiento_agenda_pieza_${item.id}">
+                                <strong>${pieza}</strong> — ${tratamiento}${diagnostico}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                grupos.forEach(function(item) {
+                    const bloques = Math.max(1, parseInt(item.cantidad_bloques || 1, 10));
+                    const nombre = item.grupo || item.descripcion || 'Prestación general';
+                    const tratamiento = item.diagnostico_tratamiento || item.tratamiento || '';
+
+                    html += `
+                        <div class="custom-control custom-checkbox mb-2">
+                            <input type="checkbox"
+                                class="custom-control-input tratamiento-agenda-dental"
+                                id="tratamiento_agenda_grupo_${item.id}"
+                                data-id="${item.id}"
+                                data-tipo="grupo"
+                                data-bloques="${bloques}">
+                            <label class="custom-control-label" for="tratamiento_agenda_grupo_${item.id}">
+                                <strong>${nombre}</strong>${tratamiento ? ` — ${tratamiento}` : ''}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+                $('#contenedor_tratamientos_presupuesto').html(html);
+
+                // Mostramos el área del selector para mantener consistente la UI dental.
+                $('#selector_odontograma_agenda_wrapper').show();
+                actualizarBloquesAgendaDental();
+            })
+            .fail(function(xhr) {
+                console.error('Error cargando tratamientos del presupuesto:', xhr.responseText || xhr);
+                $('#contenedor_tratamientos_presupuesto').html(`
+                    <div class="alert alert-danger py-2 px-3 mb-0">
+                        No fue posible cargar los tratamientos pendientes del presupuesto.
+                    </div>
+                `);
+            });
+        }
+
+        function obtenerTratamientosSeleccionadosAgendaDental() {
+            const seleccionados = [];
+
+            $('.tratamiento-agenda-dental:checked').each(function() {
+                const id = parseInt($(this).data('id'), 10);
+                const tipo = String($(this).data('tipo') || 'pieza');
+                if (id > 0) {
+                    seleccionados.push({ id: id, tipo: tipo });
+                }
+            });
+
+            return seleccionados;
+        }
+
+        function actualizarBloquesAgendaDental() {
+            let bloques = 0;
+            const piezasSeleccionadas = [];
+
+            $('.tratamiento-agenda-dental:checked').each(function() {
+                bloques += Math.max(1, parseInt($(this).data('bloques') || 1, 10));
+                if (String($(this).data('tipo')) === 'pieza') {
+                    piezasSeleccionadas.push(parseInt($(this).data('id'), 10));
+                }
+            });
+
+            if (bloques <= 0) bloques = 1;
+
+            $('#cantidad_bloques_atencion').text(bloques);
+            $('#texto_bloques_atencion').text(bloques === 1 ? 'bloque' : 'bloques');
+            $('#minutos_bloques_atencion').text(bloques * 15);
+            $('#piezas_odontograma_agenda').val(piezasSeleccionadas.join(','));
+        }
+
+        $(document).off('change.agendaDental', '.tratamiento-agenda-dental')
+            .on('change.agendaDental', '.tratamiento-agenda-dental', function() {
+                actualizarBloquesAgendaDental();
+            });
+
         function agendar_hora() {
 
 
@@ -3551,20 +3769,22 @@
                 }
             }
 
-            // if( edad > 18 )
-            // Validación simplificada: si NO es dependiente, requiere teléfono (email es opcional)
-            if (tipo_agenda_text !== 'D' && $('#paciente_dependiente').prop('checked') == false) {
-                if (reserva_hora_telefono_uno == '') {
+            // Paciente independiente: debe existir al menos un medio de contacto.
+            // Puede ser email O teléfono; no se exige ambos.
+            if ($('#paciente_dependiente').prop('checked') == false) {
+                if (
+                    (reserva_hora_telefono_uno || '').trim() === '' &&
+                    (reserva_hora_email || '').trim() === ''
+                ) {
                     swal({
                         title: "Error!",
-                        text: "Debe ingresar el teléfono del paciente",
+                        text: "Debe ingresar al menos un medio de contacto: email o teléfono.",
                         icon: "error",
                         type: "danger",
                         DangerMode: true,
                     });
                     return;
                 }
-                // Email es opcional, no se valida
             }
 
             var reserva_hora_representante_info_libre = $('#reserva_hora_representante_info_libre').val();

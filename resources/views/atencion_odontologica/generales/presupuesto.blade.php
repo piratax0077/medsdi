@@ -192,6 +192,73 @@
         });
         return Array.from(grupos.values());
     }
+
+    // Render centralizado de los insumos del presupuesto clínico.
+    // Se expone en window para que la ficha odontológica pueda refrescar
+    // inmediatamente los packs automáticos al agregar un tratamiento.
+    window.renderizarInsumosPresupuestoClinico = function (insumos) {
+        const $contenedor = $('#contenedor_insumos');
+        if (!$contenedor.length) return;
+
+        const escapar = function (valor) {
+            return $('<div>').text(valor === null || valor === undefined ? '' : valor).html();
+        };
+
+        $contenedor.empty();
+
+        agruparInsumosPresupuesto(insumos).forEach(function (insumo) {
+            if (Number(insumo.presupuesto) !== 1 || Number(insumo.urgencia || 0) !== 0) {
+                return;
+            }
+
+            const cantidad = Number(insumo.cantidad) || 0;
+            const valor = Number(insumo.valor) || 0;
+            const descuento = Number(insumo.valor_descuento || insumo.descuento) || 0;
+            const subtotal = cantidad * valor;
+            const total = Math.max(0, subtotal - descuento);
+            const nombre = ((insumo.insumos || '') + ' ' + (insumo.nombre_marca || '')).trim();
+
+            $contenedor.append(`
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-insumo-presupuesto="${Number(insumo.id) || 0}">
+                    <div class="card-informacion">
+                        <div class="card-body pb-0">
+                            <div class="form-row">
+                                <div class="form-group col-md-12 col-lg-4">
+                                    <label class="floating-label-activo-sm">Insumo</label>
+                                    <input type="text" class="form-control form-control-sm" value="${escapar(nombre)}" readonly>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-1">
+                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                    <input type="text" class="form-control form-control-sm" value="${cantidad}" readonly>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" value="${formatoMoneda(subtotal)}" readonly>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-2 col-lg-2">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" value="${descuento ? formatoMoneda(descuento) : ''}" readonly>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-2">
+                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" value="${formatoMoneda(total)}" readonly>
+                                </div>
+                                <div class="form-group col-md-1 col-lg-1 d-flex align-items-center justify-content-center">
+                                    <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${Number(insumo.id) || 0},'gral')" title="Quitar insumo">
+                                        <i class="feather icon-x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        if (typeof mejorarExperienciaPresupuestoDental === 'function') {
+            mejorarExperienciaPresupuestoDental();
+        }
+    };
 </script>
 
 <div id="form-presup_dent"
@@ -2024,8 +2091,18 @@
 
                                     // Muestra/oculta los banners de saldo a favor o saldo pendiente tras aplicar/quitar un convenio
                                     function manejarSaldoConvenio(resp, avisar){
-                                        const saldoAFavor = Math.max(0, Math.round(Number(resp.saldo_a_favor) || 0));
-                                        const saldoPendiente = Math.max(0, Math.round(Number(resp.saldo_pendiente) || 0));
+                                        const presupuestoCompletado =
+                                            resp && (resp.presupuesto_completado === true ||
+                                            Number(resp.presupuesto_completado) === 1);
+
+                                        const saldoAFavor = presupuestoCompletado
+                                            ? 0
+                                            : Math.max(0, Math.round(Number(resp.saldo_a_favor) || 0));
+
+                                        const saldoPendiente = presupuestoCompletado
+                                            ? 0
+                                            : Math.max(0, Math.round(Number(resp.saldo_pendiente) || 0));
+
                                         saldoAFavorDisponible = saldoAFavor;
 
                                         $('#banner_saldo_convenio_wrapper').toggle(saldoAFavor > 0 || saldoPendiente > 0);
@@ -2102,11 +2179,16 @@
                                         });
                                     }
 
-                                    // Si el presupuesto quedó con un convenio aplicado (persistido en BD), lo recalculamos apenas carga la ficha
+                                    // Si el presupuesto ya tiene un convenio aplicado, refrescamos
+                                    // silenciosamente al cargar. No corresponde ofrecer devolución
+                                    // solo por abrir nuevamente una atención.
                                     $(function(){
                                         const tieneDctoInicial = $('#tiene_dcto').val();
                                         if(tieneDctoInicial && tieneDctoInicial != 0){
-                                            confirmar_aplicar_convenio_tratamiento(tieneDctoInicial);
+                                            confirmar_aplicar_convenio_tratamiento(
+                                                tieneDctoInicial,
+                                                false
+                                            );
                                         }
                                     });
                                 </script>
