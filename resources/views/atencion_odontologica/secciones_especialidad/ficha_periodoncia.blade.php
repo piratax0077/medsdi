@@ -262,6 +262,21 @@
     .ficha-periodoncia .dental-table-datetime small { margin-top: .2rem; color: #718096; }
     .ficha-periodoncia .dental-treatment-name { display: -webkit-box; overflow: hidden; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
     .ficha-periodoncia .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .55rem; min-width: 200px; }
+    .ficha-periodoncia #selector_plan_tratamiento_periodoncia [data-selector-pieza].is-in-budget,
+    .ficha-periodoncia #selector_plan_principal_periodoncia [data-selector-pieza].is-in-budget,
+    .ficha-periodoncia #selector_plan_principal_periodoncia_infantil [data-selector-pieza].is-in-budget {
+        background: #dff7e8 !important;
+        border-color: #2eb872 !important;
+        box-shadow: inset 0 -5px 0 #2eb872, 0 2px 6px rgba(46,184,114,.15);
+        color: #167445 !important;
+        opacity: 1 !important;
+    }
+    .ficha-periodoncia #selector_plan_tratamiento_periodoncia [data-selector-pieza].is-in-budget img,
+    .ficha-periodoncia #selector_plan_principal_periodoncia [data-selector-pieza].is-in-budget img,
+    .ficha-periodoncia #selector_plan_principal_periodoncia_infantil [data-selector-pieza].is-in-budget img {
+        opacity: 1 !important;
+        filter: none !important;
+    }
     @media (max-width: 991.98px) { .ficha-periodoncia .dental-treatment-steps { overflow-x: auto; } .ficha-periodoncia .dental-treatment-steps .nav-item-secciones { flex: 0 0 220px; } }
 </style>
 
@@ -341,7 +356,10 @@
                             @endif
                             <!-- Atención odontológica general compartida entre especialidades -->
                             @if($mostrarExamenGeneralPeriodoncia)
-                                @include('atencion_odontologica.generales.odonto_gral', ['ocultarExamenPorPieza' => true])
+                                @include('atencion_odontologica.generales.odonto_gral', [
+                                    'ocultarExamenPorPieza' => true,
+                                    'modalInsumosAdministradoPorFicha' => true,
+                                ])
                             @endif
                             {{--  @include('atencion_odontologica.generales.includes.odontologia_preimplante')  --}}
                             <!--EVALUACION PERIODONCIA -->
@@ -3742,19 +3760,55 @@
 
     });
 
+    $(function () {
+        const cantidadModalInsumos = $('#modal_insumos').length;
+        if (cantidadModalInsumos !== 1) {
+            console.error(
+                'Periodoncia: se esperaba exactamente un #modal_insumos y se encontraron',
+                cantidadModalInsumos
+            );
+        }
+    });
+
     function abrir_modal_insumos() {
-        const $modal = $('[id="modal_insumos"]').last();
-        if (!$modal.length) {
+        const $modales = $('#modal_insumos');
+
+        if (!$modales.length) {
+            console.error('Periodoncia: no existe #modal_insumos en el DOM.');
             swal('Insumos no disponibles', 'No fue posible cargar el formulario de insumos.', 'warning');
-            return;
+            return false;
         }
 
-        // Los paneles de la ficha crean contextos de apilamiento propios. Al
-        // dejar el modal directamente en body queda siempre sobre el backdrop.
+        if ($modales.length > 1) {
+            console.error(
+                'Periodoncia: existen IDs duplicados #modal_insumos:',
+                $modales.length
+            );
+            swal(
+                'Configuración duplicada',
+                'Se encontraron varios formularios de insumos en la misma ficha.',
+                'error'
+            );
+            return false;
+        }
+
+        const $modal = $modales.first();
+
+        // Evita problemas de z-index/overflow de los paneles odontológicos.
         if (!$modal.parent().is('body')) {
             $modal.appendTo(document.body);
         }
-        $modal.modal('show');
+
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open').css('padding-right', '');
+
+        $modal.modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        return true;
     }
 
     function dame_marcas_implantes(value) {
@@ -3852,21 +3906,31 @@
         }
 
         function guardar_insumo() {
-            let $modalInsumos = $('[id="modal_insumos"].show').last();
-            if (!$modalInsumos.length) {
-                $modalInsumos = $('[id="modal_insumos"]').last();
+            let $modalInsumos = $('#modal_insumos');
+
+            if ($modalInsumos.length !== 1) {
+                console.error(
+                    'Periodoncia: guardar_insumo esperaba 1 modal y encontró',
+                    $modalInsumos.length
+                );
+                swal(
+                    'No se pudo guardar',
+                    'El formulario de insumos no está disponible de forma única.',
+                    'error'
+                );
+                return false;
             }
 
-            let $nombreInsumo = $modalInsumos.find('[id="nombreInsumo"]').last();
-            let $tipoInsumo = $modalInsumos.find('[id="tipoInsumo"]').last();
+            let $nombreInsumo = $modalInsumos.find('#nombreInsumo');
+            let $tipoInsumo = $modalInsumos.find('#tipoInsumo');
             let nombreInsumo = $.trim($nombreInsumo.find('option:selected').text());
             let tipoInsumo = String($tipoInsumo.val() || '0');
             if (tipoInsumo == 1) {
-                var marcaInsumo = $.trim($modalInsumos.find('[id="marcasImplantes"] option:selected').last().text());
+                var marcaInsumo = $.trim($modalInsumos.find('#marcasImplantes option:selected').text());
             } else {
                 var marcaInsumo = '';
             }
-            var idMarcaInsumo = $modalInsumos.find('[id="marcasImplantes"]').last().val() || 0;
+            var idMarcaInsumo = $modalInsumos.find('#marcasImplantes').val() || 0;
             console.log(idMarcaInsumo);
             let tipoInsumo_text = $.trim($tipoInsumo.find('option:selected').text());
             let cantidad = parseFloat($modalInsumos.find('[id="cantidad"]').last().val()) || 0;
@@ -3908,7 +3972,7 @@
                     id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
                     id_ficha_atencion: $('#id_fc').val(),
                     id_presupuesto: $('#id_presupuesto').val() || null,
-                    observaciones: $modalInsumos.find('[id="insumos_obs_tto"]').last().val() || '',
+                    observaciones: $modalInsumos.find('#insumos_obs_tto').val() || '',
                     _token: CSRF_TOKEN
                 }
 
@@ -8267,7 +8331,16 @@ function ocultar_pieza_impl(counter){
                     $select.closest('tr').attr('data-clinical-state', Number(nuevo) === 100 ? 1 : 2);
                     if (Array.isArray(respuesta.odontograma)) {
                         odontograma_global = respuesta.odontograma;
-                        if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
+
+                        if (
+                            window.MedSDIPresupuestoDental &&
+                            typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                        ) {
+                            window.MedSDIPresupuestoDental.recibirOdontograma(respuesta.odontograma);
+                        } else if (typeof window.actualizarDatosProgresoPresupuesto === 'function') {
+                            window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
+                        }
+
                         sincronizarSelectorPlanPeriodoncia(respuesta.odontograma);
                     }
                 },
@@ -8373,20 +8446,95 @@ function ocultar_pieza_impl(counter){
         });
 
         function sincronizarSelectorPlanPeriodoncia(listaOdontograma) {
-            const $selector = $('#selector_plan_tratamiento_periodoncia');
-            if (!$selector.length) return;
-            window.actualizarEstadosClinicosSelectorOdontograma($selector, listaOdontograma);
+            const registros = Array.isArray(listaOdontograma) ? listaOdontograma : [];
 
-            $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
-            $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+            const piezasPresupuesto = new Set(
+                registros
+                    .filter(function (registro) {
+                        return registro
+                            && Number(registro.urgencia || 0) === 0
+                            && (
+                                Number(registro.presupuesto) === 1 ||
+                                Number(registro.id_presupuesto || 0) > 0
+                            );
+                    })
+                    .map(function (registro) {
+                        return String(registro.pieza || '').trim();
+                    })
+                    .filter(Boolean)
+            );
+
+            const selectores = [
+                $('#selector_plan_tratamiento_periodoncia'),
+                $('#selector_plan_principal_periodoncia'),
+                $('#selector_plan_principal_periodoncia_infantil')
+            ];
+
+            selectores.forEach(function ($selector) {
+                if (!$selector.length) return;
+
+                if (typeof window.actualizarEstadosClinicosSelectorOdontograma === 'function') {
+                    window.actualizarEstadosClinicosSelectorOdontograma($selector, registros);
+                }
+
+                $selector.find('[data-selector-pieza]').each(function () {
+                    const $pieza = $(this);
+                    const numero = String($pieza.data('selector-pieza') || '').trim();
+                    const presupuestada = piezasPresupuesto.has(numero);
+
+                    $pieza
+                        .toggleClass('is-in-budget', presupuestada)
+                        .attr('data-en-presupuesto', presupuestada ? '1' : '0');
+
+                    // Una pieza ya incorporada al presupuesto debe seguir visible
+                    // y con su estado clínico, aunque no esté disponible para volver
+                    // a agregarla como un tratamiento nuevo.
+                    if (presupuestada) {
+                        $pieza.addClass('is-enabled');
+                    }
+                });
+
+                $selector.find('.is-selected')
+                    .removeClass('is-selected')
+                    .attr('aria-pressed', 'false');
+
+                $selector.find('.selector-odontograma-generico__resumen')
+                    .html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+            });
+
             $('#paciente_piezas_dentales_ex_period').val([]).trigger('change');
-
-            const $selectorPrincipal = $('#selector_plan_principal_periodoncia');
-            window.actualizarEstadosClinicosSelectorOdontograma($selectorPrincipal, listaOdontograma);
-            $selectorPrincipal.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
-            $selectorPrincipal.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
             $('#pieza_plan_principal_periodoncia').val('0');
         }
+
+        document.addEventListener('odontoGeneral:actualizado', function (event) {
+            const detalle = event && event.detail ? event.detail : {};
+            const respuesta = detalle.respuesta || {};
+            const lista = Array.isArray(respuesta.odontograma_paciente)
+                ? respuesta.odontograma_paciente
+                : (Array.isArray(respuesta.odontograma) ? respuesta.odontograma : []);
+
+            if (respuesta.presupuesto && respuesta.presupuesto.id) {
+                $('#id_presupuesto').val(respuesta.presupuesto.id);
+            }
+
+            if (lista.length) {
+                odontograma_global = lista;
+                sincronizarSelectorPlanPeriodoncia(lista);
+
+                if (
+                    window.MedSDIPresupuestoDental &&
+                    typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                ) {
+                    window.MedSDIPresupuestoDental.recibirOdontograma(
+                        lista,
+                        detalle.piezas && detalle.piezas.length
+                            ? String(detalle.piezas[0])
+                            : null,
+                        respuesta.presupuesto || null
+                    );
+                }
+            }
+        });
 
         function aplicar_piezas_diagnostico_plan_periodoncia(registros) {
             const piezas = [...new Set((registros || []).filter(function (registro) {
@@ -8498,10 +8646,29 @@ function ocultar_pieza_impl(counter){
                             title: 'Info',
                             text: resp.mensaje
                         });
-                        let odontograma = resp.odontograma_paciente;
-                        odontograma_global = resp.odontograma_paciente;
+                        let odontograma = Array.isArray(resp.odontograma_paciente)
+                            ? resp.odontograma_paciente
+                            : [];
+                        odontograma_global = odontograma;
+
+                        if (resp.presupuesto && resp.presupuesto.id) {
+                            $('#id_presupuesto').val(resp.presupuesto.id);
+                        }
+
                         sincronizarSelectorPlanPeriodoncia(odontograma);
                         aplicar_piezas_diagnostico_plan_periodoncia(odontograma);
+
+                        if (
+                            window.MedSDIPresupuestoDental &&
+                            typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                        ) {
+                            window.MedSDIPresupuestoDental.recibirOdontograma(
+                                odontograma,
+                                piezasSeleccionadas.length ? String(piezasSeleccionadas[0]) : null,
+                                resp.presupuesto || null
+                            );
+                        }
+
                         let table_odontograma = $('#table_odontograma').DataTable();
 
                         // Vacía la tabla
@@ -8741,6 +8908,33 @@ function ocultar_pieza_impl(counter){
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
                                 }
+                        });
+
+                        // Los bloques históricos anteriores aún reconstruyen algunas
+                        // tablas de Periodoncia. Al finalizar, el componente aislado
+                        // de presupuesto vuelve a ser la representación canónica.
+                        sincronizarSelectorPlanPeriodoncia(odontograma);
+
+                        if (
+                            window.MedSDIPresupuestoDental &&
+                            typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                        ) {
+                            window.MedSDIPresupuestoDental.recibirOdontograma(
+                                odontograma,
+                                piezasSeleccionadas.length ? String(piezasSeleccionadas[0]) : null,
+                                resp.presupuesto || null
+                            );
+                        }
+
+                        window.requestAnimationFrame(function () {
+                            sincronizarSelectorPlanPeriodoncia(odontograma);
+
+                            if (
+                                window.MedSDIPresupuestoDental &&
+                                typeof window.MedSDIPresupuestoDental.renderTablaPagos === 'function'
+                            ) {
+                                window.MedSDIPresupuestoDental.renderTablaPagos(odontograma);
+                            }
                         });
                     } else {
                         swal({

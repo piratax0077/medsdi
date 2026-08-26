@@ -1917,9 +1917,27 @@
                                             const pieza = String(o.pieza);
                                             if(!mapa[pieza]){ mapa[pieza] = { estados: [], clinicos: [], totalPagar: 0 }; }
                                             const descuento = Number(o.valor_descuento) || 0;
-                                            mapa[pieza].estados.push(
-                                                presupuestoCubierto ? 'ok' : (sinAbonos ? 'error' : (o.estado_pago || 'error'))
-                                            );
+                                            // El estado_pago devuelto por el backend es la fuente
+                                            // autoritativa por prestación. Antes, si #abonos_presup
+                                            // todavía mostraba $0 durante el mismo ciclo AJAX, se
+                                            // forzaba erróneamente el selector a rojo aunque la fila
+                                            // ya viniera con estado_pago = 'ok'.
+                                            const estadoServidor = String(o.estado_pago || '').toLowerCase();
+                                            let estadoPagoVisual = 'error';
+
+                                            if (presupuestoCubierto) {
+                                                estadoPagoVisual = 'ok';
+                                            } else if (
+                                                estadoServidor === 'ok' ||
+                                                estadoServidor === 'incompleto' ||
+                                                estadoServidor === 'error'
+                                            ) {
+                                                estadoPagoVisual = estadoServidor;
+                                            } else if (sinAbonos) {
+                                                estadoPagoVisual = 'error';
+                                            }
+
+                                            mapa[pieza].estados.push(estadoPagoVisual);
                                             mapa[pieza].totalPagar += (Number(o.valor) || 0) - descuento;
                                             const clinico = Number(o.estado) === 1 ? 'Terminado' : (Number(o.estado) === 2 ? 'En proceso' : (Number(o.estado) === 3 ? 'Citado a control' : 'Pendiente'));
                                             if(mapa[pieza].clinicos.indexOf(clinico) === -1){ mapa[pieza].clinicos.push(clinico); }
@@ -1957,12 +1975,14 @@
 
                                     // Punto único de sincronización: se llama tras cada acción AJAX que recalcula estado_pago/descuento (pagos, convenio, reasignación)
                                     function sincronizarSelectorPagosPiezas(listaOdontograma){
-                                        window.odontogramaPagosActual = listaOdontograma || [];
+                                        const lista = Array.isArray(listaOdontograma) ? listaOdontograma : [];
+                                        window.odontogramaPagosActual = lista;
+
                                         const $selector = $('#selector_pagos_piezas');
                                         if ($selector.length && typeof window.actualizarEstadosClinicosSelectorOdontograma === 'function') {
-                                            window.actualizarEstadosClinicosSelectorOdontograma($selector, listaOdontograma || []);
+                                            window.actualizarEstadosClinicosSelectorOdontograma($selector, lista);
                                         }
-                                        pintarEstadosPagoPiezas(calcularColoresPagoPorPieza(listaOdontograma));
+                                        pintarEstadosPagoPiezas(calcularColoresPagoPorPieza(lista));
                                         if (typeof window.decorarProgresosPresupuesto === 'function') {
                                             window.decorarProgresosPresupuesto();
                                         }
@@ -4320,6 +4340,11 @@
                              0,
                              response.pagos || []
                          );
+
+                         $('#abonos_presup')
+                             .val(formatoMoneda(Number(response.suma_pagado || 0)))
+                             .attr('data-saldo-pendiente', 0);
+
                          sincronizarSelectorPagosPiezas(odontograma);
 
                          if (
