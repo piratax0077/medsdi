@@ -2578,11 +2578,24 @@ class ficha_atencionController extends Controller
         $presupuesto_dental = null;
 
         if (!empty($hora->id_presupuesto)) {
-            $presupuesto_dental = PresupuestosDental::whereKey((int) $hora->id_presupuesto)
+            $consultaPresupuestoHora = PresupuestosDental::whereKey((int) $hora->id_presupuesto)
                 ->where('id_paciente', $paciente->id)
-                ->where('id_profesional', $profesional->id)
-                ->where('estado', 1)
-                ->first();
+                ->where('id_profesional', $profesional->id);
+
+            /*
+             * PERIODONCIA (tipo 21):
+             * un presupuesto clínicamente completado sigue siendo parte del
+             * historial, pagos y estado clínico de la atención. Por eso, si la
+             * hora está asociada explícitamente al presupuesto, lo recuperamos
+             * aunque una lógica antigua lo haya dejado estado = 0.
+             *
+             * Las demás especialidades conservan exactamente la regla anterior.
+             */
+            if ((int) $profesional->id_tipo_especialidad !== 21) {
+                $consultaPresupuestoHora->where('estado', 1);
+            }
+
+            $presupuesto_dental = $consultaPresupuestoHora->first();
         }
 
         if (!$presupuesto_dental) {
@@ -3745,7 +3758,30 @@ class ficha_atencionController extends Controller
                 'tratamientos_implantologia.cantidad_bloques',
                 'tratamientos_implantologia.valor',
                 'tratamientos_dental.descripcion as diagnostico')
-                ->leftJoin('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
+                /*
+                 * IMPLANTOLOGÍA (tipo 16):
+                 * tratamientos_implantologia puede contener más de un registro con
+                 * la misma descripción. Un JOIN directo por descripción multiplica
+                 * cada odontograma por la cantidad de coincidencias.
+                 *
+                 * Se toma una sola fila del catálogo (la de mayor ID) para cada
+                 * descripción, de modo que cada odontogramas_pacientes.id aparezca
+                 * exactamente una vez.
+                 */
+                ->leftJoin('tratamientos_implantologia', function ($join) {
+                    $join->on(
+                        'odontogramas_pacientes.tratamiento',
+                        '=',
+                        'tratamientos_implantologia.descripcion'
+                    )->whereRaw(
+                        'tratamientos_implantologia.id = (
+                            SELECT MAX(ti_unico.id)
+                            FROM tratamientos_implantologia AS ti_unico
+                            WHERE TRIM(UPPER(ti_unico.descripcion)) =
+                                  TRIM(UPPER(odontogramas_pacientes.tratamiento))
+                        )'
+                    );
+                })
                 ->leftJoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
@@ -3768,12 +3804,19 @@ class ficha_atencionController extends Controller
         }
 
 
-            // verificar si trae ficha de atencion
-            if (!is_null($id_ficha_atencion)) {
+            /*
+             * PERIODONCIA (tipo 21):
+             * si tenemos id_presupuesto, éste identifica de forma inequívoca el
+             * plan clínico. No exigimos además que coincida la ficha actual,
+             * porque una continuación puede abrirse desde otra atención.
+             *
+             * Para las demás especialidades mantenemos el comportamiento previo.
+             */
+            if (!is_null($id_ficha_atencion)
+                && !((int) $tipo_especialidad === 21 && !is_null($id_presupuesto))) {
                 $query->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion);
             }
 
-            // Verificar si el parámetro $id_presupuesto no es nulo
             if (!is_null($id_presupuesto)) {
                 $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
             }
@@ -4315,11 +4358,17 @@ class ficha_atencionController extends Controller
         $presupuestoActivo = null;
 
         if ($request->filled('id_presupuesto')) {
-            $presupuestoActivo = PresupuestosDental::whereKey($request->id_presupuesto)
+            $consultaPresupuesto = PresupuestosDental::whereKey($request->id_presupuesto)
                 ->where('id_paciente', $paciente->id)
-                ->where('id_profesional', $profesional->id)
-                ->where('estado', 1)
-                ->first();
+                ->where('id_profesional', $profesional->id);
+
+            // Solo Periodoncia conserva visibles los presupuestos ya terminados
+            // clínicamente. El resto de especialidades sigue exigiendo estado=1.
+            if ((int) $profesional->id_tipo_especialidad !== 21) {
+                $consultaPresupuesto->where('estado', 1);
+            }
+
+            $presupuestoActivo = $consultaPresupuesto->first();
         }
 
         /*

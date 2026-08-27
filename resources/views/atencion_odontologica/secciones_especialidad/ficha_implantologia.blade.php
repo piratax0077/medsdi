@@ -3379,6 +3379,38 @@
 <script>
     let diagnosticoPlanImplantologiaSeleccionado = null;
 
+    /**
+     * Protección visual para Implantología.
+     * La identidad de una prestación es odontogramas_pacientes.id.
+     * Si una respuesta antigua viniera repetida por un JOIN, se conserva una sola
+     * copia sin ocultar tratamientos distintos de la misma pieza.
+     */
+    function presupuestoImplantologiaUsaRenderCanonico() {
+        return !!(
+            window.MedSDIPresupuestoDental &&
+            typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+        );
+    }
+
+    function normalizarOdontogramaImplantologia(lista) {
+        const registros = Array.isArray(lista) ? lista : [];
+        const vistos = new Set();
+
+        return registros.filter(function (registro) {
+            if (!registro) return false;
+
+            const id = registro.id !== null && registro.id !== undefined
+                ? String(registro.id)
+                : '';
+
+            if (!id) return true;
+            if (vistos.has(id)) return false;
+
+            vistos.add(id);
+            return true;
+        });
+    }
+
     function sincronizarSelectorPlanImplantologia(listaOdontograma) {
         const $selector = $('#selector_plan_tratamiento_implantologia');
         if (!$selector.length) return;
@@ -3404,7 +3436,7 @@
     });
 
     let actualizandoCarasImplantologia = false;
-    function refrescar_caras_grupos_implantologia() {
+    function refrescar_caras_grupos_implantologia(callback) {
         if (actualizandoCarasImplantologia) return;
         actualizandoCarasImplantologia = true;
 
@@ -3423,6 +3455,13 @@
 
                 $('#eval_adults .dental-evaluation-panel').first()
                     .replaceWith(response.evaluacion_adulto_html);
+
+                // El reemplazo anterior reconstruye las tablas del tratamiento.
+                // Ejecutamos el callback después para volver a pintar los insumos
+                // asociados al tratamiento implantológico.
+                if (typeof callback === 'function') {
+                    callback(response);
+                }
 
                 window.requestAnimationFrame(function () {
                     decorarTablaPlanImplantologia();
@@ -7181,15 +7220,23 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 // Actualizar primero los componentes esenciales. El resto de esta
                 // funcion contiene tablas historicas opcionales y un error en una
                 // de ellas no debe impedir mostrar ni sumar los insumos del pack.
-                refrescarInsumosPreimplanteImplantologia(resp.insumos || []);
+                const insumosImplantologia = Array.isArray(resp.insumos) ? resp.insumos : [];
+
+                // Totales del presupuesto.
                 actualizarTotalesPreimplanteImplantologia(resp.valores || []);
+
+                // Vista "Presupuesto clínico": el total ya incluía los insumos,
+                // pero faltaba pintar sus tarjetas.
+                if (typeof window.renderizarInsumosPresupuestoClinico === 'function') {
+                    window.renderizarInsumosPresupuestoClinico(insumosImplantologia);
+                }
                 diagnosticoPlanImplantologiaSeleccionado = null;
                 swal({
                     icon:'success',
                     title:'Info',
                     text: resp.mensaje
                 });
-                let odontograma = Array.isArray(resp.odontograma_paciente) ? resp.odontograma_paciente : [];
+                let odontograma = normalizarOdontogramaImplantologia(resp.odontograma_paciente);
                 odontograma_global = odontograma;
                 sincronizarSelectorPlanImplantologia(odontograma);
                 if (typeof sincronizarOdontogramaPresupuesto === 'function') {
@@ -7237,7 +7284,21 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 // Mantener el mismo componente de cuatro grupos usado por
                 // odontologia general y endodoncia. La respuesta
                 // vista_presupuestos corresponde a la vista antigua (6 grupos).
-                refrescar_caras_grupos_implantologia();
+                refrescar_caras_grupos_implantologia(function () {
+                    // IMPORTANTE: refrescar_caras_grupos reemplaza el panel completo.
+                    // Por eso los insumos deben pintarse DESPUÉS del reemplazo.
+                    refrescarInsumosPreimplanteImplantologia(insumosImplantologia);
+                });
+
+                // Mantener sincronizado también el componente centralizado del presupuesto
+                // y sus círculos de progreso.
+                if (window.MedSDIPresupuestoDental &&
+                    typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function') {
+                    window.MedSDIPresupuestoDental.recibirOdontograma(odontograma);
+                } else if (typeof window.actualizarDatosProgresoPresupuesto === 'function') {
+                    window.actualizarDatosProgresoPresupuesto(odontograma);
+                }
+
                 $('#table_odontograma tbody').html(html);
                 decorarTablaPlanImplantologia();
                 $('#contenedor_piezas_dentales_presupuesto').empty();
@@ -7392,11 +7453,14 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                                 var clase = 'bg-danger';
                             }
 
-                            if(odonto.estado == 0){
-                                var estado = 'PENDIENTE';
-                            }else{
-                                var estado = 'TERMINADO';
-                            }
+                            const progresoClinico = (
+                                odonto.progreso !== null && odonto.progreso !== undefined
+                            ) ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : 0);
+
+                            const avanceClinico = typeof window.crearProgresoCircularDentalLectura === 'function'
+                                ? window.crearProgresoCircularDentalLectura(progresoClinico)
+                                : '<div class="dental-progress-wheel is-readonly" style="--progress:' + progresoClinico + '"><span class="dental-progress-wheel-value">' + progresoClinico + '%</span></div>';
+
                             // Agregar una nueva fila a la tabla
                             let rowNode = table.row.add([
                                 odonto.descripcion,
@@ -7405,7 +7469,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                                 0,
                                 formatoMoneda(formatoMoneda(odonto.valor)),
                                 '<div class="circle '+clase+'"></div>',
-                                estado, // Columna vacía
+                                avanceClinico,
 
                             ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -7560,8 +7624,8 @@ function cargar_a_presupuesto_rehab_impl_g_confirmar(){
                     title:'Info',
                     text: resp.mensaje
                 });
-                let odontograma = resp.odontograma_paciente;
-                odontograma_global = resp.odontograma_paciente;
+                let odontograma = normalizarOdontogramaImplantologia(resp.odontograma_paciente);
+                odontograma_global = odontograma;
                 let html = '';
                 odontograma.forEach(function(odonto){
                     html += '<tr>';
@@ -7908,8 +7972,8 @@ function cargar_a_presupuesto_rehab_impl_lab_confirmar(){
                     title:'Info',
                     text: resp.mensaje
                 });
-                let odontograma = resp.odontograma_paciente;
-                odontograma_global = resp.odontograma_paciente;
+                let odontograma = normalizarOdontogramaImplantologia(resp.odontograma_paciente);
+                odontograma_global = odontograma;
                 let html = '';
                 odontograma.forEach(function(odonto){
                     html += '<tr>';
@@ -9676,49 +9740,91 @@ function ocultar_pieza_impl(counter){
                             // Agregar clases a la fila
                             $(rowNode).addClass('text-center align-middle status-circle');
                         });
-                        let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
+                        let odontograma = normalizarOdontogramaImplantologia(response.odontograma);
 
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        table_piezas_odontograma.clear().draw();
+                        /*
+                         * FUENTE ÚNICA DE RENDER PARA PAGOS Y ESTADOS.
+                         *
+                         * presupuesto.blade ya administra #presup_estado_pago y además
+                         * escucha draw.dt. Si Implantología vuelve a hacer clear()/row.add()
+                         * sobre esa misma DataTable se produce una carrera de renderizado:
+                         * primero aparecen las filas canónicas y luego el código histórico
+                         * vuelve a insertarlas.
+                         */
+                        if (window.MedSDIPresupuestoDental &&
+                            typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function') {
 
-                        let odontograma = response.odontograma;
+                            window.MedSDIPresupuestoDental.recibirOdontograma(
+                                odontograma,
+                                null,
+                                response.presupuesto || null
+                            );
 
-                        // Recorrer el odontograma y agregar nuevas filas
-                        odontograma.forEach(function(odonto) {
+                        } else {
+                            // Fallback para instalaciones donde aún no esté cargado
+                            // el componente centralizado del presupuesto.
+                            let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
+                            table_piezas_odontograma.clear();
 
-                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
-                                if (odonto.estado_pago == 'ok') {
-                                    var clase = 'bg-success';
-                                } else if (odonto.estado_pago == 'incompleto') {
-                                    var clase = 'bg-warning';
-                                } else {
-                                    var clase = 'bg-danger';
+                            odontograma.forEach(function(odonto) {
+                                if (Number(odonto.presupuesto) !== 1 || Number(odonto.urgencia || 0) !== 0) {
+                                    return;
                                 }
 
-                                if (odonto.estado == 0) {
-                                    var estado = 'PENDIENTE';
-                                } else {
-                                    var estado = 'TERMINADO';
+                                let clase = 'bg-danger';
+                                if (odonto.estado_pago === 'ok') {
+                                    clase = 'bg-success';
+                                } else if (odonto.estado_pago === 'incompleto') {
+                                    clase = 'bg-warning';
                                 }
-                                // Agregar una nueva fila a la tabla
-                                let rowNode = table_piezas_odontograma.row.add([
+
+                                const progresoClinico = (
+                                    odonto.progreso !== null && odonto.progreso !== undefined
+                                ) ? Number(odonto.progreso) : (Number(odonto.estado) === 1 ? 100 : 0);
+
+                                const avanceClinico = typeof window.crearProgresoCircularDentalLectura === 'function'
+                                    ? window.crearProgresoCircularDentalLectura(progresoClinico)
+                                    : '<div class="dental-progress-wheel is-readonly" style="--progress:' + progresoClinico + '"><span class="dental-progress-wheel-value">' + progresoClinico + '%</span></div>';
+
+                                const rowNode = table_piezas_odontograma.row.add([
                                     odonto.descripcion,
                                     odonto.pieza,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
-                                    0,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    formatoMoneda(Number(odonto.valor || 0)),
+                                    Number(odonto.valor_descuento || 0)
+                                        ? formatoMoneda(Number(odonto.valor_descuento || 0))
+                                        : 0,
+                                    formatoMoneda(
+                                        Math.max(
+                                            0,
+                                            Number(odonto.valor || 0) -
+                                            Number(odonto.valor_descuento || 0)
+                                        )
+                                    ),
                                     '<div class="circle ' + clase + '"></div>',
-                                    estado, // Columna vacía
+                                    avanceClinico
+                                ]).node();
 
-                                ]).draw(false).node(); // Obtener el nodo de la fila
+                                $(rowNode)
+                                    .attr('data-odontograma-id', odonto.id || '')
+                                    .addClass('text-center align-middle status-circle');
+                            });
 
-                                // Agregar clases a la fila
-                                $(rowNode).addClass('text-center align-middle status-circle');
-                            }
-                        });
+                            // Un solo draw al final: evita disparar draw.dt por cada fila.
+                            table_piezas_odontograma.draw(false);
+                        }
 
-                        let insumos = response.insumos;
+                        let insumos = Array.isArray(response.insumos) ? response.insumos : [];
                         console.log(insumos);
+
+                        // Presupuesto clínico: mostrar visualmente los insumos,
+                        // además de sumarlos en el total.
+                        if (typeof window.renderizarInsumosPresupuestoClinico === 'function') {
+                            window.renderizarInsumosPresupuestoClinico(insumos);
+                        }
+
+                        // Tratamiento clínico.
+                        refrescarInsumosPreimplanteImplantologia(insumos);
+
                         let table_insumos = $('#table_insumos_preimplante').DataTable();
 
                         //Limpiar la tabla sin perder la configuración de DataTables

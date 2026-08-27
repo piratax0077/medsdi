@@ -3475,39 +3475,95 @@ class EscritorioProfesional extends Controller
                 ];
 
                 $prestacionesAgendadas = [];
+                $piezasAgendaProcesadas = [];
+
                 foreach (($hora_medica->tratamientos_presupuesto ?? []) as $seleccion) {
                     $tipo = $seleccion['tipo'] ?? null;
                     $id = (int) ($seleccion['id'] ?? 0);
 
                     if ($tipo === 'pieza') {
-                        $pieza = OdontogramaPaciente::find($id);
-                        if ($pieza && (int) $pieza->id_presupuesto === (int) $presupuestoHora->id) {
-                            $estadosPieza = [
-                                0 => 'Pendiente',
-                                1 => 'Finalizada',
-                                2 => 'En proceso',
-                                3 => 'Cancelada',
-                            ];
-                            $prestacionesAgendadas[] = [
-                                'tipo' => 'Pieza',
-                                'nombre' => 'Pieza ' . $pieza->pieza,
-                                'tratamiento' => $pieza->tratamiento ?: 'Tratamiento dental',
-                                'estado' => isset($estadosPieza[(int) $pieza->estado])
-                                    ? $estadosPieza[(int) $pieza->estado]
-                                    : 'Pendiente',
-                            ];
+                        /*
+                         * La agenda guarda el ID de una prestación para identificar
+                         * la pieza seleccionada, pero una misma pieza puede tener
+                         * varios trabajos dentro del mismo presupuesto.
+                         *
+                         * Usamos ese registro como referencia y luego recuperamos
+                         * TODAS las prestaciones de la misma pieza/presupuesto.
+                         */
+                        $piezaReferencia = OdontogramaPaciente::whereKey($id)
+                            ->where('id_presupuesto', $presupuestoHora->id)
+                            ->where('id_paciente', $hora_medica->id_paciente)
+                            ->where('id_profesional', $hora_medica->id_profesional)
+                            ->first();
+
+                        if ($piezaReferencia) {
+                            $numeroPieza = (string) $piezaReferencia->pieza;
+
+                            // Evitar repetir prestaciones si la hora guardó más de
+                            // un ID correspondiente a la misma pieza.
+                            if (!isset($piezasAgendaProcesadas[$numeroPieza])) {
+                                $piezasAgendaProcesadas[$numeroPieza] = true;
+
+                                $trabajosPieza = OdontogramaPaciente::where(
+                                        'id_presupuesto',
+                                        $presupuestoHora->id
+                                    )
+                                    ->where('id_paciente', $hora_medica->id_paciente)
+                                    ->where('id_profesional', $hora_medica->id_profesional)
+                                    ->where('pieza', $piezaReferencia->pieza)
+                                    ->where('presupuesto', 1)
+                                    ->where('urgencia', 0)
+                                    ->orderBy('id')
+                                    ->get();
+
+                                foreach ($trabajosPieza as $trabajoPieza) {
+                                    /*
+                                     * La agenda usa el progreso real como fuente de verdad.
+                                     * Solo progreso = 100 significa clínicamente finalizado.
+                                     */
+                                    $progreso = is_null($trabajoPieza->progreso)
+                                        ? 0
+                                        : (int) $trabajoPieza->progreso;
+
+                                    $progreso = max(0, min(100, $progreso));
+
+                                    if ($progreso >= 100) {
+                                        $estadoClinico = 'Finalizada';
+                                    } elseif ($progreso > 0) {
+                                        $estadoClinico = 'En proceso';
+                                    } else {
+                                        $estadoClinico = 'Pendiente';
+                                    }
+
+                                    $prestacionesAgendadas[] = [
+                                        'tipo' => 'Pieza',
+                                        'id' => $trabajoPieza->id,
+                                        'nombre' => 'Pieza ' . $trabajoPieza->pieza,
+                                        'pieza' => (string) $trabajoPieza->pieza,
+                                        'tratamiento' => $trabajoPieza->tratamiento
+                                            ?: ($trabajoPieza->descripcion ?: 'Tratamiento dental'),
+                                        'estado' => $estadoClinico,
+                                        'progreso' => $progreso,
+                                        'ultima_actualizacion' => optional($trabajoPieza->updated_at)->format('d-m-Y H:i'),
+                                    ];
+                                }
+                            }
                         }
                     } elseif ($tipo === 'grupo') {
                         $grupo = ExamenesBocaGeneral::where('id', $id)
                             ->where('id_paciente', $hora_medica->id_paciente)
                             ->where('id_profesional', $hora_medica->id_profesional)
                             ->first();
+
                         if ($grupo) {
+                            $progresoGrupo = $grupo->atendido ? 100 : 0;
                             $prestacionesAgendadas[] = [
                                 'tipo' => 'Grupo',
                                 'nombre' => $grupo->grupo ?: 'Grupo de piezas',
                                 'tratamiento' => $grupo->diagnostico_tratamiento ?: 'Tratamiento dental',
-                                'estado' => $grupo->atendido ? 'Finalizada' : 'Pendiente',
+                                'estado' => $progresoGrupo === 100 ? 'Finalizada' : 'Pendiente',
+                                'progreso' => $progresoGrupo,
+                                'ultima_actualizacion' => optional($grupo->updated_at)->format('d-m-Y H:i'),
                             ];
                         }
                     }

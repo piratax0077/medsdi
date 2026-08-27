@@ -1,6 +1,46 @@
+
+<style>
+    #consulta .agenda-dental-progress-panel{margin-top:.65rem;padding:.9rem 1rem;border:1px solid #d9e3f0;border-radius:.65rem;background:#fff}
+    #consulta .agenda-dental-layout{align-items:flex-start}
+    #consulta .agenda-paciente-col,
+    #consulta .agenda-dental-col{min-width:0}
+    #consulta .agenda-paciente-card,
+    #consulta .agenda-dental-card{height:100%}
+    #consulta .agenda-paciente-card{padding:.25rem .75rem .5rem;border:1px solid #e4e9f0;border-radius:.65rem;background:#fff}
+    #consulta .agenda-paciente-title{font-weight:700;color:#1649a8;padding:.7rem 0 .35rem;border-bottom:1px solid #edf0f5;margin-bottom:.2rem}
+    #consulta .agenda-dental-col .alert{margin-bottom:0}
+    #consulta .modal-agenda{margin-bottom:0;width:100%}
+    #consulta .modal-agenda th{width:42%;white-space:nowrap;padding:.45rem .35rem}
+    #consulta .modal-agenda td{padding:.45rem .35rem}
+    @media(max-width:991.98px){
+        #consulta .agenda-dental-col{margin-top:1rem}
+    }
+    #consulta .agenda-dental-progress-title{color:#1649a8;font-weight:700;margin-bottom:.75rem}
+    #consulta .agenda-dental-progress-list{display:grid;grid-template-columns:1fr;gap:.75rem}
+    #consulta .agenda-dental-progress-item{display:flex;align-items:center;gap:.85rem;padding:.75rem;border:1px solid #edf0f5;border-radius:.65rem;background:#fbfcfe;min-width:0}
+    #consulta .agenda-dental-progress-wheel{--agenda-progress:0;--agenda-progress-color:#cbd5e1;width:72px;height:72px;border-radius:50%;flex:0 0 72px;display:grid;place-items:center;position:relative;background:conic-gradient(var(--agenda-progress-color) calc(var(--agenda-progress)*1%),#e8edf3 0)}
+    #consulta .agenda-dental-progress-wheel:before{content:"";position:absolute;width:56px;height:56px;border-radius:50%;background:#fff}
+    #consulta .agenda-dental-progress-value{position:relative;z-index:1;font-size:1rem;font-weight:800;color:#334155}
+    #consulta .agenda-dental-progress-info{min-width:0;flex:1}
+    #consulta .agenda-dental-progress-name{font-weight:700;color:#26364d;line-height:1.25;margin-bottom:.3rem}
+    #consulta .agenda-dental-progress-badge{display:inline-block;padding:.17rem .45rem;border-radius:.3rem;font-size:.68rem;font-weight:800;text-transform:uppercase;margin-bottom:.25rem}
+    #consulta .agenda-dental-progress-meta{color:#5f6b7a;font-size:.76rem;line-height:1.45}
+    #consulta .agenda-progress-0{--agenda-progress-color:#94a3b8}
+    #consulta .agenda-progress-25{--agenda-progress-color:#f4b323}
+    #consulta .agenda-progress-50{--agenda-progress-color:#2bb7b3}
+    #consulta .agenda-progress-75{--agenda-progress-color:#4285e8}
+    #consulta .agenda-progress-100{--agenda-progress-color:#2fb75d}
+    #consulta .agenda-status-pendiente{background:#eef2f6;color:#5f6b7a}
+    #consulta .agenda-status-proceso{background:#e8f1ff;color:#2465c1}
+    #consulta .agenda-status-finalizada{background:#e7f8ed;color:#258348}
+    #consulta .agenda-dental-progress-legend{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.75rem;padding-top:.65rem;border-top:1px solid #edf0f5;font-size:.72rem;color:#5f6b7a}
+    #consulta .agenda-dental-progress-legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:.28rem;vertical-align:-1px;background:var(--legend-color)}
+    @media(max-width:767.98px){#consulta .agenda-dental-progress-list{grid-template-columns:1fr}}
+</style>
+
 <!-- Modal consulta agenda profesional-->
 <div id="consulta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="consulta" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <input type="hidden" name="estado_id_profesional" id="estado_id_profesional" value="">
             <input type="hidden" name="estado_id_paciente" id="estado_id_paciente" value="">
@@ -21,24 +61,10 @@
                         </div>
                         <input type="hidden" name="modificando_paciente_asistente" id="modificando_paciente_asistente" value="0">
                     </div>
-                    <div class="row">
-                         <div class="col-sm-6 col-md-6" id="seccion_examenes">
-                        </div>
-                        <div class="col-sm-12 d-none" id="detalle_agenda_dental">
-                            <div class="alert alert-primary">
-                                <div class="media">
-                                  <img src="{{ asset('images/iconos/diente.svg') }}" class="mr-2 wid-40 img-fluid" alt="...">
-                                  <div class="media-body">
-                                       <strong class="text-c-blue f-14">Detalle de la atención dental</strong>
-                                        <span id="detalle_dental_estado_pago" class="badge"></span>
-                                        <div class="text-dark" id="detalle_dental_resumen" class="mb-2"></div>
-                                        <div class="text-dark" id="detalle_dental_prestaciones"></div>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-12">
+                    <div class="row agenda-dental-layout">
+                        <div class="col-sm-12 col-lg-6 agenda-paciente-col">
+                            <div class="agenda-paciente-card">
+                                <div class="agenda-paciente-title"><i class="feather icon-user mr-1"></i> Datos del paciente</div>
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
                                     <tr>
@@ -262,8 +288,35 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-sm-12 col-lg-6 d-none agenda-dental-col" id="detalle_agenda_dental">
+                            <div class="alert alert-primary">
+                                <div class="media">
+                                  <img src="{{ asset('images/iconos/diente.svg') }}" class="mr-2 wid-40 img-fluid" alt="...">
+                                  <div class="media-body">
+                                       <strong class="text-c-blue f-14">Detalle de la atención dental</strong>
+                                        <span id="detalle_dental_estado_pago" class="badge"></span>
+                                        <div class="text-dark" id="detalle_dental_resumen" class="mb-2"></div>
+                                        <div class="text-dark" id="detalle_dental_prestaciones"></div>
+                                        <div id="detalle_dental_avances" class="agenda-dental-progress-panel d-none">
+                                            <div class="agenda-dental-progress-title">
+                                                <i class="feather icon-activity mr-1"></i> Avances de trabajos programados
+                                            </div>
+                                            <div id="detalle_dental_avances_lista" class="agenda-dental-progress-list"></div>
+                                            <div class="agenda-dental-progress-legend">
+                                                <span style="--legend-color:#94a3b8">0% Pendiente</span>
+                                                <span style="--legend-color:#f4b323">25%</span>
+                                                <span style="--legend-color:#2bb7b3">50%</span>
+                                                <span style="--legend-color:#4285e8">75%</span>
+                                                <span style="--legend-color:#2fb75d">100% Finalizado</span>
+                                            </div>
+                                        </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                                        </div>
                 </form>
 
                 <form id="cancelacion_hora_medica">

@@ -698,16 +698,20 @@
                 let clase = "";
                 if(evolucion.procedimiento.estado == 0){
                     estado = "Pendiente";
-                    clase = "badge badge-warning"
+                    clase = "badge badge-warning";
                 }else if(evolucion.procedimiento.estado == 1){
                     estado = "Finalizado";
                     clase = "badge badge-success";
                 }else if(evolucion.procedimiento.estado == 2){
-                    estado = "Cancelado";
-                    clase = "badge badge-danger";
+                    // Estado 2 corresponde a tratamiento en proceso.
+                    estado = "En proceso";
+                    clase = "badge badge-primary";
                 }else if(evolucion.procedimiento.estado == 3){
                     estado = "Citado a control";
                     clase = "badge badge-info";
+                }else{
+                    estado = "Pendiente";
+                    clase = "badge badge-warning";
                 }
                 const fila = `
                     <div class="tab-pane fade active show" id="evolucion-${evolucion.id}" role="tabpanel" aria-labelledby="evolucion-${evolucion.id}-tab">

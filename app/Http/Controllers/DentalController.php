@@ -9348,50 +9348,116 @@ class DentalController extends Controller
             'estado' => 'required_without:progreso|nullable|integer|in:0,1,2,3',
             'progreso' => 'required_without:estado|nullable|integer|in:0,25,50,75,100',
         ]);
+
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
         $pieza = OdontogramaPaciente::where('id', $req->id_tratamiento)
             ->where('id_paciente', $req->id_paciente)
             ->where('id_profesional', $profesional->id)
             ->firstOrFail();
+
         if ($req->filled('progreso')) {
             $pieza->progreso = (int) $req->progreso;
-            // Se conserva el estado clínico como dato de compatibilidad para los
-            // cierres de presupuesto y las otras especialidades.
+
+            // Compatibilidad clínica existente.
             $pieza->estado = (int) $req->progreso === 100 ? 1 : 2;
         } else {
             $pieza->estado = (int) $req->estado;
         }
+
         $presupuestoClinicamenteFinalizado = false;
+        $presupuesto = null;
+
         if($pieza->save()){
             if ($pieza->id_presupuesto) {
                 $presupuesto = PresupuestosDental::where('id', $pieza->id_presupuesto)
                     ->where('id_paciente', $pieza->id_paciente)
                     ->first();
+
                 if ($presupuesto) {
+                    /*
+                     * Para determinar el cierre clínico usamos progreso cuando
+                     * está disponible. Un trabajo se considera terminado solo
+                     * al llegar a 100%.
+                     */
                     $tieneTrabajoClinicoPendiente = OdontogramaPaciente::where('id_presupuesto', $presupuesto->id)
                         ->where('id_paciente', $pieza->id_paciente)
                         ->where('presupuesto', 1)
-                        ->where('estado', '!=', 1)
+                        ->where('urgencia', 0)
+                        ->where(function ($query) {
+                            $query->whereNull('progreso')
+                                ->orWhere('progreso', '<', 100);
+                        })
                         ->exists();
-                    $presupuesto->estado = $tieneTrabajoClinicoPendiente ? 1 : 0;
-                    $presupuesto->save();
+
                     $presupuestoClinicamenteFinalizado = !$tieneTrabajoClinicoPendiente;
+
+                    /*
+                     * IMPORTANTE - SOLO PERIODONCIA (tipo 21):
+                     *
+                     * Llegar a 100% NO desvincula ni oculta el presupuesto.
+                     * Debe seguir visible en:
+                     * - Planificación / Presupuesto
+                     * - Pagos y estados
+                     * - Historial clínico
+                     * - Tratamiento clínico (como finalizado / solo lectura)
+                     *
+                     * La exclusión de un trabajo terminado debe ocurrir solamente
+                     * en selectores de "pendientes por atender/agendar".
+                     *
+                     * Otras especialidades conservan exactamente el cierre anterior.
+                     */
+                    if ((int) $profesional->id_tipo_especialidad === 21) {
+                        $presupuesto->estado = 1;
+                    } else {
+                        $presupuesto->estado = $tieneTrabajoClinicoPendiente ? 1 : 0;
+                    }
+
+                    $presupuesto->save();
                 }
             }
+
+            /*
+             * Para Periodoncia, al refrescar después de cambiar el progreso,
+             * consultar usando la ficha/lugar históricos del presupuesto.
+             * Así una pieza finalizada no desaparece si la cita actual pertenece
+             * a una ficha posterior.
+             */
+            $idFichaConsulta = $req->id_ficha_atencion;
+            $idLugarConsulta = $req->id_lugar_atencion;
+
+            if ((int) $profesional->id_tipo_especialidad === 21 && $presupuesto) {
+                if (!empty($presupuesto->id_ficha_atencion)) {
+                    $idFichaConsulta = $presupuesto->id_ficha_atencion;
+                }
+                if (!empty($presupuesto->id_lugar_atencion)) {
+                    $idLugarConsulta = $presupuesto->id_lugar_atencion;
+                }
+            }
+
             $odontograma = $this->dame_odontograma_paciente(
                 $req->id_paciente,
-                $req->id_ficha_atencion,
-                $req->id_lugar_atencion,
+                $idFichaConsulta,
+                $idLugarConsulta,
                 $profesional->id_tipo_especialidad,
                 $pieza->id_presupuesto
-            )->where('presupuesto', 1)->where('urgencia', (int) $pieza->urgencia)->values();
+            )->where('presupuesto', 1)
+             ->where('urgencia', (int) $pieza->urgencia)
+             ->values();
+
             $odontograma_paciente_historial = $this->dame_odontograma_paciente_historial($req->id_paciente);
-            $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma_historial' => $odontograma_paciente_historial])->render();
+
+            $odontograma_paciente_vista = view(
+                'atencion_odontologica.generales.odontograma_adulto',
+                ['odontograma_historial' => $odontograma_paciente_historial]
+            )->render();
+
             return [
                 'mensaje' => 'OK',
                 'odontograma' => $odontograma,
                 'odontograma_paciente_vista' => $odontograma_paciente_vista,
                 'presupuesto_clinicamente_finalizado' => $presupuestoClinicamenteFinalizado,
+                'periodoncia' => (int) $profesional->id_tipo_especialidad === 21,
             ];
         }else{
             return [
@@ -9399,7 +9465,6 @@ class DentalController extends Controller
             ];
         }
        } catch (\Exception $e) {
-        //throw $th;
         return [
             'mensaje' => 'ERROR',
             'error' => $e->getMessage()

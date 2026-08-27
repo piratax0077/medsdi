@@ -619,7 +619,15 @@
                                     && (!$presupuestoActualClinico || !data_get($item, 'id_presupuesto') || (int) data_get($item, 'id_presupuesto') === (int) $presupuestoActualClinico->id);
                             });
                         };
-                        $piezasClinicasPresupuesto = $filtrarPresupuestoClinico($odontograma);
+                        /*
+                         * Evitar multiplicaciones producidas por JOINs del catálogo.
+                         * Una pieza puede tener varias prestaciones; únicamente se
+                         * elimina la repetición del mismo odontogramas_pacientes.id.
+                         */
+                        $piezasClinicasPresupuesto = $filtrarPresupuestoClinico($odontograma)
+                            ->unique(fn ($item) => (int) data_get($item, 'id', 0))
+                            ->values();
+
                         $generalesClinicosPresupuesto = $filtrarPresupuestoClinico($todos);
                         $insumosClinicosPresupuesto = $filtrarPresupuestoClinico($insumos_tratamientos);
                         $cantidadPiezasPresupuesto = $piezasClinicasPresupuesto->count();
@@ -637,9 +645,7 @@
                         $saldoClinicoPresupuesto = max(0, $totalClinicoPresupuesto - $valor_abonado);
 
                         // Resumen por pieza para el visor gráfico del odontograma (piezas resaltadas + detalle al hacer clic)
-                        $piezasPresupuestoDetalle = collect($odontograma)
-                            ->where('presupuesto', 1)
-                            ->where('urgencia', 0)
+                        $piezasPresupuestoDetalle = $piezasClinicasPresupuesto
                             ->groupBy(fn ($o) => (string) $o->pieza)
                             ->map(function ($tratamientos, $pieza) {
                                 $total = $tratamientos->sum('valor');
@@ -950,8 +956,21 @@
                                         const listaNormalizada = Array.isArray(listaOdontograma)
                                             ? listaOdontograma
                                             : Object.values(listaOdontograma || {});
+                                        const idsPrestaciones = new Set();
                                         const prestaciones = listaNormalizada.filter(function (pieza) {
-                                            return Number(pieza.presupuesto) === 1 && Number(pieza.urgencia) === 0;
+                                            if (!pieza
+                                                || Number(pieza.presupuesto) !== 1
+                                                || Number(pieza.urgencia) !== 0) {
+                                                return false;
+                                            }
+
+                                            const idOdontograma = Number(pieza.id || 0);
+                                            if (idOdontograma > 0) {
+                                                if (idsPrestaciones.has(idOdontograma)) return false;
+                                                idsPrestaciones.add(idOdontograma);
+                                            }
+
+                                            return true;
                                         });
 
                                         const escapar = function (valor) {
@@ -1004,7 +1023,7 @@
                                     };
 
                                     $(function () {
-                                        window.renderizarTarjetasPresupuestoClinico(@json(collect($odontograma)->values()));
+                                        window.renderizarTarjetasPresupuestoClinico(@json($piezasClinicasPresupuesto));
                                     });
                                 </script>
 
@@ -2340,12 +2359,35 @@
 
                                         API.filtrarPrestaciones = function (lista) {
                                             const idPresupuesto = API.idPresupuesto();
+                                            const vistos = new Set();
+
                                             return API.normalizarLista(lista).filter(function (item) {
                                                 const idItem = Number(item && item.id_presupuesto || 0);
-                                                return item
-                                                    && Number(item.presupuesto) === 1
-                                                    && Number(item.urgencia || 0) === 0
-                                                    && (!idPresupuesto || !idItem || idItem === idPresupuesto);
+
+                                                if (!item
+                                                    || Number(item.presupuesto) !== 1
+                                                    || Number(item.urgencia || 0) !== 0
+                                                    || (idPresupuesto && idItem && idItem !== idPresupuesto)) {
+                                                    return false;
+                                                }
+
+                                                /*
+                                                 * La identidad real de una prestación es
+                                                 * odontogramas_pacientes.id.
+                                                 *
+                                                 * No usamos pieza+tratamiento porque una pieza
+                                                 * puede tener más de una prestación legítima.
+                                                 */
+                                                const idOdontograma = Number(item.id || 0);
+
+                                                if (idOdontograma > 0) {
+                                                    if (vistos.has(idOdontograma)) {
+                                                        return false;
+                                                    }
+                                                    vistos.add(idOdontograma);
+                                                }
+
+                                                return true;
                                             });
                                         };
 
@@ -2538,8 +2580,8 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @foreach ($odontograma as $o)
-                                                                        @if ($o->presupuesto == 1 && $o->urgencia == 0 && (!isset($presupuesto) || !$presupuesto || (int) $o->id_presupuesto === (int) $presupuesto->id))
+                                                                    @foreach ($piezasClinicasPresupuesto as $o)
+                                                                        @if (!isset($presupuesto) || !$presupuesto || !(int) $o->id_presupuesto || (int) $o->id_presupuesto === (int) $presupuesto->id)
                                                                             @php
                                                                                 if ($o->estado == 0) {
                                                                                     $estado = 'PENDIENTE';

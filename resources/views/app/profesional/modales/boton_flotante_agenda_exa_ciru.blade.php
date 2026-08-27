@@ -355,18 +355,102 @@
                                                             badgePago.hide();
                                                         }
 
+                                                        const prestaciones = detalleDental.prestaciones || [];
                                                         const lista = $('<div>');
-                                                        if ((detalleDental.prestaciones || []).length) {
+
+                                                        if (prestaciones.length) {
                                                             lista.append($('<strong>').text('Trabajo programado:'));
                                                             const ul = $('<ul class="mb-0 pl-4">');
-                                                            detalleDental.prestaciones.forEach(function(prestacion) {
-                                                                ul.append($('<li>').text(prestacion.nombre + ' — ' + prestacion.tratamiento + ' (' + prestacion.estado + ')'));
+
+                                                            prestaciones.forEach(function(prestacion) {
+                                                                const progreso = Math.max(0, Math.min(100, Number(prestacion.progreso || 0)));
+                                                                const estadoClinico = progreso >= 100
+                                                                    ? 'Finalizada'
+                                                                    : (progreso > 0 ? 'En proceso' : 'Pendiente');
+
+                                                                ul.append(
+                                                                    $('<li>').text(
+                                                                        prestacion.nombre + ' — ' +
+                                                                        prestacion.tratamiento +
+                                                                        ' (' + progreso + '% · ' + estadoClinico + ')'
+                                                                    )
+                                                                );
                                                             });
+
                                                             lista.append(ul);
                                                         } else {
                                                             lista.append($('<span class="text-muted">').text('No hay piezas específicas asociadas a esta hora.'));
                                                         }
+
                                                         $('#detalle_dental_prestaciones').empty().append(lista);
+
+                                                        const $panelAvances = $('#detalle_dental_avances');
+                                                        const $listaAvances = $('#detalle_dental_avances_lista').empty();
+
+                                                        if (prestaciones.length) {
+                                                            prestaciones.forEach(function(prestacion) {
+                                                                let progreso = Math.max(0, Math.min(100, Number(prestacion.progreso || 0)));
+
+                                                                let paso = 0;
+                                                                if (progreso >= 100) paso = 100;
+                                                                else if (progreso >= 75) paso = 75;
+                                                                else if (progreso >= 50) paso = 50;
+                                                                else if (progreso >= 25) paso = 25;
+
+                                                                let estado = 'Pendiente';
+                                                                let claseEstado = 'agenda-status-pendiente';
+
+                                                                if (progreso >= 100) {
+                                                                    estado = 'Finalizada';
+                                                                    claseEstado = 'agenda-status-finalizada';
+                                                                } else if (progreso > 0) {
+                                                                    estado = 'En proceso';
+                                                                    claseEstado = 'agenda-status-proceso';
+                                                                }
+
+                                                                const $wheel = $('<div>')
+                                                                    .addClass('agenda-dental-progress-wheel agenda-progress-' + paso)
+                                                                    .css('--agenda-progress', progreso)
+                                                                    .append($('<span class="agenda-dental-progress-value">').text(progreso + '%'));
+
+                                                                const $info = $('<div class="agenda-dental-progress-info">');
+                                                                $info.append(
+                                                                    $('<div class="agenda-dental-progress-name">')
+                                                                        .text(prestacion.nombre + ' — ' + prestacion.tratamiento)
+                                                                );
+                                                                $info.append(
+                                                                    $('<span class="agenda-dental-progress-badge">')
+                                                                        .addClass(claseEstado)
+                                                                        .text(estado)
+                                                                );
+
+                                                                const $meta = $('<div class="agenda-dental-progress-meta">')
+                                                                    .append(
+                                                                        $('<div>').append(
+                                                                            $('<strong>').text('Avance: '),
+                                                                            document.createTextNode(progreso + '%')
+                                                                        )
+                                                                    );
+
+                                                                if (prestacion.ultima_actualizacion) {
+                                                                    $meta.append(
+                                                                        $('<div>').append(
+                                                                            $('<strong>').text('Última actualización: '),
+                                                                            document.createTextNode(prestacion.ultima_actualizacion)
+                                                                        )
+                                                                    );
+                                                                }
+
+                                                                $info.append($meta);
+                                                                $listaAvances.append(
+                                                                    $('<div class="agenda-dental-progress-item">').append($wheel, $info)
+                                                                );
+                                                            });
+
+                                                            $panelAvances.removeClass('d-none');
+                                                        } else {
+                                                            $panelAvances.addClass('d-none');
+                                                        }
                                                     }
 
                                                     //celeste

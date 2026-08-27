@@ -1687,7 +1687,7 @@
                                                                                                         <th>Tratamiento</th>
                                                                                                         <th>Valor</th>
                                                                                                         <th>Accion</th>
-                                                                                                        <th>Estado</th>
+                                                                                                        <th class="text-center">Avance</th>
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
@@ -1702,16 +1702,36 @@
                                                                                                                 <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button>
                                                                                                                 <button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza({{ $o->id }})"><i class="feather icon-repeat"></i> </button>
                                                                                                             </td>
-                                                                                                            <td>
-                                                                                                                @if($o->estado == 0)
-                                                                                                                    <span class="text-uppercase">Pendiente</span>
-                                                                                                                @elseif($o->estado == 1)
-                                                                                                                    <span class="text-uppercase">Realizado</span>
-                                                                                                                @elseif($o->estado == 2)
-                                                                                                                    <span class="text-uppercase">Cancelado</span>
-                                                                                                                @elseif($o->estado == 3)
-                                                                                                                    <span class="text-uppercase">Citado a Control</span>
-                                                                                                                @endif
+                                                                                                            <td class="text-center">
+                                                                                                                @php
+                                                                                                                    $progresoPeriodoncia = isset($o->progreso) && $o->progreso !== null
+                                                                                                                        ? (int) $o->progreso
+                                                                                                                        : (
+                                                                                                                            (int) $o->estado === 1
+                                                                                                                                ? 100
+                                                                                                                                : ((int) $o->estado === 2 ? 25 : 0)
+                                                                                                                        );
+
+                                                                                                                    if (!in_array($progresoPeriodoncia, [0, 25, 50, 75, 100], true)) {
+                                                                                                                        $progresoPeriodoncia = 0;
+                                                                                                                    }
+                                                                                                                @endphp
+
+                                                                                                                <div class="dental-progress-wheel"
+                                                                                                                     style="--progress:{{ $progresoPeriodoncia }}"
+                                                                                                                     title="Progreso del tratamiento: {{ $progresoPeriodoncia }}%">
+                                                                                                                    <span class="dental-progress-wheel-value">{{ $progresoPeriodoncia }}%</span>
+                                                                                                                    <select class="dental-piece-progress"
+                                                                                                                            aria-label="Progreso del tratamiento"
+                                                                                                                            data-original-progress="{{ $progresoPeriodoncia }}"
+                                                                                                                            onchange="actualizarEstadoPiezaPlan(this, {{ $o->id }})">
+                                                                                                                        @foreach([0,25,50,75,100] as $valorProgreso)
+                                                                                                                            <option value="{{ $valorProgreso }}" {{ $valorProgreso === $progresoPeriodoncia ? 'selected' : '' }}>
+                                                                                                                                {{ $valorProgreso }}%
+                                                                                                                            </option>
+                                                                                                                        @endforeach
+                                                                                                                    </select>
+                                                                                                                </div>
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                     @endif
@@ -4519,7 +4539,7 @@
                                     pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
                                     '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
                                     pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
-                                    estado
+                                    renderProgresoCircularPeriodoncia(pieza)
 
                                 ]).draw(false).node(); // Obtener el nodo de la fila
                             }
@@ -4528,6 +4548,26 @@
                 }
             });
         }
+
+    function renderProgresoCircularPeriodoncia(pieza) {
+        const estado = Number(pieza && pieza.estado !== undefined ? pieza.estado : 0);
+        let progreso = pieza && pieza.progreso !== null && pieza.progreso !== undefined
+            ? Number(pieza.progreso)
+            : (estado === 1 ? 100 : (estado === 2 ? 25 : 0));
+
+        if (![0, 25, 50, 75, 100].includes(progreso)) {
+            progreso = 0;
+        }
+
+        if (typeof window.crearProgresoCircularDental === 'function') {
+            return window.crearProgresoCircularDental(
+                progreso,
+                'actualizarEstadoPiezaPlan(this,' + Number(pieza.id) + ')'
+            );
+        }
+
+        return progreso + '%';
+    }
 
     function cargarIgual(input){
 
@@ -8874,7 +8914,7 @@ function ocultar_pieza_impl(counter){
                                         pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
                                         '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
                                         pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
-                                        estado
+                                        renderProgresoCircularPeriodoncia(pieza)
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
                                 }
@@ -10073,7 +10113,7 @@ function agregar_examenes_ficha() {
                                         pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
                                         '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
                                         pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
-                                        estado
+                                        renderProgresoCircularPeriodoncia(pieza)
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
                                 }
