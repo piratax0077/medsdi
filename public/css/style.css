@@ -38072,3 +38072,356 @@ body .select2-container--default.select2-container--open .select2-selection--sin
     0%   { background-position: 150% 0; }
     100% { background-position: -50% 0; }
 }
+
+/* =================== DESCARGA APP SDIPASS (resources/views/app_descarga.blade.php) =============== */
+.sdipass-auth {
+    background-size: cover;
+    background-image: url("../images/background_1.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+    position: relative;
+}
+.sdipass-auth::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 33, 55, .82), rgba(30, 90, 124, .68));
+}
+.sdipass-shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 940px;
+}
+.sdipass-card {
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(15, 33, 55, .06),
+                0 24px 48px -12px rgba(15, 33, 55, .35),
+                0 48px 96px -32px rgba(15, 33, 55, .28);
+}
+
+/* ---------- Panel de marca (izquierda) ---------- */
+.sdipass-hero {
+    flex: 1 1 330px;
+    position: relative;
+    padding: 3rem 2.5rem;
+    color: #fff;
+    background: linear-gradient(160deg, #14344f 0%, #2f67c1 58%, #0f9bb0 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.sdipass-hero::before,
+.sdipass-hero::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+}
+.sdipass-hero::after {
+    width: 320px;
+    height: 320px;
+    right: -130px;
+    top: -110px;
+    background: radial-gradient(circle, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 68%);
+}
+.sdipass-hero::before {
+    width: 260px;
+    height: 260px;
+    left: -120px;
+    bottom: -90px;
+    background: radial-gradient(circle, rgba(0, 224, 255, .28) 0%, rgba(0, 224, 255, 0) 70%);
+}
+.sdipass-hero > * {
+    position: relative;
+    z-index: 1;
+}
+.sdipass-tile {
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .45);
+    margin-bottom: 1.75rem;
+}
+.sdipass-tile img {
+    width: 40px;
+    height: auto;
+}
+.sdipass-hero h1 {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin: 0 0 .5rem;
+}
+.sdipass-hero p {
+    color: rgba(255, 255, 255, .82);
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 30ch;
+}
+/* Trazo tipo monitor cardiaco: guiño médico, decorativo */
+.sdipass-pulso {
+    margin-top: auto;
+    padding-top: 2.25rem;
+    opacity: .5;
+}
+.sdipass-pulso svg {
+    width: 100%;
+    height: 34px;
+    display: block;
+}
+
+/* ---------- Panel de acción (derecha) ---------- */
+.sdipass-panel {
+    flex: 1 1 460px;
+    padding: 3rem 2.75rem;
+    background: #fff;
+}
+.sdipass-panel h2 {
+    font-size: 23px;
+    font-weight: 700;
+    color: #0f2137;
+    letter-spacing: -.015em;
+    margin: 0 0 .5rem;
+}
+.sdipass-panel__intro {
+    font-size: 14px;
+    color: #6b7c93;
+    line-height: 1.6;
+    margin: 0 0 1.85rem;
+}
+
+.sdipass-acciones {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.sdipass-acciones__col {
+    flex: 1 1 190px;
+    min-width: 175px;
+}
+
+/* Botón Google Play */
+.btn-store {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    width: 100%;
+    background: #0f2137;
+    color: #fff;
+    border-radius: 12px;
+    padding: .8rem 1.15rem;
+    text-decoration: none;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    box-shadow: 0 8px 18px -8px rgba(15, 33, 55, .7);
+}
+.btn-store:hover,
+.btn-store:focus {
+    background: #16304e;
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px -10px rgba(15, 33, 55, .75);
+}
+.btn-store svg {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+}
+.btn-store__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    text-align: left;
+}
+.btn-store__txt small {
+    font-size: 9.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: #fff;
+}
+.btn-store__txt strong {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+}
+/* Variante App Store: aún no publicada */
+.btn-store--espera {
+    background: #fff;
+    border: 1px solid #e2e9f1;
+    color: #93a2b5;
+    box-shadow: none;
+    cursor: default;
+    margin-top: .7rem;
+}
+.btn-store--espera:hover,
+.btn-store--espera:focus {
+    background: #fff;
+    color: #93a2b5;
+    transform: none;
+    box-shadow: none;
+}
+.btn-store--espera svg {
+    fill: #b3bfcd;
+}
+.btn-store--espera .btn-store__txt small {
+    color: #aab6c4;
+}
+.btn-store--espera .btn-store__txt strong {
+    color: #93a2b5;
+}
+
+/* Código QR */
+.sdipass-qr-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6rem;
+    flex: 0 0 auto;
+}
+.sdipass-qr {
+    position: relative;
+    width: 168px;
+    height: 168px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #e6ecf3;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px -8px rgba(15, 33, 55, .25);
+}
+.sdipass-qr__lienzo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.sdipass-qr__modulos {
+    display: grid;
+    grid-template-columns: repeat(25, 1fr);
+    grid-template-rows: repeat(25, 1fr);
+    width: 100%;
+    height: 100%;
+}
+.sdipass-qr__modulos span {
+    border-radius: 1px;
+}
+.sdipass-qr__modulos span.on {
+    background: #16273c;
+}
+.sdipass-qr__ojo {
+    position: absolute;
+    width: 28%;
+    height: 28%;
+    border: 3.5px solid #16273c;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sdipass-qr__ojo::after {
+    content: '';
+    width: 46%;
+    height: 46%;
+    border-radius: 3px;
+    background: #16273c;
+}
+.sdipass-qr__ojo--tl { top: 0; left: 0; }
+.sdipass-qr__ojo--tr { top: 0; right: 0; }
+.sdipass-qr__ojo--bl { bottom: 0; left: 0; }
+.sdipass-qr__marca {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+    background: #fff;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sdipass-qr__marca img {
+    width: 76%;
+    height: auto;
+}
+.sdipass-qr-col figcaption {
+    font-size: 11.5px;
+    color: #8b9aad;
+    text-align: center;
+    line-height: 1.45;
+    max-width: 168px;
+}
+
+/* Pasos */
+.sdipass-pasos {
+    list-style: none;
+    counter-reset: paso;
+    margin: 2rem 0 0;
+    padding: 1.6rem 0 0;
+    border-top: 1px solid #eef2f7;
+}
+.sdipass-pasos li {
+    counter-increment: paso;
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+    font-size: 13.5px;
+    color: #4a5b70;
+    line-height: 1.5;
+    padding: .4rem 0;
+    text-align: left;
+}
+.sdipass-pasos li::before {
+    content: counter(paso);
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #eef4ff;
+    color: #2f67c1;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: .05rem;
+}
+.sdipass-pasos strong {
+    color: #0f2137;
+    font-weight: 600;
+}
+
+@media (max-width: 767.98px) {
+    .sdipass-hero,
+    .sdipass-panel {
+        padding: 2.25rem 1.75rem;
+    }
+    .sdipass-hero h1 {
+        font-size: 26px;
+    }
+    .sdipass-pulso {
+        display: none;
+    }
+    .sdipass-acciones {
+        justify-content: center;
+    }
+    .sdipass-acciones__col {
+        flex: 1 1 100%;
+    }
+}
