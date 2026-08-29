@@ -1697,6 +1697,43 @@
                                     @endif
                                     @endforeach
                                     @endif
+                                    @if(isset($todos))
+                                    @foreach ($todos as $grupoDental)
+                                    @if((int) $grupoDental->presupuesto === 1
+                                        && (int) ($grupoDental->urgencia ?? 0) === 0
+                                        && (!isset($presupuesto) || !$presupuesto || (int) ($grupoDental->id_presupuesto ?? 0) === (int) $presupuesto->id))
+                                    @php $progresoGrupo = (int) ($grupoDental->progreso ?? ((int) ($grupoDental->terminado ?? 0) === 1 ? 100 : 0)); @endphp
+                                    <tr class="dental-plan-group-row" data-group-id="{{ $grupoDental->id }}" data-clinical-state="{{ $grupoDental->terminado ? 1 : 2 }}" data-progress="{{ $progresoGrupo }}">
+                                        <td>
+                                            <div class="dental-table-datetime">
+                                                <strong>{{ \Carbon\Carbon::parse($grupoDental->fecha)->format('d-m-Y') }}</strong>
+                                                <small>{{ optional($grupoDental->created_at)->format('H:i') ?: '—' }}</small>
+                                            </div>
+                                        </td>
+                                        <td><span class="dental-treatment-name" title="{{ $grupoDental->diagnostico_tratamiento }}">{{ $grupoDental->diagnostico_tratamiento }}</span></td>
+                                        <td>—</td>
+                                        <td><div class="dental-table-tooth dental-table-group"><i class="fas fa-teeth-open"></i><strong>{{ $grupoDental->localizacion }}</strong></div></td>
+                                        <td>{{ $grupoDental->descripcion }}</td>
+                                        <td>{{ number_format($grupoDental->valor, 0, ',', '.') }}</td>
+                                        <td><span class="badge badge-primary">Incluido</span></td>
+                                        <td>
+                                            <div class="dental-table-state-control">
+                                                <div class="dental-progress-wheel" style="--progress: {{ $progresoGrupo }}" title="Progreso del grupo: {{ $progresoGrupo }}%">
+                                                    <span class="dental-progress-wheel-value">{{ $progresoGrupo }}%</span>
+                                                    <select class="dental-piece-progress" aria-label="Progreso de {{ $grupoDental->localizacion }}"
+                                                        data-original-progress="{{ $progresoGrupo }}"
+                                                        onchange="actualizarProgresoGrupoDental(this, {{ $grupoDental->id }})">
+                                                        @foreach ([0, 25, 50, 75, 100] as $porcentaje)
+                                                            <option value="{{ $porcentaje }}" {{ $progresoGrupo === $porcentaje ? 'selected' : '' }}>{{ $porcentaje }}%</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                            </div>
@@ -1706,6 +1743,76 @@
         </div>
     </div>
 </div>
+
+@once
+<script>
+    window.actualizarProgresoGrupoDental = function (select, idGrupo) {
+        const $select = $(select);
+        const progresoAnterior = String($select.data('original-progress'));
+        const progresoNuevo = String($select.val());
+        const $control = $select.closest('.dental-table-state-control');
+
+        $select.prop('disabled', true);
+        $control.find('.dental-piece-status-feedback').remove();
+
+        $.ajax({
+            type: 'POST',
+            url: @json(route('dental.guardar_progreso_grupo')),
+            data: {
+                id_grupo: idGrupo,
+                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                id_presupuesto: $('#id_presupuesto').val(),
+                progreso: progresoNuevo,
+                _token: @json(csrf_token())
+            },
+            success: function (respuesta) {
+                if (respuesta.mensaje !== 'OK') {
+                    $select.val(progresoAnterior);
+                    swal('No fue posible actualizar', 'El progreso del grupo no pudo guardarse.', 'error');
+                    return;
+                }
+
+                $select.data('original-progress', progresoNuevo);
+                $select.closest('.dental-progress-wheel')
+                    .css('--progress', progresoNuevo)
+                    .attr('title', 'Progreso del grupo: ' + progresoNuevo + '%')
+                    .find('.dental-progress-wheel-value').text(progresoNuevo + '%');
+                $select.closest('tr')
+                    .attr('data-progress', progresoNuevo)
+                    .attr('data-clinical-state', Number(progresoNuevo) === 100 ? 1 : 2)
+                    .toggleClass('dental-plan-row-completed', Number(progresoNuevo) === 100);
+
+                $('<small class="dental-piece-status-feedback text-success d-block mt-1"><i class="feather icon-check"></i> Progreso actualizado</small>')
+                    .appendTo($control)
+                    .delay(2200)
+                    .fadeOut(250, function () { $(this).remove(); });
+
+                if (typeof window.actualizarDatosProgresoGruposPresupuesto === 'function') {
+                    window.actualizarDatosProgresoGruposPresupuesto(respuesta.grupos || []);
+                }
+                if (typeof window.actualizar_presupuesto === 'function') {
+                    window.actualizar_presupuesto();
+                } else if (typeof actualizar_presupuesto === 'function') {
+                    actualizar_presupuesto();
+                }
+            },
+            error: function (xhr) {
+                $select.val(progresoAnterior);
+                $select.closest('.dental-progress-wheel')
+                    .css('--progress', progresoAnterior)
+                    .find('.dental-progress-wheel-value').text(progresoAnterior + '%');
+                const mensaje = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : 'El progreso del grupo no pudo guardarse.';
+                swal('Error', mensaje, 'error');
+            },
+            complete: function () {
+                $select.prop('disabled', false);
+            }
+        });
+    };
+</script>
+@endonce
 
 <style>
     .plan-field-readonly {

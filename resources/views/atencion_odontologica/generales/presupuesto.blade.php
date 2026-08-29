@@ -103,6 +103,79 @@
     #form-presup_dent .nav-tabs-aten .nav-link-aten { min-height:38px; display:flex; align-items:center; justify-content:center; padding:7px 12px; border:1px solid transparent; border-radius:7px; color:#53657a!important; font-weight:600; transition:.2s; }
     #form-presup_dent .nav-tabs-aten .nav-link-aten:hover { background:#fff; color:var(--presup-primary)!important; }
     #form-presup_dent .nav-tabs-aten .nav-link-aten.active { color:#fff!important; background:var(--presup-primary); box-shadow:0 3px 8px rgba(23,78,166,.22); }
+    #form-presup_dent .presupuesto-nav-principal {
+        display:flex;
+        gap:8px;
+        margin:0;
+        padding:7px;
+        border:1px solid #dbe5f0;
+        border-radius:14px;
+        background:#f3f6fa;
+        box-shadow:inset 0 1px 2px rgba(31,55,86,.04);
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-item {
+        display:flex;
+        flex:1 1 0;
+        min-width:0;
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten {
+        position:relative;
+        width:100%;
+        min-height:48px;
+        gap:8px;
+        padding:9px 13px;
+        border:1px solid transparent;
+        border-radius:10px;
+        background:transparent;
+        color:#4f6278!important;
+        font-size:.88rem;
+        font-weight:650;
+        line-height:1.2;
+        text-align:center;
+        white-space:nowrap;
+        box-shadow:none;
+        transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease;
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten i {
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        width:27px;
+        height:27px;
+        margin:0!important;
+        border-radius:8px;
+        background:#e4ebf4;
+        color:#536b86;
+        font-size:.82rem;
+        transition:inherit;
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten:hover {
+        border-color:#c7d7ea;
+        background:#fff;
+        color:var(--presup-primary)!important;
+        box-shadow:0 3px 10px rgba(31,55,86,.08);
+        transform:translateY(-1px);
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten:hover i {
+        background:#e7f0ff;
+        color:var(--presup-primary);
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten.active,
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten.active:hover {
+        border-color:#174ea6;
+        background:linear-gradient(135deg,#174ea6 0%,#2868c7 100%);
+        color:#fff!important;
+        box-shadow:0 5px 13px rgba(23,78,166,.24);
+        transform:none;
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten.active i {
+        background:rgba(255,255,255,.18);
+        color:#fff;
+    }
+    #form-presup_dent .presupuesto-nav-principal .nav-link-aten:focus-visible {
+        outline:3px solid rgba(46,180,189,.32);
+        outline-offset:2px;
+    }
     #od_presup_clinico .tit-gen { margin-bottom:4px; color:var(--presup-primary); font-size:1rem; font-weight:700; text-transform:none; }
     #contenedor_piezas_dentales_presupuesto .card-informacion, #contenedor_todos .card-informacion, #contenedor_insumos .card-informacion { margin-bottom:10px; border:1px solid var(--presup-border); border-left:4px solid #6c9ee8; border-radius:10px; background:#fff; box-shadow:0 2px 7px rgba(31,55,86,.05); transition:.2s; }
     #contenedor_piezas_dentales_presupuesto .card-informacion:hover, #contenedor_todos .card-informacion:hover, #contenedor_insumos .card-informacion:hover { border-color:#b9cce3; box-shadow:0 5px 14px rgba(31,55,86,.10); transform:translateY(-1px); }
@@ -156,13 +229,34 @@
     #modalReasignarPresupuesto .modal-footer { border-top:1px solid #dce5ef; background:#fff; }
     @media (max-width:767.98px) { #modalReasignarPresupuesto .reasignacion-resumen { grid-template-columns:1fr; } }
     @media (max-width:991.98px) {
-        #form-presup_dent .nav-tabs-aten { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+        #form-presup_dent .nav-tabs-aten:not(.presupuesto-nav-principal) { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+        #form-presup_dent .presupuesto-nav-principal { overflow-x:auto; justify-content:flex-start; scrollbar-width:thin; scroll-snap-type:x proximity; }
+        #form-presup_dent .presupuesto-nav-principal .nav-item { flex:0 0 auto; min-width:190px; scroll-snap-align:start; }
         .presupuesto-resumen .resumen-metrica { border-bottom:1px solid #edf1f6; }
         .presupuesto-acciones { justify-content:stretch; }
         .presupuesto-acciones .btn { flex:1 1 220px; }
     }
 </style>
 
+
+<script>
+    // API neutra del componente compartido para quitar piezas/grupos del presupuesto.
+    // Evita depender de que cada especialidad exponga directamente una función con un nombre concreto.
+    window.sacarPrestacionPresupuestoDental = window.sacarPrestacionPresupuestoDental || function(id, tipo = null) {
+        if (typeof window.sacar_de_presupuesto === 'function') {
+            return window.sacar_de_presupuesto(id, tipo);
+        }
+
+        console.error('No existe manejador para sacar la prestación del presupuesto', { id: id, tipo: tipo });
+        if (typeof swal === 'function') {
+            swal({
+                icon: 'error',
+                title: 'Presupuesto',
+                text: 'No fue posible quitar la prestación del presupuesto. Recargue la ficha e intente nuevamente.'
+            });
+        }
+    };
+</script>
 <script>
     function agruparInsumosPresupuesto(insumos) {
         const grupos = new Map();
@@ -259,6 +353,127 @@
             mejorarExperienciaPresupuestoDental();
         }
     };
+
+    // Render centralizado de grupos/maxilares del Presupuesto Clínico.
+    // A diferencia de las piezas, los registros de boca general no tienen
+    // necesariamente el campo urgencia, por lo que no se filtran por él.
+    window.renderizarGruposPresupuestoClinico = function (grupos) {
+        const $contenedor = $('#contenedor_todos');
+        if (!$contenedor.length || !Array.isArray(grupos)) return;
+
+        const escapar = function (valor) {
+            return $('<div>').text(valor === null || valor === undefined ? '' : valor).html();
+        };
+        const idPresupuestoActual = Number(
+            $('#form-presup_dent').attr('data-id-presupuesto') ||
+            $('#id_presupuesto').val() ||
+            0
+        );
+
+        $contenedor.empty();
+
+        grupos.forEach(function (grupo) {
+            if (!grupo || Number(grupo.presupuesto) !== 1) return;
+
+            const idPresupuestoGrupo = Number(grupo.id_presupuesto || 0);
+            if (idPresupuestoActual && idPresupuestoGrupo && idPresupuestoGrupo !== idPresupuestoActual) {
+                return;
+            }
+
+            const valor = Number(grupo.valor || 0);
+            const descuento = Number(grupo.valor_descuento || 0);
+            const total = grupo.nuevo_valor !== undefined && grupo.nuevo_valor !== null
+                ? Math.max(0, Number(grupo.nuevo_valor || 0))
+                : Math.max(0, valor - descuento);
+
+            $contenedor.append(`
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-grupo-presupuesto="${Number(grupo.id) || 0}">
+                    <div class="card-informacion">
+                        <div class="card-body pb-0">
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-3 col-lg-2">
+                                    <label class="floating-label-activo-sm">Grupo de piezas</label>
+                                    <input type="text" class="form-control form-control-sm" value="${escapar(grupo.localizacion || '')}" readonly>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-9 col-lg-4">
+                                    <label class="floating-label-activo-sm">Prestaci&oacute;n</label>
+                                    <textarea class="form-control form-control-sm prestacion-dos-lineas" readonly>${escapar(grupo.diagnostico_tratamiento || grupo.descripcion || '')}</textarea>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" value="${formatoMoneda(valor)}" readonly>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3 col-lg-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" value="${descuento ? formatoMoneda(descuento) : '$0'}" readonly>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                                    <label class="floating-label-activo-sm">Total prestaci&oacute;n</label>
+                                    <input type="text" class="form-control form-control-sm" value="${formatoMoneda(total)}" readonly>
+                                </div>
+                                <div class="form-group col-md-1 col-lg-1 d-flex align-items-center justify-content-center">
+                                    <button type="button" class="btn btn-danger btn-icon"
+                                        onclick="sacar_de_presupuesto(${Number(grupo.id) || 0},'gral')"
+                                        title="Quitar grupo del presupuesto">
+                                        <i class="feather icon-minus-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        if (typeof mejorarExperienciaPresupuestoDental === 'function') {
+            mejorarExperienciaPresupuestoDental();
+        }
+    };
+
+    // Sincroniza toda la sección "Presupuesto clínico" a partir de una respuesta
+    // de dental.actualizar_presupuesto. Esto evita que Periodoncia (u otra ficha)
+    // actualice Pagos y estados pero deje las tarjetas clínicas con datos antiguos.
+    window.renderizarPresupuestoClinicoCompleto = function (respuesta, piezaPreferida) {
+        if (!respuesta || typeof respuesta !== 'object') return;
+
+        if (respuesta.presupuesto && respuesta.presupuesto.id) {
+            $('#form-presup_dent').attr('data-id-presupuesto', respuesta.presupuesto.id);
+            if ($('#id_presupuesto').length) {
+                $('#id_presupuesto').val(respuesta.presupuesto.id);
+            }
+        }
+
+        const listaOdontograma = Array.isArray(respuesta.odontograma_paciente)
+            ? respuesta.odontograma_paciente
+            : (Array.isArray(respuesta.odontograma) ? respuesta.odontograma : []);
+
+        if (listaOdontograma.length) {
+            if (
+                window.MedSDIPresupuestoDental &&
+                typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+            ) {
+                window.MedSDIPresupuestoDental.recibirOdontograma(
+                    listaOdontograma,
+                    piezaPreferida || null,
+                    respuesta.presupuesto || null
+                );
+            } else if (typeof window.renderizarTarjetasPresupuestoClinico === 'function') {
+                window.renderizarTarjetasPresupuestoClinico(listaOdontograma);
+            }
+        }
+
+        if (Array.isArray(respuesta.todos) && typeof window.renderizarGruposPresupuestoClinico === 'function') {
+            window.renderizarGruposPresupuestoClinico(respuesta.todos);
+        }
+
+        if (Array.isArray(respuesta.insumos) && typeof window.renderizarInsumosPresupuestoClinico === 'function') {
+            window.renderizarInsumosPresupuestoClinico(respuesta.insumos);
+        }
+
+        if (typeof mejorarExperienciaPresupuestoDental === 'function') {
+            mejorarExperienciaPresupuestoDental();
+        }
+    };
 </script>
 
 <div id="form-presup_dent"
@@ -270,7 +485,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <ul class="nav nav-tabs-aten nav-fill mb-10" id="od_grl" role="tablist">
+                            <ul class="nav nav-tabs-aten nav-fill mb-10 presupuesto-nav-principal" id="od_grl" role="tablist">
                                 @if (!$paciente->es_adulto)
                                     <li class="nav-item">
                                         <a class="nav-link-aten text-reset " id="od_pac_depend_tab" data-toggle="tab"
@@ -612,11 +827,41 @@
                     aria-labelledby="od_presup_clinico_tab">
                     @php
                         $presupuestoActualClinico = $presupuesto ?? null;
+                        /*
+                         * valor_descuento y nuevo_valor no son columnas físicas de las
+                         * prestaciones. Al abrir una ficha (especialmente Endodoncia)
+                         * pueden no venir hidratados todavía por actualizar_presupuesto,
+                         * aunque el encabezado del presupuesto ya tenga el total neto.
+                         * Los reconstruimos desde el convenio persistido para que el
+                         * primer render sea igual en todas las especialidades.
+                         */
+                        $porcentajeDescuentoClinico = 0;
+                        if ($presupuestoActualClinico && $presupuestoActualClinico->id_convenio_aplicado) {
+                            $convenioClinico = \App\Models\EmpresasConvenios::find($presupuestoActualClinico->id_convenio_aplicado);
+                            $porcentajeDescuentoClinico = $convenioClinico
+                                ? max(0, min(100, (float) $convenioClinico->porcentaje))
+                                : 0;
+                        }
+                        $hidratarDescuentoClinico = function ($coleccion, $esInsumo = false) use ($porcentajeDescuentoClinico) {
+                            return collect($coleccion)->each(function ($item) use ($porcentajeDescuentoClinico, $esInsumo) {
+                                $bruto = (float) data_get($item, 'valor', 0);
+                                if ($esInsumo) {
+                                    $bruto *= max(1, (float) data_get($item, 'cantidad', 1));
+                                }
+                                $descuento = (int) round($bruto * ($porcentajeDescuentoClinico / 100));
+                                data_set($item, 'valor_descuento', $descuento);
+                                data_set($item, 'nuevo_valor', max(0, (int) round($bruto) - $descuento));
+                            });
+                        };
+                        $odontograma = $hidratarDescuentoClinico($odontograma);
+                        $todos = $hidratarDescuentoClinico($todos);
+                        $insumos_tratamientos = $hidratarDescuentoClinico($insumos_tratamientos, true);
                         $filtrarPresupuestoClinico = function ($coleccion) use ($presupuestoActualClinico) {
                             return collect($coleccion)->filter(function ($item) use ($presupuestoActualClinico) {
                                 return (int) data_get($item, 'presupuesto', 0) === 1
                                     && (int) data_get($item, 'urgencia', 0) === 0
-                                    && (!$presupuestoActualClinico || !data_get($item, 'id_presupuesto') || (int) data_get($item, 'id_presupuesto') === (int) $presupuestoActualClinico->id);
+                                    && (!$presupuestoActualClinico
+                                        || (int) data_get($item, 'id_presupuesto', 0) === (int) $presupuestoActualClinico->id);
                             });
                         };
                         /*
@@ -821,9 +1066,10 @@
                                             const idItem = Number(o.id_presupuesto || 0);
                                             return Number(o.presupuesto) === 1
                                                 && Number(o.urgencia) === 0
-                                                && (!idPresupuestoActual || !idItem || idItem === idPresupuestoActual);
+                                                && (!idPresupuestoActual || idItem === idPresupuestoActual);
                                         });
                                         const piezas = new Set(prestaciones.map(function(o){ return String(o.pieza); }));
+                                        const piezasVisuales = new Set(Array.from(piezas).concat(window.piezasGruposPresupuestoDental || []));
                                         const estadosVisuales = {};
                                         $('#selector_presupuesto_piezas, #selector_pagos_piezas').find('[data-selector-pieza]').each(function () {
                                             const pieza = String($(this).data('selector-pieza'));
@@ -837,7 +1083,7 @@
                                         $('.selector-odontograma-pediatrico [data-pieza-pediatrica]').each(function(){
                                             const $pieza = $(this);
                                             const numero = String($pieza.data('pieza-pediatrica'));
-                                            const presupuestada = piezas.has(numero);
+                                            const presupuestada = piezasVisuales.has(numero);
                                             $pieza.toggleClass('is-in-budget', presupuestada);
                                             if (!presupuestada) {
                                                 $pieza.removeClass('is-selected').attr('aria-pressed', 'false');
@@ -854,7 +1100,7 @@
                                                 const habilitada = piezas.has(String($pieza.data('pieza-pediatrica')));
                                                 $pieza.prop('disabled', !habilitada)
                                                     .toggleClass('is-locked', !habilitada)
-                                                    .toggleClass('is-in-budget', habilitada)
+                                                    .toggleClass('is-in-budget', piezasVisuales.has(String($pieza.data('pieza-pediatrica'))))
                                                     .attr('aria-disabled', habilitada ? 'false' : 'true');
                                             });
                                         });
@@ -904,7 +1150,8 @@
                                             $boton.prop('disabled', !habilitada)
                                                 .toggleClass('is-enabled', habilitada)
                                                 .toggleClass('is-locked', !habilitada)
-                                                .toggleClass('is-in-budget', habilitada);
+                                                .toggleClass('is-in-budget-individual', habilitada)
+                                                .toggleClass('is-in-budget', piezasVisuales.has(pieza));
                                             $boton.find('img').attr('src', rutas[estado] || rutas.normal).attr('data-estado-clinico', estado);
                                             if(!habilitada) $boton.removeClass('is-selected').attr('aria-pressed', 'false');
                                           });
@@ -1058,7 +1305,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
                                                                     name="pieza" id="pieza"
-                                                                    value="${{ number_format($o->valor, 0, ',', '.') }}">
+                                                                    value="${{ number_format((float) $o->valor, 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div
                                                                 class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
@@ -1066,7 +1313,8 @@
                                                                     class="floating-label-activo-sm">Descuento</label>
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
-                                                                    name="pieza" id="pieza">
+                                                                    name="pieza" id="pieza"
+                                                                    value="${{ number_format((float) ($o->valor_descuento ?? 0), 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div
                                                                 class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2">
@@ -1075,7 +1323,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
                                                                     name="pieza" id="pieza"
-                                                                    value="${{ number_format($o->valor, 0, ',', '.') }}">
+                                                                    value="${{ number_format(max(0, (float) $o->valor - (float) ($o->valor_descuento ?? 0)), 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div
                                                                 class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
@@ -1126,7 +1374,8 @@
                                                                     class="floating-label-activo-sm">Descuento</label>
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
-                                                                    name="pieza" id="pieza">
+                                                                    name="pieza" id="pieza"
+                                                                    value="${{ number_format((float) ($diagnostico->valor_descuento ?? 0), 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-4 col-lg-2">
                                                                 <label class="floating-label-activo-sm">Total
@@ -1134,7 +1383,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
                                                                     name="pieza" id="pieza"
-                                                                    value="${{ number_format($diagnostico->valor, 0, ',', '.') }}" readonly>
+                                                                    value="${{ number_format(max(0, (float) $diagnostico->valor - (float) ($diagnostico->valor_descuento ?? 0)), 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div class="form-group col-md-1 col-lg-1 d-flex">
                                                                 <button type="button"
@@ -1151,7 +1400,7 @@
                                 </div>
 
                                 <div class="form-row" id="contenedor_insumos">
-                                    @foreach ($insumos_tratamientos as $diagnostico)
+                                    @foreach ($insumosClinicosPresupuesto as $diagnostico)
                                         @if ($diagnostico->presupuesto == 1 && $diagnostico->urgencia == 0)
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <div class="card-informacion">
@@ -1178,7 +1427,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
                                                                     name="pieza" id="pieza"
-                                                                    value="{{ number_format($diagnostico->valor, 0, ',', '.') }}">
+                                                                    value="${{ number_format((float) $diagnostico->valor * (float) $diagnostico->cantidad, 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-2 col-lg-2">
                                                                 <label
@@ -1186,7 +1435,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
                                                                     name="pieza" id="pieza"
-                                                                    value="{{ $diagnostico->descuento }}">
+                                                                    value="${{ number_format((float) ($diagnostico->valor_descuento ?? $diagnostico->descuento ?? 0), 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div class="form-group col-md-3 col-lg-2">
                                                                 <label class="floating-label-activo-sm">Total
@@ -1194,7 +1443,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm"
                                                                     name="pieza" id="pieza"
-                                                                    value="{{ number_format($diagnostico->valor * $diagnostico->cantidad, 0, ',', '.') }}">
+                                                                    value="${{ number_format(max(0, ((float) $diagnostico->valor * (float) $diagnostico->cantidad) - (float) ($diagnostico->valor_descuento ?? $diagnostico->descuento ?? 0)), 0, ',', '.') }}" readonly>
                                                             </div>
                                                             <div
                                                                 class="form-group col-md-1 col-lg-1 d-flex">
@@ -1818,17 +2067,19 @@
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             name="subtotal_presup" id="subtotal_presup"
-                                                            value="{{ $presupuesto ? number_format($presupuesto->valor_total, 0, ',', '.') : '' }}">
+                                                            value="{{ $presupuesto ? number_format($totalBrutoClinicoPresupuesto, 0, ',', '.') : '' }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm"
-                                                            name="descuento_presup" id="descuento_presup">
+                                                            name="descuento_presup" id="descuento_presup"
+                                                            value="{{ $presupuesto ? number_format($descuentosClinicoPresupuesto, 0, ',', '.') : '' }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total</label>
                                                         <input type="text" class="form-control form-control-sm"
-                                                            name="total_presup" id="total_presup">
+                                                            name="total_presup" id="total_presup"
+                                                            value="{{ $presupuesto ? number_format($totalClinicoPresupuesto, 0, ',', '.') : '' }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Abonos</label>
@@ -2249,7 +2500,9 @@
                                     }
                                     window.actualizarDatosProgresoGruposPresupuesto = function (grupos) {
                                         (grupos || []).forEach(function (grupo) {
-                                            const progreso = Number(grupo.progreso || 0) || (Number(grupo.estado) === 0 ? 100 : 25);
+                                            const progreso = grupo.progreso !== null && grupo.progreso !== undefined
+                                                ? Number(grupo.progreso)
+                                                : (Number(grupo.terminado) === 1 ? 100 : 0);
                                             window.progresosGruposPresupuesto[claveProgresoPresupuesto(grupo.diagnostico_tratamiento, grupo.localizacion)] = progreso;
                                         });
                                         window.decorarProgresosPresupuesto();
@@ -2457,19 +2710,26 @@
 
                                         API.actualizarResumen = function (lista) {
                                             const prestaciones = API.filtrarPrestaciones(lista);
-                                            const cantidad = prestaciones.length;
+                                            const cantidadPiezas = prestaciones.length;
                                             const total = prestaciones.reduce(function (suma, item) {
                                                 return suma + Math.max(0, Number(item.valor || 0) - Number(item.valor_descuento || 0));
                                             }, 0);
 
-                                            $('#cantidad_items_presupuesto').text(
-                                                cantidad + (cantidad === 1 ? ' prestación' : ' prestaciones')
-                                            );
-                                            $('#presupuesto_clinico_vacio').toggle(cantidad === 0);
-                                            $('#presupuesto_piezas_visor').toggle(cantidad > 0);
+                                            // El indicador debe representar TODO el presupuesto clínico,
+                                            // no sólo las piezas. Antes esta función sobrescribía el total
+                                            // correcto y hacía parecer que grupos/insumos habían desaparecido.
+                                            const cantidadGrupos = $('#contenedor_todos .card-informacion').length;
+                                            const cantidadInsumos = $('#contenedor_insumos .card-informacion').length;
+                                            const cantidadTotal = cantidadPiezas + cantidadGrupos + cantidadInsumos;
 
-                                            // Sólo actualiza las métricas de piezas; el resto del presupuesto
-                                            // (insumos, laboratorio, grupos) conserva sus fuentes propias.
+                                            $('#cantidad_items_presupuesto').text(
+                                                cantidadTotal + (cantidadTotal === 1 ? ' prestación' : ' prestaciones')
+                                            );
+                                            $('#presupuesto_clinico_vacio').toggle(cantidadTotal === 0);
+                                            $('#presupuesto_piezas_visor').toggle(cantidadPiezas > 0);
+
+                                            // Sólo actualiza la métrica monetaria de piezas; grupos e insumos
+                                            // conservan sus propias métricas.
                                             $('#valores_piezas_presupuesto, #valores_piezas_presupuesto_conf')
                                                 .text(formatoMoneda(total));
                                         };
@@ -2518,6 +2778,27 @@
                                             if (lista.length) {
                                                 API.recibirOdontograma(lista, preferida, respuesta.presupuesto || null);
                                             }
+
+                                            // Si el endpoint que originó el evento ya devolvió el presupuesto
+                                            // completo, sincronizamos también grupos e insumos.
+                                            if (
+                                                Array.isArray(respuesta.todos) ||
+                                                Array.isArray(respuesta.insumos)
+                                            ) {
+                                                if (typeof window.renderizarPresupuestoClinicoCompleto === 'function') {
+                                                    window.renderizarPresupuestoClinicoCompleto(respuesta, preferida);
+                                                }
+                                            } else if (typeof actualizar_presupuesto === 'function') {
+                                                // Los endpoints de planificación suelen devolver sólo el odontograma.
+                                                // Pedimos UNA actualización completa para obtener grupos/insumos
+                                                // y el listener ajaxSuccess de abajo actualizará las tarjetas clínicas.
+                                                window.clearTimeout(API.timerRefrescoClinicoCompleto);
+                                                API.timerRefrescoClinicoCompleto = window.setTimeout(function () {
+                                                    if (!window.actualizandoPresupuestoDental) {
+                                                        actualizar_presupuesto();
+                                                    }
+                                                }, 40);
+                                            }
                                         });
 
                                         document.addEventListener('dental:presupuesto-actualizado', function (event) {
@@ -2528,6 +2809,23 @@
                                                 detalle.presupuesto || null
                                             );
                                         });
+
+                                        // Toda respuesta de dental.actualizar_presupuesto actualiza también
+                                        // las tarjetas del Presupuesto Clínico. Periodoncia tenía su propio
+                                        // actualizar_presupuesto(), pero sólo reconstruía Pagos y estados.
+                                        $(document)
+                                            .off('ajaxSuccess.presupuestoClinicoCentral')
+                                            .on('ajaxSuccess.presupuestoClinicoCentral', function (event, xhr, settings) {
+                                                const url = String((settings && settings.url) || '');
+                                                if (url.indexOf('actualizar_presupuesto') === -1) return;
+
+                                                const respuesta = xhr && xhr.responseJSON ? xhr.responseJSON : null;
+                                                if (!respuesta || Number(respuesta.estado) !== 1) return;
+
+                                                if (typeof window.renderizarPresupuestoClinicoCompleto === 'function') {
+                                                    window.renderizarPresupuestoClinicoCompleto(respuesta, null);
+                                                }
+                                            });
 
                                         // Cada vez que se entra en estas pestañas, reponemos el estado canónico
                                         // del componente. Así código histórico externo no deja texto PENDIENTE/
@@ -2760,8 +3058,7 @@
                                                             </thead>
                                                             <tbody>
                                                                 @php
-                                                                    $insumosPresupuestoAgrupados = collect($insumos_tratamientos)
-                                                                        ->where('presupuesto', 1)
+                                                                    $insumosPresupuestoAgrupados = collect($insumosClinicosPresupuesto)
                                                                         ->groupBy(fn ($t) => $t->id_producto
                                                                             ? 'producto:'.$t->id_producto
                                                                             : 'nombre:'.mb_strtoupper(trim((string) $t->insumos)));
@@ -2910,7 +3207,7 @@
 </div>
 
 
-<input type="hidden" id="total_presupuesto_dental" value="{{ $valores + $valores_piezas + $valores_insumos + $valores_laboratorio }}">
+<input type="hidden" id="total_presupuesto_dental" value="{{ $totalClinicoPresupuesto }}">
 <input type="hidden" name="tiene_dcto" id="tiene_dcto" value="{{ optional($presupuesto)->id_convenio_aplicado ?? 0 }}">
 <input type="hidden" name="tiene_reasignacion" id="tiene_reasignacion" value="0">
 <!-- MODAL INSUMOS -->
@@ -3301,7 +3598,7 @@
                     };
                     $totalOdontogramaReasignacion = collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->sum(fn ($o) => $conDescuentoReasignacion($o->valor));
                     $totalGruposReasignacion = collect($todos)->where('presupuesto', 1)->sum(fn ($o) => $conDescuentoReasignacion($o->valor));
-                    $totalInsumosReasignacion = collect($insumos_tratamientos)->filter(fn ($i) => $i->presupuesto == 1 && $i->urgencia == 0)->sum(fn ($i) => $conDescuentoReasignacion($i->cantidad * $i->valor));
+                    $totalInsumosReasignacion = collect($insumosClinicosPresupuesto)->sum(fn ($i) => $conDescuentoReasignacion($i->cantidad * $i->valor));
                     $totalPresupuestoReasignacion = $totalOdontogramaReasignacion + $totalGruposReasignacion + $totalInsumosReasignacion;
                 @endphp
                 <div class="alert reasignacion-ayuda py-2" role="status">
@@ -3478,7 +3775,7 @@
 						                            </tr>
 						                        </thead>
 						                        <tbody>
-						                            @foreach ($insumos_tratamientos as $i)
+						                            @foreach ($insumosClinicosPresupuesto as $i)
 						                                @if ($i->presupuesto == 1 && $i->urgencia == 0)
 						                                    @php
 						                                        $total = $i->cantidad * $i->valor;
@@ -4009,6 +4306,10 @@
     }
 
     function pagar_presupuesto() {
+        // El modal de pago siempre trabaja con el total NETO. Las tarjetas de
+        // Grupo/Piezas/Insumos muestran brutos únicamente como desglose.
+        const totalNetoVigente = parseInt($('#total_presupuesto_dental').val()) || 0;
+        $('#total_presupuesto_dental').val(totalNetoVigente);
         if (presupuestoCerradoPorPago) {
             const totalVigente = parseInt($('#total_presupuesto_dental').val()) || 0;
             const abonadoVigente = parseInt($('#total_abonado_presupuesto').val()) || 0;
@@ -4386,9 +4687,11 @@
                                 insumo.insumos + ' ' + insumo.nombre_marca,
                                 insumo.observaciones,
                                 insumo.cantidad, // Nombre del insumo
-                                formatoMoneda(insumo.valor), // Cantidad utilizada
-                                0, // Unidad de medida
                                 formatoMoneda(total),
+                                formatoMoneda(Number(insumo.valor_descuento || 0)),
+                                formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null
+                                    ? Number(insumo.nuevo_valor)
+                                    : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                 ' <div class="circle ' + clase + '"></div>',
 
                             ]).draw(false).node();
@@ -4409,7 +4712,7 @@
                     // Recorrer el odontograma y agregar nuevas filas
                     todos.forEach(function(odonto) {
 
-                        if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
+                        if (Number(odonto.presupuesto) === 1) {
                             if (odonto.estado_pago == 'ok') {
                                 var clase = 'bg-success';
                             } else if (odonto.estado_pago == 'incompleto') {
@@ -4809,7 +5112,7 @@
                     // Recorrer el odontograma y agregar nuevas filas
                     todos.forEach(function(odonto) {
 
-                        if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                        if (Number(odonto.presupuesto) === 1) {
                             if (odonto.estado_pago == 'ok') {
                                 var clase = 'bg-success';
                             } else if (odonto.estado_pago == 'incompleto') {
@@ -5261,9 +5564,11 @@
                                 insumo.insumos + ' ' + insumo.nombre_marca,
                                 insumo.observaciones,
                                 insumo.cantidad, // Nombre del insumo
-                                formatoMoneda(insumo.valor), // Cantidad utilizada
-                                0, // Unidad de medida
                                 formatoMoneda(total),
+                                formatoMoneda(Number(insumo.valor_descuento || 0)),
+                                formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null
+                                    ? Number(insumo.nuevo_valor)
+                                    : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                 ' <div class="circle ' + clase + '"></div>',
 
                             ]).draw(false).node();
@@ -5282,7 +5587,7 @@
                     table_todos.clear().draw();
                     // Recorrer el odontograma y agregar nuevas filas
                     todos.forEach(function(odonto) {
-                        if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
+                        if (Number(odonto.presupuesto) === 1) {
                             if (odonto.estado_pago == 'ok') {
                                 var clase = 'bg-success';
                             } else if (odonto.estado_pago == 'incompleto') {
@@ -5801,7 +6106,7 @@
                 // Recorrer el odontograma y agregar nuevas filas
                 todos.forEach(function(odonto) {
 
-                    if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                    if (Number(odonto.presupuesto) === 1) {
                         if (odonto.estado_pago == 'ok') {
                             var clase = 'bg-success';
                         } else if (odonto.estado_pago == 'incompleto') {
@@ -5861,7 +6166,7 @@
                                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.nuevo_valor)}">
                                                         </div>
                                                         <div class="form-group col-md-1 col-lg-1 fill">
-                                                            <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral')"><i class="feather icon-x"></i> </button>
+                                                            <button type="button" class="btn btn-danger btn-icon" onclick="sacarPrestacionPresupuestoDental(${t.id},'gral')"><i class="feather icon-x"></i> </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -5870,6 +6175,23 @@
                                 );
                     }
                 });
+
+                // IMPORTANTE: aplicar un convenio sólo debe cambiar valores monetarios.
+                // Se vuelve a sincronizar el presupuesto desde su flujo central para
+                // conservar grupos clínicos como Maxilar superior/inferior y Boca completa.
+                if (typeof actualizar_presupuesto === 'function') {
+                    actualizar_presupuesto();
+                }
+
+                // Endodoncia mantiene sus caras/grupos en un panel separado.
+                // Si esta vista está cargada dentro de la ficha endodóntica, lo refrescamos
+                // después del descuento sin tocar la estructura clínica.
+                if (typeof refrescar_caras_grupos_endodoncia === 'function') {
+                    refrescar_caras_grupos_endodoncia();
+                }
+                if (typeof refrescar_piezas_diagnostico_plan_endodoncia === 'function') {
+                    refrescar_piezas_diagnostico_plan_endodoncia();
+                }
             },
             error: function(error) {
                 console.log(error.responseText);
@@ -6010,9 +6332,11 @@
                             insumo.insumos + ' ' + insumo.nombre_marca,
                             insumo.observaciones,
                             insumo.cantidad, // Nombre del insumo
-                            formatoMoneda(insumo.valor), // Cantidad utilizada
-                            0, // Unidad de medida
                             formatoMoneda(total),
+                            formatoMoneda(Number(insumo.valor_descuento || 0)),
+                            formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null
+                                ? Number(insumo.nuevo_valor)
+                                : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                             ' <div class="circle ' + clase + '"></div>',
 
                         ]).draw(false).node();
@@ -6101,7 +6425,7 @@
                 // Recorrer el odontograma y agregar nuevas filas
                 todos.forEach(function(odonto) {
 
-                    if (odonto.presupuesto == 1 && Number(odonto.urgencia || 0) === 0) {
+                    if (Number(odonto.presupuesto) === 1) {
                         if (odonto.estado_pago == 'ok') {
                             var clase = 'bg-success';
                         } else if (odonto.estado_pago == 'incompleto') {
@@ -6161,7 +6485,7 @@
                                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
                                                                 </div>
                                                                 <div class="form-group col-md-1 col-lg-1 fill">
-                                                                    <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral')"><i class="feather icon-x"></i> </button>
+                                                                    <button type="button" class="btn btn-danger btn-icon" onclick="sacarPrestacionPresupuestoDental(${t.id},'gral')"><i class="feather icon-x"></i> </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -6170,7 +6494,17 @@
                                         );
                     }
                 });
-                actualizar_presupuesto();
+
+                // Al quitar el convenio se usa el mismo flujo de sincronización.
+                if (typeof actualizar_presupuesto === 'function') {
+                    actualizar_presupuesto();
+                }
+                if (typeof refrescar_caras_grupos_endodoncia === 'function') {
+                    refrescar_caras_grupos_endodoncia();
+                }
+                if (typeof refrescar_piezas_diagnostico_plan_endodoncia === 'function') {
+                    refrescar_piezas_diagnostico_plan_endodoncia();
+                }
             },
             error: function(error) {
                 console.log(error.responseText);

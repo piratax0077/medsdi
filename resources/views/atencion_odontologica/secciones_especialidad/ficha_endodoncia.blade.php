@@ -1213,71 +1213,205 @@
         }
     }
 
-    function sincronizarSelectorPlanEndodoncia(listaOdontograma) {
+    /*
+     * El selector de Tratamiento debe mostrar la MISMA condición clínica que el
+     * odontograma principal. El include selector_odontograma ya se dibuja con
+     * $odontograma_historial; esta función solo mantiene ese historial sincronizado
+     * cuando llegan respuestas AJAX.
+     *
+     * Antes esta función recibía $odontograma (lista parcial de Endodoncia) y
+     * recorría las 32 piezas, devolviendo a "normal" cualquier pieza ausente de
+     * esa respuesta. Por eso Tratamiento mostraba menos piezas pintadas que el
+     * odontograma principal.
+     */
+    let historialVisualSelectorEndodoncia = @json($odontograma_historial ?? ($odontograma ?? []));
+
+    function normalizarTextoClinicoEndodoncia(valor) {
+        return String(valor || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
+    }
+
+    function resolverEstadoVisualEndodoncia(registro) {
+        if (!registro || Number(registro.urgencia) === 1 || Number(registro.estado) === 3) {
+            return null;
+        }
+
+        const diagnostico = normalizarTextoClinicoEndodoncia(
+            registro.diagnostico || registro.diagnostico_descripcion || ''
+        );
+        const tratamiento = normalizarTextoClinicoEndodoncia(
+            registro.tratamiento || registro.descripcion || ''
+        );
+        const texto = (diagnostico + ' ' + tratamiento).trim();
+        const contiene = (...terminos) => terminos.some(t => texto.indexOf(t) !== -1);
+
+        if (contiene('implante', 'implantologia')) {
+            return Number(registro.estado) === 0 ? 'ausente' : 'implante';
+        }
+        if (contiene('pulpectomia')) return 'pulpectomia';
+        if (contiene('pulpotomia')) return 'pulpotomia';
+        if (contiene('endodoncia', 'tratamiento de conducto', 'tratamiento conducto', 'conducto radicular')) {
+            return 'endodoncia';
+        }
+        if (contiene('corona en mal estado', 'corona mal estado', 'corona defectuosa')) return 'corona_mal_estado';
+        if (contiene('corona provisoria', 'corona provisional')) return 'corona_provisoria';
+        if (contiene('perno munon', 'perno y munon')) return 'perno_munon';
+        if (contiene('resto radicular', 'residuo radicular', 'remanente radicular')) return 'residuo_radicular';
+        if (contiene('protesis removible')) return 'protesis_removible';
+        if (contiene('ribbond')) return 'ribbond';
+        if (contiene('extraccion', 'exodoncia')) return 'extraccion';
+        if (contiene('impactado', 'incluido')) return 'impactado';
+        if (contiene('fractura', 'fracturado')) return 'fractura';
+        if (contiene('movilidad')) return 'movilidad';
+        if (contiene('abfraccion')) return 'abfraccion';
+        if (contiene('abrasion')) return 'abrasion';
+        if (contiene('atricion')) return 'atricion';
+        if (contiene('erosion')) return 'erosion';
+        if (contiene('obturacion')) return 'obturacion';
+        if (contiene('ortodoncia', 'ortodontico', 'ortodontica')) return 'ortodoncia';
+        if (contiene('sellante', 'sellado de fosas', 'sellado fosas')) return 'sellante';
+        if (contiene('surco')) return 'surco';
+        if (contiene('fluor', 'fluoracion', 'fluoruracion')) return 'fluor';
+        if (contiene('corona')) return 'corona';
+        if (contiene('carie')) return 'carie';
+        if (contiene('diente ausente', 'pieza ausente', 'ausencia dentaria')) return 'ausente';
+        if (contiene('diente sano', 'pieza sana')) return 'normal';
+        if (contiene('otro tratamiento', 'otro tto')) return 'otro_tto';
+
+        return null;
+    }
+
+    function rutaImagenEstadoEndodoncia(base, estado, codigo) {
+        const rutas = {
+            carie: base + '/carie/carie' + codigo + '.png',
+            ausente: base + '/diente-ausente/dau' + codigo + '.png',
+            extraccion: base + '/extraccion/porhacer/extraccion_' + codigo + '.png',
+            fractura: base + '/fractura/fractura_' + codigo + '.png',
+            impactado: base + '/impactado/impactado_' + codigo + '.png',
+            endodoncia: base + '/endodoncia/endo' + codigo + '.png',
+            pulpotomia: base + '/pulpotomia/pulpotomia' + codigo + '.png',
+            pulpectomia: base + '/pulpectomia/pulpectomia_' + codigo + '.png',
+            implante: base + '/implante/impl' + codigo + '.png',
+            movilidad: base + '/movilidad/movilidad_' + codigo + '.png',
+            perno_munon: base + '/perno-munon/hecho/perno_munon_' + codigo + '.png',
+            corona: base + '/corona/hecho/corona_' + codigo + '.png',
+            corona_provisoria: base + '/corona-provisoria/hecho/cp_hecho_' + codigo + '.png',
+            corona_mal_estado: base + '/corona_mal_estado/c_malestado' + codigo + '.png',
+            protesis_removible: base + '/protesis-removible/p_removible' + codigo + '.png',
+            residuo_radicular: base + '/residuo-radicular/hecho/rr_' + codigo + '.png',
+            ribbond: base + '/ribbond/hecho/ribbond_' + codigo + '.png',
+            sellante: base + '/sellante/sellante_' + codigo + '.png',
+            surco: base + '/surco/surco_' + codigo + '.png',
+            atricion: base + '/atricion/atricion' + codigo + '.png',
+            abrasion: base + '/abrasion/abrasion' + codigo + '.png',
+            abfraccion: base + '/abfraccion/abfraccion' + codigo + '.png',
+            erosion: base + '/erosion/erosion' + codigo + '.png',
+            obturacion: base + '/obturacion/obturacion' + codigo + '.png',
+            ortodoncia: base + '/ortodoncia/ortodoncia' + codigo + '.png',
+            fluor: base + '/fluor/fluor' + codigo + '.png',
+            otro_tto: base + '/otro-tto/otro-tto' + codigo + '.png',
+            normal: base + '/d' + codigo + '.png'
+        };
+
+        return rutas[estado] || rutas.normal;
+    }
+
+    function mezclarHistorialVisualEndodoncia(listaNueva, reemplazarCompleto) {
+        const nuevos = Array.isArray(listaNueva) ? listaNueva : [];
+
+        if (reemplazarCompleto) {
+            historialVisualSelectorEndodoncia = nuevos.slice();
+            return;
+        }
+
+        const mapa = new Map();
+
+        (Array.isArray(historialVisualSelectorEndodoncia) ? historialVisualSelectorEndodoncia : [])
+            .forEach(function (registro, indice) {
+                if (!registro) return;
+                const clave = registro.id != null
+                    ? 'id:' + String(registro.id)
+                    : 'tmp:' + String(registro.pieza || '') + ':' + indice;
+                mapa.set(clave, registro);
+            });
+
+        nuevos.forEach(function (registro, indice) {
+            if (!registro) return;
+
+            if (registro.id != null) {
+                mapa.set('id:' + String(registro.id), registro);
+                return;
+            }
+
+            // Registros temporales devueltos por algunos endpoints de planificación.
+            mapa.set(
+                'nuevo:' + String(registro.pieza || '') + ':' +
+                String(registro.tratamiento || registro.descripcion || '') + ':' + indice,
+                registro
+            );
+        });
+
+        historialVisualSelectorEndodoncia = Array.from(mapa.values());
+    }
+
+    function sincronizarSelectorPlanEndodoncia(listaOdontograma, reemplazarHistorial = false) {
         const $selector = $('#selector_plan_tratamiento_endodoncia');
         if (!$selector.length) return;
 
+        mezclarHistorialVisualEndodoncia(listaOdontograma, reemplazarHistorial);
+
         const estadosVisuales = {};
         const piezasPresupuesto = new Set();
-        (Array.isArray(listaOdontograma) ? listaOdontograma : []).forEach(function (registro) {
-            if (!registro || Number(registro.urgencia) === 1) return;
 
-            const pieza = String(registro.pieza || '');
-            if (!pieza || estadosVisuales[pieza] === 'ausente') return;
-            if (
-                Number(registro.presupuesto) === 1 ||
-                Number(registro.id_presupuesto || 0) > 0
-            ) {
-                piezasPresupuesto.add(pieza);
-            }
+        (Array.isArray(historialVisualSelectorEndodoncia) ? historialVisualSelectorEndodoncia : [])
+            .forEach(function (registro) {
+                if (!registro || Number(registro.urgencia) === 1) return;
 
-            const diagnostico = String(registro.diagnostico || '').toLowerCase();
-            const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
-            let estado = estadosVisuales[pieza] || 'normal';
+                const pieza = String(registro.pieza || '');
+                if (!pieza) return;
 
-            if (diagnostico.includes('carie')) estado = 'carie';
-            if (tratamiento.includes('implante')) {
-                estado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
-            }
-            if (estado !== 'ausente' && (
-                tratamiento.includes('endodoncia') ||
-                tratamiento.includes('pulpotomia') ||
-                tratamiento.includes('pulpectomia')
-            )) {
-                estado = 'endodoncia';
-            }
+                if (
+                    Number(registro.presupuesto) === 1 ||
+                    Number(registro.id_presupuesto || 0) > 0
+                ) {
+                    piezasPresupuesto.add(pieza);
+                }
 
-            estadosVisuales[pieza] = estado;
-        });
+                const estado = resolverEstadoVisualEndodoncia(registro);
+                if (estado !== null) {
+                    // El historial llega ordenado cronológicamente; la última
+                    // condición clínica reconocida es la imagen vigente.
+                    estadosVisuales[pieza] = estado;
+                }
+            });
 
         const baseImagenes = @json(asset('images/dental/dientes'));
+
         $selector.find('[data-selector-pieza]').each(function () {
             const $boton = $(this);
             const pieza = String($boton.data('selector-pieza'));
             const codigo = pieza.replace('.', '');
             const estado = estadosVisuales[pieza] || 'normal';
+
             $boton.toggleClass('is-in-budget', piezasPresupuesto.has(pieza));
-            const rutas = {
-                carie: baseImagenes + '/carie/carie' + codigo + '.png',
-                ausente: baseImagenes + '/diente-ausente/dau' + codigo + '.png',
-                implante: baseImagenes + '/implante/impl' + codigo + '.png',
-                endodoncia: baseImagenes + '/endodoncia/endo' + codigo + '.png',
-                normal: baseImagenes + '/d' + codigo + '.png'
-            };
 
             $boton.find('img')
-                .attr('src', rutas[estado] || rutas.normal)
-                .attr('data-estado-clinico', estado);
+                .attr('src', rutaImagenEstadoEndodoncia(baseImagenes, estado, codigo))
+                .attr('data-estado-clinico', estado)
+                .attr('title', 'Pieza ' + pieza + ' · ' + estado.replace(/_/g, ' '));
         });
-
-        $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
-        $selector.find('.selector-odontograma-generico__resumen')
-            .html('<span class="text-muted">Ninguna pieza seleccionada</span>');
-        $('#pieza_plan_tratamiento_endodoncia').val('0');
     }
 
     $(function () {
-        sincronizarSelectorPlanEndodoncia(@json($odontograma ?? []));
+        // MUY IMPORTANTE: usar el historial odontológico completo, igual que el
+        // odontograma principal. $odontograma puede ser solo el plan de Endodoncia.
+        sincronizarSelectorPlanEndodoncia(
+            @json($odontograma_historial ?? ($odontograma ?? [])),
+            true
+        );
     });
 
     function decorarTablaPlanEndodoncia() {
@@ -2078,6 +2212,9 @@
                             }
 
                         });
+                        // El endpoint de eliminación devuelve importes brutos.
+                        // El render financiero central repone convenio, descuentos y netos.
+                        actualizar_presupuesto();
                 }
             },
             error: function(error){
@@ -2538,9 +2675,16 @@
             responsive: true,
         });
     });
-    function actualizar_presupuesto(){
-        // Obtener valores del formulario
+    window.actualizandoPresupuestoDental = window.actualizandoPresupuestoDental || false;
 
+    function actualizar_presupuesto(){
+        // Evita peticiones simultáneas/reentrantes provocadas por redibujos o eventos de otras vistas.
+        if (window.actualizandoPresupuestoDental) {
+            return;
+        }
+        window.actualizandoPresupuestoDental = true;
+
+        // Obtener valores del formulario
         const id_dcto = $('#tiene_dcto').val();
 
         // Crear objeto JSON con los datos del formulario
@@ -2560,11 +2704,10 @@
             success: function(response){
                 console.log('Éxito:', response);
                 if (response.estado == 1) {
-                    let tiene_dcto = $('#tiene_dcto').val();
-                    if(tiene_dcto != 0){
-                        confirmar_aplicar_convenio_tratamiento(tiene_dcto);
-                    }else{
-                        let pagos = response.pagos;
+                    // IMPORTANTE: actualizar_presupuesto() sólo consulta/renderiza.
+                    // Nunca debe volver a aplicar el convenio, porque eso crea el ciclo:
+                    // actualizar_presupuesto -> confirmar_aplicar_convenio_tratamiento -> refrescos -> actualizar_presupuesto.
+                    let pagos = response.pagos;
                         let table = $('#table_pagos_presupuesto').DataTable();
                         let presupuesto = response.presupuesto;
                         $('#id_presupuesto').val(presupuesto.id);
@@ -2612,9 +2755,11 @@
                                 let rowNode = table_piezas_odontograma.row.add([
                                     odonto.descripcion,
                                     odonto.pieza,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
-                                    0,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    formatoMoneda(Number(odonto.valor || 0)),
+                                    formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                    formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null
+                                        ? Number(odonto.nuevo_valor)
+                                        : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                     '<div class="circle ' + clase + '"></div>',
                                     estado, // Columna vacía
 
@@ -2686,9 +2831,11 @@
                                     insumo.insumos + ' ' + insumo.nombre_marca,
                                     insumo.observaciones,
                                     insumo.cantidad, // Nombre del insumo
-                                    formatoMoneda(insumo.valor), // Cantidad utilizada
-                                    0, // Unidad de medida
                                     formatoMoneda(total),
+                                    formatoMoneda(Number(insumo.valor_descuento || 0)),
+                                    formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null
+                                        ? Number(insumo.nuevo_valor)
+                                        : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
 
                                 ]).draw(false).node();
@@ -2710,12 +2857,17 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(parseInt(response.suma_adeudado)));
                         $('#valores_total_final_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_adeudado)));
                         $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
-                        $('#subtotal_presup').val(formatoMoneda(response.suma_adeudado));
+                        // Encabezado financiero: bruto - descuento = total neto.
+                        $('#subtotal_presup').val(formatoMoneda(response.suma_presupuesto));
                         $('#subtotal_lab').val(formatoMoneda(response.total_lab));
-                        $('#descuento_lab').val(0);
-                        let total = parseInt(response.suma_presupuesto) +  parseInt(response.total_lab);
-                        $('#total_presupuesto').val(formatoMoneda(total));
-                        $('#total_presupuesto_dental').val(total);
+                        $('#descuento_lab').val(formatoMoneda(
+                            (response.trabajos_lab || []).concat(response.trabajos_mayor || [])
+                                .reduce((suma, trabajo) => suma + Number(trabajo.valor_descuento || 0), 0)
+                        ));
+                        const totalNeto = Number(response.suma_adeudado || 0);
+                        $('#total_presup').val(formatoMoneda(totalNeto));
+                        $('#total_presupuesto').val(formatoMoneda(totalNeto));
+                        $('#total_presupuesto_dental').val(totalNeto);
                         let todos = response.todos;
 
                         let table_ = $('#presup_estado_pago_gral').DataTable();
@@ -2743,9 +2895,11 @@
                                 let rowNode = table_.row.add([
                                     odonto.localizacion,
                                     odonto.diagnostico_tratamiento,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
-                                    0,
-                                    formatoMoneda(odonto.valor),
+                                    formatoMoneda(Number(odonto.valor || 0)),
+                                    formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                    formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null
+                                        ? Number(odonto.nuevo_valor)
+                                        : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
                                     estado
                                 ]).draw(false).node();
@@ -2755,7 +2909,11 @@
                             }
 
                         });
-                    }
+
+                        $('#valores_descuentos_presupuesto').html(formatoMoneda(Number(response.descuentos || 0)));
+                        $('#valores_descuentos_presupuesto_conf').html(formatoMoneda(Number(response.descuentos || 0)));
+                        $('#descuento_presup').val(formatoMoneda(Number(response.descuentos || 0)));
+                        $('#descuento_clinico').val(formatoMoneda(Number(response.descuentos || 0)));
 
                 } else {
                     console.log('Error:', response.mensaje);
@@ -2763,6 +2921,9 @@
             },
             error: function(error){
                 console.log(error);
+            },
+            complete: function(){
+                window.actualizandoPresupuestoDental = false;
             }
         })
     }
@@ -6250,6 +6411,11 @@ function eliminar_pieza_dental_pieza(id,tipo){
                                 $(rowNode).addClass('text-left align-left status-circle');
                             }
                     });
+
+                    // La respuesta clínica de guardarCambiosTratamiento no incluye
+                    // los atributos monetarios calculados del convenio. Restaurar
+                    // siempre las tablas financieras desde su endpoint canónico.
+                    actualizar_presupuesto();
                 }
             });
         }

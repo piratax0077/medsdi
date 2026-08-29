@@ -22,4 +22,21 @@ class LogMensajeriaDriver implements MensajeriaDriverInterface
             'sid' => null,
         ];
     }
+
+    public function enviarSms(string $telefono, string $mensaje, array $metadata = []): array
+    {
+        Log::info('SMS simulado', [
+            'telefono' => $telefono,
+            'mensaje' => $mensaje,
+            'metadata' => $metadata,
+        ]);
+
+        return [
+            'estado' => 1,
+            'msj' => 'SMS registrado en log',
+            'driver' => 'log',
+            'sid' => null,
+        ];
+    }
+
 }

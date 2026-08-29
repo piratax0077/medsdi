@@ -771,10 +771,92 @@
         let productosPackActuales = [];
         function escaparPack(valor){ return $('<div>').text(valor == null ? '' : valor).html(); }
         function agregarFilaPackInsumos(item = {}) {
-            const opciones = productosPackActuales.map(p => `<option value="${p.id}" data-valor="${Number(p.precio_compra || p.precio_venta || 0)}" ${Number(item.id_producto) === Number(p.id) ? 'selected' : ''}>${escaparPack((p.codigo_interno ? p.codigo_interno+' · ' : '')+p.nombre)} (stock ${p.stock_actual || 0})</option>`).join('');
-            $('#tabla_pack_insumos tbody').append(`<tr><td><select class="form-control producto-pack"><option value="">Seleccione</option>${opciones}</select></td><td><input type="number" min="0.01" step="0.01" class="form-control cantidad-pack" value="${item.cantidad || 1}"></td><td><input type="number" min="0" step="1" class="form-control valor-pack" value="${item.valor_unitario || 0}"></td><td><input class="form-control observacion-pack" value="${escaparPack(item.observaciones || '')}"></td><td><button type="button" class="btn btn-danger btn-sm" onclick="$(this).closest('tr').remove()"><i class="feather icon-x"></i></button></td></tr>`);
+            // Agrupa los productos por categoría odontológica para que el selector
+            // sea más fácil de navegar además del buscador Select2.
+            const grupos = {};
+
+            productosPackActuales.forEach(function (p) {
+                const categoria = p.categoria || 'Sin categoría';
+                if (!grupos[categoria]) {
+                    grupos[categoria] = [];
+                }
+                grupos[categoria].push(p);
+            });
+
+            const opciones = Object.keys(grupos)
+                .sort(function (a, b) { return a.localeCompare(b, 'es'); })
+                .map(function (categoria) {
+                    const items = grupos[categoria].map(function (p) {
+                        const codigo = p.codigo_interno ? p.codigo_interno + ' · ' : '';
+                        const nombre = p.nombre || '';
+                        const stock = Number(p.stock_actual || 0);
+                        const valor = Number(p.precio_compra || p.precio_venta || 0);
+                        const seleccionado = Number(item.id_producto) === Number(p.id) ? 'selected' : '';
+
+                        return `<option value="${p.id}" data-valor="${valor}" ${seleccionado}>${escaparPack(codigo + nombre)} (stock ${stock})</option>`;
+                    }).join('');
+
+                    return `<optgroup label="${escaparPack(categoria)}">${items}</optgroup>`;
+                }).join('');
+
+            const selectId = 'producto_pack_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+
+            $('#tabla_pack_insumos tbody').append(`
+                <tr>
+                    <td>
+                        <select id="${selectId}" class="form-control producto-pack" style="width:100%;">
+                            <option value="">Seleccione un producto</option>
+                            ${opciones}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" min="0.01" step="0.01" class="form-control cantidad-pack" value="${item.cantidad || 1}">
+                    </td>
+                    <td>
+                        <input type="number" min="0" step="1" class="form-control valor-pack" value="${item.valor_unitario || 0}">
+                    </td>
+                    <td>
+                        <input class="form-control observacion-pack" value="${escaparPack(item.observaciones || '')}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm btn-eliminar-insumo-pack">
+                            <i class="feather icon-x"></i>
+                        </button>
+                    </td>
+                </tr>
+            `);
+
+            if ($.fn.select2) {
+                $('#' + selectId).select2({
+                    width: '100%',
+                    placeholder: 'Buscar insumo odontológico...',
+                    allowClear: true,
+                    dropdownParent: $('#modalPackInsumos'),
+                    language: {
+                        noResults: function () {
+                            return 'No se encontraron insumos odontológicos';
+                        }
+                    }
+                });
+            }
         }
-        $(document).on('change', '.producto-pack', function(){ const valor=$(this).find(':selected').data('valor'); if(valor !== undefined) $(this).closest('tr').find('.valor-pack').val(valor); });
+        $(document).on('change', '.producto-pack', function(){
+            const valor = $(this).find(':selected').data('valor');
+            if (valor !== undefined) {
+                $(this).closest('tr').find('.valor-pack').val(valor);
+            }
+        });
+
+        $(document).on('click', '.btn-eliminar-insumo-pack', function () {
+            const $fila = $(this).closest('tr');
+            const $select = $fila.find('.producto-pack');
+
+            if ($.fn.select2 && $select.hasClass('select2-hidden-accessible')) {
+                $select.select2('destroy');
+            }
+
+            $fila.remove();
+        });
         function abrirPackInsumos(id, descripcion) {
             arancelPackActual=id; $('#pack_insumos_tratamiento').text(descripcion); $('#tabla_pack_insumos tbody').empty();
             $.get(`{{ url('/profesional/aranceles') }}/${id}/insumos`, function(r){ productosPackActuales=r.productos || []; (r.pack || []).forEach(agregarFilaPackInsumos); if(!(r.pack || []).length) agregarFilaPackInsumos(); $('#modalPackInsumos').modal('show'); });

@@ -54,4 +54,52 @@ class ApiMensajeriaDriver implements MensajeriaDriverInterface
             ];
         }
     }
+
+    public function enviarSms(string $telefono, string $mensaje, array $metadata = []): array
+    {
+        $url = config('mensajeria.api.url');
+        $token = config('mensajeria.api.token');
+
+        if (empty($url) || empty($token)) {
+            return [
+                'estado' => 0,
+                'msj' => 'API de mensajería no configurada',
+                'driver' => 'api',
+                'sid' => null,
+            ];
+        }
+
+        try {
+            $response = Http::withToken($token)->post(rtrim($url, '/') . '/api/sms/enviar', [
+                'telefono' => $telefono,
+                'mensaje' => $mensaje,
+                'metadata' => $metadata,
+            ]);
+
+            if (!$response->successful()) {
+                return [
+                    'estado' => 0,
+                    'msj' => 'Error API SMS: ' . $response->body(),
+                    'driver' => 'api',
+                    'sid' => null,
+                ];
+            }
+
+            return [
+                'estado' => 1,
+                'msj' => 'SMS enviado mediante API externa',
+                'driver' => 'api',
+                'sid' => $response->json('sid'),
+                'respuesta' => $response->json(),
+            ];
+        } catch (\Exception $e) {
+            return [
+                'estado' => 0,
+                'msj' => 'Error API SMS: ' . $e->getMessage(),
+                'driver' => 'api',
+                'sid' => null,
+            ];
+        }
+    }
+
 }

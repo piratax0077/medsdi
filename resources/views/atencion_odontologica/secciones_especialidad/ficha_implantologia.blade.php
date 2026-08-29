@@ -9694,7 +9694,14 @@ function ocultar_pieza_impl(counter){
     $('#contenedor_pieza_tto_impl'+counter).empty();
 }
 
+    window.actualizandoPresupuestoDental = window.actualizandoPresupuestoDental || false;
+
     function actualizar_presupuesto(){
+        if (window.actualizandoPresupuestoDental) {
+            return;
+        }
+        window.actualizandoPresupuestoDental = true;
+
         // Obtener valores del formulario
 
         const id_dcto = $('#tiene_dcto').val();
@@ -9716,10 +9723,8 @@ function ocultar_pieza_impl(counter){
             success: function(response){
                 console.log('Éxito:', response);
                 if (response.estado == 1) {
-                    let tiene_dcto = $('#tiene_dcto').val();
-                    if(tiene_dcto != 0){
-                        confirmar_aplicar_convenio_tratamiento(tiene_dcto);
-                    }else{
+                        // El descuento persistido sólo se renderiza; no se reaplica desde un refresco.
+
                         let pagos = response.pagos;
                         let table = $('#table_pagos_presupuesto').DataTable();
                         let presupuesto = response.presupuesto;
@@ -9884,9 +9889,9 @@ function ocultar_pieza_impl(counter){
                                     insumo.insumos + ' ' + insumo.nombre_marca,
                                     insumo.observaciones,
                                     insumo.cantidad, // Nombre del insumo
-                                    formatoMoneda(insumo.valor), // Cantidad utilizada
-                                    0, // Unidad de medida
-                                    formatoMoneda(total),
+                                    formatoMoneda(total), // Sub-total real
+                                    formatoMoneda(Number(insumo.valor_descuento || 0)), // Descuento
+                                    formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null ? Number(insumo.nuevo_valor) : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
 
                                 ]).draw(false).node();
@@ -9939,11 +9944,11 @@ function ocultar_pieza_impl(counter){
                                 }
                                 // Agregar una nueva fila a la tabla
                                 let rowNode = table_.row.add([
-                                    odonto.localizacion,
-                                    odonto.diagnostico_tratamiento,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
-                                    0,
-                                    formatoMoneda(odonto.valor),
+                                    odonto.diagnostico_tratamiento || odonto.descripcion || '',
+                            odonto.localizacion || '',
+                            formatoMoneda(Number(odonto.valor || 0)),
+                            formatoMoneda(Number(odonto.valor_descuento || 0)),
+                            formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null ? Number(odonto.nuevo_valor) : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
                                     estado
                                 ]).draw(false).node();
@@ -9953,7 +9958,7 @@ function ocultar_pieza_impl(counter){
                             }
 
                         });
-                    }
+
 
                 } else {
                     console.log('Error:', response.mensaje);
@@ -9961,7 +9966,13 @@ function ocultar_pieza_impl(counter){
             },
             error: function(error){
                 console.log(error);
-            }
+            },
+                complete: function(){
+                    window.actualizandoPresupuestoDental = false;
+                    if (typeof window.programarNormalizacionValoresPresupuestoDental === 'function') {
+                        window.programarNormalizacionValoresPresupuestoDental();
+                    }
+                }
         })
     }
 
@@ -11243,3 +11254,4 @@ function ocultar_pieza_impl(counter){
         }
 </script>
 @include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')
+@include('atencion_odontologica.include.agendamiento_control_dental')

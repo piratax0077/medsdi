@@ -675,9 +675,10 @@
                                         <label class="floating-label-activo-sm">Tel&eacute;fono Contacto <span class="text-danger requerido-contacto-agenda">*</span></label>
                                         <input type="tel" class="form-control form-control-sm"
                                             name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno"
-                                            oninput="validar_campos_minimos();"
+                                            oninput="invalidar_validacion_telefono(); validar_campos_minimos();"
                                             onblur="validar_campo_telefono();"
-                                            onchange="validar_campo_telefono();">
+                                            onchange="validar_campo_telefono();"
+                                            inputmode="numeric" autocomplete="tel">
                                     </div>
                                     <button class="btn btn-xxs mt-n2  btn-info btn-block"
                                         type="button" id="btn_reserva_hora_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono();">
@@ -686,7 +687,11 @@
                                     <div class="form-group" style="display:none" name="div_codigo_validador" id="div_codigo_validador">
                                         <label class="floating-label-activo-sm">Codigo Validador</label>
                                         <input type="tel" class="form-control form-control-sm"
-                                            name="reserva_hora_telefono_uno_codigo_validador" id="reserva_hora_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono();">
+                                            name="reserva_hora_telefono_uno_codigo_validador"
+                                            id="reserva_hora_telefono_uno_codigo_validador"
+                                            maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+                                            placeholder="Ingrese los 6 dígitos"
+                                            oninput="this.value=this.value.replace(/\D/g,'').slice(0,6); validar_codigo_telefono();">
                                     </div>
                                     <input type="hidden" name="result_codigo_validacion" id="result_codigo_validacion" value="0">
                                     <div id="div_codigo_validador_mensaje" style="display:none"></div>
@@ -1694,38 +1699,101 @@
             validar_campos_minimos();
         }
 
+        let validandoCodigoTelefonoAgenda = false;
+
+        function invalidar_validacion_telefono()
+        {
+            if ($('#result_codigo_validacion').val() === '1') {
+                $('#result_codigo_validacion').val('0');
+                $('#div_codigo_validador_mensaje').hide().html('');
+                $('#div_codigo_validador').hide();
+                $('#reserva_hora_telefono_uno_codigo_validador').val('');
+                $('#btn_reserva_hora_telefono_uno_validar').show();
+            }
+        }
+
         function enviar_validacion_telefono()
         {
-            $('#btn_reserva_hora_telefono_uno_validar').hide();
-            $('#div_codigo_validador').show();
-            $('#reserva_hora_telefono_uno_codigo_validador').val('');
-            $('#div_codigo_validador_mensaje').html('');
+            const telefono = ($('#reserva_hora_telefono_uno').val() || '').trim();
+            const $boton = $('#btn_reserva_hora_telefono_uno_validar');
+
+            if (!/^\d{9}$/.test(telefono)) {
+                swal({
+                    title: "Validación de teléfono",
+                    text: "Ingrese un teléfono móvil válido de 9 dígitos, por ejemplo 956231245.",
+                    icon: "warning",
+                    buttons: "Aceptar"
+                });
+                return;
+            }
+
+            $boton.prop('disabled', true).html('Enviando SMS...');
             $('#result_codigo_validacion').val('0');
+            $('#reserva_hora_telefono_uno_codigo_validador').val('');
+            $('#div_codigo_validador').hide();
+            $('#div_codigo_validador_mensaje').show().html('<span class="text-info">Enviando código de validación...</span>');
+
+            $.ajax({
+                url: "{{ route('agenda.telefono.validacion.enviar') }}",
+                type: "POST",
+                dataType: "json",
+                data: { _token: "{{ csrf_token() }}", telefono: telefono }
+            })
+            .done(function(respuesta) {
+                if (Number(respuesta.estado) !== 1) {
+                    $('#div_codigo_validador_mensaje').show().html('<span class="text-danger">' + (respuesta.msj || 'No fue posible enviar el SMS.') + '</span>');
+                    return;
+                }
+                $('#div_codigo_validador').show();
+                $('#div_codigo_validador_mensaje').show().html('<span class="text-success">' + respuesta.msj + '</span>');
+                $('#reserva_hora_telefono_uno_codigo_validador').focus();
+                $boton.hide();
+            })
+            .fail(function(jqXHR) {
+                let mensaje = 'No fue posible enviar el SMS.';
+                if (jqXHR.responseJSON && jqXHR.responseJSON.msj) mensaje = jqXHR.responseJSON.msj;
+                $('#div_codigo_validador_mensaje').show().html('<span class="text-danger">' + mensaje + '</span>');
+            })
+            .always(function() {
+                $boton.prop('disabled', false).html('<i class="feather icon-check"></i> Validar teléfono');
+            });
         }
 
         function validar_codigo_telefono()
         {
-            var codigo = $('#reserva_hora_telefono_uno_codigo_validador').val();
-            if(codigo.length >= 4)
-            {
-                console.log(codigo);
-                if(codigo == 1234)
-                {
-                    $('#div_codigo_validador').hide();
-                    $('#div_codigo_validador_mensaje').show();
-                    $('#div_codigo_validador_mensaje').html('<span style="color:green;">Valido</span>');
-                    $('#result_codigo_validacion').val('1');
-                    $("#guardar_reserva_paciente").prop('disabled', false);
+            const codigo = ($('#reserva_hora_telefono_uno_codigo_validador').val() || '').trim();
+            const telefono = ($('#reserva_hora_telefono_uno').val() || '').trim();
+            if (codigo.length !== 6 || validandoCodigoTelefonoAgenda) return;
+
+            validandoCodigoTelefonoAgenda = true;
+            $('#div_codigo_validador_mensaje').show().html('<span class="text-info">Validando código...</span>');
+
+            $.ajax({
+                url: "{{ route('agenda.telefono.validacion.verificar') }}",
+                type: "POST",
+                dataType: "json",
+                data: { _token: "{{ csrf_token() }}", telefono: telefono, codigo: codigo }
+            })
+            .done(function(respuesta) {
+                if (Number(respuesta.estado) !== 1) return;
+                $('#result_codigo_validacion').val('1');
+                $('#div_codigo_validador').hide();
+                $('#div_codigo_validador_mensaje').show().html('<span class="text-success"><i class="feather icon-check-circle"></i> Teléfono validado correctamente</span>');
+                $('#btn_reserva_hora_telefono_uno_validar').hide();
+                validar_campos_minimos();
+            })
+            .fail(function(jqXHR) {
+                let mensaje = 'No fue posible validar el código.';
+                if (jqXHR.responseJSON && jqXHR.responseJSON.msj) {
+                    mensaje = jqXHR.responseJSON.msj;
+                    if (typeof jqXHR.responseJSON.intentos_restantes !== 'undefined') mensaje += ' Intentos restantes: ' + jqXHR.responseJSON.intentos_restantes + '.';
                 }
-                else
-                {
-                    $('#div_codigo_validador').show();
-                    $('#div_codigo_validador_mensaje').show();
-                    $('#div_codigo_validador_mensaje').html('<span style="color:red;">No Valido</span>');
-                    $('#result_codigo_validacion').val('0');
-                    $("#guardar_reserva_paciente").prop('disabled', true);
-                }
-            }
+                $('#result_codigo_validacion').val('0');
+                $('#div_codigo_validador_mensaje').show().html('<span class="text-danger">' + mensaje + '</span>');
+                $('#reserva_hora_telefono_uno_codigo_validador').select();
+                validar_campos_minimos();
+            })
+            .always(function() { validandoCodigoTelefonoAgenda = false; });
         }
 
         function validar_campo_telefono_representante()

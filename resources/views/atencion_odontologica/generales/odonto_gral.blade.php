@@ -342,18 +342,6 @@
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
-                                                                        @foreach ($todos as $grupo)
-                                                                            @if($grupo->presupuesto == 1)
-                                                                                <tr>
-                                                                                    <td>{{ $grupo->localizacion }}</td>
-                                                                                    <td class="text-uppercase">{{ $grupo->descripcion }}</td>
-                                                                                    <td>{{ $grupo->diagnostico_tratamiento }}</td>
-                                                                                    <td>${{ number_format($grupo->valor,0,',','.') }}</td>
-                                                                                    <td><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_diagnostico({{ $grupo->id }},'gral')"><i class="feather icon-x"></i></button></td>
-                                                                                    <td><span class="text-uppercase">{{ $grupo->terminado ? 'Realizado' : 'Pendiente' }}</span></td>
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -1673,6 +1661,40 @@
             }
 
             notificar_actualizacion_odonto_gral(resp, 'planificacion', piezas);
+
+            // Sincronizar de inmediato el Presupuesto Clínico con la respuesta
+            // del backend. Esto evita que la pieza sólo aparezca después de F5.
+            const odontogramaActualizado = Array.isArray(resp.odontograma_paciente)
+                ? resp.odontograma_paciente
+                : (Array.isArray(resp.odontograma) ? resp.odontograma : []);
+
+            if (odontogramaActualizado.length) {
+                window.odontograma_global = odontogramaActualizado;
+
+                if (
+                    window.MedSDIPresupuestoDental &&
+                    typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+                ) {
+                    window.MedSDIPresupuestoDental.recibirOdontograma(
+                        odontogramaActualizado,
+                        piezas.length ? String(piezas[0]) : null,
+                        resp.presupuesto || null
+                    );
+                } else if (typeof window.renderizarTarjetasPresupuestoClinico === 'function') {
+                    window.renderizarTarjetasPresupuestoClinico(odontogramaActualizado);
+                }
+            }
+
+            // El include puede vivir dentro de Odontología General, Endodoncia o
+            // Periodoncia. Si la ficha contenedora dispone de actualizar_presupuesto,
+            // hacemos un único refresco completo para sincronizar además grupos,
+            // insumos, descuentos y totales. La propia función tiene protección
+            // contra peticiones simultáneas.
+            if (typeof actualizar_presupuesto === 'function') {
+                window.setTimeout(function () {
+                    actualizar_presupuesto();
+                }, 0);
+            }
 
             $('#diag_presupuesto_pieza_g').val('');
             $('#paciente_piezas_dentales_ex').val([]).trigger('change');

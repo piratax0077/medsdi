@@ -85,7 +85,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
-                <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
+                <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="2">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-row">
@@ -572,9 +572,13 @@ $('#modal_reserva_hora_lugar_atencion').val('');
 $('#modal_reserva_dias_atencion').val('');
 $('#modal_reserva_fecha').val('');
 $('#modal_reserva_hora_lista_horas').html('');
-// asigno id profesioanl
+// asigno id profesional
 $('#modal_reserva_hora_id_profesional').val(id_profesional);
-$('#modal_reserva_hora_tipo_agenda').val(tipo_agenda);
+
+// Este include se usa exclusivamente desde fichas odontológicas.
+// No heredamos tipo_agenda=1 (Consulta) desde horarios generales.
+// 2 = Dental.
+$('#modal_reserva_hora_tipo_agenda').val('2');
 
 carga_calendario_profesional_pedir();
 
@@ -1236,10 +1240,15 @@ function generar_reserva_cita(hora)
             } else {
                 $('#reserva_sexo').text('Femenino');
             }
-            $('#reserva_convenio').html(data.registro.prevision.nombre);
-            $('#reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
-            $('#reserva_hora_email').html(data.registro.email);
-            $('#reserva_hora_telefono').html(data.registro.telefono_uno);
+            const previsionReserva = data.registro.prevision;
+            const direccionReserva = data.registro.direccion;
+            const ciudadReserva = direccionReserva && direccionReserva.ciudad;
+            $('#reserva_convenio').text(previsionReserva ? (previsionReserva.nombre || 'No informado') : 'No informado');
+            $('#reserva_direccion').text(direccionReserva
+                ? [direccionReserva.direccion, direccionReserva.numero_dir, ciudadReserva && ciudadReserva.nombre].filter(Boolean).join(' ')
+                : 'No informada');
+            $('#reserva_hora_email').text(data.registro.email || 'No informado');
+            $('#reserva_hora_telefono').text(data.registro.telefono_uno || 'No informado');
 
 
 
@@ -1273,40 +1282,17 @@ function agendar_hora() {
     let id_asistente = $('#reserva_hora_id_asistente').val();
     let origen = $('#reserva_hora_origen').val();
     let descripcion = $('#reserva_hora_descripcion').val();
+    const contextoDental = typeof window.obtenerDatosAgendamientoControlDental === 'function'
+        ? window.obtenerDatosAgendamientoControlDental()
+        : { id_presupuesto: '', tratamientos_presupuesto: [], proc_bloque: 1, motivo_dental: 'primera' };
 
-    let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
-    var tipo_agenda_text = 'C';
+    // Esta vista es tomar_hora_dental: la reserva siempre debe guardarse como Dental.
+    // Evitamos depender de tipo_agenda del horario, porque un bloque general puede venir como 1 (Consulta).
+    let tipo_agenda = '2';
+    let tipo_agenda_text = 'D';
+    $('#modal_reserva_hora_tipo_agenda').val('2');
 
-    var procedimiento = '';
-        var proc_bloque = '';
-        if($('#form_reseva_de_horas_id_procedimiento').length == 1)
-        {
-            procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
-            proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
-        }else{
-            proc_bloque = parseInt($('#reserva_hora_cantidad_bloques').text());
-        }
-
-    console.log(tipo_agenda);
-    console.log(tipo_agenda_text);
-
-    switch (tipo_agenda) {
-        case '1':
-            tipo_agenda_text = 'C';//CONSULTA
-            break;
-        case '2':
-            tipo_agenda_text = 'D';//DENTAL
-            break;
-        case '3':
-            tipo_agenda_text = 'T';//TELEMEDICINA
-            break;
-        case '4':
-            tipo_agenda_text = 'E';//EXAMEN
-            break;
-    }
-
-
-    $.ajax({
+$.ajax({
             url: url,
             type: "post",
             data: {
@@ -1317,10 +1303,15 @@ function agendar_hora() {
                 id_profesional: id_profesional,
                 id_asistente: id_asistente,
                 origen: origen,
-                tipo_hora_medica: tipo_agenda_text,
+                tipo_hora_medica: 'D',
+                tipo_agenda: 2,
+                origen_dental: 1,
                 procedimiento: procedimiento,
-                proc_bloque: proc_bloque,
-                descripcion: descripcion
+                proc_bloque: contextoDental.proc_bloque || proc_bloque,
+                descripcion: descripcion,
+                id_presupuesto: contextoDental.id_presupuesto,
+                tratamientos_presupuesto: contextoDental.tratamientos_presupuesto,
+                motivo_dental: contextoDental.motivo_dental
             }
         })
         .done(function(data) {

@@ -64,6 +64,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\OdontogramaPaciente;
+use App\Models\DiagnosticosDental;
+use App\Models\ExamenesBocaGeneral;
 
 use App\Models\PacienteControlGlicemia;
 use App\Models\PacienteControlPeso;
@@ -3591,6 +3593,30 @@ class EscritorioPaciente extends Controller
         $datos = array();
         $valido = 1;
 
+        /*
+         * Protección para reservas originadas desde una ficha odontológica.
+         *
+         * El modal tomar_hora_dental envía:
+         *   origen_dental = 1
+         *   tipo_agenda   = 2
+         *
+         * Aunque el navegador enviara por error tipo_hora_medica = C,
+         * el backend debe registrar la hora como Dental (D).
+         *
+         * Esta regla NO afecta el buscador/agendamiento médico general:
+         * sólo se aplica cuando el request identifica explícitamente
+         * un origen o agenda dental.
+         */
+        $esReservaDental =
+            $request->boolean('origen_dental')
+            || (string) $request->input('tipo_agenda') === '2';
+
+        if ($esReservaDental) {
+            $request->merge([
+                'tipo_hora_medica' => 'D',
+            ]);
+        }
+
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $profesional = Profesional::where('id', $request->id_profesional)->first();
         $lugar_atencion = LugarAtencion::where('id', $request->id_lugar_atencion)->first();
@@ -3693,7 +3719,84 @@ class EscritorioPaciente extends Controller
                 $tiempo_consulta = $totales;
             }
 
+            $idPresupuestoDental = null;
+            $tratamientosPresupuesto = [];
+
+            if ($esReservaDental && !empty($request->id_presupuesto)) {
+                $presupuestoDental = PresupuestosDental::whereKey($request->id_presupuesto)
+                    ->where('id_paciente', $paciente->id)
+                    ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->first();
+
+                if (!$presupuestoDental) {
+                    return json_encode(['estado' => 'error', 'msj' => 'El presupuesto seleccionado no está activo o no pertenece al paciente.']);
+                }
+
+                $seleccionados = collect($request->input('tratamientos_presupuesto', []));
+                if ($seleccionados->isEmpty()) {
+                    return json_encode(['estado' => 'error', 'msj' => 'Debe seleccionar al menos una pieza o prestación para esta atención.']);
+                }
+
+                $bloquesDentales = 0;
+                foreach ($seleccionados as $seleccion) {
+                    $tipo = $seleccion['tipo'] ?? null;
+                    $id = (int) ($seleccion['id'] ?? 0);
+
+                    if ($tipo === 'pieza') {
+                        $prestacion = OdontogramaPaciente::whereKey($id)
+                            ->where('id_presupuesto', $presupuestoDental->id)
+                            ->where('presupuesto', 1)
+                            ->where('urgencia', 0)
+                            ->where(function ($query) {
+                                $query->whereNull('atendido')->orWhere('atendido', 0);
+                            })
+                            ->first();
+                        $catalogo = $prestacion
+                            ? ((int) $profesional->id_tipo_especialidad === 16
+                                ? \App\Models\TratamientosImplantologia::where('descripcion', $prestacion->tratamiento)->first()
+                                : DiagnosticosDental::where('descripcion', $prestacion->tratamiento)->first())
+                            : null;
+                    } elseif ($tipo === 'grupo') {
+                        $prestacion = ExamenesBocaGeneral::whereKey($id)
+                            ->where('id_presupuesto', $presupuestoDental->id)
+                            ->where('id_paciente', $paciente->id)
+                            ->where('id_profesional', $profesional->id)
+                            ->where('presupuesto', 1)
+                            ->where(function ($query) {
+                                $query->whereNull('atendido')->orWhere('atendido', 0);
+                            })
+                            ->first();
+                        $catalogo = $prestacion
+                            ? ((int) $profesional->id_tipo_especialidad === 16
+                                ? DiagnosticosDental::where('descripcion', $prestacion->diagnostico_tratamiento)->first()
+                                : \App\Models\TratamientosImplantologia::where('descripcion', $prestacion->diagnostico_tratamiento)->first())
+                            : null;
+                    } else {
+                        $prestacion = null;
+                        $catalogo = null;
+                    }
+
+                    if (!$prestacion) {
+                        return json_encode(['estado' => 'error', 'msj' => 'Una de las prestaciones seleccionadas ya no está disponible.']);
+                    }
+
+                    $tratamientosPresupuesto[] = ['tipo' => $tipo, 'id' => $id];
+                    $bloquesDentales += max(1, (int) ($catalogo->cantidad_bloques ?? 1));
+                }
+
+                $idPresupuestoDental = $presupuestoDental->id;
+                $tiempo_consulta = max(1, $bloquesDentales) * 15;
+                $texto_alias_examen = 'Tratamiento Dental';
+            } elseif ($esReservaDental) {
+                $texto_alias_examen = $request->motivo_dental === 'urgencia'
+                    ? 'Urgencia Dental'
+                    : 'Primera Consulta Dental';
+            }
+
             $hora_medica = new HoraMedica();
+            $hora_medica->id_presupuesto = $idPresupuestoDental;
+            $hora_medica->tratamientos_presupuesto = $tratamientosPresupuesto ?: null;
 
             $hora_medica->id_paciente = $request->reserva_hora_id;
             $hora_medica->id_profesional = $profesional->id;
@@ -3704,7 +3807,9 @@ class EscritorioPaciente extends Controller
             $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
             $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
 
-            $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+            $hora_medica->tipo_hora_medica = $esReservaDental
+                ? 'D'
+                : $request->tipo_hora_medica;
             $hora_medica->alias_examen = $texto_alias_examen;
             $hora_medica->id_procedimiento = $request->id_procedimiento;
 
@@ -3723,7 +3828,7 @@ class EscritorioPaciente extends Controller
 
             if ($hora_medica->save())
             {
-                if($request->tipo_hora_medica == 'T')
+                if($hora_medica->tipo_hora_medica == 'T')
                 {
                     $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );
 					$hora_medica->video_llamada = $jitsi;

@@ -1,4 +1,5 @@
-<div id="tratamiento_maxilar_inferior" class="modal fade" tabindex="-1" role="dialog"
+@include('atencion_odontologica.modals.odontograma.grupo_dental_comun')
+<div id="tratamiento_maxilar_inferior" class="modal fade modal-grupo-dental" tabindex="-1" role="dialog"
     aria-labelledby="tratamiento_maxilar_inferior" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -8,7 +9,8 @@
             </div>
             <div class="modal-body">
                 <form id="form_diagnostico_tratamiento_inferior">
-                    <div class="row">
+                    <div class="grupo-dental-ayuda"><i class="feather icon-info"></i><span>Registre el diagnóstico y tratamiento del grupo. Al guardar se incorporará inmediatamente al plan y al presupuesto clínico.</span></div>
+                    <div class="row grupo-dental-formulario">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Fecha</label>
@@ -42,16 +44,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="guardarDiagnosticoTratamientoInferior()">
-                                    <i class="fa fa-plus"></i> Agregar Diagnóstico/Tratamiento
+                                <button type="button" class="btn btn-success btn-sm btn-block grupo-dental-guardar" onclick="guardarDiagnosticoTratamientoInferior()">
+                                    <i class="feather icon-save"></i> Guardar y agregar al presupuesto
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-4 text-center">
+                        <div class="col-md-4 text-center grupo-dental-imagen">
                             <img src="{{ asset('img_dental/boca_inf.png') }}" class="img-fluid">
                         </div>
                     </div>
-                    <hr>
+                    <div class="grupo-dental-listado-titulo"><strong>Prestaciones registradas</strong><small class="text-muted">Historial del maxilar inferior</small></div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-xs">
                             <thead>
@@ -94,8 +96,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-info" onclick="guardarTodoInferior()">Guardar</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -1469,6 +1470,8 @@
             tipo_examen,
             localizacion_examen,
             especialidad_examen: 'tratamiento',
+            id_presupuesto: $('#id_presupuesto').val(),
+            agregar_presupuesto: 1,
             _token: CSRF_TOKEN // Asegúrate de tener definida esta variable
         };
 
@@ -1478,7 +1481,7 @@
             data: data,
             success: function (response) {
                 console.log(response);
-                cargar_a_presupuesto(response.examen.id,'gral');
+                window.notificarGrupoDentalGuardado(response, localizacion_examen);
                 let diagnosticos = response.todos;
                 let table = $('#table_tto_boca_gral').DataTable();
                     // Limpiar la tabla completamente
@@ -1606,7 +1609,7 @@
 
                 // Limpia el formulario
                 $('#form_diagnostico_tratamiento')[0].reset();
-                $('#diagnostico_combo').val('0');
+                $('#diagnostico_combo_inf').val('0');
             },
             error: function (xhr) {
                 console.error(xhr.responseText);

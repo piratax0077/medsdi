@@ -4023,7 +4023,9 @@
 
 
 
-                            //Recorrer el array de insumos y agregarlos a la tabla
+                            // Recorrer todos los insumos devueltos por el endpoint.
+                            // Esta tabla permite cargar/quitar insumos del presupuesto, por eso
+                            // no debe usar la colección filtrada insumosPresupuestoActual.
                             insumos.forEach(insumo => {
                                 let total = insumo.cantidad * insumo.valor;
                                 // Botones de acción
@@ -4295,9 +4297,9 @@
                                     `${insumo.insumos} ${insumo.nombre_marca}`,
                                     insumo.observaciones,
                                     insumo.cantidad, // Nombre del insumo
-                                    formatoMoneda(insumo.valor), // Cantidad utilizada
-                                    0, // Unidad de medida
-                                    formatoMoneda(total),
+                                    formatoMoneda(total), // Sub-total real
+                                    formatoMoneda(Number(insumo.valor_descuento || 0)), // Descuento
+                                    formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null ? Number(insumo.nuevo_valor) : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
                                     ''
 
@@ -7723,10 +7725,15 @@ function mostrar_pieza_dental_examen(count){
                 } else {
                     $('#reserva_sexo').text('Femenino');
                 }
-                $('#reserva_convenio').html(data.registro.prevision.nombre);
-                $('#reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
-                $('#reserva_hora_email').html(data.registro.email);
-                $('#reserva_hora_telefono').html(data.registro.telefono_uno);
+                const previsionReserva = data.registro.prevision;
+                const direccionReserva = data.registro.direccion;
+                const ciudadReserva = direccionReserva && direccionReserva.ciudad;
+                $('#reserva_convenio').text(previsionReserva ? (previsionReserva.nombre || 'No informado') : 'No informado');
+                $('#reserva_direccion').text(direccionReserva
+                    ? [direccionReserva.direccion, direccionReserva.numero_dir, ciudadReserva && ciudadReserva.nombre].filter(Boolean).join(' ')
+                    : 'No informada');
+                $('#reserva_hora_email').text(data.registro.email || 'No informado');
+                $('#reserva_hora_telefono').text(data.registro.telefono_uno || 'No informado');
 
 
 
@@ -7759,6 +7766,9 @@ function mostrar_pieza_dental_examen(count){
         let id_lugar_atencion = $('#reserva_hora_id_lugar_atencion').val();
         let id_asistente = $('#reserva_hora_id_asistente').val();
         let origen = $('#reserva_hora_origen').val();
+        const contextoDental = typeof window.obtenerDatosAgendamientoControlDental === 'function'
+            ? window.obtenerDatosAgendamientoControlDental()
+            : { id_presupuesto: '', tratamientos_presupuesto: [], proc_bloque: 1, motivo_dental: 'primera' };
 
         let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
         var tipo_agenda_text = 'C';
@@ -7792,7 +7802,14 @@ function mostrar_pieza_dental_examen(count){
                 id_profesional: id_profesional,
                 id_asistente: id_asistente,
                 origen: origen,
-                tipo_hora_medica: tipo_agenda_text,
+                tipo_hora_medica: 'D',
+                tipo_agenda: 2,
+                origen_dental: 1,
+                procedimiento: '',
+                proc_bloque: contextoDental.proc_bloque,
+                id_presupuesto: contextoDental.id_presupuesto,
+                tratamientos_presupuesto: contextoDental.tratamientos_presupuesto,
+                motivo_dental: contextoDental.motivo_dental,
             }
         })
         .done(function(data) {
@@ -10249,7 +10266,14 @@ function ocultar_pieza_impl(counter){
     $('#contenedor_pieza_tto_impl'+counter).empty();
 }
 
+    window.actualizandoPresupuestoDental = window.actualizandoPresupuestoDental || false;
+
     function actualizar_presupuesto(){
+        if (window.actualizandoPresupuestoDental) {
+            return;
+        }
+        window.actualizandoPresupuestoDental = true;
+
             // Obtener valores del formulario
 
             const id_dcto = $('#tiene_dcto').val();
@@ -10271,10 +10295,8 @@ function ocultar_pieza_impl(counter){
                 success: function(response){
                     console.log('Éxito:', response);
                     if (response.estado == 1) {
-                        let tiene_dcto = $('#tiene_dcto').val();
-                        if(tiene_dcto != 0){
-                            confirmar_aplicar_convenio_tratamiento(tiene_dcto);
-                        }else{
+                        // El descuento persistido sólo se renderiza; no se reaplica desde un refresco.
+
                             let pagos = response.pagos;
                             let table = $('#table_pagos_presupuesto').DataTable();
                             let presupuesto = response.presupuesto;
@@ -10323,9 +10345,11 @@ function ocultar_pieza_impl(counter){
                                     let rowNode = table_piezas_odontograma.row.add([
                                         odonto.descripcion,
                                         odonto.pieza,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        formatoMoneda(Number(odonto.valor || 0)),
+                                        formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                        formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null
+                                            ? Number(odonto.nuevo_valor)
+                                            : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                         '<div class="circle ' + clase + '"></div>',
                                         estado, // Columna vacía
 
@@ -10336,7 +10360,13 @@ function ocultar_pieza_impl(counter){
                                 }
                             });
 
-                            let insumos = response.insumos;
+                            let insumos = response.insumos || [];
+                            const idPresupuestoActual = Number(presupuesto.id || $('#id_presupuesto').val() || 0);
+                            const insumosPresupuestoActual = insumos.filter(function (insumo) {
+                                return Number(insumo.presupuesto) === 1
+                                    && Number(insumo.urgencia || 0) === 0
+                                    && (!idPresupuestoActual || Number(insumo.id_presupuesto || 0) === idPresupuestoActual);
+                            });
                             console.log(insumos);
                             let table_insumos = $('#table_insumos_preimplante').DataTable();
 
@@ -10344,7 +10374,7 @@ function ocultar_pieza_impl(counter){
                             table_insumos.clear();
 
                             //Recorrer el array de insumos y agregarlos a la tabla
-                            insumos.forEach(insumo => {
+                            insumosPresupuestoActual.forEach(insumo => {
                                 let total = insumo.cantidad * insumo.valor;
                                 if(insumo.presupuesto == 0 || insumo.presupuesto == null){
                                             // Botones de acción
@@ -10388,7 +10418,7 @@ function ocultar_pieza_impl(counter){
                                 if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                                     if (insumo.estado_pago == 'ok') {
                                         var clase = 'bg-success';
-                                    } else if (insumo.estado_pago == 'intermedio') {
+                                    } else if (insumo.estado_pago == 'incompleto') {
                                         var clase = 'bg-warning';
                                     } else {
                                         var clase = 'bg-danger';
@@ -10397,9 +10427,11 @@ function ocultar_pieza_impl(counter){
                                         insumo.insumos + ' ' + insumo.nombre_marca,
                                         insumo.observaciones,
                                         insumo.cantidad, // Nombre del insumo
-                                        formatoMoneda(insumo.valor), // Cantidad utilizada
-                                        0, // Unidad de medida
                                         formatoMoneda(total),
+                                        formatoMoneda(Number(insumo.valor_descuento || 0)),
+                                        formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null
+                                            ? Number(insumo.nuevo_valor)
+                                            : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                         ' <div class="circle ' + clase + '"></div>',
 
                                     ]).draw(false).node();
@@ -10410,6 +10442,10 @@ function ocultar_pieza_impl(counter){
 
                             });
                             table_insumos_pagos.draw();
+                            const valoresBrutos = response.valores || [0, 0, 0, 0];
+                            $('#valores_examenes_presupuesto, #valores_examenes_presupuesto_conf').html(formatoMoneda(Number(valoresBrutos[0] || 0)));
+                            $('#valores_piezas_presupuesto, #valores_piezas_presupuesto_conf').html(formatoMoneda(Number(valoresBrutos[1] || 0)));
+                            $('#valores_insumos_presupuesto, #valores_insumos_presupuesto_conf').html(formatoMoneda(Number(valoresBrutos[2] || 0)));
                             $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
                             $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(response.suma_pagado)));
                             $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response
@@ -10421,52 +10457,77 @@ function ocultar_pieza_impl(counter){
                             $('#valores_total_final_presupuesto').html(formatoMoneda(parseInt(response.suma_adeudado)));
                             $('#valores_total_final_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_adeudado)));
                             $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
-                            $('#subtotal_presup').val(formatoMoneda(response.suma_adeudado));
+                            $('#subtotal_presup').val(formatoMoneda(response.suma_presupuesto));
+                            $('#descuento_presup').val(formatoMoneda(Number(response.descuentos || 0)));
                             $('#subtotal_lab').val(formatoMoneda(response.total_lab));
-                            $('#descuento_lab').val(0);
-                            let total = parseInt(response.suma_presupuesto) +  parseInt(response.total_lab);
-                            $('#total_presupuesto').val(formatoMoneda(total));
-                            $('#total_presupuesto_dental').val(total);
-                            let todos = response.todos;
+                            $('#descuento_lab').val(formatoMoneda(
+                                (response.trabajos_lab || []).concat(response.trabajos_mayor || [])
+                                    .reduce((suma, trabajo) => suma + Number(trabajo.valor_descuento || 0), 0)
+                            ));
+                            const totalNeto = Number(response.suma_adeudado || 0);
+                            $('#total_presup').val(formatoMoneda(totalNeto));
+                            $('#total_presupuesto').val(formatoMoneda(totalNeto));
+                            $('#total_presupuesto_dental').val(totalNeto);
+                            $('#valores_descuentos_presupuesto, #valores_descuentos_presupuesto_conf').html(formatoMoneda(Number(response.descuentos || 0)));
+                            const todos = Array.isArray(response.todos) ? response.todos : [];
+                            const idPresupuestoActualGrupos = Number($('#id_presupuesto').val() || 0);
+                            const porcentajeConvenioGrupos = Math.max(0, Number(response.porcentaje_descuento || 0));
 
                             let table_ = $('#presup_estado_pago_gral').DataTable();
 
-                            // Limpiar la tabla antes de agregar nuevas filas
-                            table_.clear().draw();
+                            // Periodoncia no debe sobrescribir el render compartido con valores
+                            // históricos/incompletos. Los grupos no tienen columna `urgencia`, por
+                            // lo que se filtran sólo por presupuesto e id_presupuesto.
+                            table_.clear();
 
-                            // Recorrer el odontograma y agregar nuevas filas
                             todos.forEach(function(odonto) {
-
-                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
-                                    if (odonto.estado_pago == 'ok') {
-                                        var clase = 'bg-success';
-                                    } else if (odonto.estado_pago == 'incompleto') {
-                                        var clase = 'bg-warning';
-                                    } else {
-                                        var clase = 'bg-danger';
-                                    }
-                                    if (odonto.atendido == 0) {
-                                        var estado = 'PENDIENTE';
-                                    } else {
-                                        var estado = 'TERMINADO';
-                                    }
-                                    // Agregar una nueva fila a la tabla
-                                    let rowNode = table_.row.add([
-                                        odonto.localizacion,
-                                        odonto.diagnostico_tratamiento,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(odonto.valor),
-                                        ' <div class="circle ' + clase + '"></div>',
-                                        estado
-                                    ]).draw(false).node();
-
-                                    // Agregar clases a la fila
-                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                if (Number(odonto.presupuesto) !== 1) {
+                                    return;
+                                }
+                                if (idPresupuestoActualGrupos && Number(odonto.id_presupuesto || 0) !== idPresupuestoActualGrupos) {
+                                    return;
                                 }
 
+                                let clase = 'bg-danger';
+                                if (odonto.estado_pago === 'ok') {
+                                    clase = 'bg-success';
+                                } else if (odonto.estado_pago === 'incompleto' || odonto.estado_pago === 'intermedio') {
+                                    clase = 'bg-warning';
+                                }
+
+                                const estado = Number(odonto.atendido || 0) === 0 ? 'PENDIENTE' : 'TERMINADO';
+                                const valorBruto = Math.max(0, Number(odonto.valor || 0));
+
+                                // Fuente principal: montos enviados por DentalController.
+                                // Respaldo: si una respuesta legacy trae descuento=0 pero el
+                                // presupuesto tiene convenio, recalcular sólo para la vista.
+                                let valorDescuento = Math.max(0, Number(odonto.valor_descuento || 0));
+                                let valorNeto = (odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null)
+                                    ? Math.max(0, Number(odonto.nuevo_valor || 0))
+                                    : Math.max(0, valorBruto - valorDescuento);
+
+                                if (porcentajeConvenioGrupos > 0 && valorBruto > 0 && valorDescuento <= 0) {
+                                    valorDescuento = Math.round(valorBruto * (porcentajeConvenioGrupos / 100));
+                                    valorNeto = Math.max(0, valorBruto - valorDescuento);
+                                }
+
+                                const rowNode = table_.row.add([
+                                    odonto.diagnostico_tratamiento || odonto.descripcion || '',
+                                    odonto.localizacion || '',
+                                    formatoMoneda(valorBruto),
+                                    formatoMoneda(valorDescuento),
+                                    formatoMoneda(valorNeto),
+                                    '<div class="circle ' + clase + '"></div>',
+                                    estado
+                                ]).node();
+
+                                $(rowNode).addClass('text-center align-middle status-circle');
                             });
-                        }
+
+                            // Un solo draw al final evita el parpadeo y que otro draw intermedio
+                            // deje temporalmente la tabla en cero.
+                            table_.draw(false);
+
 
                     } else {
                         console.log('Error:', response.mensaje);
@@ -10474,6 +10535,12 @@ function ocultar_pieza_impl(counter){
                 },
                 error: function(error){
                     console.log(error);
+                },
+                complete: function(){
+                    window.actualizandoPresupuestoDental = false;
+                    // No volver a normalizar aquí: presupuesto.blade y este success ya
+                    // dejaron las tablas con los montos autoritativos de la respuesta.
+                    // La normalización diferida era capaz de volver a sobrescribir grupos.
                 }
             })
         }

@@ -1,50 +1,238 @@
 @php
     use Illuminate\Support\Str;
 
-    // Crear un array para almacenar el estado final de cada pieza
+    /**
+     * Normaliza textos clínicos para que las comparaciones funcionen igual
+     * con mayúsculas, minúsculas y acentos.
+     */
+    $normalizarTextoOdontograma = static function ($valor) {
+        return Str::lower(Str::ascii(trim((string) $valor)));
+    };
+
+    /**
+     * Resuelve UNA condición visual desde un registro del historial.
+     *
+     * Se usa diagnostico + tratamiento porque el historial de MedSDI devuelve:
+     * - diagnostico: descripción de tratamientos_dental
+     * - tratamiento/descripcion: prestación registrada en odontogramas_pacientes
+     *
+     * Si el registro no representa una condición gráfica conocida devuelve null
+     * y se conserva el último estado clínico válido de la pieza.
+     */
+    $resolverEstadoVisualOdontograma = static function ($registro) use ($normalizarTextoOdontograma) {
+        $estadoRegistro = (int) data_get($registro, 'estado', 0);
+
+        // Un tratamiento cancelado no debe modificar la imagen clínica vigente.
+        if ($estadoRegistro === 3) {
+            return null;
+        }
+
+        $tratamiento = $normalizarTextoOdontograma(
+            data_get($registro, 'tratamiento', data_get($registro, 'descripcion', ''))
+        );
+        $diagnostico = $normalizarTextoOdontograma(
+            data_get($registro, 'diagnostico', data_get($registro, 'diagnostico_descripcion', ''))
+        );
+
+        $texto = trim($diagnostico . ' ' . $tratamiento);
+
+        // Estados específicos primero para no confundirlos con términos genéricos.
+        if (Str::contains($texto, ['implante', 'implantologia'])) {
+            // Conserva el comportamiento histórico de MedSDI:
+            // implante pendiente (estado 0) se representa como pieza ausente.
+            return $estadoRegistro === 0 ? 'ausente' : 'implante';
+        }
+
+        if (Str::contains($texto, ['pulpectomia'])) {
+            return 'pulpectomia';
+        }
+
+        if (Str::contains($texto, ['pulpotomia'])) {
+            return 'pulpotomia';
+        }
+
+        if (Str::contains($texto, [
+            'endodoncia',
+            'tratamiento de conducto',
+            'tratamiento conducto',
+            'conducto radicular',
+        ])) {
+            return 'endodoncia';
+        }
+
+        if (Str::contains($texto, [
+            'corona en mal estado',
+            'corona mal estado',
+            'corona defectuosa',
+        ])) {
+            return 'corona_mal_estado';
+        }
+
+        if (Str::contains($texto, ['corona provisoria', 'corona provisional'])) {
+            return 'corona_provisoria';
+        }
+
+        if (Str::contains($texto, ['perno munon', 'perno muñon', 'perno y munon', 'perno y muñon'])) {
+            return 'perno_munon';
+        }
+
+        if (Str::contains($texto, ['resto radicular', 'residuo radicular', 'remanente radicular'])) {
+            return 'residuo_radicular';
+        }
+
+        if (Str::contains($texto, ['protesis removible', 'prótesis removible'])) {
+            return 'protesis_removible';
+        }
+
+        if (Str::contains($texto, ['ribbond'])) {
+            return 'ribbond';
+        }
+
+        if (Str::contains($texto, ['extraccion', 'exodoncia'])) {
+            return 'extraccion';
+        }
+
+        if (Str::contains($texto, ['impactado', 'incluido'])) {
+            return 'impactado';
+        }
+
+        if (Str::contains($texto, ['fractura', 'fracturado'])) {
+            return 'fractura';
+        }
+
+        if (Str::contains($texto, ['movilidad'])) {
+            return 'movilidad';
+        }
+
+        if (Str::contains($texto, ['abfraccion'])) {
+            return 'abfraccion';
+        }
+
+        if (Str::contains($texto, ['abrasion'])) {
+            return 'abrasion';
+        }
+
+        if (Str::contains($texto, ['atricion'])) {
+            return 'atricion';
+        }
+
+        if (Str::contains($texto, ['erosion'])) {
+            return 'erosion';
+        }
+
+        if (Str::contains($texto, ['obturacion'])) {
+            return 'obturacion';
+        }
+
+        if (Str::contains($texto, ['ortodoncia', 'ortodontico', 'ortodontica'])) {
+            return 'ortodoncia';
+        }
+
+        if (Str::contains($texto, ['sellante', 'sellado de fosas', 'sellado fosas'])) {
+            return 'sellante';
+        }
+
+        if (Str::contains($texto, ['surco'])) {
+            return 'surco';
+        }
+
+        if (Str::contains($texto, ['fluor', 'fluoracion', 'fluoruracion'])) {
+            return 'fluor';
+        }
+
+        if (Str::contains($texto, ['corona'])) {
+            return 'corona';
+        }
+
+        if (Str::contains($texto, ['carie'])) {
+            return 'carie';
+        }
+
+        if (Str::contains($texto, ['diente ausente', 'pieza ausente', 'ausencia dentaria'])) {
+            return 'ausente';
+        }
+
+        if (Str::contains($texto, ['diente sano', 'pieza sana'])) {
+            return 'normal';
+        }
+
+        if (Str::contains($texto, ['otro tratamiento', 'otro tto'])) {
+            return 'otro_tto';
+        }
+
+        return null;
+    };
+
+    /**
+     * Devuelve la imagen correcta para una pieza adulta y su estado clínico.
+     * Las rutas siguen exactamente la estructura existente en
+     * public/images/dental/dientes.
+     */
+    $imagenEstadoOdontograma = static function ($estado, $codigo) {
+        $rutas = [
+            'carie'               => "images/dental/dientes/carie/carie{$codigo}.png",
+            'ausente'             => "images/dental/dientes/diente-ausente/dau{$codigo}.png",
+            'extraccion'          => "images/dental/dientes/extraccion/porhacer/extraccion_{$codigo}.png",
+            'fractura'            => "images/dental/dientes/fractura/fractura_{$codigo}.png",
+            'impactado'           => "images/dental/dientes/impactado/impactado_{$codigo}.png",
+            'endodoncia'          => "images/dental/dientes/endodoncia/endo{$codigo}.png",
+            'pulpotomia'          => "images/dental/dientes/pulpotomia/pulpotomia{$codigo}.png",
+            'pulpectomia'         => "images/dental/dientes/pulpectomia/pulpectomia_{$codigo}.png",
+            'implante'            => "images/dental/dientes/implante/impl{$codigo}.png",
+            'movilidad'           => "images/dental/dientes/movilidad/movilidad_{$codigo}.png",
+            'perno_munon'         => "images/dental/dientes/perno-munon/hecho/perno_munon_{$codigo}.png",
+            'corona'              => "images/dental/dientes/corona/hecho/corona_{$codigo}.png",
+            'corona_provisoria'   => "images/dental/dientes/corona-provisoria/hecho/cp_hecho_{$codigo}.png",
+            'corona_mal_estado'   => "images/dental/dientes/corona_mal_estado/c_malestado{$codigo}.png",
+            'protesis_removible'  => "images/dental/dientes/protesis-removible/p_removible{$codigo}.png",
+            'residuo_radicular'   => "images/dental/dientes/residuo-radicular/hecho/rr_{$codigo}.png",
+            'ribbond'             => "images/dental/dientes/ribbond/hecho/ribbond_{$codigo}.png",
+            'sellante'            => "images/dental/dientes/sellante/sellante_{$codigo}.png",
+            'surco'               => "images/dental/dientes/surco/surco_{$codigo}.png",
+            'atricion'            => "images/dental/dientes/atricion/atricion{$codigo}.png",
+            'abrasion'            => "images/dental/dientes/abrasion/abrasion{$codigo}.png",
+            'abfraccion'          => "images/dental/dientes/abfraccion/abfraccion{$codigo}.png",
+            'erosion'             => "images/dental/dientes/erosion/erosion{$codigo}.png",
+            'obturacion'          => "images/dental/dientes/obturacion/obturacion{$codigo}.png",
+            'ortodoncia'          => "images/dental/dientes/ortodoncia/ortodoncia{$codigo}.png",
+            'fluor'               => "images/dental/dientes/fluor/fluor{$codigo}.png",
+            'otro_tto'            => "images/dental/dientes/otro-tto/otro-tto{$codigo}.png",
+        ];
+
+        return $rutas[$estado] ?? "images/dental/dientes/d{$codigo}.png";
+    };
+
+    // El odontograma representa el historial completo del paciente.
+    // La última condición clínica reconocida de cada pieza es la que se dibuja.
     $piezasEstado = [];
-    if(isset($odontograma_historial)){
-        // Agrupar por pieza
+
+    if (isset($odontograma_historial)) {
         $historialPorPieza = [];
-        foreach ($odontograma_historial as $pieza) {
-            $codigoPieza = trim((string) data_get($pieza, 'pieza', ''));
+
+        foreach ($odontograma_historial as $registro) {
+            if ((int) data_get($registro, 'urgencia', 0) === 1) {
+                continue;
+            }
+
+            $codigoPieza = trim((string) data_get($registro, 'pieza', ''));
             if ($codigoPieza === '') {
                 continue;
             }
-            $historialPorPieza[$codigoPieza][] = $pieza;
+
+            $historialPorPieza[$codigoPieza][] = $registro;
         }
 
         foreach ($historialPorPieza as $codigoPieza => $historial) {
             $estadoFinal = 'normal';
-            foreach ($historial as $pieza) {
-                $tratamiento = (string) data_get($pieza, 'tratamiento', data_get($pieza, 'descripcion', ''));
-                $diagnostico = (string) data_get($pieza, 'diagnostico', '');
-                $estado = data_get($pieza, 'estado', '');
-                $tratamientoNormalizado = Str::lower(Str::ascii(trim($tratamiento)));
-                $diagnosticoNormalizado = Str::lower(Str::ascii(trim($diagnostico)));
 
-                // Acepta Carie, CARIES y cualquier variación de mayúsculas o acentos.
-                if (Str::contains($diagnosticoNormalizado, 'carie')) {
-                    $estadoFinal = 'carie';
-                }
-                // Prioridad: si hay algún implante con estado 0, es ausente
-                if (Str::contains($tratamientoNormalizado, 'implante')) {
-                    if ($estado == '0') {
-                        $estadoFinal = 'ausente';
-                        // Un registro posterior finalizado debe poder reemplazar
-                        // el estado pendiente/ausente del mismo implante.
-                    } else {
-                        $estadoFinal = 'implante';
-                    }
-                }
+            foreach ($historial as $registro) {
+                $nuevoEstado = $resolverEstadoVisualOdontograma($registro);
 
-                // endodoncia
-                if (Str::contains($tratamientoNormalizado, 'endodoncia') ||
-                    Str::contains($tratamientoNormalizado, 'pulpotomia') ||
-                    Str::contains($tratamientoNormalizado, 'pulpectomia')) {
-                    $estadoFinal = 'endodoncia';
+                if ($nuevoEstado !== null) {
+                    $estadoFinal = $nuevoEstado;
                 }
             }
+
             $piezasEstado[$codigoPieza] = $estadoFinal;
         }
     }
@@ -67,31 +255,17 @@
                             $codigoPiezaImagen = '1' . ($i % 10); // Para las imágenes
                             $estadoPieza = $piezasEstado[$codigoPieza] ?? 'normal';
 
-                            // Determinar la imagen según el estado
-                            switch ($estadoPieza) {
-                                case 'carie':
-                                    $imagen = "images/dental/dientes/carie/carie{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'ausente':
-                                    $imagen = "images/dental/dientes/diente-ausente/dau{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'implante':
-                                    $imagen = "images/dental/dientes/implante/impl{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'endodoncia':
-                                    $imagen = "images/dental/dientes/endodoncia/endo{$codigoPiezaImagen}.png";
-                                    break;
-                                default:
-                                    $imagen = "images/dental/dientes/d{$codigoPiezaImagen}.png";
-                                    break;
-                            }
+                            // Imagen centralizada según la simbología clínica
+                            $imagen = $imagenEstadoOdontograma($estadoPieza, $codigoPiezaImagen);
                         @endphp
 
                         <div class="text-center mx-1">
 
                             <div class="diente_adulto" id="t{{ $codigoPieza }}">
                                 <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
-                                    onclick="info_odontograma('{{ $codigoPieza }}');">
+                                    onclick="info_odontograma('{{ $codigoPieza }}');"
+                                    data-estado-clinico="{{ $estadoPieza }}"
+                                    title="Pieza {{ $codigoPieza }} · {{ str_replace('_', ' ', ucfirst($estadoPieza)) }}">
                             </div>
                             <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2 font-weight-bold">{{ $codigoPieza }}</label>
                         </div>
@@ -103,31 +277,17 @@
                             $codigoPiezaImagen = '2' . ($i % 10); // Para las imágenes
                             $estadoPieza = $piezasEstado[$codigoPieza] ?? 'normal';
 
-                            // Determinar la imagen según el estado
-                            switch ($estadoPieza) {
-                                case 'carie':
-                                    $imagen = "images/dental/dientes/carie/carie{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'ausente':
-                                    $imagen = "images/dental/dientes/diente-ausente/dau{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'implante':
-                                    $imagen = "images/dental/dientes/implante/impl{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'endodoncia':
-                                    $imagen = "images/dental/dientes/endodoncia/endo{$codigoPiezaImagen}.png";
-                                    break;
-                                default:
-                                    $imagen = "images/dental/dientes/d{$codigoPiezaImagen}.png";
-                                    break;
-                            }
+                            // Imagen centralizada según la simbología clínica
+                            $imagen = $imagenEstadoOdontograma($estadoPieza, $codigoPiezaImagen);
                         @endphp
 
                         <div class="text-center mx-1">
 
                             <div class="diente_adulto" id="t{{ $codigoPieza }}">
                                 <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
-                                    onclick="info_odontograma('{{ $codigoPieza }}');">
+                                    onclick="info_odontograma('{{ $codigoPieza }}');"
+                                    data-estado-clinico="{{ $estadoPieza }}"
+                                    title="Pieza {{ $codigoPieza }} · {{ str_replace('_', ' ', ucfirst($estadoPieza)) }}">
                             </div>
                             <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2 font-weight-bold">{{ $codigoPieza }}</label>
                         </div>
@@ -141,31 +301,17 @@
                             $codigoPiezaImagen = '4' . ($i % 10); // Para las imágenes
                             $estadoPieza = $piezasEstado[$codigoPieza] ?? 'normal'; // Estado preprocesado en PHP principal
 
-                            // Determinar la imagen según el estado
-                            switch ($estadoPieza) {
-                                case 'carie':
-                                    $imagen = "images/dental/dientes/carie/carie{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'ausente':
-                                    $imagen = "images/dental/dientes/diente-ausente/dau{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'implante':
-                                    $imagen = "images/dental/dientes/implante/impl{$codigoPiezaImagen}.png";
-                                    break;
-                                case 'endodoncia':
-                                    $imagen = "images/dental/dientes/endodoncia/endo{$codigoPiezaImagen}.png";
-                                    break;
-                                default:
-                                    $imagen = "images/dental/dientes/d{$codigoPiezaImagen}.png";
-                                    break;
-                            }
+                            // Imagen centralizada según la simbología clínica
+                            $imagen = $imagenEstadoOdontograma($estadoPieza, $codigoPiezaImagen);
                         @endphp
 
                         <div class="text-center mx-1">
                             <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2 font-weight-bold">{{ $codigoPieza }}</label>
                             <div class="diente_adulto" id="t{{ $codigoPieza }}">
                                 <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
-                                    onclick="info_odontograma('{{ $codigoPieza }}');">
+                                    onclick="info_odontograma('{{ $codigoPieza }}');"
+                                    data-estado-clinico="{{ $estadoPieza }}"
+                                    title="Pieza {{ $codigoPieza }} · {{ str_replace('_', ' ', ucfirst($estadoPieza)) }}">
                             </div>
 
                         </div>
@@ -176,31 +322,17 @@
                         $codigoPiezaImagen = '3' . ($i % 10); // Para las imágenes
                         $estadoPieza = $piezasEstado[$codigoPieza] ?? 'normal'; // Estado preprocesado en PHP principal
 
-                        // Determinar la imagen según el estado
-                        switch ($estadoPieza) {
-                            case 'carie':
-                                $imagen = "images/dental/dientes/carie/carie{$codigoPiezaImagen}.png";
-                                break;
-                            case 'ausente':
-                                $imagen = "images/dental/dientes/diente-ausente/dau{$codigoPiezaImagen}.png";
-                                break;
-                            case 'implante':
-                                $imagen = "images/dental/dientes/implante/impl{$codigoPiezaImagen}.png";
-                                break;
-                            case 'endodoncia':
-                                $imagen = "images/dental/dientes/endodoncia/endo{$codigoPiezaImagen}.png";
-                                break;  
-                            default:
-                                $imagen = "images/dental/dientes/d{$codigoPiezaImagen}.png";
-                                break;
-                        }
+                        // Imagen centralizada según la simbología clínica
+                        $imagen = $imagenEstadoOdontograma($estadoPieza, $codigoPiezaImagen);
                     @endphp
 
                     <div class="text-center mx-1">
                         <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent font-weight-bold mt-2">{{ $codigoPieza }}</label>
                         <div class="diente_adulto" id="t{{ $codigoPieza }}">
                             <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
-                                onclick="info_odontograma('{{ $codigoPieza }}');">
+                                onclick="info_odontograma('{{ $codigoPieza }}');"
+                                    data-estado-clinico="{{ $estadoPieza }}"
+                                    title="Pieza {{ $codigoPieza }} · {{ str_replace('_', ' ', ucfirst($estadoPieza)) }}">
                         </div>
                     </div>
                 @endforeach

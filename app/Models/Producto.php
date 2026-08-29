@@ -89,4 +89,16 @@ class Producto extends Model
     {
         return $query->where('id_tipo_producto', $tipo);
     }
+
+    public function scopeArea($query, $area)
+    {
+        return $query->whereHas('tipoProducto', function ($q) use ($area) {
+            $q->where('area', $area);
+        });
+    }
+
+    public function scopeOdontologia($query)
+    {
+        return $query->area('odontologia');
+    }
 }

@@ -150,19 +150,19 @@
 @endsection
 @section('js_inferior')
 <script>
-            
-        
+
+
      $(document).ready(function () {
-            
+
             $('#tabla_antecedentes_paciente').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
         });
-        
 
-    
+
+
 
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
@@ -866,7 +866,7 @@
         });
     }
 
-    function sacar_de_presupuesto(id, tipo = null){
+    window.sacar_de_presupuesto = function(id, tipo = null){
         let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
         let data = {
             id: id,

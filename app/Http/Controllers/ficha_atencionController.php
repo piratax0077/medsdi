@@ -2564,16 +2564,13 @@ class ficha_atencionController extends Controller
         $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
 
         /*
-         * Resolver el presupuesto dental que debe continuar en esta atención.
+         * Resolver el presupuesto dental que corresponde a ESTA atención.
          *
-         * Una nueva hora puede crear una ficha de atención distinta, pero un
-         * presupuesto odontológico puede abarcar varias citas. Por eso no debemos
-         * limitar la búsqueda a la ficha nueva.
-         *
-         * Prioridad:
-         * 1) presupuesto asociado explícitamente a la hora;
-         * 2) presupuesto activo de la ficha actual;
-         * 3) último presupuesto activo/no pagado del mismo paciente y profesional.
+         * Regla:
+         * 1) si la hora fue agendada con id_presupuesto, continuar ese presupuesto;
+         * 2) si durante esta misma ficha ya se creó un presupuesto, reutilizarlo;
+         * 3) si no existe ninguno de los anteriores, NO heredar automáticamente
+         *    presupuestos de atenciones anteriores del paciente.
          */
         $presupuesto_dental = null;
 
@@ -2607,17 +2604,10 @@ class ficha_atencionController extends Controller
                 ->first();
         }
 
-        if (!$presupuesto_dental) {
-            /*
-             * Un presupuesto completamente pagado puede seguir clínicamente
-             * pendiente. El pago no debe ocultarlo al abrir una nueva atención.
-             */
-            $presupuesto_dental = PresupuestosDental::where('id_paciente', $paciente->id)
-                ->where('id_profesional', $profesional->id)
-                ->where('estado', 1)
-                ->orderByDesc('id')
-                ->first();
-        }
+        /*
+         * IMPORTANTE: no hacemos un fallback al último presupuesto del paciente.
+         * Una hora sin id_presupuesto debe abrir una atención limpia.
+         */
 
         $id_presupuesto_plan = $presupuesto_dental ? (int) $presupuesto_dental->id : 0;
 
@@ -2661,6 +2651,24 @@ class ficha_atencionController extends Controller
         $todos = $this->dameTratamientosBocaGeneral(
             $id_ficha_plan
         );
+
+        // Los grupos deben pertenecer al mismo presupuesto clínico que se está continuando.
+        // Esto evita mezclar grupos de presupuestos anteriores de la misma ficha y garantiza
+        // que Maxilar superior/inferior se mantengan visibles al recargar la atención.
+        if ($id_presupuesto_plan > 0) {
+            $todos = $todos
+                ->filter(function ($tratamiento) use ($id_presupuesto_plan) {
+                    return (int) ($tratamiento->id_presupuesto ?? 0) === (int) $id_presupuesto_plan
+                        && (int) ($tratamiento->presupuesto ?? 0) === 1;
+                })
+                ->values();
+        } else {
+            $todos = $todos
+                ->filter(function ($tratamiento) {
+                    return (int) ($tratamiento->presupuesto ?? 0) === 1;
+                })
+                ->values();
+        }
 
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
@@ -3557,9 +3565,10 @@ class ficha_atencionController extends Controller
         }
 
         foreach ($tratamientos as $item) {
-            // Sumar solo los que están en presupuesto y tienen valor definido
-            if ($item->presupuesto == 1 && isset($item->valor) && $item->urgencia == 0) {
-                $total_general += $item->valor;
+            // examenes_boca_general no posee columna "urgencia". Los grupos se incluyen
+            // únicamente cuando pertenecen al presupuesto y tienen un valor de catálogo.
+            if ((int) ($item->presupuesto ?? 0) === 1 && isset($item->valor)) {
+                $total_general += (float) $item->valor;
             }
         }
 
@@ -4372,8 +4381,8 @@ class ficha_atencionController extends Controller
         }
 
         /*
-         * Fallback para atenciones que todavía no traen id_presupuesto:
-         * primero buscamos uno de la ficha actual.
+         * Si la atención no trae id_presupuesto, sólo reutilizamos un presupuesto
+         * creado dentro de la ficha actual. Nunca tomamos uno de otra atención.
          */
         if (!$presupuestoActivo) {
             $presupuestoActivo = PresupuestosDental::where('id_paciente', $paciente->id)
@@ -4386,17 +4395,9 @@ class ficha_atencionController extends Controller
         }
 
         /*
-         * Último respaldo: presupuesto clínicamente activo más reciente del mismo
-         * paciente/profesional. Puede estar pagado; mientras estado = 1 sigue
-         * abierto para tratamiento.
+         * Sin id_presupuesto y sin presupuesto en la ficha actual, dejamos
+         * $presupuestoActivo en null para no heredar un presupuesto anterior.
          */
-        if (!$presupuestoActivo) {
-            $presupuestoActivo = PresupuestosDental::where('id_paciente', $paciente->id)
-                ->where('id_profesional', $profesional->id)
-                ->where('estado', 1)
-                ->orderByDesc('id')
-                ->first();
-        }
 
         $id_presupuesto = optional($presupuestoActivo)->id ?: $request->id_presupuesto;
 
@@ -4427,6 +4428,11 @@ class ficha_atencionController extends Controller
 
         $diagnosticos = TratamientosDental::where('estado', 1)->get();
         $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad, $id_presupuesto);
+        $todos = $this->dameTratamientosBocaGeneral($id_ficha_atencion)
+            ->when($id_presupuesto, function ($grupos, $idPresupuesto) {
+                return $grupos->where('id_presupuesto', (int) $idPresupuesto);
+            })
+            ->values();
 
         $evaluacion_adulto_html = view('atencion_odontologica.generales.evaluacion_adulto', [
             'paciente' => $paciente,
@@ -4442,6 +4448,8 @@ class ficha_atencionController extends Controller
             'tercer_cuadrante_endodoncia' => $tercer_cuadrante_endodoncia,
             'cuarto_cuadrante_endodoncia' => $cuarto_cuadrante_endodoncia,
             'odontograma' => $odontograma,
+            'todos' => $todos,
+            'presupuesto' => $presupuestoActivo,
         ])->render();
 
         $caras_cuadrantes_html = view('atencion_odontologica.generales.caras_cuadrantes', [
@@ -4461,6 +4469,7 @@ class ficha_atencionController extends Controller
             'id_ficha_atencion_actual' => $id_ficha_atencion_actual,
             'evaluacion_adulto_html' => $evaluacion_adulto_html,
             'caras_cuadrantes_html' => $caras_cuadrantes_html,
+            'grupos' => $todos,
         ]);
     }
 
@@ -17920,24 +17929,58 @@ $titulo = mb_strtoupper($tipo_informe->titulo, 'UTF-8');
 
     public function dameTratamientosBocaGeneral($id_ficha_atencion, $total = null)
     {
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        if($profesional->id_tipo_especialidad !== 16){
-        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'diagnosticos_dental.valor','tratamientos_dental.descripcion')
-            ->leftjoin('diagnosticos_dental', 'examenes_boca_general.diagnostico_tratamiento', '=', 'diagnosticos_dental.descripcion')
-            ->join('tratamientos_dental','examenes_boca_general.diagnostico','tratamientos_dental.id')
-            ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
-            ->get();
-        }else{
-            $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'tratamientos_implantologia.valor','tratamientos_dental.descripcion')
-            ->join('tratamientos_implantologia', 'examenes_boca_general.diagnostico_tratamiento', '=', 'tratamientos_implantologia.descripcion')
-            ->join('tratamientos_dental','examenes_boca_general.diagnostico','tratamientos_dental.id')
-            ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
-            ->get();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$profesional) {
+            return collect();
         }
 
-
-        // Si quieres retornar también el total general, puedes incluirlo así:
-        // return ['examenes' => $examenes, 'total_gral' => $total_gral];
+        /*
+         * examenes_boca_general es el registro clínico histórico del grupo.
+         * Se usan LEFT JOIN para que el grupo no desaparezca si un catálogo fue
+         * modificado posteriormente. El valor continúa viniendo del catálogo.
+         */
+        if ((int) $profesional->id_tipo_especialidad !== 16) {
+            $examenes = ExamenesBocaGeneral::select(
+                    'examenes_boca_general.*',
+                    'diagnosticos_dental.valor',
+                    'tratamientos_dental.descripcion'
+                )
+                ->leftJoin(
+                    'diagnosticos_dental',
+                    'examenes_boca_general.diagnostico_tratamiento',
+                    '=',
+                    'diagnosticos_dental.descripcion'
+                )
+                ->leftJoin(
+                    'tratamientos_dental',
+                    'examenes_boca_general.diagnostico',
+                    '=',
+                    'tratamientos_dental.id'
+                )
+                ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
+                ->get();
+        } else {
+            $examenes = ExamenesBocaGeneral::select(
+                    'examenes_boca_general.*',
+                    'tratamientos_implantologia.valor',
+                    'tratamientos_dental.descripcion'
+                )
+                ->leftJoin(
+                    'tratamientos_implantologia',
+                    'examenes_boca_general.diagnostico_tratamiento',
+                    '=',
+                    'tratamientos_implantologia.descripcion'
+                )
+                ->leftJoin(
+                    'tratamientos_dental',
+                    'examenes_boca_general.diagnostico',
+                    '=',
+                    'tratamientos_dental.id'
+                )
+                ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
+                ->get();
+        }
 
         return $examenes;
     }

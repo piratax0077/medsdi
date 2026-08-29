@@ -9,8 +9,69 @@
     $selectorMostrarEstadoClinico = $mostrarEstadoClinico ?? false;
     $selectorCuatroFilas = $cuatroFilas ?? false;
 
-    // Replica la misma lectura visual usada por odontograma_adulto.blade.php.
-    // La ultima condicion clinica relevante de cada pieza define su imagen.
+    // Misma lectura clínica del odontograma adulto.
+    // Mantener este bloque sincronizado con odontograma_adulto.blade.php.
+    $normalizarEstadoSelector = static function ($valor) {
+        $valor = \Illuminate\Support\Str::ascii(trim((string) $valor));
+        return mb_strtolower($valor, 'UTF-8');
+    };
+
+    $resolverEstadoVisualSelector = static function ($registro) use ($normalizarEstadoSelector) {
+        $estadoRegistro = (int) data_get($registro, 'estado', 0);
+
+        if ($estadoRegistro === 3) {
+            return null;
+        }
+
+        $tratamiento = $normalizarEstadoSelector(
+            data_get($registro, 'tratamiento', data_get($registro, 'descripcion', ''))
+        );
+        $diagnostico = $normalizarEstadoSelector(
+            data_get($registro, 'diagnostico', data_get($registro, 'diagnostico_descripcion', ''))
+        );
+        $texto = trim($diagnostico . ' ' . $tratamiento);
+
+        $contiene = static function ($agujas) use ($texto) {
+            foreach ((array) $agujas as $aguja) {
+                if ($aguja !== '' && strpos($texto, $aguja) !== false) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        if ($contiene(['implante', 'implantologia'])) return $estadoRegistro === 0 ? 'ausente' : 'implante';
+        if ($contiene(['pulpectomia'])) return 'pulpectomia';
+        if ($contiene(['pulpotomia'])) return 'pulpotomia';
+        if ($contiene(['endodoncia', 'tratamiento de conducto', 'tratamiento conducto', 'conducto radicular'])) return 'endodoncia';
+        if ($contiene(['corona en mal estado', 'corona mal estado', 'corona defectuosa'])) return 'corona_mal_estado';
+        if ($contiene(['corona provisoria', 'corona provisional'])) return 'corona_provisoria';
+        if ($contiene(['perno munon', 'perno y munon'])) return 'perno_munon';
+        if ($contiene(['resto radicular', 'residuo radicular', 'remanente radicular'])) return 'residuo_radicular';
+        if ($contiene(['protesis removible'])) return 'protesis_removible';
+        if ($contiene(['ribbond'])) return 'ribbond';
+        if ($contiene(['extraccion', 'exodoncia'])) return 'extraccion';
+        if ($contiene(['impactado', 'incluido'])) return 'impactado';
+        if ($contiene(['fractura', 'fracturado'])) return 'fractura';
+        if ($contiene(['movilidad'])) return 'movilidad';
+        if ($contiene(['abfraccion'])) return 'abfraccion';
+        if ($contiene(['abrasion'])) return 'abrasion';
+        if ($contiene(['atricion'])) return 'atricion';
+        if ($contiene(['erosion'])) return 'erosion';
+        if ($contiene(['obturacion'])) return 'obturacion';
+        if ($contiene(['ortodoncia', 'ortodontico', 'ortodontica'])) return 'ortodoncia';
+        if ($contiene(['sellante', 'sellado de fosas', 'sellado fosas'])) return 'sellante';
+        if ($contiene(['surco'])) return 'surco';
+        if ($contiene(['fluor', 'fluoracion', 'fluoruracion'])) return 'fluor';
+        if ($contiene(['corona'])) return 'corona';
+        if ($contiene(['carie'])) return 'carie';
+        if ($contiene(['diente ausente', 'pieza ausente', 'ausencia dentaria'])) return 'ausente';
+        if ($contiene(['diente sano', 'pieza sana'])) return 'normal';
+        if ($contiene(['otro tratamiento', 'otro tto'])) return 'otro_tto';
+
+        return null;
+    };
+
     $selectorEstadosVisuales = [];
     if ($selectorMostrarEstadoClinico) {
         foreach (collect($historialPiezas ?? []) as $registro) {
@@ -23,22 +84,12 @@
                 continue;
             }
 
-            $tratamientoRegistro = mb_strtolower((string) data_get($registro, 'tratamiento', ''));
-            $diagnosticoRegistro = mb_strtolower((string) data_get($registro, 'diagnostico', ''));
-            $estadoRegistro = (int) data_get($registro, 'estado', 0);
-            $estadoVisual = $selectorEstadosVisuales[$numeroRegistro] ?? 'normal';
-
-            if (strpos($diagnosticoRegistro, 'carie') !== false) {
-                $estadoVisual = 'carie';
+            $nuevoEstado = $resolverEstadoVisualSelector($registro);
+            if ($nuevoEstado !== null) {
+                $selectorEstadosVisuales[$numeroRegistro] = $nuevoEstado;
+            } elseif (!isset($selectorEstadosVisuales[$numeroRegistro])) {
+                $selectorEstadosVisuales[$numeroRegistro] = 'normal';
             }
-            if (strpos($tratamientoRegistro, 'implante') !== false) {
-                $estadoVisual = ($estadoRegistro !== 0 || $estadoVisual === 'implante') ? 'implante' : 'ausente';
-            }
-            if (strpos($tratamientoRegistro, 'endodoncia') !== false || strpos($tratamientoRegistro, 'pulpotomia') !== false || strpos($tratamientoRegistro, 'pulpectomia') !== false) {
-                $estadoVisual = 'endodoncia';
-            }
-
-            $selectorEstadosVisuales[$numeroRegistro] = $estadoVisual;
         }
     }
 
@@ -130,10 +181,33 @@
                         $codigoImagen = str_replace('.', '', $numero);
                         $estadoVisual = $selectorEstadosVisuales[$numero] ?? 'normal';
                         $imagenesPorEstado = [
-                            'carie' => "images/dental/dientes/carie/carie{$codigoImagen}.png",
-                            'ausente' => "images/dental/dientes/diente-ausente/dau{$codigoImagen}.png",
-                            'implante' => "images/dental/dientes/implante/impl{$codigoImagen}.png",
-                            'endodoncia' => "images/dental/dientes/endodoncia/endo{$codigoImagen}.png",
+                            'carie'              => "images/dental/dientes/carie/carie{$codigoImagen}.png",
+                            'ausente'            => "images/dental/dientes/diente-ausente/dau{$codigoImagen}.png",
+                            'extraccion'         => "images/dental/dientes/extraccion/porhacer/extraccion_{$codigoImagen}.png",
+                            'fractura'           => "images/dental/dientes/fractura/fractura_{$codigoImagen}.png",
+                            'impactado'          => "images/dental/dientes/impactado/impactado_{$codigoImagen}.png",
+                            'endodoncia'         => "images/dental/dientes/endodoncia/endo{$codigoImagen}.png",
+                            'pulpotomia'         => "images/dental/dientes/pulpotomia/pulpotomia{$codigoImagen}.png",
+                            'pulpectomia'        => "images/dental/dientes/pulpectomia/pulpectomia_{$codigoImagen}.png",
+                            'implante'           => "images/dental/dientes/implante/impl{$codigoImagen}.png",
+                            'movilidad'          => "images/dental/dientes/movilidad/movilidad_{$codigoImagen}.png",
+                            'perno_munon'        => "images/dental/dientes/perno-munon/hecho/perno_munon_{$codigoImagen}.png",
+                            'corona'             => "images/dental/dientes/corona/hecho/corona_{$codigoImagen}.png",
+                            'corona_provisoria'  => "images/dental/dientes/corona-provisoria/hecho/cp_hecho_{$codigoImagen}.png",
+                            'corona_mal_estado'  => "images/dental/dientes/corona_mal_estado/c_malestado{$codigoImagen}.png",
+                            'protesis_removible' => "images/dental/dientes/protesis-removible/p_removible{$codigoImagen}.png",
+                            'residuo_radicular'  => "images/dental/dientes/residuo-radicular/hecho/rr_{$codigoImagen}.png",
+                            'ribbond'            => "images/dental/dientes/ribbond/hecho/ribbond_{$codigoImagen}.png",
+                            'sellante'           => "images/dental/dientes/sellante/sellante_{$codigoImagen}.png",
+                            'surco'              => "images/dental/dientes/surco/surco_{$codigoImagen}.png",
+                            'atricion'           => "images/dental/dientes/atricion/atricion{$codigoImagen}.png",
+                            'abrasion'           => "images/dental/dientes/abrasion/abrasion{$codigoImagen}.png",
+                            'abfraccion'         => "images/dental/dientes/abfraccion/abfraccion{$codigoImagen}.png",
+                            'erosion'            => "images/dental/dientes/erosion/erosion{$codigoImagen}.png",
+                            'obturacion'         => "images/dental/dientes/obturacion/obturacion{$codigoImagen}.png",
+                            'ortodoncia'         => "images/dental/dientes/ortodoncia/ortodoncia{$codigoImagen}.png",
+                            'fluor'              => "images/dental/dientes/fluor/fluor{$codigoImagen}.png",
+                            'otro_tto'           => "images/dental/dientes/otro-tto/otro-tto{$codigoImagen}.png",
                         ];
                         $imagenPieza = $imagenesPorEstado[$estadoVisual]
                             ?? "images/dental/dientes/d{$codigoImagen}.png";
@@ -190,21 +264,83 @@ if (typeof window.actualizarEstadosClinicosSelectorOdontograma !== 'function') {
             const pieza = String(registro.pieza || '');
             if (!pieza) return;
 
-            const tratamiento = String(registro.tratamiento || registro.descripcion || '').toLowerCase();
-            const diagnostico = String(registro.diagnostico || registro.diagnostico_descripcion || '').toLowerCase();
-            let estado = estados[pieza] || 'normal';
+            // Estado 3 = cancelado: no debe alterar la imagen clínica vigente.
+            if (Number(registro.estado) === 3) return;
 
-            if (diagnostico.indexOf('carie') !== -1) estado = 'carie';
-            if (tratamiento.indexOf('implante') !== -1) {
-                estado = (Number(registro.estado) !== 0 || estado === 'implante') ? 'implante' : 'ausente';
-            }
-            if (estado !== 'implante' && (tratamiento.indexOf('endodoncia') !== -1 ||
-                tratamiento.indexOf('pulpotomia') !== -1 ||
-                tratamiento.indexOf('pulpectomia') !== -1)) {
-                estado = 'endodoncia';
+            const normalizar = (valor) => String(valor || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .trim();
+
+            const tratamiento = normalizar(registro.tratamiento || registro.descripcion || '');
+            const diagnostico = normalizar(registro.diagnostico || registro.diagnostico_descripcion || '');
+            const texto = (diagnostico + ' ' + tratamiento).trim();
+            const contiene = (...terminos) => terminos.some(termino => texto.indexOf(termino) !== -1);
+
+            let nuevoEstado = null;
+
+            if (contiene('implante', 'implantologia')) {
+                nuevoEstado = Number(registro.estado) === 0 ? 'ausente' : 'implante';
+            } else if (contiene('pulpectomia')) {
+                nuevoEstado = 'pulpectomia';
+            } else if (contiene('pulpotomia')) {
+                nuevoEstado = 'pulpotomia';
+            } else if (contiene('endodoncia', 'tratamiento de conducto', 'tratamiento conducto', 'conducto radicular')) {
+                nuevoEstado = 'endodoncia';
+            } else if (contiene('corona en mal estado', 'corona mal estado', 'corona defectuosa')) {
+                nuevoEstado = 'corona_mal_estado';
+            } else if (contiene('corona provisoria', 'corona provisional')) {
+                nuevoEstado = 'corona_provisoria';
+            } else if (contiene('perno munon', 'perno y munon')) {
+                nuevoEstado = 'perno_munon';
+            } else if (contiene('resto radicular', 'residuo radicular', 'remanente radicular')) {
+                nuevoEstado = 'residuo_radicular';
+            } else if (contiene('protesis removible')) {
+                nuevoEstado = 'protesis_removible';
+            } else if (contiene('ribbond')) {
+                nuevoEstado = 'ribbond';
+            } else if (contiene('extraccion', 'exodoncia')) {
+                nuevoEstado = 'extraccion';
+            } else if (contiene('impactado', 'incluido')) {
+                nuevoEstado = 'impactado';
+            } else if (contiene('fractura', 'fracturado')) {
+                nuevoEstado = 'fractura';
+            } else if (contiene('movilidad')) {
+                nuevoEstado = 'movilidad';
+            } else if (contiene('abfraccion')) {
+                nuevoEstado = 'abfraccion';
+            } else if (contiene('abrasion')) {
+                nuevoEstado = 'abrasion';
+            } else if (contiene('atricion')) {
+                nuevoEstado = 'atricion';
+            } else if (contiene('erosion')) {
+                nuevoEstado = 'erosion';
+            } else if (contiene('obturacion')) {
+                nuevoEstado = 'obturacion';
+            } else if (contiene('ortodoncia', 'ortodontico', 'ortodontica')) {
+                nuevoEstado = 'ortodoncia';
+            } else if (contiene('sellante', 'sellado de fosas', 'sellado fosas')) {
+                nuevoEstado = 'sellante';
+            } else if (contiene('surco')) {
+                nuevoEstado = 'surco';
+            } else if (contiene('fluor', 'fluoracion', 'fluoruracion')) {
+                nuevoEstado = 'fluor';
+            } else if (contiene('corona')) {
+                nuevoEstado = 'corona';
+            } else if (contiene('carie')) {
+                nuevoEstado = 'carie';
+            } else if (contiene('diente ausente', 'pieza ausente', 'ausencia dentaria')) {
+                nuevoEstado = 'ausente';
+            } else if (contiene('diente sano', 'pieza sana')) {
+                nuevoEstado = 'normal';
+            } else if (contiene('otro tratamiento', 'otro tto')) {
+                nuevoEstado = 'otro_tto';
             }
 
-            estados[pieza] = estado;
+            if (nuevoEstado !== null) {
+                estados[pieza] = nuevoEstado;
+            }
         });
 
         $selector.find('[data-selector-pieza]').each(function () {
@@ -215,8 +351,31 @@ if (typeof window.actualizarEstadosClinicosSelectorOdontograma !== 'function') {
             const rutas = {
                 carie: base + '/carie/carie' + codigo + '.png',
                 ausente: base + '/diente-ausente/dau' + codigo + '.png',
-                implante: base + '/implante/impl' + codigo + '.png',
+                extraccion: base + '/extraccion/porhacer/extraccion_' + codigo + '.png',
+                fractura: base + '/fractura/fractura_' + codigo + '.png',
+                impactado: base + '/impactado/impactado_' + codigo + '.png',
                 endodoncia: base + '/endodoncia/endo' + codigo + '.png',
+                pulpotomia: base + '/pulpotomia/pulpotomia' + codigo + '.png',
+                pulpectomia: base + '/pulpectomia/pulpectomia_' + codigo + '.png',
+                implante: base + '/implante/impl' + codigo + '.png',
+                movilidad: base + '/movilidad/movilidad_' + codigo + '.png',
+                perno_munon: base + '/perno-munon/hecho/perno_munon_' + codigo + '.png',
+                corona: base + '/corona/hecho/corona_' + codigo + '.png',
+                corona_provisoria: base + '/corona-provisoria/hecho/cp_hecho_' + codigo + '.png',
+                corona_mal_estado: base + '/corona_mal_estado/c_malestado' + codigo + '.png',
+                protesis_removible: base + '/protesis-removible/p_removible' + codigo + '.png',
+                residuo_radicular: base + '/residuo-radicular/hecho/rr_' + codigo + '.png',
+                ribbond: base + '/ribbond/hecho/ribbond_' + codigo + '.png',
+                sellante: base + '/sellante/sellante_' + codigo + '.png',
+                surco: base + '/surco/surco_' + codigo + '.png',
+                atricion: base + '/atricion/atricion' + codigo + '.png',
+                abrasion: base + '/abrasion/abrasion' + codigo + '.png',
+                abfraccion: base + '/abfraccion/abfraccion' + codigo + '.png',
+                erosion: base + '/erosion/erosion' + codigo + '.png',
+                obturacion: base + '/obturacion/obturacion' + codigo + '.png',
+                ortodoncia: base + '/ortodoncia/ortodoncia' + codigo + '.png',
+                fluor: base + '/fluor/fluor' + codigo + '.png',
+                otro_tto: base + '/otro-tto/otro-tto' + codigo + '.png',
                 normal: base + '/d' + codigo + '.png'
             };
 

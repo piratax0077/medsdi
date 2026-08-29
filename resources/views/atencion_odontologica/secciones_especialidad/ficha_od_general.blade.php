@@ -1113,6 +1113,15 @@
                                 #evaluacion_general .dental-table-datetime strong { color: #34495e; font-size: .8rem; }
                                 #evaluacion_general .dental-table-datetime small { margin-top: .2rem; color: var(--dental-muted); font-size: .75rem; }
                                 #evaluacion_general .dental-table-state-control { display: flex; align-items: center; justify-content: center; gap: .5rem; min-width: 190px; }
+                                #evaluacion_general #table_odontograma tr.dental-plan-row-completed td {
+                                    background: #f2fbf5 !important;
+                                }
+                                #evaluacion_general #table_odontograma tr.dental-plan-row-completed .dental-treatment-name::after {
+                                    content: ' · Terminado';
+                                    color: #278447;
+                                    font-weight: 700;
+                                    font-size: .75rem;
+                                }
                                 #evaluacion_general .dental-progress-wheel {
                                     --progress: 25;
                                     position: relative;
@@ -1562,19 +1571,88 @@
                     .delay(2200)
                     .fadeOut(250, function () { $(this).remove(); });
 
-                if (Array.isArray(respuesta.odontograma)) {
-                    odontograma_global = respuesta.odontograma;
-                    if (typeof window.actualizarDatosProgresoPresupuesto === 'function') window.actualizarDatosProgresoPresupuesto(respuesta.odontograma);
-                } else {
-                    const piezaActualizada = (odontograma_global || []).find(function (pieza) {
+                /*
+                 * Mantener el registro finalizado dentro de la fuente de verdad.
+                 * Algunos endpoints históricos podían devolver una lista parcial
+                 * cuando el último trabajo llegaba a 100%; eso hacía que la fila
+                 * desapareciera de Tratamiento y que Pagos conservara el 75%.
+                 */
+                const listaServidor = Array.isArray(respuesta.odontograma)
+                    ? respuesta.odontograma.slice()
+                    : [];
+
+                const listaAnterior = Array.isArray(window.odontograma_global)
+                    ? window.odontograma_global.slice()
+                    : [];
+
+                let piezaActualizada = respuesta.pieza_actualizada || null;
+
+                if (!piezaActualizada) {
+                    piezaActualizada = listaServidor.find(function (pieza) {
                         return Number(pieza.id) === Number(idTratamiento);
-                    });
-                    if (piezaActualizada) {
-                        piezaActualizada.progreso = Number(progresoNuevo);
-                        piezaActualizada.estado = Number(progresoNuevo) === 100 ? 1 : 2;
-                    }
+                    }) || listaAnterior.find(function (pieza) {
+                        return Number(pieza.id) === Number(idTratamiento);
+                    }) || null;
                 }
+
+                if (piezaActualizada) {
+                    piezaActualizada = Object.assign({}, piezaActualizada, {
+                        progreso: Number(progresoNuevo),
+                        estado: Number(progresoNuevo) === 100 ? 1 : 2,
+                        presupuesto: piezaActualizada.presupuesto != null
+                            ? piezaActualizada.presupuesto
+                            : 1
+                    });
+                }
+
+                const mapaRegistros = new Map();
+
+                // Primero conservar lo que ya estaba visible.
+                listaAnterior.forEach(function (pieza) {
+                    if (pieza && pieza.id != null) {
+                        mapaRegistros.set(Number(pieza.id), pieza);
+                    }
+                });
+
+                // Luego el servidor reemplaza con datos más recientes.
+                listaServidor.forEach(function (pieza) {
+                    if (pieza && pieza.id != null) {
+                        mapaRegistros.set(Number(pieza.id), pieza);
+                    }
+                });
+
+                // Finalmente forzar el tratamiento que acabamos de modificar.
+                if (piezaActualizada && piezaActualizada.id != null) {
+                    mapaRegistros.set(Number(piezaActualizada.id), piezaActualizada);
+                }
+
+                window.odontograma_global = Array.from(mapaRegistros.values());
+                odontograma_global = window.odontograma_global;
+
+                sincronizarPresupuestoCompartidoOdontoGeneral(
+                    window.odontograma_global,
+                    respuesta.presupuesto || null
+                );
+
+                // Repintar también la tabla local sin eliminar la fila terminada.
+                $select.closest('tr')
+                    .attr('data-progress', progresoNuevo)
+                    .attr('data-clinical-state', Number(progresoNuevo) === 100 ? 1 : 2)
+                    .addClass(Number(progresoNuevo) === 100 ? 'dental-plan-row-completed' : '');
+
                 actualizarEstadoCabeceraPlanDental();
+
+                // El include compartido puede redibujar DataTables en el mismo tick.
+                // Repetimos la decoración después del redraw para asegurar 100%.
+                window.requestAnimationFrame(function () {
+                    if (typeof window.actualizarDatosProgresoPresupuesto === 'function') {
+                        window.actualizarDatosProgresoPresupuesto(window.odontograma_global);
+                    }
+                    if (typeof window.decorarProgresosPresupuesto === 'function') {
+                        window.decorarProgresosPresupuesto();
+                    }
+                    programarDecoracionTablaPlan();
+                });
             },
             error: function () {
                 $select.val(progresoAnterior);
@@ -2666,10 +2744,15 @@
                 } else {
                     $('#reserva_sexo').text('Femenino');
                 }
-                $('#reserva_convenio').html(data.registro.prevision.nombre);
-                $('#reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
-                $('#reserva_hora_email').html(data.registro.email);
-                $('#reserva_hora_telefono').html(data.registro.telefono_uno);
+                const previsionReserva = data.registro.prevision;
+                const direccionReserva = data.registro.direccion;
+                const ciudadReserva = direccionReserva && direccionReserva.ciudad;
+                $('#reserva_convenio').text(previsionReserva ? (previsionReserva.nombre || 'No informado') : 'No informado');
+                $('#reserva_direccion').text(direccionReserva
+                    ? [direccionReserva.direccion, direccionReserva.numero_dir, ciudadReserva && ciudadReserva.nombre].filter(Boolean).join(' ')
+                    : 'No informada');
+                $('#reserva_hora_email').text(data.registro.email || 'No informado');
+                $('#reserva_hora_telefono').text(data.registro.telefono_uno || 'No informado');
 
 
 
@@ -2703,6 +2786,9 @@
         let id_asistente = $('#reserva_hora_id_asistente').val();
         let origen = $('#reserva_hora_origen').val();
         let descripcion = $('#reserva_hora_descripcion').val();
+        const contextoDental = typeof window.obtenerDatosAgendamientoControlDental === 'function'
+            ? window.obtenerDatosAgendamientoControlDental()
+            : { id_presupuesto: '', tratamientos_presupuesto: [], proc_bloque: 1, motivo_dental: 'primera' };
 
         let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
         var tipo_agenda_text = 'C';
@@ -2736,8 +2822,15 @@
                 id_profesional: id_profesional,
                 id_asistente: id_asistente,
                 origen: origen,
-                tipo_hora_medica: tipo_agenda_text,
-                descripcion: descripcion
+                tipo_hora_medica: 'D',
+                tipo_agenda: 2,
+                origen_dental: 1,
+                descripcion: descripcion,
+                procedimiento: '',
+                proc_bloque: contextoDental.proc_bloque,
+                id_presupuesto: contextoDental.id_presupuesto,
+                tratamientos_presupuesto: contextoDental.tratamientos_presupuesto,
+                motivo_dental: contextoDental.motivo_dental
             }
         })
         .done(function(data) {
@@ -3102,7 +3195,7 @@
             console.log(id);
             let data = {
                 id: id,
-                id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
+                id_paciente: $('#id_paciente').val(),
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 _token: CSRF_TOKEN
@@ -3273,9 +3366,9 @@
                                     `${insumo.insumos} ${insumo.nombre_marca}`,
                                     insumo.observaciones,
                                     insumo.cantidad, // Nombre del insumo
-                                    formatoMoneda(insumo.valor), // Cantidad utilizada
-                                    0, // Unidad de medida
-                                    formatoMoneda(total),
+                                    formatoMoneda(total), // Sub-total real
+                                    formatoMoneda(Number(insumo.valor_descuento || 0)), // Descuento
+                                    formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null ? Number(insumo.nuevo_valor) : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
                                     ''
 
@@ -3312,6 +3405,9 @@
                             }
 
                         });
+                        // eliminar_insumos_tto devuelve importes brutos; restaurar
+                        // descuentos y netos desde la fuente financiera canónica.
+                        actualizar_presupuesto();
                     }
                 },
                 error: function(error) {
@@ -12398,7 +12494,55 @@ setTimeout(function(){
             });
          }
 
-         function actualizar_presupuesto(){
+
+        /**
+         * Sincroniza Odontología General con el include compartido de presupuesto.
+         *
+         * IMPORTANTE:
+         * presupuesto.blade.php es común a todas las especialidades odontológicas.
+         * Por eso la ficha general no redefine el gráfico ni modifica el include:
+         * solamente entrega el odontograma actualizado a su API pública.
+         */
+        function sincronizarPresupuestoCompartidoOdontoGeneral(odontograma, presupuesto) {
+            const lista = Array.isArray(odontograma) ? odontograma : [];
+
+            window.odontograma_global = lista;
+
+            if (
+                window.MedSDIPresupuestoDental &&
+                typeof window.MedSDIPresupuestoDental.recibirOdontograma === 'function'
+            ) {
+                window.MedSDIPresupuestoDental.recibirOdontograma(
+                    lista,
+                    null,
+                    presupuesto || null
+                );
+                return true;
+            }
+
+            // Compatibilidad con versiones anteriores del include compartido.
+            if (typeof window.actualizarDatosProgresoPresupuesto === 'function') {
+                window.actualizarDatosProgresoPresupuesto(lista);
+            }
+
+            if (typeof window.decorarProgresosPresupuesto === 'function') {
+                window.requestAnimationFrame(function () {
+                    window.decorarProgresosPresupuesto();
+                });
+            }
+
+            return false;
+        }
+
+        window.actualizandoPresupuestoDental = window.actualizandoPresupuestoDental || false;
+
+        function actualizar_presupuesto(){
+            // Evita peticiones simultáneas/reentrantes provocadas por redibujos o eventos de otras vistas.
+            if (window.actualizandoPresupuestoDental) {
+                return;
+            }
+            window.actualizandoPresupuestoDental = true;
+
             // Obtener valores del formulario
 
             const id_dcto = $('#tiene_dcto').val();
@@ -12420,11 +12564,10 @@ setTimeout(function(){
                 success: function(response){
                     console.log('Éxito:', response);
                     if (response.estado == 1) {
-                        let tiene_dcto = $('#tiene_dcto').val();
-                        if(tiene_dcto != 0){
-                            confirmar_aplicar_convenio_tratamiento(tiene_dcto);
-                        }else{
-                            let pagos = response.pagos;
+                        // IMPORTANTE: actualizar_presupuesto() sólo consulta/renderiza.
+                        // No debe volver a aplicar el convenio aquí; hacerlo genera ciclos de AJAX
+                        // entre actualizar_presupuesto() y confirmar_aplicar_convenio_tratamiento().
+                        let pagos = response.pagos;
                             let table = $('#table_pagos_presupuesto').DataTable();
                             let presupuesto = response.presupuesto;
                             $('#id_presupuesto').val(presupuesto.id);
@@ -12521,9 +12664,11 @@ setTimeout(function(){
                                     let rowNode = table_piezas_odontograma.row.add([
                                         odonto.descripcion,
                                         odonto.pieza,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        formatoMoneda(Number(odonto.valor || 0)),
+                                        formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                        formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null
+                                            ? Number(odonto.nuevo_valor)
+                                            : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                         '<div class="circle ' + clase + '"></div>',
                                         estado, // Columna vacía
 
@@ -12534,224 +12679,58 @@ setTimeout(function(){
                                 }
                             });
 
-                            const insumos = Array.isArray(response.insumos) ? response.insumos : [];
-                            console.log('actualizar_presupuesto - insumos:', insumos);
+                            // El include de presupuesto es compartido por TODAS las especialidades.
+                            // Después del render legacy de esta ficha, entregamos la fuente de verdad
+                            // al componente común para que la columna PROGRESO quede como círculo 0-100%.
+                            sincronizarPresupuestoCompartidoOdontoGeneral(
+                                odontograma,
+                                response.presupuesto || presupuesto || null
+                            );
 
-                            // La tabla visible en Odontología General es table_insumos_odon_gral.
-                            // Antes se refrescaba table_insumos_preimplante, por eso los packs
-                            // automáticos sólo aparecían en "Pagos y estados".
-                            let table_insumos = $('#table_insumos_odon_gral').DataTable();
+                            let insumos = response.insumos;
+                            console.log(insumos);
+                            let table_insumos = $('#table_insumos_preimplante').DataTable();
+
+                            //Limpiar la tabla sin perder la configuración de DataTables
                             table_insumos.clear();
 
-                            const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
-                            const insumosAgrupadosPlan = new Map();
-
-                            insumos.forEach(function(insumo) {
-                                // Esta tabla corresponde a la atención normal, no a urgencias.
-                                if (Number(insumo.urgencia || 0) !== 0) return;
-
-                                // Si el insumo ya pertenece a un presupuesto, mostrar sólo el vigente.
-                                if (idPresupuestoActual > 0
-                                    && Number(insumo.presupuesto || 0) === 1
-                                    && Number(insumo.id_presupuesto || 0) !== idPresupuestoActual) {
-                                    return;
-                                }
-
-                                const idProducto = Number(insumo.id_producto || 0);
-                                const clave = idProducto > 0
-                                    ? 'producto:' + idProducto + '|presupuesto:' + Number(insumo.presupuesto || 0)
-                                    : [
-                                        String(insumo.insumos || '').trim().toUpperCase(),
-                                        String(insumo.nombre_marca || '').trim().toUpperCase(),
-                                        String(insumo.observaciones || '').trim(),
-                                        Number(insumo.valor || 0),
-                                        Number(insumo.presupuesto || 0),
-                                        String(insumo.tipo || '')
-                                    ].join('|');
-
-                                if (!insumosAgrupadosPlan.has(clave)) {
-                                    insumosAgrupadosPlan.set(clave, Object.assign({}, insumo, {
-                                        cantidad_agrupada: 0,
-                                        registros_agrupados: 0,
-                                        todos_pack_automatico: true
-                                    }));
-                                }
-
-                                const grupo = insumosAgrupadosPlan.get(clave);
-                                grupo.cantidad_agrupada += Number(insumo.cantidad || 0);
-                                grupo.registros_agrupados += 1;
-                                grupo.todos_pack_automatico = grupo.todos_pack_automatico
-                                    && String(insumo.tipo || '') === 'pack_automatico';
-                            });
-
-                            insumosAgrupadosPlan.forEach(function(insumo) {
-                                const cantidad = Number(insumo.cantidad_agrupada || 0);
-                                const valor = Number(insumo.valor || 0);
-                                const total = cantidad * valor;
-                                const nombre = ((insumo.insumos || '') + ' ' + (insumo.nombre_marca || ''))
-                                    .trim();
-
-                                let botones = '';
-
-                                if (insumo.todos_pack_automatico) {
-                                    botones = '<span class="badge badge-info">Automático</span>';
-                                } else if (Number(insumo.presupuesto || 0) === 1) {
-                                    botones = `
-                                        <button type="button" class="btn btn-icon btn-danger"
-                                            onclick="sacar_de_presupuesto_insumo(${insumo.id})"
-                                            title="Quitar del presupuesto">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-icon btn-warning"
-                                            onclick="dame_insumo(${insumo.id})">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-icon btn-danger"
-                                            onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="feather icon-x"></i>
-                                        </button>`;
-                                } else {
-                                    botones = `
-                                        <button type="button" class="btn btn-icon btn-primary"
-                                            onclick="cargar_a_presupuesto_insumo(${insumo.id})">
-                                            <i class="feather icon-shopping-cart"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-icon btn-warning"
-                                            onclick="dame_insumo(${insumo.id})">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-icon btn-danger"
-                                            onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="feather icon-x"></i>
-                                        </button>`;
+                            //Recorrer el array de insumos y agregarlos a la tabla
+                            insumos.forEach(insumo => {
+                                let total = insumo.cantidad * insumo.valor;
+                                if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                            // Botones de acción
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                                <i class="feather icon-shopping-cart"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="editar_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }else{
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="editar_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
                                 }
 
                                 table_insumos.row.add([
-                                    $('<div>').text(nombre).html(),
-                                    $('<div>').text(insumo.observaciones || '').html(),
-                                    cantidad,
-                                    formatoMoneda(valor),
-                                    formatoMoneda(total),
+                                    insumo.insumos + ' ' + insumo.nombre_marca, // Nombre del insumo
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    insumo.valor, // Unidad de medida
+                                    total,
                                     botones
                                 ]);
                             });
-
-                            table_insumos.draw(false);
-
-                            // Sincronizar también el Presupuesto Clínico con la misma colección
-                            // que acabamos de usar en Planificación. Así los packs automáticos
-                            // aparecen inmediatamente sin cambiar de pestaña ni recargar.
-                            if (typeof window.renderizarInsumosPresupuestoClinico === 'function') {
-                                window.renderizarInsumosPresupuestoClinico(insumos);
-                            } else {
-                                // Fallback: actualizar_presupuesto() debe poder refrescar la vista
-                                // aunque presupuesto.blade todavía no exponga el helper global.
-                                const $contenedorInsumosClinicos = $('#contenedor_insumos');
-                                if ($contenedorInsumosClinicos.length) {
-                                    $contenedorInsumosClinicos.empty();
-                                    insumosAgrupadosPlan.forEach(function(insumo) {
-                                        if (Number(insumo.presupuesto || 0) !== 1) return;
-                                        if (Number(insumo.urgencia || 0) !== 0) return;
-                                        if (idPresupuestoActual > 0
-                                            && Number(insumo.id_presupuesto || 0) !== idPresupuestoActual) return;
-
-                                        const cantidad = Number(insumo.cantidad_agrupada || insumo.cantidad || 0);
-                                        const valor = Number(insumo.valor || 0);
-                                        const total = cantidad * valor;
-                                        const nombreSeguro = $('<div>').text(
-                                            ((insumo.insumos || '') + ' ' + (insumo.nombre_marca || '')).trim()
-                                        ).html();
-                                        $contenedorInsumosClinicos.append(`
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="card-informacion">
-                                                    <div class="card-body pb-0">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-12 col-lg-4">
-                                                                <label class="floating-label-activo-sm">Insumo</label>
-                                                                <input type="text" class="form-control form-control-sm" readonly value="${nombreSeguro}">
-                                                            </div>
-                                                            <div class="form-group col-md-3 col-lg-1">
-                                                                <label class="floating-label-activo-sm">Cantidad</label>
-                                                                <input type="text" class="form-control form-control-sm" readonly value="${cantidad}">
-                                                            </div>
-                                                            <div class="form-group col-md-3 col-lg-2">
-                                                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                                                <input type="text" class="form-control form-control-sm" readonly value="${formatoMoneda(total)}">
-                                                            </div>
-                                                            <div class="form-group col-md-3 col-lg-2">
-                                                                <label class="floating-label-activo-sm">Total</label>
-                                                                <input type="text" class="form-control form-control-sm" readonly value="${formatoMoneda(total)}">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>`);
-                                    });
-                                }
-                            }
-
-                            // El backend devuelve valores ya reconciliados con el presupuesto
-                            // vigente. Usarlos como única fuente de verdad para todos los totales.
-                            const valoresActualizados = Array.isArray(response.valores)
-                                ? response.valores
-                                : [0, 0, Number(response.valor_insumos || 0), Number(response.total_lab || 0)];
-                            const valorGruposActual = Number(valoresActualizados[0] || 0);
-                            const valorPiezasActual = Number(valoresActualizados[1] || 0);
-                            const valorInsumosActual = Number(
-                                response.valor_insumos !== undefined
-                                    ? response.valor_insumos
-                                    : (valoresActualizados[2] || 0)
-                            );
-                            const valorLaboratorioActual = Number(
-                                response.total_lab !== undefined
-                                    ? response.total_lab
-                                    : (valoresActualizados[3] || 0)
-                            );
-                            const totalPresupuestoActual = Number(
-                                response.suma_adeudado !== undefined
-                                    ? response.suma_adeudado
-                                    : (valorGruposActual + valorPiezasActual + valorInsumosActual + valorLaboratorioActual)
-                            );
-
-                            $('#valores_examenes_presupuesto, #valores_examenes_presupuesto_conf')
-                                .html(formatoMoneda(valorGruposActual));
-                            $('#valores_piezas_presupuesto, #valores_piezas_presupuesto_conf')
-                                .html(formatoMoneda(valorPiezasActual));
-                            $('#valores_insumos_presupuesto, #valores_insumos_presupuesto_conf')
-                                .html(formatoMoneda(valorInsumosActual));
-                            $('#valores_laboratorio, #valores_laboratorio_conf')
-                                .html(formatoMoneda(valorLaboratorioActual));
-                            $('#valores_total_final_presupuesto, #valores_total_final_presupuesto_conf')
-                                .html(formatoMoneda(totalPresupuestoActual));
-                            $('#subtotal_insumos, #total_insumos').val(formatoMoneda(valorInsumosActual));
-                            $('#total_presupuesto_dental').val(totalPresupuestoActual);
-                            $('#total_presupuesto').val(formatoMoneda(totalPresupuestoActual));
-                            $('#subtotal_presup').val(formatoMoneda(totalPresupuestoActual));
-                            $('#monto_total').html(formatoMoneda(totalPresupuestoActual));
-
-                            // La cantidad de prestaciones del presupuesto debe considerar
-                            // piezas + grupos + insumos vigentes.
-                            const cantidadInsumosClinicos = insumos.filter(function (insumo) {
-                                return Number(insumo.presupuesto) === 1
-                                    && Number(insumo.urgencia || 0) === 0
-                                    && (!idPresupuestoActual
-                                        || Number(insumo.id_presupuesto || 0) === idPresupuestoActual);
-                            }).length;
-                            const cantidadGruposClinicos = Array.isArray(response.todos)
-                                ? response.todos.filter(function (item) {
-                                    return Number(item.presupuesto) === 1
-                                        && Number(item.urgencia || 0) === 0;
-                                }).length
-                                : 0;
-                            const cantidadTotalClinica = piezasPresupuestoClinico.length
-                                + cantidadGruposClinicos
-                                + cantidadInsumosClinicos;
-                            $('#cantidad_items_presupuesto').text(
-                                cantidadTotalClinica + ' ' +
-                                (cantidadTotalClinica === 1 ? 'prestación' : 'prestaciones')
-                            );
-                            $('#presupuesto_clinico_vacio').toggle(cantidadTotalClinica === 0);
-
                             let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
                             table_insumos_pagos.clear();
                             console.log(insumos);
@@ -12769,9 +12748,11 @@ setTimeout(function(){
                                         insumo.insumos + ' ' + insumo.nombre_marca,
                                         insumo.observaciones,
                                         insumo.cantidad, // Nombre del insumo
-                                        formatoMoneda(insumo.valor), // Cantidad utilizada
-                                        0, // Unidad de medida
                                         formatoMoneda(total),
+                                        formatoMoneda(Number(insumo.valor_descuento || 0)),
+                                        formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null
+                                            ? Number(insumo.nuevo_valor)
+                                            : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                         ' <div class="circle ' + clase + '"></div>',
 
                                     ]).draw(false).node();
@@ -12782,6 +12763,16 @@ setTimeout(function(){
 
                             });
                             table_insumos_pagos.draw();
+                            // Las tarjetas parciales representan valores BRUTOS.
+                            // El descuento se informa por separado y se resta una
+                            // sola vez para obtener el Total Final.
+                            const valoresBrutos = response.valores || [0, 0, 0, 0];
+                            $('#valores_examenes_presupuesto').html(formatoMoneda(Number(valoresBrutos[0] || 0)));
+                            $('#valores_examenes_presupuesto_conf').html(formatoMoneda(Number(valoresBrutos[0] || 0)));
+                            $('#valores_piezas_presupuesto').html(formatoMoneda(Number(valoresBrutos[1] || 0)));
+                            $('#valores_piezas_presupuesto_conf').html(formatoMoneda(Number(valoresBrutos[1] || 0)));
+                            $('#valores_insumos_presupuesto').html(formatoMoneda(Number(valoresBrutos[2] || 0)));
+                            $('#valores_insumos_presupuesto_conf').html(formatoMoneda(Number(valoresBrutos[2] || 0)));
                             $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
                             $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(response.suma_pagado)));
                             $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response
@@ -12790,15 +12781,87 @@ setTimeout(function(){
                             $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
                             $('#valores_laboratorio').html(formatoMoneda(parseInt(response.total_lab)));
                             $('#valores_laboratorio_conf').html(formatoMoneda(parseInt(response.total_lab)));
-                            $('#valores_total_final_presupuesto').html(formatoMoneda(totalPresupuestoActual));
-                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(totalPresupuestoActual));
-                            $('#abonos_presup').val(formatoMoneda(response.suma_pagado || 0));
-                            $('#subtotal_presup').val(formatoMoneda(totalPresupuestoActual));
-                            $('#subtotal_lab').val(formatoMoneda(valorLaboratorioActual));
-                            $('#descuento_lab').val(0);
-                            $('#total_presupuesto').val(formatoMoneda(totalPresupuestoActual));
-                            $('#total_presupuesto_dental').val(totalPresupuestoActual);
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(parseInt(response.suma_adeudado)));
+                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_adeudado)));
+                            $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
+                            // Encabezado financiero: bruto - descuento = total neto.
+                            $('#subtotal_presup').val(formatoMoneda(response.suma_presupuesto));
+                            $('#subtotal_lab').val(formatoMoneda(response.total_lab));
+                            $('#descuento_lab').val(formatoMoneda(
+                                (response.trabajos_lab || []).concat(response.trabajos_mayor || [])
+                                    .reduce((suma, trabajo) => suma + Number(trabajo.valor_descuento || 0), 0)
+                            ));
+                            const totalNeto = Number(response.suma_adeudado || 0);
+                            $('#total_presup').val(formatoMoneda(totalNeto));
+                            $('#total_presupuesto').val(formatoMoneda(totalNeto));
+                            $('#total_presupuesto_dental').val(totalNeto);
                             let todos = response.todos;
+
+                            // Piezas y grupos son colecciones independientes. Un grupo
+                            // nunca debe reemplazar las tarjetas ni el odontograma de piezas.
+                            const idPresupuestoActual = Number($('#id_presupuesto').val() || 0);
+                            const gruposPresupuestoClinico = (todos || []).filter(function (grupo) {
+                                return Number(grupo.presupuesto) === 1
+                                    && Number(grupo.urgencia || 0) === 0
+                                    && (!idPresupuestoActual
+                                        || Number(grupo.id_presupuesto || 0) === idPresupuestoActual);
+                            });
+                            if (typeof window.actualizarDatosProgresoGruposPresupuesto === 'function') {
+                                window.actualizarDatosProgresoGruposPresupuesto(gruposPresupuestoClinico);
+                            }
+                            const insumosPresupuestoClinico = (insumos || []).filter(function (insumo) {
+                                return Number(insumo.presupuesto) === 1
+                                    && Number(insumo.urgencia || 0) === 0
+                                    && (!idPresupuestoActual
+                                        || Number(insumo.id_presupuesto || 0) === idPresupuestoActual);
+                            });
+                            const cantidadPrestacionesClinicas = piezasPresupuestoClinico.length
+                                + gruposPresupuestoClinico.length
+                                + insumosPresupuestoClinico.length;
+
+                            $('#cantidad_items_presupuesto').text(
+                                cantidadPrestacionesClinicas + ' ' +
+                                (cantidadPrestacionesClinicas === 1 ? 'prestación' : 'prestaciones')
+                            );
+                            $('#presupuesto_clinico_vacio').toggle(cantidadPrestacionesClinicas === 0);
+
+                            const escaparHtmlGrupo = function (valor) {
+                                return $('<div>').text(valor == null ? '' : String(valor)).html();
+                            };
+                            const $contenedorGrupos = $('#contenedor_todos').empty();
+                            gruposPresupuestoClinico.forEach(function (grupo) {
+                                const valor = Number(grupo.valor || 0);
+                                const descuento = Number(grupo.valor_descuento || 0);
+                                const totalGrupo = Math.max(0, valor - descuento);
+                                $contenedorGrupos.append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-grupo-presupuesto="${Number(grupo.id)}">
+                                        <div class="card-informacion"><div class="card-body pb-0"><div class="form-row">
+                                            <div class="form-group col-sm-12 col-md-3 col-lg-2">
+                                                <label class="floating-label-activo-sm">Grupo de piezas</label>
+                                                <input type="text" class="form-control form-control-sm" value="${escaparHtmlGrupo(grupo.localizacion)}" readonly>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-9 col-lg-4">
+                                                <label class="floating-label-activo-sm">Prestación</label>
+                                                <input type="text" class="form-control form-control-sm" value="${escaparHtmlGrupo(grupo.diagnostico_tratamiento)}" readonly>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                                <input type="text" class="form-control form-control-sm" value="${formatoMoneda(valor)}" readonly>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3 col-lg-1">
+                                                <label class="floating-label-activo-sm">Descuento</label>
+                                                <input type="text" class="form-control form-control-sm" value="${descuento ? formatoMoneda(descuento) : ''}" readonly>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                                                <label class="floating-label-activo-sm">Total prestación</label>
+                                                <input type="text" class="form-control form-control-sm" value="${formatoMoneda(totalGrupo)}" readonly>
+                                            </div>
+                                            <div class="form-group col-md-1 col-lg-1 d-flex align-items-center">
+                                                <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${Number(grupo.id)},'gral', this)" title="Quitar grupo del presupuesto"><i class="feather icon-x"></i></button>
+                                            </div>
+                                        </div></div></div>
+                                    </div>`);
+                            });
 
                             let table_ = $('#presup_estado_pago_gral').DataTable();
 
@@ -12806,7 +12869,7 @@ setTimeout(function(){
                             table_.clear().draw();
 
                             // Recorrer el odontograma y agregar nuevas filas
-                            todos.forEach(function(odonto) {
+                            gruposPresupuestoClinico.forEach(function(odonto) {
 
                                 if (odonto.presupuesto == 1) {
                                     if (odonto.estado_pago == 'ok') {
@@ -12823,11 +12886,11 @@ setTimeout(function(){
                                     }
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_.row.add([
-                                        odonto.localizacion,
-                                        odonto.diagnostico_tratamiento,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(odonto.valor),
+                                        odonto.diagnostico_tratamiento || odonto.descripcion || '',
+                                        odonto.localizacion || '',
+                                        formatoMoneda(Number(odonto.valor || 0)),
+                                        formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                        formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null ? Number(odonto.nuevo_valor) : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                         ' <div class="circle ' + clase + '"></div>',
                                         estado
                                     ]).draw(false).node();
@@ -12841,7 +12904,11 @@ setTimeout(function(){
                             if (typeof actualizarPendientesModalReasignacion === 'function') {
                                 actualizarPendientesModalReasignacion(response);
                             }
-                        }
+
+                            $('#valores_descuentos_presupuesto').html(formatoMoneda(Number(response.descuentos || 0)));
+                            $('#valores_descuentos_presupuesto_conf').html(formatoMoneda(Number(response.descuentos || 0)));
+                            $('#descuento_presup').val(formatoMoneda(Number(response.descuentos || 0)));
+                            $('#descuento_clinico').val(formatoMoneda(Number(response.descuentos || 0)));
 
                     } else {
                         console.log('Error:', response.mensaje);
@@ -12849,6 +12916,9 @@ setTimeout(function(){
                 },
                 error: function(error){
                     console.log(error);
+                },
+                complete: function(){
+                    window.actualizandoPresupuestoDental = false;
                 }
              })
          }

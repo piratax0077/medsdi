@@ -6871,10 +6871,15 @@
                 } else {
                     $('#reserva_sexo').text('Femenino');
                 }
-                $('#reserva_convenio').html(data.registro.prevision.nombre);
-                $('#reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
-                $('#reserva_hora_email').html(data.registro.email);
-                $('#reserva_hora_telefono').html(data.registro.telefono_uno);
+                const previsionReserva = data.registro.prevision;
+                const direccionReserva = data.registro.direccion;
+                const ciudadReserva = direccionReserva && direccionReserva.ciudad;
+                $('#reserva_convenio').text(previsionReserva ? (previsionReserva.nombre || 'No informado') : 'No informado');
+                $('#reserva_direccion').text(direccionReserva
+                    ? [direccionReserva.direccion, direccionReserva.numero_dir, ciudadReserva && ciudadReserva.nombre].filter(Boolean).join(' ')
+                    : 'No informada');
+                $('#reserva_hora_email').text(data.registro.email || 'No informado');
+                $('#reserva_hora_telefono').text(data.registro.telefono_uno || 'No informado');
 
 
 
@@ -6907,6 +6912,9 @@
         let id_lugar_atencion = $('#reserva_hora_id_lugar_atencion').val();
         let id_asistente = $('#reserva_hora_id_asistente').val();
         let origen = $('#reserva_hora_origen').val();
+        const contextoDental = typeof window.obtenerDatosAgendamientoControlDental === 'function'
+            ? window.obtenerDatosAgendamientoControlDental()
+            : { id_presupuesto: '', tratamientos_presupuesto: [], proc_bloque: 1, motivo_dental: 'primera' };
 
         let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
         var tipo_agenda_text = 'C';
@@ -6940,7 +6948,14 @@
                 id_profesional: id_profesional,
                 id_asistente: id_asistente,
                 origen: origen,
-                tipo_hora_medica: tipo_agenda_text,
+                tipo_hora_medica: 'D',
+                tipo_agenda: 2,
+                origen_dental: 1,
+                procedimiento: '',
+                proc_bloque: contextoDental.proc_bloque,
+                id_presupuesto: contextoDental.id_presupuesto,
+                tratamientos_presupuesto: contextoDental.tratamientos_presupuesto,
+                motivo_dental: contextoDental.motivo_dental,
             }
         })
         .done(function(data) {
@@ -7865,11 +7880,11 @@
                                     }
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_.row.add([
-                                        odonto.localizacion,
-                                        odonto.diagnostico_tratamiento,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(odonto.valor),
+                                        odonto.diagnostico_tratamiento || odonto.descripcion || '',
+                                        odonto.localizacion || '',
+                                        formatoMoneda(Number(odonto.valor || 0)),
+                                        formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                        formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null ? Number(odonto.nuevo_valor) : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                         ' <div class="circle ' + clase + '"></div>',
                                         estado
                                     ]).draw(false).node();
@@ -8232,9 +8247,9 @@
                                     `${insumo.insumos} ${insumo.nombre_marca}`,
                                     insumo.observaciones,
                                     insumo.cantidad, // Nombre del insumo
-                                    formatoMoneda(insumo.valor), // Cantidad utilizada
-                                    0, // Unidad de medida
-                                    formatoMoneda(total),
+                                    formatoMoneda(total), // Sub-total real
+                                    formatoMoneda(Number(insumo.valor_descuento || 0)), // Descuento
+                                    formatoMoneda(insumo.nuevo_valor !== undefined && insumo.nuevo_valor !== null ? Number(insumo.nuevo_valor) : Math.max(0, total - Number(insumo.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
                                     ''
 
@@ -9516,11 +9531,11 @@
                                 var estado = nombreEstadoTratamientoDental(odonto.estado);
                                 // Agregar una nueva fila a la tabla
                                 let rowNode = table.row.add([
-                                    odonto.localizacion,
-                                    odonto.diagnostico_tratamiento,
-                                    formatoMoneda(formatoMoneda(odonto.valor)),
-                                    0,
-                                    formatoMoneda(odonto.valor),
+                                    odonto.diagnostico_tratamiento || odonto.descripcion || '',
+                            odonto.localizacion || '',
+                            formatoMoneda(Number(odonto.valor || 0)),
+                            formatoMoneda(Number(odonto.valor_descuento || 0)),
+                            formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null ? Number(odonto.nuevo_valor) : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                     ' <div class="circle ' + clase + '"></div>',
                                     estado
                                 ]).draw(false).node();
@@ -9869,11 +9884,11 @@
                                     var estado = nombreEstadoTratamientoDental(odonto.estado);
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_presup.row.add([
-                                        odonto.localizacion,
-                                        odonto.diagnostico_tratamiento,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(odonto.valor),
+                                        odonto.diagnostico_tratamiento || odonto.descripcion || '',
+                                        odonto.localizacion || '',
+                                        formatoMoneda(Number(odonto.valor || 0)),
+                                        formatoMoneda(Number(odonto.valor_descuento || 0)),
+                                        formatoMoneda(odonto.nuevo_valor !== undefined && odonto.nuevo_valor !== null ? Number(odonto.nuevo_valor) : Math.max(0, Number(odonto.valor || 0) - Number(odonto.valor_descuento || 0))),
                                         ' <div class="circle ' + clase + '"></div>',
                                         estado
                                     ]).draw(false).node();
@@ -10438,3 +10453,4 @@ function confirmarEliminarImagenRx(id){
 
 @endsection
 @include('atencion_odontologica.include.ocultar_switch_presupuesto_tratamiento')
+@include('atencion_odontologica.include.agendamiento_control_dental')

@@ -9,6 +9,9 @@
         ->values();
 @endphp
 
+@include('atencion_odontologica.generales.includes.historial_evoluciones')
+@include('atencion_odontologica.include.agendamiento_control_dental')
+
 <div class="row">
     <div class="col-9">
         <div class="card-informacion">
@@ -80,7 +83,7 @@
                                     onblur="this.rows=3;"></textarea>
                             </div>
 
-                            <div class="form-group col-sm-12 mb-0">
+                            <div class="form-group col-sm-12 mb-0 d-none" aria-hidden="true">
                                 <div
                                     class="badge badge-warning"
                                     style="font-size: 15px;"
@@ -689,79 +692,7 @@
     }
 
     function cargarTablaEvolucionesOdGral(evoluciones){
-        const div_evolucion = $('#contenedor_evoluciones_od_gral');
-        div_evolucion.empty();
-
-        if (evoluciones && evoluciones.length > 0) {
-            evoluciones.forEach(function(evolucion, index) {
-                let estado = "";
-                let clase = "";
-                if(evolucion.procedimiento.estado == 0){
-                    estado = "Pendiente";
-                    clase = "badge badge-warning";
-                }else if(evolucion.procedimiento.estado == 1){
-                    estado = "Finalizado";
-                    clase = "badge badge-success";
-                }else if(evolucion.procedimiento.estado == 2){
-                    // Estado 2 corresponde a tratamiento en proceso.
-                    estado = "En proceso";
-                    clase = "badge badge-primary";
-                }else if(evolucion.procedimiento.estado == 3){
-                    estado = "Citado a control";
-                    clase = "badge badge-info";
-                }else{
-                    estado = "Pendiente";
-                    clase = "badge badge-warning";
-                }
-                const fila = `
-                    <div class="tab-pane fade active show" id="evolucion-${evolucion.id}" role="tabpanel" aria-labelledby="evolucion-${evolucion.id}-tab">
-                        <div class="card-informacion">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0">Evolución registrada el ${evolucion.fecha}</h6>
-                                <small class="text-muted">Por: ${evolucion.profesional_nombre_completo}</small>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-row align-items-center">
-                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                        <div class="form-group">
-                                            <label class="floating-label-activo-sm">Pieza N°</label>
-                                            <input type="text" class="form-control form-control-sm" value="${evolucion.pieza}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                        <div class="form-group">
-                                            <label class="floating-label-activo-sm">Procedimiento</label>
-                                            <input type="text" class="form-control form-control-sm" value="${evolucion.procedimiento?.tratamiento}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                        <div class="form-group">
-                                            <label class="floating-label-activo-sm">Evolución</label>
-                                            <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" readonly>${evolucion.evolucion}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                <span class="${clase}" style="font-size: 15px;">${estado}</span>
-                                <button type="button" class="btn btn-sm btn-outline-warning" onclick="modificarEvolucionOdGral(${evolucion.id})" title="Eliminar evolución">
-                                    <i class="feather icon-edit"></i> Modificar
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                `;
-                div_evolucion.append(fila);
-            });
-        } else {
-            div_evolucion.append(`
-                <div class="alert alert-info text-center">
-                    <i class="feather icon-info"></i>
-                    No hay evoluciones registradas para esta ficha de atención.
-                </div>
-            `);
-        }
+        renderHistorialEvolucionesOdontologicas('#contenedor_evoluciones_od_gral', evoluciones);
     }
 
     // Función para eliminar una evolución odontológica general

@@ -1421,6 +1421,8 @@ Route::group([
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
     Route::post('Hora-medica/paciente/nuevo/prereserva', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPacientePrereserva'])->name('agenda.paciente.nuevo.prereserva');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
+    Route::post('Hora-medica/validar/telefono/enviar', [App\Http\Controllers\EscritorioProfesional::class, 'enviarCodigoValidacionTelefono'])->name('agenda.telefono.validacion.enviar');
+    Route::post('Hora-medica/validar/telefono/verificar', [App\Http\Controllers\EscritorioProfesional::class, 'verificarCodigoValidacionTelefono'])->name('agenda.telefono.validacion.verificar');
 	Route::get('Hora-medica/validar/email/paciente', [App\Http\Controllers\EscritorioProfesional::class, 'validar_email_paciente'])->name('agenda.paciente.validar_email');
 
     /** motor de busqueda asistente online*/
@@ -3267,7 +3269,9 @@ Route::post('/dental/editar_insumo_tto',[App\Http\Controllers\DentalController::
 Route::post('/dental/finalizar_atencion_urg',[App\Http\Controllers\DentalController::class, 'finalizar_atencion_urg'])->name('dental.finalizar_atencion_urg');
 Route::post('/dental/proxima_atencion_paciente',[App\Http\Controllers\DentalController::class, 'proxima_atencion_paciente'])->name('dental.proxima_atencion_paciente');
 Route::post('/dental/guardar_evolucion_od_gral',[App\Http\Controllers\DentalController::class, 'guardar_evolucion_od_gral'])->name('dental.guardar_evolucion_od_gral');
+Route::post('/dental/guardar_progreso_grupo',[App\Http\Controllers\DentalController::class, 'guardarProgresoGrupoDental'])->name('dental.guardar_progreso_grupo');
 Route::post('/dental/dame_evoluciones_od_gral',[App\Http\Controllers\DentalController::class, 'dame_evoluciones_od_gral'])->name('dental.dame_evoluciones_od_gral');
+Route::get('/dental/contexto_agendamiento',[App\Http\Controllers\DentalController::class, 'contexto_agendamiento'])->name('dental.contexto_agendamiento');
 Route::post('/dental/eliminar_evolucion_od_gral',[App\Http\Controllers\DentalController::class, 'eliminar_evolucion_od_gral'])->name('dental.eliminar_evolucion_od_gral');
 Route::post('/dental/dame_estado_prestacion',[App\Http\Controllers\DentalController::class, 'dame_estado_prestacion'])->name('dental.dame_estado_prestacion');
 Route::post('/dental/modificar_evolucion',[App\Http\Controllers\DentalController::class, 'modificar_evolucion'])->name('dental.modificar_evolucion');
@@ -3395,7 +3399,8 @@ Route::get('/test/config-mensajeria', function () {
             0,
             5
         ),
-        'from' => config('mensajeria.twilio.from'),
+        'whatsapp_from' => config('mensajeria.twilio.from'),
+        'sms_from' => config('mensajeria.twilio.sms_from'),
     ];
 });
 

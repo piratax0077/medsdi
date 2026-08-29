@@ -1,4 +1,5 @@
-<div id="tratamiento_boca_completa" class="modal fade" tabindex="-1" role="dialog"
+@include('atencion_odontologica.modals.odontograma.grupo_dental_comun')
+<div id="tratamiento_boca_completa" class="modal fade modal-grupo-dental" tabindex="-1" role="dialog"
     aria-labelledby="tratamiento_boca_completa" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -7,8 +8,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
             </div>
             <div class="modal-body">
-                <form id="form_diagnostico_tratamiento_inferior">
-                    <div class="row">
+                <form id="form_diagnostico_tratamiento_boca">
+                    <div class="grupo-dental-ayuda"><i class="feather icon-info"></i><span>Registre el diagnóstico y tratamiento de boca completa. Al guardar se incorporará inmediatamente al plan y al presupuesto clínico.</span></div>
+                    <div class="row grupo-dental-formulario">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Fecha</label>
@@ -42,16 +44,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="guardarDiagnosticoTratamientoBoca()">
-                                    <i class="fa fa-plus"></i> Agregar Diagnóstico/Tratamiento
+                                <button type="button" class="btn btn-success btn-sm btn-block grupo-dental-guardar" onclick="guardarDiagnosticoTratamientoBoca()">
+                                    <i class="feather icon-save"></i> Guardar y agregar al presupuesto
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-4 text-center">
+                        <div class="col-md-4 text-center grupo-dental-imagen">
                             <img src="{{ asset('img_dental/boca.png') }}" class="img-fluid">
                         </div>
                     </div>
-                    <hr>
+                    <div class="grupo-dental-listado-titulo"><strong>Prestaciones registradas</strong><small class="text-muted">Historial de boca completa</small></div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-xs">
                             <thead>
@@ -94,8 +96,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-info" onclick="guardarTodoInferior()">Guardar</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -358,6 +359,7 @@
         url: "{{ route('profesional.guardar_examen_boca_general') }}",
         data: data,
         success: function (response) {
+            window.notificarGrupoDentalGuardado(response, localizacion_examen);
             let diagnosticos = response.todos;
             let table = $('#table_tto_boca_gral').DataTable();
             // Limpiar la tabla completamente
@@ -424,7 +426,7 @@
             }
 
             // Limpia el formulario
-            $('#form_diagnostico_tratamiento_inferior')[0].reset();
+            $('#form_diagnostico_tratamiento_boca')[0].reset();
             $('#diagnostico_combo_boca').val('0');
         },
         error: function (xhr) {

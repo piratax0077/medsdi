@@ -69,6 +69,67 @@ class TwilioMensajeriaDriver implements MensajeriaDriverInterface
         }
     }
 
+    public function enviarSms(string $telefono, string $mensaje, array $metadata = []): array
+    {
+        $sid = config('mensajeria.twilio.sid');
+        $token = config('mensajeria.twilio.token');
+        $smsFrom = config('mensajeria.twilio.sms_from');
+        $fromGeneral = config('mensajeria.twilio.from');
+
+        if (empty($smsFrom) && !empty($fromGeneral) && strpos((string) $fromGeneral, 'whatsapp:') !== 0) {
+            $smsFrom = $fromGeneral;
+        }
+
+        if (empty($sid) || empty($token) || empty($smsFrom)) {
+            return [
+                'estado' => 0,
+                'msj' => 'Twilio SMS no configurado. Revise mensajeria.twilio.sms_from.',
+                'driver' => 'twilio',
+                'sid' => null,
+            ];
+        }
+
+        $to = $this->normalizarTelefono($telefono);
+
+        if (!$to) {
+            return [
+                'estado' => 0,
+                'msj' => 'Número inválido: ' . $telefono,
+                'driver' => 'twilio',
+                'sid' => null,
+            ];
+        }
+
+        try {
+            $client = new Client($sid, $token);
+            $message = $client->messages->create($to, [
+                'from' => $smsFrom,
+                'body' => $mensaje,
+            ]);
+
+            return [
+                'estado' => 1,
+                'msj' => 'SMS enviado correctamente',
+                'driver' => 'twilio',
+                'sid' => $message->sid,
+            ];
+        } catch (TwilioException $e) {
+            return [
+                'estado' => 0,
+                'msj' => 'Error Twilio SMS: ' . $e->getMessage(),
+                'driver' => 'twilio',
+                'sid' => null,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'estado' => 0,
+                'msj' => 'Error inesperado SMS: ' . $e->getMessage(),
+                'driver' => 'twilio',
+                'sid' => null,
+            ];
+        }
+    }
+
     private function normalizarTelefono(string $telefono): ?string
     {
         $numero = preg_replace('/[^0-9]/', '', $telefono);

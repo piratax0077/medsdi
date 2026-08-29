@@ -13,6 +13,11 @@ class MensajeriaService
         return $this->driver()->enviarWhatsapp($telefono, $mensaje, $metadata);
     }
 
+    public function enviarSms(string $telefono, string $mensaje, array $metadata = []): array
+    {
+        return $this->driver()->enviarSms($telefono, $mensaje, $metadata);
+    }
+
     private function driver()
     {
         $driver = config('mensajeria.driver', 'log');

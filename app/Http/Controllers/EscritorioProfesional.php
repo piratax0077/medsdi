@@ -154,6 +154,7 @@ use Illuminate\Support\Str;
 use App\Services\WhatsAppService;
 use App\Services\FirebaseCloudMessaging;
 use App\Services\PresupuestoDentalPdfService;
+use App\Services\Mensajeria\MensajeriaService;
 
 use App\Mail\ExamenesPorRealizar;
 
@@ -180,6 +181,7 @@ use App\Models\TiposReceta;
 use DateTime;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -1072,6 +1074,163 @@ class EscritorioProfesional extends Controller
         $producto->estado = 0;
         $producto->save();
         return response()->json(['mensaje' => 'Insumo eliminado correctamente.']);
+    }
+
+    /**
+     * Envía por SMS un código de 6 dígitos para validar el teléfono ingresado en la agenda.
+     */
+    public function enviarCodigoValidacionTelefono(Request $request, MensajeriaService $mensajeria)
+    {
+        $validator = Validator::make($request->all(), [
+            'telefono' => ['required', 'string', 'max:30'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Debe ingresar un teléfono válido.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $telefono = $this->normalizarTelefonoValidacionAgenda($request->telefono);
+        if (!$telefono) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El teléfono debe corresponder a un móvil chileno válido.',
+            ], 422);
+        }
+
+        $userId = Auth::id();
+        $telefonoHash = hash('sha256', $telefono);
+        $rateKey = 'agenda_sms_rate_' . $userId . '_' . $telefonoHash;
+
+        if (Cache::has($rateKey)) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Espere 60 segundos antes de solicitar un nuevo código.',
+            ], 429);
+        }
+
+        $codigo = (string) random_int(100000, 999999);
+        $challengeKey = 'agenda_sms_codigo_' . $userId . '_' . $telefonoHash;
+        $verifiedKey = 'agenda_sms_validado_' . $userId . '_' . $telefonoHash;
+
+        Cache::put($challengeKey, [
+            'telefono' => $telefono,
+            'codigo_hash' => hash_hmac('sha256', $codigo, (string) config('app.key')),
+            'intentos' => 0,
+            'creado_en' => now()->toDateTimeString(),
+        ], now()->addMinutes(5));
+        Cache::forget($verifiedKey);
+
+        $resultado = $mensajeria->enviarSms(
+            $telefono,
+            'MedSDI: su codigo de validacion es ' . $codigo . '. Vigencia: 5 minutos.',
+            ['tipo' => 'validacion_telefono_agenda', 'usuario_id' => $userId]
+        );
+
+        if ((int) ($resultado['estado'] ?? 0) !== 1) {
+            Cache::forget($challengeKey);
+            Log::warning('No fue posible enviar SMS de validación de agenda', [
+                'usuario_id' => $userId,
+                'telefono' => $telefono,
+                'resultado' => $resultado,
+            ]);
+            return response()->json([
+                'estado' => 0,
+                'msj' => $resultado['msj'] ?? 'No fue posible enviar el SMS.',
+            ], 502);
+        }
+
+        Cache::put($rateKey, true, now()->addSeconds(60));
+        return response()->json([
+            'estado' => 1,
+            'msj' => 'Código enviado por SMS. Tiene 5 minutos para ingresarlo.',
+            'telefono' => $telefono,
+        ]);
+    }
+
+    public function verificarCodigoValidacionTelefono(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'telefono' => ['required', 'string', 'max:30'],
+            'codigo' => ['required', 'digits:6'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Ingrese el código de 6 dígitos.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $telefono = $this->normalizarTelefonoValidacionAgenda($request->telefono);
+        if (!$telefono) {
+            return response()->json(['estado' => 0, 'msj' => 'El teléfono no es válido.'], 422);
+        }
+
+        $userId = Auth::id();
+        $telefonoHash = hash('sha256', $telefono);
+        $challengeKey = 'agenda_sms_codigo_' . $userId . '_' . $telefonoHash;
+        $verifiedKey = 'agenda_sms_validado_' . $userId . '_' . $telefonoHash;
+        $payload = Cache::get($challengeKey);
+
+        if (!$payload) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El código venció o no existe. Solicite uno nuevo.',
+            ], 410);
+        }
+
+        $intentos = (int) ($payload['intentos'] ?? 0);
+        if ($intentos >= 5) {
+            Cache::forget($challengeKey);
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Se superó el máximo de intentos. Solicite un nuevo código.',
+            ], 429);
+        }
+
+        $hashIngresado = hash_hmac('sha256', (string) $request->codigo, (string) config('app.key'));
+        if (!hash_equals((string) $payload['codigo_hash'], $hashIngresado)) {
+            $payload['intentos'] = $intentos + 1;
+            Cache::put($challengeKey, $payload, now()->addMinutes(5));
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Código incorrecto.',
+                'intentos_restantes' => max(0, 5 - $payload['intentos']),
+            ], 422);
+        }
+
+        Cache::forget($challengeKey);
+        Cache::put($verifiedKey, true, now()->addMinutes(15));
+        return response()->json([
+            'estado' => 1,
+            'msj' => 'Teléfono validado correctamente.',
+            'telefono' => $telefono,
+        ]);
+    }
+
+    private function normalizarTelefonoValidacionAgenda($telefono): ?string
+    {
+        $numero = preg_replace('/[^0-9]/', '', (string) $telefono);
+        if (empty($numero) || $numero === '569') return null;
+        if (strpos($numero, '56') === 0 && strlen($numero) === 11) {
+            return preg_match('/^569\d{8}$/', $numero) ? '+' . $numero : null;
+        }
+        if (strlen($numero) === 9 && strpos($numero, '9') === 0) return '+56' . $numero;
+        if (strlen($numero) === 8) return '+569' . $numero;
+        return null;
+    }
+
+    private function telefonoAgendaFueValidado($telefono): bool
+    {
+        $telefono = $this->normalizarTelefonoValidacionAgenda($telefono);
+        if (!$telefono || !Auth::check()) return false;
+        $verifiedKey = 'agenda_sms_validado_' . Auth::id() . '_' . hash('sha256', $telefono);
+        return Cache::has($verifiedKey);
     }
 
     public function validar_rut(Request $request)
@@ -2390,16 +2549,19 @@ class EscritorioProfesional extends Controller
         $porcentaje_descuento = intval($convenio->porcentaje);
 
         // Persistimos qué convenio quedó aplicado para que se mantenga tras recargar la ficha.
+        // Si no viene id_presupuesto, usamos la ficha recibida; no se debe utilizar
+        // $idFichaPresupuesto antes de resolver el presupuesto.
         $presupuesto = $request->filled('id_presupuesto')
-            ? PresupuestosDental::whereKey($request->id_presupuesto)
-            ->where('id_paciente', $request->id_paciente)
-            ->where('id_profesional', $profesional->id)
-            ->first()
-            : PresupuestosDental::where('id_paciente', $request->id_paciente)
-            ->where('id_ficha_atencion', $idFichaPresupuesto)
-            ->where('id_profesional', $profesional->id)
-            ->where('estado', 1)
-            ->first();
+            ? PresupuestosDental::whereKey((int) $request->id_presupuesto)
+                ->where('id_paciente', (int) $request->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->first()
+            : PresupuestosDental::where('id_paciente', (int) $request->id_paciente)
+                ->where('id_ficha_atencion', (int) $request->id_ficha_atencion)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado', 1)
+                ->orderByDesc('id')
+                ->first();
         if (!$presupuesto) {
             return response()->json(['message' => 'El presupuesto clínico no es válido.'], 422);
         }
@@ -2428,7 +2590,7 @@ class EscritorioProfesional extends Controller
             $idFichaPresupuesto,
             $request->id_lugar_atencion,
             $profesional->id_tipo_especialidad,
-            $request->id_presupuesto
+            $presupuesto->id
         )->filter(function ($pieza) {
             return (int) $pieza->presupuesto === 1
                 && (int) ($pieza->urgencia ?? 0) === 0;
@@ -2439,7 +2601,7 @@ class EscritorioProfesional extends Controller
             $idFichaPresupuesto,
             $request->id_lugar_atencion,
             $profesional->id_tipo_especialidad,
-            $request->id_presupuesto
+            $presupuesto->id
         );
 
         $insumos = InsumosTratamientosDental::where('id_paciente', $request->id_paciente)
@@ -2454,10 +2616,11 @@ class EscritorioProfesional extends Controller
 
         $todos = $this->dameTratamientosBocaGeneral(
             $idFichaPresupuesto
-        )->filter(function ($tratamiento) use ($request) {
-            return (int) $tratamiento->id_presupuesto === (int) $request->id_presupuesto
-                && (int) $tratamiento->presupuesto === 1
-                && (int) ($tratamiento->urgencia ?? 0) === 0;
+        )->filter(function ($tratamiento) use ($presupuesto) {
+            // examenes_boca_general no posee columna urgencia. El grupo debe
+            // pertenecer al presupuesto activo y estar marcado en presupuesto.
+            return (int) ($tratamiento->id_presupuesto ?? 0) === (int) $presupuesto->id
+                && (int) ($tratamiento->presupuesto ?? 0) === 1;
         })->values();
 
         $total_lab = 0;
@@ -2545,7 +2708,7 @@ class EscritorioProfesional extends Controller
 
         $total_general = $valores[0] + $valores[1] + $valores[2] + $valores[3];
         $total_con_descuento = $total_general - $descuentos;
-        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_presupuesto', $request->id_presupuesto)->get();
+        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_presupuesto', $presupuesto->id)->get();
 
         $resto_pago = 0;
         foreach ($pagos_tratamientos_dentales as $p) {
@@ -2679,7 +2842,11 @@ class EscritorioProfesional extends Controller
             'saldo_pendiente' => $saldoPendiente,
             'presupuesto_completado' => (bool) $presupuesto->pago_completado,
             'total_lab' => $total_lab,
-            'todos' => $todos
+            'todos' => $todos,
+            // El frontend compartido necesita conocer el convenio aplicado para
+            // renderizar piezas, grupos e insumos con el mismo contrato monetario.
+            'id_convenio_aplicado' => (int) $presupuesto->id_convenio_aplicado,
+            'porcentaje_descuento' => (int) $porcentaje_descuento
         ];
     }
 
@@ -2700,16 +2867,49 @@ class EscritorioProfesional extends Controller
     public function dameTratamientosBocaGeneral($id_ficha_atencion, $total = null)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        if ($profesional->id_tipo_especialidad !== 16) {
-            $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'diagnosticos_dental.valor', 'tratamientos_dental.descripcion')
-                ->join('diagnosticos_dental', 'examenes_boca_general.diagnostico_tratamiento', '=', 'diagnosticos_dental.descripcion')
-                ->join('tratamientos_dental', 'examenes_boca_general.diagnostico', 'tratamientos_dental.id')
+
+        if (!$profesional) {
+            return collect();
+        }
+
+        if ((int) $profesional->id_tipo_especialidad !== 16) {
+            $examenes = ExamenesBocaGeneral::select(
+                    'examenes_boca_general.*',
+                    'diagnosticos_dental.valor',
+                    'tratamientos_dental.descripcion'
+                )
+                ->leftJoin(
+                    'diagnosticos_dental',
+                    'examenes_boca_general.diagnostico_tratamiento',
+                    '=',
+                    'diagnosticos_dental.descripcion'
+                )
+                ->leftJoin(
+                    'tratamientos_dental',
+                    'examenes_boca_general.diagnostico',
+                    '=',
+                    'tratamientos_dental.id'
+                )
                 ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
                 ->get();
         } else {
-            $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'tratamientos_implantologia.valor', 'tratamientos_dental.descripcion')
-                ->join('tratamientos_implantologia', 'examenes_boca_general.diagnostico_tratamiento', '=', 'tratamientos_implantologia.descripcion')
-                ->join('tratamientos_dental', 'examenes_boca_general.diagnostico', 'tratamientos_dental.id')
+            $examenes = ExamenesBocaGeneral::select(
+                    'examenes_boca_general.*',
+                    'tratamientos_implantologia.valor',
+                    'tratamientos_dental.descripcion'
+                )
+                ->leftJoin(
+                    'tratamientos_implantologia',
+                    'examenes_boca_general.diagnostico_tratamiento',
+                    '=',
+                    'tratamientos_implantologia.descripcion'
+                )
+                ->leftJoin(
+                    'tratamientos_dental',
+                    'examenes_boca_general.diagnostico',
+                    '=',
+                    'tratamientos_dental.id'
+                )
                 ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
                 ->get();
         }
@@ -2717,12 +2917,12 @@ class EscritorioProfesional extends Controller
         $total_gral = 0;
 
         foreach ($examenes as $e) {
-            if ($e->presupuesto == 1) {
-                $valor = (float) $e->valor;
+            if ((int) ($e->presupuesto ?? 0) === 1) {
+                $valor = (float) ($e->valor ?? 0);
                 $total_gral += $valor;
 
                 if ($total === null) {
-                    $e->estado_pago = 'intermedio'; // o 'pendiente' si prefieres
+                    // No sobrescribir un estado persistido sólo por consultar la colección.
                     continue;
                 }
 
@@ -2732,14 +2932,11 @@ class EscritorioProfesional extends Controller
                     $e->estado_pago = 'ok';
                     $total -= $valor;
                 } else {
-                    $e->estado_pago = 'intermedio';
-                    $total -= $valor; // puede quedar negativo
+                    $e->estado_pago = 'incompleto';
+                    $total = 0;
                 }
             }
         }
-
-        // Si quieres retornar también el total general, puedes incluirlo así:
-        // return ['examenes' => $examenes, 'total_gral' => $total_gral];
 
         return $examenes;
     }
@@ -5307,11 +5504,21 @@ class EscritorioProfesional extends Controller
         $examen_boca_general->comentario = $req->comentarios == '' ? 'SIN OBSERVACIONES' : $req->comentarios;
         $examen_boca_general->localizacion = $req->localizacion_examen;
         $examen_boca_general->presupuesto = $presupuesto ? 1 : 0;
+        $examen_boca_general->id_presupuesto = $presupuesto ? $presupuesto->id : null;
 
         if ($examen_boca_general->save()) {
             $ficha_atencionController = new ficha_atencionController;
             $todos = $ficha_atencionController->dameTratamientosBocaGeneral($examen_boca_general->id_ficha_atencion);
-            $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $examen_boca_general->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            if ($presupuesto) {
+                $todos = $todos->where('id_presupuesto', $presupuesto->id)->values();
+            }
+            $valores_tratamientos = $this->dameValoresOdontograma(
+                $req->id_paciente,
+                $examen_boca_general->id_ficha_atencion,
+                $req->id_lugar_atencion,
+                $profesional->id_tipo_especialidad,
+                $presupuesto ? $presupuesto->id : null
+            );
             return [
                 'mensaje' => 'OK',
                 'examen' => $examen_boca_general,
@@ -6783,21 +6990,72 @@ class EscritorioProfesional extends Controller
     {
         $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
         $trabajo = DiagnosticosDentalProfesional::where('id', $arancel)
-            ->where('id_profesional', $profesional->id)->firstOrFail();
+            ->where('id_profesional', $profesional->id)
+            ->firstOrFail();
 
         $pack = TratamientoProfesionalInsumo::where('id_diagnostico_profesional', $trabajo->id)
-            ->where('estado', 1)->get();
-        $productosPack = $pack->pluck('id_producto');
-        $productos = Producto::where(function ($query) use ($profesional, $productosPack) {
-            $query->where('id_profesional', $profesional->id)
-                ->orWhereNull('id_profesional')
-                ->orWhereIn('id', $productosPack);
-        })
             ->where('estado', 1)
-            ->orderBy('nombre')
-            ->get(['id', 'codigo_interno', 'nombre', 'precio_compra', 'precio_venta', 'stock_actual']);
+            ->get();
 
-        return response()->json(['productos' => $productos, 'pack' => $pack]);
+        $productosPack = $pack->pluck('id_producto')->filter()->values();
+
+        /*
+         * En Aranceles Odontológicos mostramos sólo productos pertenecientes
+         * a categorías marcadas con area = odontologia.
+         *
+         * Si un pack antiguo contiene un producto de otra área, lo conservamos
+         * en la respuesta para no romper tratamientos ya configurados.
+         */
+        $productos = Producto::with(['tipoProducto:id,nombre,area'])
+            ->where(function ($query) use ($profesional, $productosPack) {
+                $query->where('id_profesional', $profesional->id)
+                    ->orWhereNull('id_profesional')
+                    ->orWhereIn('id', $productosPack);
+            })
+            ->where('estado', 1)
+            ->where(function ($query) use ($productosPack) {
+                $query->whereHas('tipoProducto', function ($categoria) {
+                    $categoria->where('area', 'odontologia');
+                });
+
+                if ($productosPack->isNotEmpty()) {
+                    $query->orWhereIn('id', $productosPack);
+                }
+            })
+            ->orderBy('nombre')
+            ->get([
+                'id',
+                'codigo_interno',
+                'nombre',
+                'precio_compra',
+                'precio_venta',
+                'stock_actual',
+                'id_tipo_producto',
+            ])
+            ->map(function ($producto) {
+                return [
+                    'id' => $producto->id,
+                    'codigo_interno' => $producto->codigo_interno,
+                    'nombre' => $producto->nombre,
+                    'precio_compra' => $producto->precio_compra,
+                    'precio_venta' => $producto->precio_venta,
+                    'stock_actual' => $producto->stock_actual,
+                    'id_tipo_producto' => $producto->id_tipo_producto,
+                    'categoria' => optional($producto->tipoProducto)->nombre ?: 'Sin categoría',
+                    'area' => optional($producto->tipoProducto)->area,
+                ];
+            })
+            ->values();
+
+        $categorias = TipoProducto::odontologia()
+            ->orderBy('nombre')
+            ->get(['id', 'nombre']);
+
+        return response()->json([
+            'productos' => $productos,
+            'pack' => $pack,
+            'categorias' => $categorias,
+        ]);
     }
 
     public function guardarInsumosArancel(Request $request, $arancel)
@@ -13758,7 +14016,72 @@ class EscritorioProfesional extends Controller
                     ->orderByDesc('id')
                     ->get();
 
+                /*
+                 * Estado clínico real de cada presupuesto dental.
+                 *
+                 * Antes la agenda sólo recibía `pago_completado` y el Blade asumía
+                 * que todo presupuesto pagado seguía "PENDIENTE DE ATENCIÓN".
+                 * Ahora informamos por separado pago y avance clínico.
+                 *
+                 * Para piezas usamos `progreso` como fuente principal de verdad,
+                 * igual que el detalle de la agenda. Para grupos aceptamos también
+                 * `atendido/terminado` por compatibilidad con registros históricos.
+                 */
+                foreach ($presupuestos_dentales as $presupuestoDental) {
+                    $piezasClinicas = OdontogramaPaciente::where('id_presupuesto', $presupuestoDental->id)
+                        ->where('id_paciente', $paciente->id)
+                        ->where('id_profesional', $profesional->id)
+                        ->where('presupuesto', 1)
+                        ->where('urgencia', 0)
+                        ->get(['id', 'progreso', 'atendido', 'estado']);
+
+                    $gruposClinicos = ExamenesBocaGeneral::where('id_presupuesto', $presupuestoDental->id)
+                        ->where('id_paciente', $paciente->id)
+                        ->where('id_profesional', $profesional->id)
+                        ->where('presupuesto', 1)
+                        ->get(['id', 'progreso', 'atendido', 'terminado']);
+
+                    $piezasPendientes = $piezasClinicas->filter(function ($pieza) {
+                        $progreso = is_null($pieza->progreso) ? 0 : (int) $pieza->progreso;
+                        return $progreso < 100;
+                    })->count();
+
+                    $gruposPendientes = $gruposClinicos->filter(function ($grupo) {
+                        $progreso = is_null($grupo->progreso) ? null : (int) $grupo->progreso;
+
+                        // Si existe progreso explícito, éste manda.
+                        if (!is_null($progreso)) {
+                            return $progreso < 100;
+                        }
+
+                        // Compatibilidad con registros antiguos sin progreso.
+                        return (int) ($grupo->atendido ?? 0) !== 1
+                            && (int) ($grupo->terminado ?? 0) !== 1;
+                    })->count();
+
+                    $totalPrestacionesClinicas = $piezasClinicas->count() + $gruposClinicos->count();
+                    $prestacionesPendientes = $piezasPendientes + $gruposPendientes;
+                    $clinicamenteCompletado = $totalPrestacionesClinicas > 0 && $prestacionesPendientes === 0;
+
+                    $presupuestoDental->setAttribute('clinicamente_completado', $clinicamenteCompletado);
+                    $presupuestoDental->setAttribute('prestaciones_clinicas', $totalPrestacionesClinicas);
+                    $presupuestoDental->setAttribute('prestaciones_pendientes', $prestacionesPendientes);
+                    $presupuestoDental->setAttribute(
+                        'estado_clinico',
+                        $clinicamenteCompletado ? 'completado' : 'pendiente'
+                    );
+                }
+
                 // Siempre exponer la colección, incluso si viene vacía.
+                $presupuestos_dentales = $presupuestos_dentales->filter(function ($presupuesto) {
+                    $totalAbonado = (int) PagosPresupuestoDental::where('id_presupuesto', $presupuesto->id)->sum('total');
+                    $valorTotal = (int) ($presupuesto->valor_total ?? 0);
+                    $estaPagado = (bool) $presupuesto->pago_completado
+                        || ($valorTotal > 0 && $totalAbonado >= $valorTotal);
+
+                    return !($estaPagado && (bool) ($presupuesto->clinicamente_completado ?? false));
+                })->values();
+
                 $paciente['presupuestos'] = $presupuestos_dentales;
             } else {
                 $paciente['presupuestos'] = [];
@@ -14140,6 +14463,27 @@ class EscritorioProfesional extends Controller
                         'msj' => 'Una de las prestaciones seleccionadas ya no está disponible.',
                     ]);
                 }
+
+                $yaProgramado = HoraMedica::where('id_presupuesto', $presupuesto->id)
+                    ->where('id_paciente', $paciente->id)
+                    ->where('id_profesional', $profesional->id)
+                    ->whereIn('id_estado', [1, 2])
+                    ->whereDate('fecha_consulta', '>=', now()->toDateString())
+                    ->get(['id', 'tratamientos_presupuesto'])
+                    ->contains(function ($horaProgramada) use ($tipo, $id) {
+                        return collect($horaProgramada->tratamientos_presupuesto ?? [])->contains(function ($tratamiento) use ($tipo, $id) {
+                            return ($tratamiento['tipo'] ?? null) === $tipo
+                                && (int) ($tratamiento['id'] ?? 0) === $id;
+                        });
+                    });
+
+                if ($yaProgramado) {
+                    return json_encode([
+                        'estado' => 'error',
+                        'id_profesional' => $profesional->id,
+                        'msj' => 'Una de las prestaciones seleccionadas ya está asociada a una hora futura.',
+                    ]);
+                }
                 $tratamientosPresupuesto[] = ['tipo' => $tipo, 'id' => $id];
             }
         }
@@ -14322,6 +14666,13 @@ class EscritorioProfesional extends Controller
         $datos = array();
         $error = array();
         $valido = 1;
+
+        // Si el navegador informa que el teléfono fue validado, confirmarlo en backend.
+        if ((int) $request->reserva_result_codigo_validacion === 1) {
+            $request->merge([
+                'reserva_result_codigo_validacion' => $this->telefonoAgendaFueValidado($request->reserva_hora_telefono) ? 1 : 0,
+            ]);
+        }
 
         if (
             $request->tipo_hora_medica === 'D'
