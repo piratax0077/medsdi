@@ -194,7 +194,7 @@
                                         </td>
                                         </th>
                                     </tr>
-                                    <tr>
+                                    {{--<tr>
                                         <th scope="row">
                                             <strong>Número</strong>
                                         <td>
@@ -212,7 +212,7 @@
                                             </div>
                                         </td>
                                         </th>
-                                    </tr>
+                                    </tr>--}}
                                     <tr>
                                         <th scope="row">
                                             <strong>Región</strong>
@@ -322,16 +322,13 @@
                 <form id="cancelacion_hora_medica">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-
                             <div class="form-group ">
                                 <label class="floating-label">Comentarios</label>
                                 <input type="text" class="form-control" id="cancelar_hora_comentario" name="cancelar_hora_comentario">
                             </div>
-
                         </div>
                     </div>
                 </form>
-
                 <form id="confirmacion_hora_medica">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
@@ -354,7 +351,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
             <div class="modal-footer">
                 <div id="contenedor_via_confirmacion">

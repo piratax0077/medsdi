@@ -408,16 +408,16 @@
                                             </div>
                                             <div class="paciente_edit" style="display:none">
                                                 <div class="form-row">
-                                                    <div class="col-sm-12 col-md-9">
+                                                    <div class="col-12">
                                                         <div class="form-group">
                                                             <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12 col-md-3">
+                                                    {{--<div class="col-sm-12 col-md-3">
                                                         <div class="form-group">
                                                             <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
                                                         </div>
-                                                    </div>
+                                                    </div>--}}
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -699,7 +699,7 @@
 
 
 
-                                <div class="col-sm-12 col-md-6 col-lg-9 col-xl-9">
+                                <div class="col-12">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                         <input type="address" class="form-control form-control-sm"
@@ -707,13 +707,13 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                {{--<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Nº</label>
                                         <input type="address" class="form-control form-control-sm"
                                             name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
                                     </div>
-                                </div>
+                                </div>--}}
 
                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">

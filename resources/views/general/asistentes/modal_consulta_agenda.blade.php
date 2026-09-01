@@ -126,7 +126,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <strong>Telefono</strong>
+                                            <strong>Teléfono</strong>
                                         <td>
 
                                             <div class="paciente_view_asistente">
@@ -163,7 +163,7 @@
                                         </td>
                                         </th>
                                     </tr>
-                                    <tr>
+                                    {{--<tr>
                                         <th scope="row">
                                             <strong>Número</strong>
                                         <td>
@@ -181,7 +181,7 @@
                                             </div>
                                         </td>
                                         </th>
-                                    </tr>
+                                    </tr>--}}
                                     <tr>
                                         <th scope="row">
                                             <strong>Región</strong>
@@ -1005,7 +1005,7 @@
                                         </div>
                                         <div class="paciente_edit" style="display:none">
                                             <div class="form-row">
-                                                <div class="col-sm-12 col-md-9">
+                                                <div class="col-12">
                                                     <div class="form-group">
                                                         <label
                                                             class="floating-label-activo-sm">Direcci&oacute;n</label>
@@ -1014,14 +1014,14 @@
                                                             id="input_reserva_direccion_direccion" value="">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-3">
+                                                {{--<div class="col-sm-12 col-md-3">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">N°</label>
                                                         <input type="address" class="form-control form-control-sm"
                                                             name="input_reserva_direccion_numero_dir"
                                                             id="input_reserva_direccion_numero_dir" value="">
                                                     </div>
-                                                </div>
+                                                </div>--}}
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -1327,7 +1327,7 @@
                                                 id="result_codigo_validacion" value="0">
                                             <div id="div_codigo_validador_mensaje" style="display:none"></div>
                                         </div>
-                                        <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
+                                        <div class="col-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                                 <input type="address" class="form-control form-control-sm"
@@ -1335,13 +1335,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        {{--<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">N°</label>
                                                 <input type="address" class="form-control form-control-sm"
                                                     name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
                                             </div>
-                                        </div>
+                                        </div>--}}
 
                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                             <div class="form-group">
@@ -1514,7 +1514,7 @@
                     value="">
                 <div class="row">
                     <div class="col-md-12">
-                        Validando Aprobación de Responsable para Atencion Medica de Menor de Edad
+                        Validando Aprobación de Responsable para Atencion Médica de Menor de Edad
                     </div>
                     <div class="col-md-12">
                         <input type="hidden" name="">
@@ -1530,7 +1530,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"
-                    onclick="cancelarautorizacionMenorEdad();">Cancelar</button>
+                    onclick="cancelarautorizacionMenorEdad();"><i class="feather icon-x"></i> Cancelar</button>
             </div>
         </div>
     </div>

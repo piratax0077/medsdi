@@ -139,7 +139,6 @@
                                             <th>Lugares de Atención</th>
                                         </tr>
                                     </thead>
-
                                 </table>
                             </div>
                         </div>
@@ -207,11 +206,12 @@
 
     <!-- Modal Presupuestos -->
     <div class="modal fade" id="modalPresupuestos" tabindex="-1" role="dialog" aria-labelledby="modalPresupuestosLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content ">
                 <div class="modal-header">
                     <h5 class="modal-title">Historial de Presupuestos</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"
+                        onclick="$('#modalPresupuestos').modal('hide');">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -283,10 +283,10 @@
     {{-- Modal autorización talonarios --}}
     <div id="modal_autorizacion" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
-                <div class="modal-header text-white border-0" style="background: linear-gradient(90deg, #17a2b8, #20c997); padding: 1.1rem 1.5rem;">
-                    <h5 class="modal-title font-weight-bold mb-0"><i class="fa fa-lock mr-2"></i>Autorización</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();" style="opacity: .9; text-shadow: none;">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header text-white border-0">
+                    <h5 class="modal-title font-weight-bold mb-0">Autorización</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
