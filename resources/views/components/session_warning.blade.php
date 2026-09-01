@@ -27,6 +27,6 @@
 
         setTimeout(function () {
             sdiCerrarToastWarning();
-        }, 45000);
+        }, 25000);
     </script>
 @endif
