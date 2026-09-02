@@ -843,7 +843,7 @@
 
 <!-- MODAL AGREGAR HORA MEDICA agenda_agregar_paciente -->
 <div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
                 <h5 class="modal-title text-white text-center" id="titulo_modal_reserva_especialidad"><i class="icono-agenda feather icon-calendar"></i> Agendamiento de horas médicas</h5>
